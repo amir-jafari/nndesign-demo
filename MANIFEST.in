@@ -1,0 +1,3 @@
+include README.md
+recursive-include nndesign/Chapters *
+recursive-include nndesign/Logo *
