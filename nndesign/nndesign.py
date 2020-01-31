@@ -1,6 +1,7 @@
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
+from nndesign_layout import NNDLayout
 from Window import MainWindowNN
 
 from get_package_path import PACKAGE_PATH
@@ -16,11 +17,10 @@ xautor = 700; yautor= 715; wautor = 500; hautor=100;
 xcm1 =250; ycm1= 120; wcm1 = 250; hcm1 =20; add1 = 80; subt=20;
 xbtn1 =150; ybtn1= 430; wbtn1 = 60; hbtn1=20; add2 = 80; add2_1 = 30;
 
-xl1 =10; yl1= 90; wl1 = 700; hl1 =90;
-xl2 =700; yl2= 780; wl2 = 900; hl2 =780;
-
 w_Logo1 = 100;h_Logo1 = 80; xL_g1 = 150; yL_g1= 90; wL_g1= w_Logo1; hL_g1=h_Logo1; add_l = 80;
 
+xl1 =10; yl1= 90; wl1 = 700; hl1 =90;
+xl2 =700; yl2= 780; wl2 = 900; hl2 =780;
 
 w_Logom = 200; h_Logom = 100; xL_gm = 50; yL_gm= 140; wL_gm= 3*w_Logo1; hL_gm = h_Logom;
 w_Logom1 = 200; h_Logom1 = 100; xL_gm1 = 20; yL_gm1= 450; wL_gm1= 3*w_Logo1; hL_gm1=h_Logom1;
@@ -30,9 +30,10 @@ xbtnm1 =300; ybtnm1= 470; wbtnm1 = 300; hbtnm1=50;
 # -------------------------------------------------------------------------------------------------------------
 
 
-class MainWindow(QMainWindow):
+class MainWindow(NNDLayout):
     def __init__(self):
-        super(MainWindow, self).__init__()
+        """ Window that shows the main menu, to choose between the two books """
+        super(MainWindow, self).__init__(draw_vertical=False, create_plot=False)
 
         self.setGeometry(xm, ym, wm, hm)
         self.setWindowTitle("Neural Network Design")
@@ -56,6 +57,9 @@ class MainWindow(QMainWindow):
         self.label4.setText("By Hagan, Jafari")
         self.label4.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
         self.label4.setGeometry(xautor, yautor, wautor, hautor)
+
+        self.statusBar()
+        self.main_menu = self.menuBar()
 
         self.icon1 = QtWidgets.QLabel(self)
         self.icon1.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/NN.svg").pixmap(w_Logom, h_Logom, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -88,6 +92,24 @@ class MainWindow(QMainWindow):
         print("TODO")  # TODO
         # self.button2_win = MainWindowDL()
         # self.button2_win.show()
+
+    def paintEvent(self, e):
+        qp = QtGui.QPainter()
+        color = QtGui.QColor(0, 0, 0)
+        color.setNamedColor('#d4d4d4')
+        qp.begin(self)
+        self.draw_lines(qp)
+        qp.end()
+
+    @staticmethod
+    def draw_lines(qp):
+        pen = QtGui.QPen(QtCore.Qt.darkBlue, 4, QtCore.Qt.SolidLine)
+        qp.setPen(pen)
+        qp.drawLine(xl1, yl1, wl1, hl1)
+
+        pen = QtGui.QPen(QtCore.Qt.darkBlue, 4, QtCore.Qt.SolidLine)
+        qp.setPen(pen)
+        qp.drawLine(xl2, yl2, wl2, hl2)
 
 
 def nndtoc():

@@ -1,15 +1,11 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QMainWindow
-
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-
-from matplotlib.figure import Figure
 import math
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+
+from nndesign_layout import NNDLayout
 
 from get_package_path import PACKAGE_PATH
 
@@ -45,22 +41,11 @@ xl3 = wl1;yl3 = hl1+35;wl3 = wl1;hl3 = 750;
 # -------------------------------------------------------------------------------------------------------------
 
 
-class OneInputNeuron(QMainWindow):
+class OneInputNeuron(NNDLayout):
     def __init__(self):
-        super(OneInputNeuron, self).__init__()
+        super(OneInputNeuron, self).__init__(main_menu=1)
 
-        self.setGeometry(xm, ym, wm, hm)
-        self.setWindowTitle("Neural Network Design")
-
-        self.label1 = QtWidgets.QLabel(self)
-        self.label1.setText("Neural Network")
-        self.label1.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
-        self.label1.setGeometry(xlabel, ylabel, wlabel, hlabel)
-
-        self.label2 = QtWidgets.QLabel(self)
-        self.label2.setText("DESIGN")
-        self.label2.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
-        self.label2.setGeometry(xlabel, ylabel + add, wlabel, hlabel)
+        # TODO: We can probably generalize this by making another class
 
         self.label3 = QtWidgets.QLabel(self)
         self.label3.setText("One input neuron")
@@ -89,47 +74,34 @@ class OneInputNeuron(QMainWindow):
 
         # ----------------------
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-
         self.comboBox1 = QtWidgets.QComboBox(self)
         self.comboBox1_functions = [self.purelin, self.hardlim, self.hardlims, self.satlin, self.satlins, self.logsig, self.tansig]
         self.comboBox1.addItems(["Purelin", 'Hardlim', 'Hardlims', 'Satlin', 'Satlins', 'LogSig', 'TanSig'])
         self.func1 = self.purelin
-
         self.label_f = QtWidgets.QLabel(self)
         self.label_f.setText("f")
         self.label_f.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_f.setGeometry(775, 550, 150, 100)
 
-        self.label_b = QtWidgets.QLabel(self)
-        self.label_b.setText("b")
-        self.label_b.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b.setGeometry(775, 470, 150, 100)
-
         self.label_w = QtWidgets.QLabel(self)
         self.label_w.setText("w")
         self.label_w.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_w.setGeometry(775, 400, 150, 100)
-
         self.slider_w = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider_w.setRange(-3, 3)
         self.slider_w.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_w.setTickInterval(1)
         self.slider_w.setValue(1)
 
+        self.label_b = QtWidgets.QLabel(self)
+        self.label_b.setText("b")
+        self.label_b.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
+        self.label_b.setGeometry(775, 470, 150, 100)
         self.slider_b = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider_b.setRange(-3, 3)
         self.slider_b.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_b.setTickInterval(1)
         self.slider_b.setValue(0)
-
-        self.wid = QtWidgets.QWidget(self)
-        self.layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid.setGeometry(10, 300, 680, 500)
-        self.layout.addWidget(self.canvas)
-        self.wid.setLayout(self.layout)
 
         self.wid2 = QtWidgets.QWidget(self)
         self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -203,7 +175,7 @@ class OneInputNeuron(QMainWindow):
     @staticmethod
     def satlin(x):
         if x < 0:
-            return 0;
+            return 0
         elif x < 1:
             return x
         else:

@@ -1,0 +1,5 @@
+Book 1:
+
+- Chapter 2:
+	- One Input Neuron -> Done
+	- Two Input Neuron -> Graph or just show output value?  

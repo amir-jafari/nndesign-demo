@@ -1,0 +1,19 @@
+Documentation for nndesign:
+
+- There is a script defining common attributes: nndesign_layout.py, which all other windows inherit from, and with init arguments to change appearance as required.
+
+- The main script is nndesign.py:
+
+Defines a window with the main menu, which is almost unique, apart from the horizontal line, so it inherits from nndesign_layout.NNDLayout with main_menu=False, draw_vertical=False and create_plot=False.
+
+- The next script is Window.py:
+
+Contains the menus for the two books as two window classes (TODO: second book). These two classes inherit from nndesign_layout.NNDLayout because from here, all windows will have some common attributes. After this inheritance, which initializes the common attributes, some unique attributes to these windows are defined:
+
+The icons and dropdown menus are initialized empty but with their locations already set, and then are updated dynamically by the .show_chapters method, based on which block of chapters we want to show, which are chosen with the defined buttons that are connected to .show_chapters with a different value for its chapters argument (such as "2-5").
+
+The elements in the dropdown menus are connected to a function for each chapter by comboBox.currentIndexChanged.connect, that shows a new window particular to this chapter.
+
+- The next scripts are chapter-specific (one for each chapter):
+
+Inherits from NNDLayout with main_menu=1 or main_menu=2 and create_plot=True or create_plot=False.
