@@ -9,70 +9,15 @@ from nndesign_layout import NNDLayout
 
 from get_package_path import PACKAGE_PATH
 
-# -------------------------------------------------------------------------------------------------------------
-xm =500; ym= 150; wm = 900; hm =800;
-
-xlabel =80; ylabel= 5; wlabel = 500; hlabel =100; add =20;
-xtabel =560; ytabel=25 ; wtabel =500 ; htabel =100;
-xautor = 700; yautor= 715; wautor = 500; hautor=100;
-
-xcm1 =250; ycm1= 140; wcm1 = 350; hcm1 =20; add1 = 140; subt=20;
-xbtn1 =150; ybtn1= 740; wbtn1 = 60; hbtn1=20; add2 = 80; add2_1 = 30;
-
-xl1 =10; yl1= 90; wl1 = 700; hl1 =90;
-xl2 =700; yl2= 780; wl2 = 900; hl2 =780;
-
-w_Logo1 = 100;h_Logo1 = 80; xL_g1 = 150; yL_g1= 110; wL_g1= w_Logo1; hL_g1=h_Logo1; add_l = 140;
-
-
-w_Logom = 200; h_Logom = 100; xL_gm = 80; yL_gm= 140; wL_gm= 3*w_Logo1; hL_gm = h_Logom;
-w_Logom1 = 200; h_Logom1 = 100; xL_gm1 = 80; yL_gm1= 450; wL_gm1= 3*w_Logo1; hL_gm1=h_Logom1;
-
-xbtnm =300; ybtnm= 140; wbtnm = 300; hbtnm=50;
-xbtnm1 =300; ybtnm1= 470; wbtnm1 = 300; hbtnm1=50;
-
-# -------------------------------------------------------------------------------------------------------------
-wp_pic2_1 = 100; hp_pic2_1 = 80; x_pic2_1 = 750; y_pic2_1= 50; w_pic2_1= wp_pic2_1; h_pic2_1=hp_pic2_1;
-wp_pic2_2 = 500; hp_pic2_2 = 200; x_pic2_2 = 250; y_pic2_2= 100; w_pic2_2= 500; h_pic2_2=200;
-
-x_info = 710; y_info= 150; w_info= 450; h_info=250;
-
-xl3 = wl1;yl3 = hl1+35;wl3 = wl1;hl3 = 750;
-# -------------------------------------------------------------------------------------------------------------
-
 
 class OneInputNeuron(NNDLayout):
     def __init__(self):
         super(OneInputNeuron, self).__init__(main_menu=1)
 
-        # TODO: We can probably generalize this by making another class
-
-        self.label3 = QtWidgets.QLabel(self)
-        self.label3.setText("One input neuron")
-        self.label3.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
-        self.label3.setGeometry(xtabel, ytabel, wtabel, htabel)
-
-        self.label4 = QtWidgets.QLabel(self)
-        self.label4.setText("Chapter 2")
-        self.label4.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
-        self.label4.setGeometry(xautor, yautor, wautor, hautor)
-
-        self.label5 = QtWidgets.QLabel(self)
-        self.label5.setText("Alter the weight and bias\n and input by dragging the\n triangular shaped indictors.\n"
-                            " \n Pick the transfer function\n with the F menu.\n "
-                            "\n Watch the change\n to the  neuron function\n and its  output.")
-        self.label5.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
-        self.label5.setGeometry(x_info, y_info, w_info, h_info)
-
-        self.icon1 = QtWidgets.QLabel(self)
-        self.icon1.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg").pixmap(wp_pic2_1, hp_pic2_1, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon1.setGeometry(x_pic2_1, y_pic2_1, w_pic2_1, h_pic2_1)
-
-        self.icon1 = QtWidgets.QLabel(self)
-        self.icon1.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Chapters/2/nn2d1.svg").pixmap(wp_pic2_2, hp_pic2_2, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon1.setGeometry(x_pic2_2, y_pic2_2, w_pic2_2, h_pic2_2)
-
-        # ----------------------
+        self.fill_chapter("One input neuron", 2, "Alter the weight and bias\n and input by dragging the\n triangular"
+                                                 " shaped indictors.\n \n Pick the transfer function\n with the F menu.\n "
+                                                 "\n Watch the change\n to the  neuron function\n and its  output.",
+                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")
 
         self.comboBox1 = QtWidgets.QComboBox(self)
         self.comboBox1_functions = [self.purelin, self.hardlim, self.hardlims, self.satlin, self.satlins, self.logsig, self.tansig]

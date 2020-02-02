@@ -2,7 +2,9 @@ from PyQt5 import QtWidgets, QtGui
 from functools import partial
 
 from nndesign_layout import NNDLayout
+
 from One_input_neuron import OneInputNeuron
+from Perceptron_rule import PerceptronRule
 
 from get_package_path import PACKAGE_PATH
 
@@ -172,7 +174,7 @@ class MainWindowNN(NNDLayout):
             self.chapter_window1 = OneInputNeuron()
             self.chapter_window1.show()
         elif idx == 2:
-            self.myOtherWindow1 = two_input_neuron()
+            self.chapter_window2 = two_input_neuron()
 
     def chapter3(self, idx):
         if idx == 1:
@@ -186,7 +188,8 @@ class MainWindowNN(NNDLayout):
         if idx == 1:
             self.myOtherWindow = decision_boundaries()
         elif idx == 2:
-            self.myOtherWindow1 = perceptron_rule()
+            self.chapter_window2 = PerceptronRule()
+            self.chapter_window2.show()
 
     def chapter5(self, idx):
         if idx == 1:

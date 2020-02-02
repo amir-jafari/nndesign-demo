@@ -1,0 +1,215 @@
+from PyQt5 import QtWidgets, QtGui, QtCore
+import numpy as np
+
+from nndesign_layout import NNDLayout
+
+from get_package_path import PACKAGE_PATH
+
+
+POS = 1
+NEG = 0
+
+
+def hardlim(n):
+    return 0 if n < 0 else 1
+
+
+class PerceptronRule(NNDLayout):
+    def __init__(self):
+        super(PerceptronRule, self).__init__(main_menu=1)
+
+        self.fill_chapter("Perceptron rule", 4, "On the plot, click the\n Primary mouse button\n to add a positive class.\n"
+                                                " Secondary mouse button\n to add a negative class.\n Then click Train  ",
+                          PACKAGE_PATH + "Chapters/4/Logo_Ch_4.svg", PACKAGE_PATH + "Chapters/4/Percptron1.svg")
+
+        self.data = []
+        self.total_epochs = 0
+        self.R = 2  # Num input dimensions
+        self.S = 1  # Num neurons
+
+        # Add a plot
+        self.axes = self.figure.add_subplot(111)
+        self.figure.subplots_adjust(bottom=0.2, left=0.1)
+        self.axes.set_xlim(0, 10)
+        self.axes.set_ylim(0, 10)
+        self.axes.tick_params(labelsize=8)
+        self.axes.set_xlabel("$p^1$", fontsize=10)
+        self.axes.set_ylabel("$p^2$", fontsize=10)
+        self.pos_line, = self.axes.plot([], 'mo', label="Positive Class")
+        self.neg_line, = self.axes.plot([], 'cs', label="Negative Class")
+        self.decision, = self.axes.plot([], 'r-', label="Decision Boundary")
+        self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=3, bbox_to_anchor=(0, -.24, 1, -.280), mode='expand')
+        self.axes.set_title("Single Neuron Perceptron")
+        self.canvas.draw()
+        # Add event handler for a mouseclick in the plot
+        self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
+
+        self.epoch_label = QtWidgets.QLabel(self)
+        self.epoch_label.setText("Epochs so far: 0")
+        self.epoch_label.setFixedHeight(20)
+        self.wid2 = QtWidgets.QWidget(self)
+        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid2.setGeometry(700, 400, 680, 600)
+        self.layout2.addWidget(self.epoch_label)
+        self.wid2.setLayout(self.layout2)
+
+        self.error_label = QtWidgets.QLabel(self)
+        self.error_label.setText("Error: ---")
+        self.error_label.setFixedHeight(20)
+        self.wid4 = QtWidgets.QWidget(self)
+        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid4.setGeometry(700, 380, 680, 600)
+        self.layout4.addWidget(self.error_label)
+        self.wid4.setLayout(self.layout4)
+
+        self.warning_label = QtWidgets.QLabel(self)
+        self.warning_label.setText("")
+        self.warning_label.setFixedHeight(20)
+        self.wid5 = QtWidgets.QWidget(self)
+        self.layout5 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid5.setGeometry(700, 420, 680, 600)
+        self.layout5.addWidget(self.warning_label)
+        self.wid5.setLayout(self.layout5)
+
+        self.epr_label = QtWidgets.QLabel("Max Epochs per run:")
+        wid6 = QtWidgets.QWidget(self)
+        layout6 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        wid6.setGeometry(700, 280, 680, 600)
+        layout6.addWidget(self.epr_label)
+        wid6.setLayout(layout6)
+
+        self.epochs_per_run = QtWidgets.QComboBox(self)
+        self.epochs_per_run.addItems(["1", "10", "100", "1000"])
+        self.epochs_per_run.setCurrentIndex(0)
+
+        wid7 = QtWidgets.QWidget(self)
+        layout7 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        wid7.setGeometry(700, 550, 150, 100)
+        layout7.addWidget(self.epochs_per_run)
+        wid7.setLayout(layout7)
+
+        self.run_button = QtWidgets.QPushButton("Train", self)
+        self.run_button.setStyleSheet("font-size:13px")
+        self.run_button.setGeometry(705, 530, 190, 30)
+        self.run_button.clicked.connect(self.on_run)
+
+        self.rerun_button = QtWidgets.QPushButton("Reset to Start", self)
+        self.rerun_button.setStyleSheet("font-size:13px")
+        self.rerun_button.setGeometry(705, 490, 190, 30)
+        self.rerun_button.clicked.connect(self.on_reset)
+
+        self.undo_click_button = QtWidgets.QPushButton("Undo Last Mouse Click", self)
+        self.undo_click_button.setStyleSheet("font-size:13px")
+        self.undo_click_button.setGeometry(705, 450, 190, 30)
+        self.undo_click_button.clicked.connect(self.on_undo_mouseclick)
+
+        self.clear_button = QtWidgets.QPushButton("Clear Data", self)
+        self.clear_button.setStyleSheet("font-size:13px")
+        self.clear_button.setGeometry(705, 410, 190, 30)
+        self.clear_button.clicked.connect(self.on_clear)
+
+        self.initialize_weights()
+
+    def draw_data(self):
+        self.pos_line.set_data([x[0] for x in self.data if x[2] == POS], [y[1] for y in self.data if y[2] == POS])
+        self.neg_line.set_data([x[0] for x in self.data if x[2] == NEG], [y[1] for y in self.data if y[2] == NEG])
+        self.canvas.draw()
+
+    def draw_decision_boundary(self):
+        lim = self.axes.get_xlim()
+        X = np.linspace(lim[0], lim[1], 101)
+        Y = self.find_decision_boundary(X)
+        self.decision.set_data(X, Y)
+        self.canvas.draw()
+
+    def clear_decision_boundary(self):
+        self.decision.set_data([], [])
+        self.canvas.draw()
+
+    def on_mouseclick(self, event):
+        """Add an item to the plot"""
+        if event.xdata != None and event.xdata != None:
+            self.data.append((event.xdata, event.ydata, POS if event.button == 1 else NEG))
+            self.draw_data()
+
+    def on_clear(self):
+        self.data = []
+        self.clear_decision_boundary()
+        self.initialize_weights()
+        self.total_epochs = 0
+        self.update_run_status()
+        self.draw_data()
+
+    def update_run_status(self):
+        if self.total_epochs == 0:
+            self.epoch_label.setText("Epochs so far: 0")
+            self.error_label.setText("Error: ---")
+        else:
+            self.epoch_label.setText("Epochs so far: {}".format(self.total_epochs))
+            self.error_label.setText("Error: {}".format(self.total_error))
+
+    def on_run(self):
+
+        if len(self.data) < 2:
+            self.warning_label.setText("Please select at least two data points before training")
+        else:
+            if len(np.unique([cls[2] for cls in self.data])) == 1:
+                self.warning_label.setText("Please select at least one data point of each class")
+            else:
+                self.warning_label.setText("")
+                # Do 10 epochs
+                for epoch in range(int(self.epochs_per_run.currentText())):
+
+                    self.total_epochs += 1
+
+                    # training = self.data.copy()
+                    # np.random.shuffle(training)
+                    for d in self.data:
+                        self.train_one_iteration(np.array(d[0:2]), d[2])
+
+                    # Calculate the error for the epoch
+                    self.all_t_hat = np.array([self.run_forward(np.array(xy[0:2])) for xy in self.data])
+                    self.total_error = abs(np.array([t[2] for t in self.data]) - self.all_t_hat).sum()
+
+                    if self.total_error == 0:
+                        break
+
+                self.update_run_status()
+                self.draw_decision_boundary()
+
+    def on_reset(self):
+        self.initialize_weights()
+        self.total_epochs = 0
+        self.update_run_status()
+        self.clear_decision_boundary()
+
+    def on_undo_mouseclick(self):
+        if self.data:
+            self.data.pop()
+            self.draw_data()
+
+    def run_forward(self, p):
+        """Given an input of dimension R, run the network"""
+        return hardlim(self.Weights.dot(p) + self.bias)
+
+    def train_one_iteration(self, p, t):
+        """Given one input of dimension R and its target, perform one training iteration.
+        Update the weights and biases using the Perceptron learning Rule."""
+
+        t_hat = self.run_forward(p)
+        self.error = t - t_hat
+
+        # Adjust weights and bias based on the error from this iteration
+        self.Weights = self.Weights + self.error * p.T
+        self.bias = self.bias + self.error
+        return self.error
+
+    def find_decision_boundary(self, x):
+        """Returns the corresponding y value for the input x on the decision
+        boundary"""
+        return -(x * self.Weights[0] + self.bias) / \
+               (self.Weights[1] if self.Weights[1] != 0 else .000001)
+
+    def initialize_weights(self):
+        self.Weights = (np.random.random(self.R) - 0.5) * 20
+        self.bias = (np.random.random(self.S) - 0.5) * 20

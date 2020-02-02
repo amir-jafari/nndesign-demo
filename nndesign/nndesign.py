@@ -8,7 +8,7 @@ from get_package_path import PACKAGE_PATH
 
 
 # -------------------------------------------------------------------------------------------------------------
-xm =500; ym= 150; wm = 900; hm =800;
+xm =500; ym= 150; wm = 720; hm =800;
 
 xlabel =80; ylabel= 5; wlabel = 500; hlabel =100; add =20;
 xtabel =560; ytabel=25 ; wtabel =500 ; htabel =100;
@@ -37,6 +37,10 @@ class MainWindow(NNDLayout):
 
         self.setGeometry(xm, ym, wm, hm)
         self.setWindowTitle("Neural Network Design")
+
+        self.setFixedSize(wm, hm)
+
+        """self.p_x, self.p_y = xm, ym"""
 
         self.label1 = QtWidgets.QLabel(self)
         self.label1.setText("Neural Network Design:")
@@ -93,23 +97,26 @@ class MainWindow(NNDLayout):
         # self.button2_win = MainWindowDL()
         # self.button2_win.show()
 
-    def paintEvent(self, e):
-        qp = QtGui.QPainter()
-        color = QtGui.QColor(0, 0, 0)
-        color.setNamedColor('#d4d4d4')
-        qp.begin(self)
-        self.draw_lines(qp)
-        qp.end()
+    """# https://www.reddit.com/r/learnpython/comments/94wszv/dynamic_selfwidth_and_selfheight_in_label_pyqt5/e3onhqi/
+    def update(self):
+        print(self.width(), self.height())
+        diff_w = wm - self.width()
+        diff_h = hm - self.height()
+        if self.pos().x() != self.p_x or self.pos().y() != self.p_y:
+            if diff_w != 0 or diff_h != 0:
+                print("moved!")
+        # print(diff_w, diff_h)
+        # print(self.pos())
+        self.p_x, self.p_y = self.pos().x(), self.pos().y()
+        self.label3.move(wtabel - diff_w, wtabel - diff_h)
 
-    @staticmethod
-    def draw_lines(qp):
-        pen = QtGui.QPen(QtCore.Qt.darkBlue, 4, QtCore.Qt.SolidLine)
-        qp.setPen(pen)
-        qp.drawLine(xl1, yl1, wl1, hl1)
+    def resizeEvent(self, event):
+        self.update()  # call your update method
+        QMainWindow.resizeEvent(self, event)
 
-        pen = QtGui.QPen(QtCore.Qt.darkBlue, 4, QtCore.Qt.SolidLine)
-        qp.setPen(pen)
-        qp.drawLine(xl2, yl2, wl2, hl2)
+    def moveEvent(self, event):
+        self.p_xx, self.p_yy = self.pos().x(), self.pos().y()
+        QMainWindow.moveEvent(self, event)"""
 
 
 def nndtoc():

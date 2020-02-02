@@ -17,3 +17,11 @@ The elements in the dropdown menus are connected to a function for each chapter 
 - The next scripts are chapter-specific (one for each chapter):
 
 Inherits from NNDLayout with main_menu=1 or main_menu=2 and create_plot=True or create_plot=False.
+
+-----------
+
+For resizing when window size changes: http://zetcode.com/gui/pyqt5/layout/
+
+https://www.youtube.com/watch?v=g5mLzk3PP1o&list=PL1FgJUcJJ03uO70zDLDF3oaTu6s2QLOPa&index=5
+
+Have spent quite a while on this, it seems too complicated and it breaks my class inheritance... I don't think it's worth it
