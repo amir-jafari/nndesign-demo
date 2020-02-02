@@ -5,6 +5,7 @@ from nndesign_layout import NNDLayout
 
 from One_input_neuron import OneInputNeuron
 from Perceptron_rule import PerceptronRule
+from Decision_boundary import DecisionBoundaries
 
 from get_package_path import PACKAGE_PATH
 
@@ -186,7 +187,8 @@ class MainWindowNN(NNDLayout):
 
     def chapter4(self, idx):
         if idx == 1:
-            self.myOtherWindow = decision_boundaries()
+            self.chapter_window1 = DecisionBoundaries()
+            self.chapter_window1.show()
         elif idx == 2:
             self.chapter_window2 = PerceptronRule()
             self.chapter_window2.show()

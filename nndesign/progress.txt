@@ -5,5 +5,5 @@ Book 1:
 	- Two Input Neuron -> Graph or just show output value?  
 
 - Chapter 4:
-    -
+    - Decision boundary --> Done
     - Perceptron rule --> Done
