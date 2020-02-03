@@ -2,8 +2,55 @@ Book 1:
 
 - Chapter 2:
 	- One Input Neuron -> Done
-	- Two Input Neuron -> Graph or just show output value?  
+	- Two Input Neuron -> Graph or just show output value?
+
+- Chapter 3:
+    - Perceptron Classification
 
 - Chapter 4:
     - Decision boundary --> Done
     - Perceptron rule --> Done
+
+- Chapter 5:
+    - Gram Schmidt
+    - Reciprocal Basis
+
+- Chapter 6:
+    - Linear Transformations
+    - Eigenvector Game
+
+- Chapter 8:
+    - Taylor Series 1
+    - Taylor Series 2
+    - Directional Derivatives
+    - Quadratic Function
+
+- Chapter 9:
+    - Steepest Descent for Quadratic
+    - Method Comparison
+    - Newton's Method
+    - Steepest Descent
+
+- Chapter 11:
+    - Network Function
+    - Back-propagation Calculation
+    - Function Approximation  --> Working on it: Figure out why it doesn't update the plot each epoch, and why S1 value doesn't show
+    - Generalization
+
+- Chapter 12:
+    - Steepest Descent #1
+    - Steepest Descent #2
+    - Momentum
+    - Variable Learning Rate
+    - CG Line Search
+    - Conjugate Gradient
+
+- Chapter 13:
+    - Early Stopping
+    - Regularization
+    - Bayesian Regularization
+    - Early-stopping-Regularization
+
+- Chapter 14:
+    - Dynamic Derivatives
+    - Recurrent Network Training

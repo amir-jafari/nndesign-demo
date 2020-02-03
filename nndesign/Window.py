@@ -6,6 +6,7 @@ from nndesign_layout import NNDLayout
 from One_input_neuron import OneInputNeuron
 from Perceptron_rule import PerceptronRule
 from Decision_boundary import DecisionBoundaries
+from Function_approximation import FunctionApproximation
 
 from get_package_path import PACKAGE_PATH
 
@@ -215,7 +216,15 @@ class MainWindowNN(NNDLayout):
         print("TODO")
 
     def chapter11(self, idx):
-        print("TODO")
+        if idx == 1:
+            print("TODO")
+        elif idx == 2:
+            print("TODO")
+        elif idx == 3:
+            self.chapter_window4 = FunctionApproximation()
+            self.chapter_window4.show()
+        elif idx == 4:
+            print("TODO")
 
     def chapter12(self, idx):
         print("TODO")
