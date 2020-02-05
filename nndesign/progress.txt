@@ -32,9 +32,9 @@ Book 1:
     - Steepest Descent
 
 - Chapter 11:
-    - Network Function
+    - Network Function --> Done
     - Back-propagation Calculation
-    - Function Approximation  --> Working on it: Figure out why it doesn't update the plot each epoch, and why S1 value doesn't show
+    - Function Approximation  --> Working on it: TODO: Figure out why it doesn't update the plot each epoch, and why S1 value doesn't show
     - Generalization
 
 - Chapter 12:

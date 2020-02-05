@@ -7,6 +7,7 @@ from One_input_neuron import OneInputNeuron
 from Perceptron_rule import PerceptronRule
 from Decision_boundary import DecisionBoundaries
 from Function_approximation import FunctionApproximation
+from Network_function import NetworkFunction
 
 from get_package_path import PACKAGE_PATH
 
@@ -217,7 +218,8 @@ class MainWindowNN(NNDLayout):
 
     def chapter11(self, idx):
         if idx == 1:
-            print("TODO")
+            self.chapter_window1 = NetworkFunction()
+            self.chapter_window1.show()
         elif idx == 2:
             print("TODO")
         elif idx == 3:
