@@ -8,6 +8,7 @@ from Perceptron_rule import PerceptronRule
 from Decision_boundary import DecisionBoundaries
 from Function_approximation import FunctionApproximation
 from Network_function import NetworkFunction
+from Steepest_descent_quadratic import SteepestDescentQuadratic
 
 from get_package_path import PACKAGE_PATH
 
@@ -211,7 +212,15 @@ class MainWindowNN(NNDLayout):
         print("TODO")
 
     def chapter9(self, idx):
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = SteepestDescentQuadratic()
+            self.chapter_window1.show()
+        elif idx == 2:
+            print("TODO")
+        elif idx == 3:
+            print("TODO")
+        elif idx == 4:
+            print("TODO")
 
     def chapter10(self, idx):
         print("TODO")
