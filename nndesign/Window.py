@@ -9,6 +9,7 @@ from Decision_boundary import DecisionBoundaries
 from Function_approximation import FunctionApproximation
 from Network_function import NetworkFunction
 from Steepest_descent_quadratic import SteepestDescentQuadratic
+from Comparison_of_methods import ComparisonOfMethods
 
 from get_package_path import PACKAGE_PATH
 
@@ -216,7 +217,8 @@ class MainWindowNN(NNDLayout):
             self.chapter_window1 = SteepestDescentQuadratic()
             self.chapter_window1.show()
         elif idx == 2:
-            print("TODO")
+            self.chapter_window2 = ComparisonOfMethods()
+            self.chapter_window2.show()
         elif idx == 3:
             print("TODO")
         elif idx == 4:
