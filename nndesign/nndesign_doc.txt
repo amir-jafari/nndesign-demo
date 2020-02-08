@@ -1,5 +1,7 @@
 Documentation for nndesign:
 
+- To allow for different screen sizes, we get the screen resolution when running nndesign.py and then scale the absolute coordinates set on my mac accordingly.
+
 - There is a script defining common attributes: nndesign_layout.py, which all other windows inherit from, and with init arguments to change appearance as required.
 
 - The main script is nndesign.py:

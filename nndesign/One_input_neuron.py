@@ -11,10 +11,10 @@ from get_package_path import PACKAGE_PATH
 
 
 class OneInputNeuron(NNDLayout):
-    def __init__(self):
-        super(OneInputNeuron, self).__init__(main_menu=1)
+    def __init__(self, w_ratio, h_ratio):
+        super(OneInputNeuron, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("One input neuron", 2, "Alter the weight and bias\n and input by dragging the\n triangular"
+        self.fill_chapter("One input neuron", 2, " Alter the weight and bias\n and input by dragging the\n triangular"
                                                  " shaped indictors.\n \n Pick the transfer function\n with the F menu.\n "
                                                  "\n Watch the change\n to the  neuron function\n and its  output.",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")
@@ -26,12 +26,12 @@ class OneInputNeuron(NNDLayout):
         self.label_f = QtWidgets.QLabel(self)
         self.label_f.setText("f")
         self.label_f.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_f.setGeometry(775, 550, 150, 100)
+        self.label_f.setGeometry(560 * self.w_ratio, 550 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
 
         self.label_w = QtWidgets.QLabel(self)
         self.label_w.setText("w")
         self.label_w.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w.setGeometry(775, 400, 150, 100)
+        self.label_w.setGeometry(560 * self.w_ratio, 400 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
         self.slider_w = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider_w.setRange(-3, 3)
         self.slider_w.setTickPosition(QtWidgets.QSlider.TicksBelow)
@@ -41,7 +41,7 @@ class OneInputNeuron(NNDLayout):
         self.label_b = QtWidgets.QLabel(self)
         self.label_b.setText("b")
         self.label_b.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b.setGeometry(775, 470, 150, 100)
+        self.label_b.setGeometry(560 * self.w_ratio, 470 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
         self.slider_b = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider_b.setRange(-3, 3)
         self.slider_b.setTickPosition(QtWidgets.QSlider.TicksBelow)
@@ -50,19 +50,19 @@ class OneInputNeuron(NNDLayout):
 
         self.wid2 = QtWidgets.QWidget(self)
         self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(710, 580, 150, 100)
+        self.wid2.setGeometry(520 * self.w_ratio, 580 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
         self.layout2.addWidget(self.comboBox1)
         self.wid2.setLayout(self.layout2)
 
         self.wid3 = QtWidgets.QWidget(self)
         self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(710, 430, 150, 100)
+        self.wid3.setGeometry(520 * self.w_ratio, 430 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
         self.layout3.addWidget(self.slider_w)
         self.wid3.setLayout(self.layout3)
 
         self.wid4 = QtWidgets.QWidget(self)
         self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(710, 500, 150, 100)
+        self.wid4.setGeometry(520 * self.w_ratio, 500 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
         self.layout4.addWidget(self.slider_b)
         self.wid4.setLayout(self.layout4)
 

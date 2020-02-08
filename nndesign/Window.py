@@ -15,24 +15,27 @@ from get_package_path import PACKAGE_PATH
 
 
 # -------------------------------------------------------------------------------------------------------------
-xtabel =560; ytabel=25 ; wtabel =500 ; htabel =100;
-xautor = 650; yautor= 715; wautor = 500; hautor=100;
+wlabel, hlabel = 500, 100
+xlabel =30; ylabel= 5; add =20;
+xtabel =120; ytabel=25
+xautor = 180; yautor= 600;
 
 
-xcm1 =250; ycm1= 140; wcm1 = 350; hcm1 =20; add1 = 140; subt=20;
-xbtn1 =150; ybtn1= 740; wbtn1 = 60; hbtn1=20; add2 = 80; add2_1 = 30;
+xcm1 =340; ycm1= 140; wcm1 = 250; hcm1 =20; add1 = 140; subt=20;
+xcm2 = 333
+xbtn1 =100; ybtn1= 740; wbtn1 = 60; hbtn1=20; add2 = 80; add2_1 = 30;
 
 xl1 =10; yl1= 90; wl1 = 700; hl1 =90;
 xl2 =650; yl2= 780; wl2 = 900; hl2 =780;
 
-w_Logo1 = 100;h_Logo1 = 80; xL_g1 = 150; yL_g1= 110; wL_g1= w_Logo1; hL_g1=h_Logo1; add_l = 140;
+w_Logo1 = 100;h_Logo1 = 80; xL_g1 = 100; yL_g1= 110; wL_g1= w_Logo1; hL_g1=h_Logo1; add_l = 140;
 
 
-w_Logom = 200; h_Logom = 100; xL_gm = 80; yL_gm= 140; wL_gm= 3*w_Logo1; hL_gm = h_Logom;
-w_Logom1 = 200; h_Logom1 = 100; xL_gm1 = 80; yL_gm1= 450; wL_gm1= 3*w_Logo1; hL_gm1=h_Logom1;
+w_Logom = 100; h_Logom = 100; xL_gm = 80; yL_gm= 140; wL_gm= 3*w_Logo1; hL_gm = h_Logom;
+w_Logom1 = 100; h_Logom1 = 100; xL_gm1 = 80; yL_gm1= 450; wL_gm1= 3*w_Logo1; hL_gm1=h_Logom1;
 
-xbtnm =300; ybtnm= 140; wbtnm = 300; hbtnm=50;
-xbtnm1 =300; ybtnm1= 470; wbtnm1 = 300; hbtnm1=50;
+xbtnm =100; ybtnm= 140; wbtnm = 300; hbtnm=50;
+xbtnm1 =100; ybtnm1= 470; wbtnm1 = 300; hbtnm1=50;
 
 BOOK1_CHAPTERS_DEMOS = {
     2: ["Neuron Model & Network Architecture:", "Chapter2 demos", "One-input Neuron", "Two-input Neuron"],
@@ -60,19 +63,19 @@ BOOK1_CHAPTERS_DEMOS = {
 
 
 class MainWindowNN(NNDLayout):
-    def __init__(self):
+    def __init__(self, w_ratio, h_ratio):
         """ Main Window for the Neural Network Design Book. Inherits basic layout from NNDLayout """
-        super(MainWindowNN, self).__init__(main_menu=1, draw_vertical=False, create_plot=False)
+        super(MainWindowNN, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=1, draw_vertical=False, create_plot=False)
 
         self.label3 = QtWidgets.QLabel(self)
         self.label3.setText("Table of Contents")
         self.label3.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.StyleItalic))
-        self.label3.setGeometry(xtabel, ytabel, wtabel, htabel)
+        self.label3.setGeometry(self.wm - xtabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
 
         self.label4 = QtWidgets.QLabel(self)
         self.label4.setText("By Hagan, Demuth, Beale, Jafari")
         self.label4.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
-        self.label4.setGeometry(xautor, yautor, wautor, hautor)
+        self.label4.setGeometry(self.wm - xautor * self.w_ratio, yautor * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
 
         # ---- Chapter icons and dropdown menus ----
 
@@ -81,30 +84,30 @@ class MainWindowNN(NNDLayout):
         self.icon1 = QtWidgets.QLabel(self)
         self.comboBox1 = QtWidgets.QComboBox(self)
         self.comboBox1.connected = False  # Need to create this attribute so that we don't have more than one connected function
-        self.comboBox1.setGeometry(xcm1, ycm1, wcm1, hcm1)
+        self.comboBox1.setGeometry(self.wm - xcm1 * self.w_ratio, ycm1 * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box1 = QtWidgets.QLabel(self)
-        self.label_box1.setGeometry(xcm1, ycm1 - subt, wcm1, hcm1)
+        self.label_box1.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
 
         self.icon2 = QtWidgets.QLabel(self)
         self.comboBox2 = QtWidgets.QComboBox(self)
         self.comboBox2.connected = False
-        self.comboBox2.setGeometry(xcm1, ycm1 + add1, wcm1, hcm1)
+        self.comboBox2.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box2 = QtWidgets.QLabel(self)
-        self.label_box2.setGeometry(xcm1, ycm1 + add1 - subt, wcm1, hcm1)
+        self.label_box2.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
 
         self.icon3 = QtWidgets.QLabel(self)
         self.comboBox3 = QtWidgets.QComboBox(self)
         self.comboBox3.connected = False
-        self.comboBox3.setGeometry(xcm1, ycm1 + 2 * add1, wcm1, hcm1)
+        self.comboBox3.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + 2 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box3 = QtWidgets.QLabel(self)
-        self.label_box3.setGeometry(xcm1, ycm1 + 2 * add1 - subt, wcm1, hcm1)
+        self.label_box3.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + 2 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
 
         self.icon4 = QtWidgets.QLabel(self)
         self.comboBox4 = QtWidgets.QComboBox(self)
         self.comboBox4.connected = False
-        self.comboBox4.setGeometry(xcm1, ycm1 + 3 * add1, wcm1, hcm1)
+        self.comboBox4.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + 3 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box4 = QtWidgets.QLabel(self)
-        self.label_box4.setGeometry(xcm1, ycm1 + 3 * add1 - subt, wcm1, hcm1)
+        self.label_box4.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + 3 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
 
         self.show_chapters()
 
@@ -145,6 +148,8 @@ class MainWindowNN(NNDLayout):
         self.button7.setGeometry(xbtn1 + 3 * add2, ybtn1 + add2_1, wbtn1, hbtn1)
         self.button7.clicked.connect(self.new_window7)
 
+        self.center()
+
     def show_chapters(self, chapters="2-5"):
         """ Updates the icons and dropdown menus based on a block of chapters (chapters) """
 
@@ -159,7 +164,8 @@ class MainWindowNN(NNDLayout):
         for icon in [self.icon1, self.icon2, self.icon3, self.icon4]:
             icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/Logo_Ch_{}.svg".format(chapter_numbers[idx])).pixmap(
                 w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            icon.setGeometry(xL_g1, yL_g1 + idx * add_l, wL_g1, hL_g1)
+            # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, wL_g1, hL_g1)
+            icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, wL_g1 * self.w_ratio, hL_g1 * self.h_ratio)
             idx += 1
 
         idx = 0
@@ -176,7 +182,7 @@ class MainWindowNN(NNDLayout):
 
     def chapter2(self, idx):
         if idx == 1:
-            self.chapter_window1 = OneInputNeuron()
+            self.chapter_window1 = OneInputNeuron(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
         elif idx == 2:
             self.chapter_window2 = two_input_neuron()
