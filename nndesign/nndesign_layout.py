@@ -49,20 +49,26 @@ class NNDLayout(QMainWindow):
 
         self.draw_vertical = draw_vertical
         if main_menu == 1:
-
             self.setWindowTitle("Neural Network Design")
-
             self.label1 = QtWidgets.QLabel(self)
             self.label1.setText("Neural Network")
             self.label1.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
             self.label1.setGeometry(xlabel * self.w_ratio, ylabel * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
-
             self.label2 = QtWidgets.QLabel(self)
             self.label2.setText("DESIGN")
             self.label2.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
             self.label2.setGeometry(xlabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
 
-        # TODO: elif main_menu == 2 (for second book)
+        if main_menu == 2:
+            self.setWindowTitle("Neural Network Design")
+            self.label1 = QtWidgets.QLabel(self)
+            self.label1.setText("Neural Network Design")
+            self.label1.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
+            self.label1.setGeometry(xlabel * self.w_ratio, ylabel * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
+            self.label2 = QtWidgets.QLabel(self)
+            self.label2.setText("DEEP LEARNING")
+            self.label2.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
+            self.label2.setGeometry(xlabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
 
         if create_plot:
 
@@ -95,7 +101,7 @@ class NNDLayout(QMainWindow):
             # qp.drawLine(self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio + 35, self.wm - xl1 * self.w_ratio, 750 * self.h_ratio)
             qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, 670 * self.h_ratio)
 
-    def fill_chapter(self, title, number, description, logo_path, icon_path, show_info=True):
+    def fill_chapter(self, title, number, description, logo_path, icon_path, show_info=True, icon_move_left=0):
 
         # TODO: Use len of title to modify position of text, or actually, to set the line breaks on the right place in order to also scale according to resolution
 
@@ -121,7 +127,7 @@ class NNDLayout(QMainWindow):
 
         self.icon2 = QtWidgets.QLabel(self)
         self.icon2.setPixmap(QtGui.QIcon(icon_path).pixmap(wp_pic2_2 * self.w_ratio, hp_pic2_2 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon2.setGeometry(x_pic2_2 * self.w_ratio, y_pic2_2 * self.h_ratio, w_pic2_2 * self.w_ratio, h_pic2_2 * self.h_ratio)
+        self.icon2.setGeometry((x_pic2_2 - icon_move_left) * self.w_ratio, y_pic2_2 * self.h_ratio, w_pic2_2 * self.w_ratio, h_pic2_2 * self.h_ratio)
 
     def center(self):
         qr = self.frameGeometry()

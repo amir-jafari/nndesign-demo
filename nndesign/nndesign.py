@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication
 
 from nndesign_layout import NNDLayout
-from Window import MainWindowNN
+from Window import MainWindowNN, MainWindowDL
 
 from get_package_path import PACKAGE_PATH
 
@@ -77,24 +77,17 @@ class MainWindow(NNDLayout):
         self.button1_win = MainWindowNN(self.w_ratio, self.h_ratio)
         self.button1_win.show()
 
-    @staticmethod
-    def new_window2():
-        print("TODO")  # TODO
-        # self.button2_win = MainWindowDL()
-        # self.button2_win.show()
-
-    def center(self):
-        qr = self.frameGeometry()
-        cp = QtWidgets.QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
+    def new_window2(self):
+        # print("TODO")  # TODO
+        self.button2_win = MainWindowDL(self.w_ratio, self.h_ratio)
+        self.button2_win.show()
 
 
 import sys
 app = QApplication(sys.argv)
 dimensions = QtWidgets.QDesktopWidget().screenGeometry(-1)
 W_SCREEN, H_SCREEN = dimensions.width(), dimensions.height()
-W_SCREEN, H_SCREEN = 1900, 850  # To check how it would look on a bigger screen
+# W_SCREEN, H_SCREEN = 1900, 850  # To check how it would look on a bigger screen
 W_RATIO, H_RATIO = W_SCREEN / 1280, H_SCREEN / 800
 win = MainWindow(W_RATIO, H_RATIO)
 win.show()

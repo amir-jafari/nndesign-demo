@@ -11,6 +11,12 @@ from Network_function import NetworkFunction
 from Steepest_descent_quadratic import SteepestDescentQuadratic
 from Comparison_of_methods import ComparisonOfMethods
 
+from Poslin_network_function import PoslinNetworkFunction
+# from Poslin_decision_regions import PoslinDecisionRegions
+from Cascaded_function import CascadedFunction
+from Gradient_descent import GradientDescent
+from Gradient_descent_stochastic import GradientDescentStochastic
+
 from get_package_path import PACKAGE_PATH
 
 
@@ -45,6 +51,11 @@ BOOK1_CHAPTERS_DEMOS = {
     19: ["Adaptive Resonance Theory", "Chapter19 demos", "ART1 Layer 1", "ART1 Layer 2", "Orienting Subsystem", "ART1 Algorithm"],
     20: ["Stability", "Chapter20 demos", "Dynamical System"],
     21: ["Hopfield Network", "Chapter21 demos", "Hopfield Network"]
+}
+
+BOOK2_CHAPTERS_DEMOS = {
+    2: ["Multilayer Networks", "Chapter2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
+    3: ["Multilayer Network Train", "Chapter3 demos", "Gradient Descent", "Gradient Descent Stochastic"]
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -269,3 +280,99 @@ class MainWindowNN(NNDLayout):
     @staticmethod
     def new_window7():
         print("TODO")
+
+
+class MainWindowDL(NNDLayout):
+    def __init__(self, w_ratio, h_ratio):
+        """ Main Window for the Neural Network Design - Deep Learning Book. Inherits basic layout from NNDLayout """
+        super(MainWindowDL, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=2, draw_vertical=False, create_plot=False)
+
+        self.label3 = QtWidgets.QLabel(self)
+        self.label3.setText("Table of Contents")
+        self.label3.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.StyleItalic))
+        self.label3.setGeometry(self.wm - xlabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
+
+        self.label4 = QtWidgets.QLabel(self)
+        self.label4.setText("By Hagan, Jafari")
+        self.label4.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
+        self.label4.setGeometry(self.wm - 100 * self.w_ratio, 580 * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
+
+        # ---- Chapter icons and dropdown menus ----
+
+        self.chapter_window1, self.chapter_window2, self.chapter_window3, self.chapter_window4, self.chapter_window5 = None, None, None, None, None
+
+        self.icon1 = QtWidgets.QLabel(self)
+        self.comboBox1 = QtWidgets.QComboBox(self)
+        self.comboBox1.connected = False  # Need to create this attribute so that we don't have more than one connected function
+        self.comboBox1.setGeometry(self.wm - xcm1 * self.w_ratio, ycm1 * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box1 = QtWidgets.QLabel(self)
+        self.label_box1.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+
+        self.icon2 = QtWidgets.QLabel(self)
+        self.comboBox2 = QtWidgets.QComboBox(self)
+        self.comboBox2.connected = False
+        self.comboBox2.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box2 = QtWidgets.QLabel(self)
+        self.label_box2.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+
+        self.show_chapters()
+
+        # ---- Buttons at the bottom to switch between blocks of chapters ----
+
+        self.button1 = QtWidgets.QPushButton(self)
+        self.button1.setText("2-3")
+        self.button1.setGeometry(xbtn1 * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
+        self.button1.clicked.connect(partial(self.show_chapters, "2-3"))
+
+        self.center()
+
+    def show_chapters(self, chapters="2-3"):
+        """ Updates the icons and dropdown menus based on a block of chapters (chapters) """
+
+        chapters = chapters.split("-")
+        chapter_numbers = list(range(int(chapters[0]), int(chapters[1]) + 1))
+        chapter_functions = [self.chapter2, self.chapter3]
+
+        idx = 0
+        for icon in [self.icon1, self.icon2]:  # TODO: Change logo path when we have them
+            icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/Logo_Ch_{}.svg".format(chapter_numbers[idx])).pixmap(
+                w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, w_Logo1, h_Logo1)
+            icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio)
+            idx += 1
+
+        idx = 0
+        for label_box, comboBox in zip([self.label_box1, self.label_box2],
+                                       [self.comboBox1, self.comboBox2]):
+            label_box.setText(BOOK2_CHAPTERS_DEMOS[chapter_numbers[idx]][0])
+            if comboBox.connected:
+                comboBox.currentIndexChanged.disconnect()
+            comboBox.clear()
+            comboBox.addItems(BOOK2_CHAPTERS_DEMOS[chapter_numbers[idx]][1:])
+            comboBox.currentIndexChanged.connect(chapter_functions[chapter_numbers[idx] - 2])
+            comboBox.connected = True
+            idx += 1
+
+    def chapter2(self, idx):
+        if idx == 1:
+            self.chapter_window1 = PoslinNetworkFunction(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
+        elif idx == 2:
+            # self.chapter_window2 = PoslinDecisionRegions(self.w_ratio, self.h_ratio)
+            # self.chapter_window2.show()
+            print("TODO")
+        elif idx == 3:
+            print("TODO")
+        elif idx == 4:
+            print("TODO")
+        elif idx == 5:
+            self.chapter_window5 = CascadedFunction(self.w_ratio, self.h_ratio)
+            self.chapter_window5.show()
+
+    def chapter3(self, idx):
+        if idx == 1:
+            self.chapter_window1 = GradientDescent(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window1 = GradientDescentStochastic(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
