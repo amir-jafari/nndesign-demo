@@ -1,9 +1,9 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-import math
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+from matplotlib.animation import FuncAnimation
 
 from nndesign_layout import NNDLayout
 
@@ -59,7 +59,7 @@ class FunctionApproximation(NNDLayout):
         self.label_s1 = QtWidgets.QLabel(self)
         self.label_s1.setText("Number of Hidden Neurons S1: 4")
         self.label_s1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_s1.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 400 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.label_s1.setGeometry((self.x_chapter_slider_label - 60) * self.w_ratio, 400 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.slider_s1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider_s1.setRange(1, 9)
         self.slider_s1.setTickPosition(QtWidgets.QSlider.TicksBelow)
@@ -105,6 +105,7 @@ class FunctionApproximation(NNDLayout):
         self.label_s1.setText("Number of Hidden Neurons S1: {}".format(self.S1))
         self.label_diff.setText("Difficulty Index: {}".format(self.diff))
         self.f_to_approx = lambda p: 1 + np.sin(np.pi * p * self.diff / 5)
+        self.net_approx.set_data([], [])
         self.plot_f()
 
     def init_params(self):
@@ -121,61 +122,51 @@ class FunctionApproximation(NNDLayout):
     def f_to_approx(self, p):
         return 1 + np.sin(np.pi * p * self.diff / 5)
 
+    # https://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/
     def on_run(self):
-        n_epochs, alpha = 100, 0.01
-        # Training Loop
-        for _ in range(n_epochs):
-            # Array of the errors for each sample
-            error = np.array([])
-            nn_output = []
-            # Updating parameters for each sample
-            for sample in self.p:
-                # Propagates the input forward
-                # Reshapes input as 1x1
-                a0 = sample.reshape(-1, 1)
-                # Hidden Layer's Net Input
-                n1 = np.dot(self.W1, a0) + self.b1
-                #  Hidden Layer's Transformation
-                a1 = logsigmoid(n1)
-                # Output Layer's Net Input
-                n2 = np.dot(self.W2, a1) + self.b2
-                # Output Layer's Transformation
-                a = purelin(n2)  # (a2 = a)
-                nn_output.append(a)
+        n_epochs = 500
+        self.last_idx = 0
+        ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=n_epochs,
+                            interval=20, repeat=False, blit=True)
 
-                # Back-propagates the sensitivities
-                # Compares our NN's output with the real value
-                e = self.f_to_approx(a0) - a
-                error = np.append(error, e)
-                # Output Layer
-                F2_der = np.diag(purelin_der(n2).reshape(-1))
-                s = -2 * np.dot(F2_der, e)  # (s2 = s)
-                # Hidden Layer
-                F1_der = np.diag(logsigmoid_der(n1).reshape(-1))
-                s1 = np.dot(F1_der, np.dot(self.W2.T, s))
+    def animate_init(self):
+        self.net_approx.set_data([], [])
+        return self.net_approx,
 
-                # Updates the weights and biases
-                # Hidden Layer
-                self.W1 += -alpha * np.dot(s1, a0.T)
-                self.b1 += -alpha * s1
-                # Output Layer
-                self.W2 += -alpha * np.dot(s, a1.T)
-                self.b2 += -alpha * s
-
-            self.plot_approx(np.array(nn_output))
-
-    def plot_approx(self, approx):
-        self.net_approx.set_data(self.p, approx)
-        self.canvas.draw()
-
-    def net_forward(self):
-        nn_output = np.array([])
+    def on_animate(self, idx):
+        alpha = 0.03
+        nn_output = []
         for sample in self.p:
+            # Propagates the input forward
+            # Reshapes input as 1x1
             a0 = sample.reshape(-1, 1)
-            # Hidden Layer's Transformation
+            # Hidden Layer's Net Input
             n1 = np.dot(self.W1, a0) + self.b1
+            #  Hidden Layer's Transformation
             a1 = logsigmoid(n1)
-            # Output Layer's Transformation
+            # Output Layer's Net Input
             n2 = np.dot(self.W2, a1) + self.b2
-            nn_output = np.append(nn_output, purelin(n2)[0][0])
-        return nn_output
+            # Output Layer's Transformation
+            a = purelin(n2)  # (a2 = a)
+            nn_output.append(a)
+
+            # Back-propagates the sensitivities
+            # Compares our NN's output with the real value
+            e = self.f_to_approx(a0) - a
+            # error = np.append(error, e)
+            # Output Layer
+            F2_der = np.diag(purelin_der(n2).reshape(-1))
+            s = -2 * np.dot(F2_der, e)  # (s2 = s)
+            # Hidden Layer
+            F1_der = np.diag(logsigmoid_der(n1).reshape(-1))
+            s1 = np.dot(F1_der, np.dot(self.W2.T, s))
+
+            # Updates the weights and biases
+            # Hidden Layer
+            self.W1 += -alpha * np.dot(s1, a0.T)
+            self.b1 += -alpha * s1
+            # Output Layer
+            self.W2 += -alpha * np.dot(s, a1.T)
+            self.b2 += -alpha * s
+        self.net_approx.set_data(self.p, nn_output)
+        return self.net_approx,

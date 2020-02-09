@@ -4,9 +4,7 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-
 from matplotlib.animation import FuncAnimation
-
 
 from nndesign_layout import NNDLayout
 
