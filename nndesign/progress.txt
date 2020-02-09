@@ -2,10 +2,11 @@ Book 1:
 
 - Chapter 2:
 	- One Input Neuron -> Done
-	- Two Input Neuron -> Graph or just show output value?
+	- Two Input Neuron -> Just output value
 
 - Chapter 3:
-    - Perceptron Classification
+    - Perceptron Classification --> No graph, just show calculations
+    - Hamming and Holpfied --> Same, follow MATLAB for the math
 
 - Chapter 4:
     - Decision boundary --> Done
@@ -26,15 +27,15 @@ Book 1:
     - Quadratic Function
 
 - Chapter 9:
-    - Steepest Descent for Quadratic  --> Almost done: TODO: Figure out why it doesn't update the plot each epoch
-    - Method Comparison
+    - Steepest Descent for Quadratic  --> Done
+    - Method Comparison --> Done
     - Newton's Method
     - Steepest Descent
 
 - Chapter 11:
     - Network Function --> Done
     - Back-propagation Calculation
-    - Function Approximation  --> Almost done: TODO: Figure out why it doesn't update the plot each epoch, and why S1 value doesn't show
+    - Function Approximation  --> Almost done: TODO: Use FuncAnimation from Cascaded Network, and why S1 value doesn't show. Use levenberg-marqad...
     - Generalization
 
 - Chapter 12:

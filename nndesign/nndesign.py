@@ -94,7 +94,7 @@ import sys
 app = QApplication(sys.argv)
 dimensions = QtWidgets.QDesktopWidget().screenGeometry(-1)
 W_SCREEN, H_SCREEN = dimensions.width(), dimensions.height()
-# W_SCREEN, H_SCREEN = 1900, 850  # To check how it would look on a bigger screen
+W_SCREEN, H_SCREEN = 1900, 850  # To check how it would look on a bigger screen
 W_RATIO, H_RATIO = W_SCREEN / 1280, H_SCREEN / 800
 win = MainWindow(W_RATIO, H_RATIO)
 win.show()

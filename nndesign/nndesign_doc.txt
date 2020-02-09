@@ -1,5 +1,7 @@
 Documentation for nndesign:
 
+- At least on my Mac, sliders only seem to work when selecting them from left to right
+
 - To allow for different screen sizes, we get the screen resolution when running nndesign.py and then scale the absolute coordinates set on my mac accordingly.
 
 - There is a script defining common attributes: nndesign_layout.py, which all other windows inherit from, and with init arguments to change appearance as required.

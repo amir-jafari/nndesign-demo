@@ -29,7 +29,7 @@ class SteepestDescentQuadratic(NNDLayout):
         self.axes.contour(X, Y, F)
         self.axes.set_xlim(-4, 4)
         self.axes.set_ylim(-2, 2)
-        self.path, = self.axes.plot([], label="Gradient Descent Path")
+        self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data, self.y_data = [], []
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
@@ -62,7 +62,7 @@ class SteepestDescentQuadratic(NNDLayout):
             self.x_data, self.y_data = [], []
             self.graph()
             self.x_data, self.y_data = [x_start], [y_start]
-            self.path, = self.axes.plot([], label="Gradient Descent Path")
+            self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
             self.steepest_descent(x_start, x_start)
 
     def graph(self):
@@ -84,5 +84,5 @@ class SteepestDescentQuadratic(NNDLayout):
             self.x_data, self.y_data = [], []
             self.graph()
             self.x_data, self.y_data = [event.xdata], [event.ydata]
-            self.path, = self.axes.plot([], label="Gradient Descent Path")
+            self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
             self.steepest_descent(event.xdata, event.ydata)

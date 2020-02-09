@@ -30,14 +30,14 @@ class ComparisonOfMethods(NNDLayout):
         self.axes_1.contour(X, Y, F)
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
-        self.path_1, = self.axes_1.plot([], 'r+', label="Gradient Descent Path")
+        self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data_1, self.y_data_1 = [], []
         self.axes_2 = self.figure.add_subplot(2, 1, 2)
         # self.axes_2.set_title("Conjugate Gradient Path")
         self.axes_2.contour(X, Y, F)
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
-        self.path_2, = self.axes_2.plot([], 'r+', label="Conjugate Gradient Path")
+        self.path_2, = self.axes_2.plot([], linestyle='--', marker='o', label="Conjugate Gradient Path")
         self.x_data_2, self.y_data_2 = [], []
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
@@ -122,8 +122,8 @@ class ComparisonOfMethods(NNDLayout):
             self.graph()
             self.x_data_1, self.y_data_1 = [event.xdata], [event.ydata]
             self.x_data_2, self.y_data_2 = [event.xdata], [event.ydata]
-            self.path_1, = self.axes_1.plot([], label="Gradient Descent Path")
-            self.path_2, = self.axes_2.plot([], label="Conjugate Gradient Path")
+            self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+            self.path_2, = self.axes_2.plot([], linestyle='--', marker='o', label="Conjugate Gradient Path")
             self.steepest_descent(event.xdata, event.ydata)
             self.conjugate_gradient(event.xdata, event.ydata)
             self.graph()

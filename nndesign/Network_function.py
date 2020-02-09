@@ -20,6 +20,7 @@ class NetworkFunction(NNDLayout):
         self.comboBox1 = QtWidgets.QComboBox(self)
         self.comboBox1_functions = [self.purelin, self.logsig, self.tansig]
         self.comboBox1.addItems(["Purelin", 'LogSig', 'TanSig'])
+        self.comboBox1.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 580 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.func1 = self.purelin
         self.label_f = QtWidgets.QLabel(self)
         self.label_f.setText("f")
@@ -40,7 +41,7 @@ class NetworkFunction(NNDLayout):
         self.slider_w1_1.setRange(-10, 10)
         self.slider_w1_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_w1_1.setTickInterval(1)
-        self.slider_w1_1.setValue(1)
+        self.slider_w1_1.setValue(10)
 
         self.wid_w1_1 = QtWidgets.QWidget(self)
         self.layout_w1_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -56,7 +57,7 @@ class NetworkFunction(NNDLayout):
         self.slider_w1_2.setRange(-10, 10)
         self.slider_w1_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_w1_2.setTickInterval(1)
-        self.slider_w1_2.setValue(1)
+        self.slider_w1_2.setValue(10)
 
         self.wid_w1_2 = QtWidgets.QWidget(self)
         self.layout_w1_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -72,7 +73,7 @@ class NetworkFunction(NNDLayout):
         self.slider_b1_1.setRange(-10, 10)
         self.slider_b1_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_b1_1.setTickInterval(1)
-        self.slider_b1_1.setValue(0)
+        self.slider_b1_1.setValue(-10)
 
         self.wid_b1_1 = QtWidgets.QWidget(self)
         self.layout_b1_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -88,7 +89,7 @@ class NetworkFunction(NNDLayout):
         self.slider_b1_2.setRange(-10, 10)
         self.slider_b1_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_b1_2.setTickInterval(1)
-        self.slider_b1_2.setValue(0)
+        self.slider_b1_2.setValue(10)
 
         self.wid_b1_2 = QtWidgets.QWidget(self)
         self.layout_b1_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -181,11 +182,11 @@ class NetworkFunction(NNDLayout):
 
         p = np.arange(-4, 4, 0.1)
         func = np.vectorize(self.func1)
-        out = np.dot(func(np.dot(p.reshape(-1, 1), weight_1) + bias_1), weight_2) + bias_2
+        out = func(np.dot(self.tansig(np.dot(p.reshape(-1, 1), weight_1) + bias_1), weight_2) + bias_2)
 
         a.plot(p, out.reshape(-1), markersize=3, color="red")
         # Setting limits so that the point moves instead of the plot.
-        a.set_xlim(-4, 4)
+        a.set_xlim(-2, 2)
         a.set_ylim(-2, 2)
         # add grid and axes
         a.grid(True, which='both')
