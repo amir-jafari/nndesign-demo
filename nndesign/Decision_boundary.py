@@ -20,11 +20,11 @@ def hardlim(n):
 
 
 class DecisionBoundaries(NNDLayout):
-    def __init__(self):
-        super(DecisionBoundaries, self).__init__(main_menu=1)
+    def __init__(self, w_ratio, h_ratio):
+        super(DecisionBoundaries, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Decision Boundaries", 4, "On the plot, click the\n Primary mouse button\n to add a positive class, and\n"
-                                                    " the secondary mouse button\n to add a negative class \n Modify the parameters' values"
+        self.fill_chapter("Decision Boundaries", 4, " On the plot, click the\n Primary mouse button\n to add a positive class, and\n"
+                                                    " the secondary mouse button\n to add a negative class \n Modify the parameters' values\n"
                                                     " and see how the error changes",
                           PACKAGE_PATH + "Chapters/4/Logo_Ch_4.svg", PACKAGE_PATH + "Chapters/4/Percptron1.svg")  # TODO: get icon
 
@@ -39,13 +39,15 @@ class DecisionBoundaries(NNDLayout):
         self.axes.set_ylim(-5, 5)
         self.axes.tick_params(labelsize=8)
         self.axes.set_xlabel("$p^1$", fontsize=10)
+        self.axes.xaxis.set_label_coords(0.5, 0.1)
         self.axes.set_ylabel("$p^2$", fontsize=10)
+        self.axes.yaxis.set_label_coords(-0.05, 0.5)
         self.pos_line, = self.axes.plot([], 'mo', label="Positive Class")
         self.neg_line, = self.axes.plot([], 'cs', label="Negative Class")
         self.decision, = self.axes.plot([], 'r-', label="Decision Boundary")
         self.weight_vector = self.axes.quiver([0], [0], [1], [-1], scale=21, label="Weight vector")
-        self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=3,
-                         bbox_to_anchor=(0, -.24, 1, -.280), mode='expand')
+        self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=2,
+                         bbox_to_anchor=(0, -.28, 1, -.280), mode='expand')
         self.axes.set_title("Single Neuron Perceptron")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
@@ -53,7 +55,7 @@ class DecisionBoundaries(NNDLayout):
         self.label_w1 = QtWidgets.QLabel(self)
         self.label_w1.setText("w1: 1.0")
         self.label_w1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w1.setGeometry(775, 330, 150, 100)
+        self.label_w1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 260 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.slider_w1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider_w1.setRange(-100, 100)
         self.slider_w1.setTickPosition(QtWidgets.QSlider.TicksBelow)
@@ -61,10 +63,16 @@ class DecisionBoundaries(NNDLayout):
         self.slider_w1.setTickInterval(1)
         self.slider_w1.setValue(10)
 
+        self.wid3 = QtWidgets.QWidget(self)
+        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 285 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.layout3.addWidget(self.slider_w1)
+        self.wid3.setLayout(self.layout3)
+
         self.label_w2 = QtWidgets.QLabel(self)
         self.label_w2.setText("w2: -1.0")
         self.label_w2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w2.setGeometry(775, 400, 150, 100)
+        self.label_w2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 330 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.slider_w2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider_w2.setRange(-100, 100)
         self.slider_w2.setTickPosition(QtWidgets.QSlider.TicksBelow)
@@ -72,10 +80,16 @@ class DecisionBoundaries(NNDLayout):
         self.slider_w2.setTickInterval(1)
         self.slider_w2.setValue(-10)
 
+        self.wid4 = QtWidgets.QWidget(self)
+        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid4.setGeometry(self.x_chapter_usual * self.w_ratio, 355 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.layout4.addWidget(self.slider_w2)
+        self.wid4.setLayout(self.layout4)
+
         self.label_b = QtWidgets.QLabel(self)
         self.label_b.setText("b: 0.0")
         self.label_b.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b.setGeometry(775, 470, 150, 100)
+        self.label_b.setGeometry(self.x_chapter_slider_label * self.w_ratio, 400 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.slider_b = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider_b.setRange(-100, 100)
         self.slider_b.setTickPosition(QtWidgets.QSlider.TicksBelow)
@@ -83,37 +97,25 @@ class DecisionBoundaries(NNDLayout):
         self.slider_b.setTickInterval(1)
         self.slider_b.setValue(0)
 
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(710, 360, 150, 100)
-        self.layout3.addWidget(self.slider_w1)
-        self.wid3.setLayout(self.layout3)
-
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(710, 430, 150, 100)
-        self.layout4.addWidget(self.slider_w2)
-        self.wid4.setLayout(self.layout4)
-
         self.wid5 = QtWidgets.QWidget(self)
         self.layout5 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid5.setGeometry(710, 500, 150, 100)
+        self.wid5.setGeometry(self.x_chapter_usual * self.w_ratio, 425 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout5.addWidget(self.slider_b)
         self.wid5.setLayout(self.layout5)
 
         self.label_error = QtWidgets.QLabel(self)
         self.label_error.setText("Error: ---")
         self.label_error.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_error.setGeometry(775, 550, 150, 100)
+        self.label_error.setGeometry(self.x_chapter_slider_label * self.w_ratio, 530 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
 
         self.undo_click_button = QtWidgets.QPushButton("Undo Last Mouse Click", self)
         self.undo_click_button.setStyleSheet("font-size:13px")
-        self.undo_click_button.setGeometry(705, 670, 190, 30)
+        self.undo_click_button.setGeometry(self.x_chapter_button * self.w_ratio, 500 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.undo_click_button.clicked.connect(self.on_undo_mouseclick)
 
         self.clear_button = QtWidgets.QPushButton("Clear Data", self)
         self.clear_button.setStyleSheet("font-size:13px")
-        self.clear_button.setGeometry(705, 620, 190, 30)
+        self.clear_button.setGeometry(self.x_chapter_button * self.w_ratio, 530 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.clear_button.clicked.connect(self.on_clear)
 
         self.slider_w1.valueChanged.connect(self.slide)

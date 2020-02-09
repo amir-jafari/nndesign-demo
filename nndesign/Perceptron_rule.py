@@ -15,10 +15,10 @@ def hardlim(n):
 
 
 class PerceptronRule(NNDLayout):
-    def __init__(self):
-        super(PerceptronRule, self).__init__(main_menu=1)
+    def __init__(self, w_ratio, h_ratio):
+        super(PerceptronRule, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Perceptron rule", 4, "On the plot, click the\n Primary mouse button\n to add a positive class.\n"
+        self.fill_chapter("Perceptron rule", 4, " On the plot, click the\n Primary mouse button\n to add a positive class.\n"
                                                 " Secondary mouse button\n to add a negative class.\n Then click Train  ",
                           PACKAGE_PATH + "Chapters/4/Logo_Ch_4.svg", PACKAGE_PATH + "Chapters/4/Percptron1.svg")
 
@@ -32,13 +32,15 @@ class PerceptronRule(NNDLayout):
         self.figure.subplots_adjust(bottom=0.2, left=0.1)
         self.axes.set_xlim(0, 10)
         self.axes.set_ylim(0, 10)
-        self.axes.tick_params(labelsize=8)
+        self.axes.tick_params(labelsize=10)
         self.axes.set_xlabel("$p^1$", fontsize=10)
+        self.axes.xaxis.set_label_coords(0.5, 0.1)
         self.axes.set_ylabel("$p^2$", fontsize=10)
+        self.axes.yaxis.set_label_coords(-0.05, 0.5)
         self.pos_line, = self.axes.plot([], 'mo', label="Positive Class")
         self.neg_line, = self.axes.plot([], 'cs', label="Negative Class")
         self.decision, = self.axes.plot([], 'r-', label="Decision Boundary")
-        self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=3, bbox_to_anchor=(0, -.24, 1, -.280), mode='expand')
+        self.axes.legend(loc='lower left', fontsize=8, numpoints=1, ncol=3, bbox_to_anchor=(-0.1, -.24, 1.1, -.280))
         self.axes.set_title("Single Neuron Perceptron")
         self.canvas.draw()
         # Add event handler for a mouseclick in the plot
@@ -49,7 +51,7 @@ class PerceptronRule(NNDLayout):
         self.epoch_label.setFixedHeight(20)
         self.wid2 = QtWidgets.QWidget(self)
         self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(700, 400, 680, 600)
+        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 600 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout2.addWidget(self.epoch_label)
         self.wid2.setLayout(self.layout2)
 
@@ -58,23 +60,19 @@ class PerceptronRule(NNDLayout):
         self.error_label.setFixedHeight(20)
         self.wid4 = QtWidgets.QWidget(self)
         self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(700, 380, 680, 600)
+        self.wid4.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 480 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout4.addWidget(self.error_label)
         self.wid4.setLayout(self.layout4)
 
         self.warning_label = QtWidgets.QLabel(self)
         self.warning_label.setText("")
-        self.warning_label.setFixedHeight(20)
-        self.wid5 = QtWidgets.QWidget(self)
-        self.layout5 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid5.setGeometry(700, 420, 680, 600)
-        self.layout5.addWidget(self.warning_label)
-        self.wid5.setLayout(self.layout5)
+        # self.warning_label.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
+        self.warning_label.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 520 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
 
         self.epr_label = QtWidgets.QLabel("Max Epochs per run:")
         wid6 = QtWidgets.QWidget(self)
         layout6 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        wid6.setGeometry(700, 280, 680, 600)
+        wid6.setGeometry((self.x_chapter_usual + 5) * self.w_ratio, 420 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         layout6.addWidget(self.epr_label)
         wid6.setLayout(layout6)
 
@@ -84,28 +82,28 @@ class PerceptronRule(NNDLayout):
 
         wid7 = QtWidgets.QWidget(self)
         layout7 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        wid7.setGeometry(700, 550, 150, 100)
+        wid7.setGeometry(self.x_chapter_usual * self.w_ratio, 440 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         layout7.addWidget(self.epochs_per_run)
         wid7.setLayout(layout7)
 
         self.run_button = QtWidgets.QPushButton("Train", self)
         self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(705, 530, 190, 30)
+        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 420 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.run_button.clicked.connect(self.on_run)
 
         self.rerun_button = QtWidgets.QPushButton("Reset to Start", self)
         self.rerun_button.setStyleSheet("font-size:13px")
-        self.rerun_button.setGeometry(705, 490, 190, 30)
+        self.rerun_button.setGeometry(self.x_chapter_button * self.w_ratio, 380 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.rerun_button.clicked.connect(self.on_reset)
 
         self.undo_click_button = QtWidgets.QPushButton("Undo Last Mouse Click", self)
         self.undo_click_button.setStyleSheet("font-size:13px")
-        self.undo_click_button.setGeometry(705, 450, 190, 30)
+        self.undo_click_button.setGeometry(self.x_chapter_button * self.w_ratio, 340 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.undo_click_button.clicked.connect(self.on_undo_mouseclick)
 
         self.clear_button = QtWidgets.QPushButton("Clear Data", self)
         self.clear_button.setStyleSheet("font-size:13px")
-        self.clear_button.setGeometry(705, 410, 190, 30)
+        self.clear_button.setGeometry(self.x_chapter_button * self.w_ratio, 300 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.clear_button.clicked.connect(self.on_clear)
 
         self.initialize_weights()
@@ -151,10 +149,10 @@ class PerceptronRule(NNDLayout):
     def on_run(self):
 
         if len(self.data) < 2:
-            self.warning_label.setText("Please select at least two data points before training")
+            self.warning_label.setText("Please select at least two\ndata points before training")
         else:
             if len(np.unique([cls[2] for cls in self.data])) == 1:
-                self.warning_label.setText("Please select at least one data point of each class")
+                self.warning_label.setText("Please select at least one\ndata point of each class")
             else:
                 self.warning_label.setText("")
                 # Do 10 epochs

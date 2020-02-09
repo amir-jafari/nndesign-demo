@@ -18,15 +18,15 @@ F = (a[0, 0] * X ** 2 + a[0, 1] + a[1, 0] * X * Y + a[1, 1] * Y ** 2) / 2 + b[0]
 
 
 class ComparisonOfMethods(NNDLayout):
-    def __init__(self):
-        super(ComparisonOfMethods, self).__init__(main_menu=1)
+    def __init__(self, w_ratio, h_ratio):
+        super(ComparisonOfMethods, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Comparison of Methods", 9, "Click anywhere to start an initial guess. The gradient descent path will be shown"
-                                                      "for both Steepest Descent and Conjugate Gradient",
+        self.fill_chapter("Comparison of Methods", 9, " Click anywhere to start an\n initial guess. The gradient\n descent path will be shown"
+                                                      "\nfor both Steepest Descent\n and Conjugate Gradient",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")  # TODO: Change icons
 
         self.axes_1 = self.figure.add_subplot(2, 1, 1)
-        self.axes_1.set_title("Above: Steepest Descent Path | Below: Conjugate Gradient Path")
+        self.axes_1.set_title("Above: Steepest Descent Path | Below: Conjugate Gradient Path", fontdict={'fontsize': 10})
         self.axes_1.contour(X, Y, F)
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)

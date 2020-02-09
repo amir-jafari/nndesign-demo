@@ -27,10 +27,10 @@ def purelin_der(n):
 
 
 class FunctionApproximation(NNDLayout):
-    def __init__(self):
-        super(FunctionApproximation, self).__init__(main_menu=1)
+    def __init__(self, w_ratio, h_ratio):
+        super(FunctionApproximation, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Function Approximation", 11, "Click the train button to train the log-sig ...",
+        self.fill_chapter("Function Approximation", 11, "Click the train button to train\n the log-sig ...",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")  # TODO: Logo and Icon
 
         self.S1 = 4
@@ -46,7 +46,9 @@ class FunctionApproximation(NNDLayout):
         self.axes.set_ylim(0, 2)
         self.axes.tick_params(labelsize=8)
         self.axes.set_xlabel("Input", fontsize=10)
+        self.axes.xaxis.set_label_coords(0.5, 0.1)
         self.axes.set_ylabel("Target", fontsize=10)
+        self.axes.yaxis.set_label_coords(0.05, 0.5)
         self.data_to_approx, = self.axes.plot([], label="Function to Approximate")
         self.net_approx, = self.axes.plot([], label="Network Approximation")
         self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=3,
@@ -57,7 +59,7 @@ class FunctionApproximation(NNDLayout):
         self.label_s1 = QtWidgets.QLabel(self)
         self.label_s1.setText("Number of Hidden Neurons S1: 4")
         self.label_s1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_s1.setGeometry(710, 400, 150, 100)
+        self.label_s1.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 400 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.slider_s1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider_s1.setRange(1, 9)
         self.slider_s1.setTickPosition(QtWidgets.QSlider.TicksBelow)
@@ -67,7 +69,7 @@ class FunctionApproximation(NNDLayout):
         self.label_diff = QtWidgets.QLabel(self)
         self.label_diff.setText("Difficulty index: 1")
         self.label_diff.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_diff.setGeometry(710, 470, 150, 100)
+        self.label_diff.setGeometry((self.x_chapter_slider_label - 10) * self.w_ratio, 470 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.slider_diff = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider_diff.setRange(1, 9)
         self.slider_diff.setTickPosition(QtWidgets.QSlider.TicksBelow)
@@ -76,13 +78,13 @@ class FunctionApproximation(NNDLayout):
 
         self.wid3 = QtWidgets.QWidget(self)
         self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(710, 430, 150, 100)
+        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 430 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout3.addWidget(self.slider_s1)
         self.wid3.setLayout(self.layout3)
 
         self.wid4 = QtWidgets.QWidget(self)
         self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(710, 500, 150, 100)
+        self.wid4.setGeometry(self.x_chapter_usual * self.w_ratio, 500 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout4.addWidget(self.slider_diff)
         self.wid4.setLayout(self.layout4)
 
@@ -91,7 +93,7 @@ class FunctionApproximation(NNDLayout):
 
         self.run_button = QtWidgets.QPushButton("Train", self)
         self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(705, 600, 190, 30)
+        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 600 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.run_button.clicked.connect(self.on_run)
 
     def slide(self):

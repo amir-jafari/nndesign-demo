@@ -15,27 +15,14 @@ from get_package_path import PACKAGE_PATH
 
 
 # -------------------------------------------------------------------------------------------------------------
-wlabel, hlabel = 500, 100
-xlabel =30; ylabel= 5; add =20;
-xtabel =120; ytabel=25
-xautor = 180; yautor= 600;
+xlabel, ylabel, wlabel, hlabel, add = 120, 5, 500, 100, 20
+xautor, yautor = 180, 600
 
-
-xcm1 =340; ycm1= 140; wcm1 = 250; hcm1 =20; add1 = 140; subt=20;
+xcm1, ycm1, wcm1, hcm1, add1, subt = 340, 140, 250, 20, 140, 20
 xcm2 = 333
-xbtn1 =100; ybtn1= 740; wbtn1 = 60; hbtn1=20; add2 = 80; add2_1 = 30;
+xbtn1, ybtn1, wbtn1, hbtn1, add2 = 10, 635, 60, 30, 65
 
-xl1 =10; yl1= 90; wl1 = 700; hl1 =90;
-xl2 =650; yl2= 780; wl2 = 900; hl2 =780;
-
-w_Logo1 = 100;h_Logo1 = 80; xL_g1 = 100; yL_g1= 110; wL_g1= w_Logo1; hL_g1=h_Logo1; add_l = 140;
-
-
-w_Logom = 100; h_Logom = 100; xL_gm = 80; yL_gm= 140; wL_gm= 3*w_Logo1; hL_gm = h_Logom;
-w_Logom1 = 100; h_Logom1 = 100; xL_gm1 = 80; yL_gm1= 450; wL_gm1= 3*w_Logo1; hL_gm1=h_Logom1;
-
-xbtnm =100; ybtnm= 140; wbtnm = 300; hbtnm=50;
-xbtnm1 =100; ybtnm1= 470; wbtnm1 = 300; hbtnm1=50;
+w_Logo1, h_Logo1, xL_g1, yL_g1, add_l = 100, 80, 100, 110, 140
 
 BOOK1_CHAPTERS_DEMOS = {
     2: ["Neuron Model & Network Architecture:", "Chapter2 demos", "One-input Neuron", "Two-input Neuron"],
@@ -70,7 +57,7 @@ class MainWindowNN(NNDLayout):
         self.label3 = QtWidgets.QLabel(self)
         self.label3.setText("Table of Contents")
         self.label3.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.StyleItalic))
-        self.label3.setGeometry(self.wm - xtabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
+        self.label3.setGeometry(self.wm - xlabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
 
         self.label4 = QtWidgets.QLabel(self)
         self.label4.setText("By Hagan, Demuth, Beale, Jafari")
@@ -115,38 +102,38 @@ class MainWindowNN(NNDLayout):
 
         self.button1 = QtWidgets.QPushButton(self)
         self.button1.setText("2-5")
-        self.button1.setGeometry(xbtn1, ybtn1, wbtn1, hbtn1)
+        self.button1.setGeometry(xbtn1 * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
         self.button1.clicked.connect(partial(self.show_chapters, "2-5"))
 
         self.button2 = QtWidgets.QPushButton(self)
         self.button2.setText("6-9")
-        self.button2.setGeometry(xbtn1 + add2, ybtn1, wbtn1, hbtn1)
+        self.button2.setGeometry((xbtn1 + add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
         self.button2.clicked.connect(partial(self.show_chapters, "6-9"))
 
         self.button3 = QtWidgets.QPushButton(self)
         self.button3.setText("10-13")
-        self.button3.setGeometry(xbtn1 + 2 * add2, ybtn1, wbtn1, hbtn1)
+        self.button3.setGeometry((xbtn1 + 2 * add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
         self.button3.clicked.connect(partial(self.show_chapters, "10-13"))
 
         self.button4 = QtWidgets.QPushButton(self)
         self.button4.setText("14-17")
-        self.button4.setGeometry(xbtn1 + 3 * add2, ybtn1, wbtn1, hbtn1)
+        self.button4.setGeometry((xbtn1 + 3 * add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
         self.button4.clicked.connect(partial(self.show_chapters, "14-17"))
 
         self.button5 = QtWidgets.QPushButton(self)
         self.button5.setText("18-21")
-        self.button5.setGeometry(xbtn1, ybtn1 + add2_1, wbtn1, hbtn1)
+        self.button5.setGeometry((xbtn1 + 4 * add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
         self.button5.clicked.connect(partial(self.show_chapters, "18-21"))
 
-        self.button6 = QtWidgets.QPushButton(self)
+        """self.button6 = QtWidgets.QPushButton(self)
         self.button6.setText("Textbook Info")
-        self.button6.setGeometry(xbtn1 + add2, ybtn1 + add2_1, wbtn1, hbtn1)
+        self.button6.setGeometry((xbtn1 + add2) * self.w_ratio, (ybtn1 + add2_1) * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
         self.button6.clicked.connect(self.new_window6)
 
         self.button7 = QtWidgets.QPushButton(self)
         self.button7.setText("Close")
-        self.button7.setGeometry(xbtn1 + 3 * add2, ybtn1 + add2_1, wbtn1, hbtn1)
-        self.button7.clicked.connect(self.new_window7)
+        self.button7.setGeometry((xbtn1 + 3 * add2) * self.w_ratio, (ybtn1 + add2_1) * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
+        self.button7.clicked.connect(self.new_window7)"""
 
         self.center()
 
@@ -164,8 +151,8 @@ class MainWindowNN(NNDLayout):
         for icon in [self.icon1, self.icon2, self.icon3, self.icon4]:
             icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/Logo_Ch_{}.svg".format(chapter_numbers[idx])).pixmap(
                 w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, wL_g1, hL_g1)
-            icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, wL_g1 * self.w_ratio, hL_g1 * self.h_ratio)
+            # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, w_Logo1, h_Logo1)
+            icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio)
             idx += 1
 
         idx = 0
@@ -185,29 +172,29 @@ class MainWindowNN(NNDLayout):
             self.chapter_window1 = OneInputNeuron(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
         elif idx == 2:
-            self.chapter_window2 = two_input_neuron()
+            self.chapter_window2 = two_input_neuron(self.w_ratio, self.h_ratio)
 
     def chapter3(self, idx):
         if idx == 1:
-            self.myOtherWindow = perceptron_classification()
+            self.myOtherWindow = perceptron_classification(self.w_ratio, self.h_ratio)
         if idx == 2:
-            self.myOtherWindow1 = hamming_classification()
+            self.myOtherWindow1 = hamming_classification(self.w_ratio, self.h_ratio)
         elif idx == 3:
-            self.myOtherWindow1 = hopfield_classification()
+            self.myOtherWindow1 = hopfield_classification(self.w_ratio, self.h_ratio)
 
     def chapter4(self, idx):
         if idx == 1:
-            self.chapter_window1 = DecisionBoundaries()
+            self.chapter_window1 = DecisionBoundaries(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
         elif idx == 2:
-            self.chapter_window2 = PerceptronRule()
+            self.chapter_window2 = PerceptronRule(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
 
     def chapter5(self, idx):
         if idx == 1:
-            self.myOtherWindow = gram_schmidt()
+            self.myOtherWindow = gram_schmidt(self.w_ratio, self.h_ratio)
         elif idx == 2:
-            self.myOtherWindow1 = reciprocal_basis()
+            self.myOtherWindow1 = reciprocal_basis(self.w_ratio, self.h_ratio)
 
     def chapter6(self, idx):
         print("TODO")
@@ -220,10 +207,10 @@ class MainWindowNN(NNDLayout):
 
     def chapter9(self, idx):
         if idx == 1:
-            self.chapter_window1 = SteepestDescentQuadratic()
+            self.chapter_window1 = SteepestDescentQuadratic(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
         elif idx == 2:
-            self.chapter_window2 = ComparisonOfMethods()
+            self.chapter_window2 = ComparisonOfMethods(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
         elif idx == 3:
             print("TODO")
@@ -235,12 +222,12 @@ class MainWindowNN(NNDLayout):
 
     def chapter11(self, idx):
         if idx == 1:
-            self.chapter_window1 = NetworkFunction()
+            self.chapter_window1 = NetworkFunction(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
         elif idx == 2:
             print("TODO")
         elif idx == 3:
-            self.chapter_window4 = FunctionApproximation()
+            self.chapter_window4 = FunctionApproximation(self.w_ratio, self.h_ratio)
             self.chapter_window4.show()
         elif idx == 4:
             print("TODO")

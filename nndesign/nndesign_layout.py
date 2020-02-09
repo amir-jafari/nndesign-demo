@@ -5,16 +5,16 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 
+
 WM_MAC_MAIN, HM_MAC_MAIN = 1280 - 750, 800 - 120  # For my Mac
 WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 580, 800 - 120  # For my Mac
 
-wlabel, hlabel = 500, 100
-xlabel =30; ylabel= 5; add =20;
-xtabel =120; ytabel=25
-xautor = 100; yautor= 580;
-x_info = 530; y_info= 150; w_info= 450; h_info=250;
+# -------------------------------------------------------------------------------------------------------------
+xlabel, ylabel, wlabel, hlabel, add = 30, 5, 500, 100, 20
+xtabel, ytlabel = 120, 25
+xautor, yautor = 100, 580
 
-wtabel = 100; htabel = 100; wautor = 200; hautor = 200
+x_info, y_info, w_info, h_info = 530, 100, 450, 250
 
 wp_pic2_1 = 100; hp_pic2_1 = 80; x_pic2_1 = 550; y_pic2_1= 50; w_pic2_1= wp_pic2_1; h_pic2_1=hp_pic2_1;
 wp_pic2_2 = 500; hp_pic2_2 = 200; x_pic2_2 = 130; y_pic2_2= 100; w_pic2_2= 500; h_pic2_2=200;
@@ -23,6 +23,7 @@ wp_pic2_2 = 500; hp_pic2_2 = 200; x_pic2_2 = 130; y_pic2_2= 100; w_pic2_2= 500; 
 # Starting line point for my MAC. The ending point is determined by the w, h and ratio of screen compared to mine
 xl1, yl1 = 10, 90
 xl2 = 520
+# -------------------------------------------------------------------------------------------------------------
 
 
 class NNDLayout(QMainWindow):
@@ -36,6 +37,11 @@ class NNDLayout(QMainWindow):
             self.wm, self.hm = WM_MAC_MAIN * w_ratio, HM_MAC_MAIN * h_ratio
         self.setFixedSize(self.wm, self.hm)
         self.center()
+
+        self.x_chapter_usual, self.w_chapter_button, self.h_chapter_button = 520, 170, 30
+        self.x_chapter_button = 525
+        self.x_chapter_slider_label = 590
+        self.w_chapter_slider = 180
 
         self.label3, self.label4, self.label5, self.icon1, self.icon2 = None, None, None, None, None
 
@@ -87,7 +93,9 @@ class NNDLayout(QMainWindow):
             # qp.drawLine(self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio + 35, self.wm - xl1 * self.w_ratio, 750 * self.h_ratio)
             qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, 670 * self.h_ratio)
 
-    def fill_chapter(self, title, number, description, logo_path, icon_path):
+    def fill_chapter(self, title, number, description, logo_path, icon_path, show_info=True):
+
+        # TODO: Use len of title to modify position of text, or actually, to set the line breaks on the right place in order to also scale according to resolution
 
         self.label3 = QtWidgets.QLabel(self)
         self.label3.setText(title)
@@ -99,10 +107,11 @@ class NNDLayout(QMainWindow):
         self.label4.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
         self.label4.setGeometry((xl2 - 120) * self.w_ratio, ylabel * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
 
-        self.label5 = QtWidgets.QLabel(self)
-        self.label5.setText(description)
-        self.label5.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
-        self.label5.setGeometry(x_info * self.w_ratio, y_info * self.h_ratio, w_info * self.w_ratio, h_info * self.h_ratio)
+        if show_info:
+            self.label5 = QtWidgets.QLabel(self)
+            self.label5.setText(description)
+            self.label5.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
+            self.label5.setGeometry(x_info * self.w_ratio, y_info * self.h_ratio, w_info * self.w_ratio, h_info * self.h_ratio)
 
         self.icon1 = QtWidgets.QLabel(self)
         self.icon1.setPixmap(QtGui.QIcon(logo_path).pixmap(wp_pic2_1 * self.w_ratio, hp_pic2_1 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))

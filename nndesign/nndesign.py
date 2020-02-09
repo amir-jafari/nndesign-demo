@@ -8,25 +8,15 @@ from get_package_path import PACKAGE_PATH
 
 
 # -------------------------------------------------------------------------------------------------------------
-
-wlabel, hlabel = 500, 100
-xlabel =30; ylabel= 5; add =20;
-xtabel =120; ytabel=25
-xautor = 100; yautor= 580;
-
-xcm1 =250; ycm1= 120; wcm1 = 250; hcm1 =20; add1 = 80; subt=20;
-xbtn1 =150; ybtn1= 430; wbtn1 = 60; hbtn1=20; add2 = 80; add2_1 = 30;
-
-# w_Logo1 = 100;h_Logo1 = 80; xL_g1 = 150; yL_g1= 90; wL_g1= w_Logo1; hL_g1=h_Logo1; add_l = 80;
-
-xl1 =10; yl1= 90; wl1 = 700; hl1 =90;
-xl2 =700; yl2= 780; wl2 = 900; hl2 =780;
+xlabel, ylabel, wlabel, hlabel, add = 30, 5, 500, 100, 20
+xtabel, ytlabel = 120, 25
+xautor, yautor = 100, 580
 
 w_Logom = 200; h_Logom = 100; xL_gm = 50; yL_gm= 140; wL_gm= 300; hL_gm = h_Logom;
 w_Logom1 = 200; h_Logom1 = 100; xL_gm1 = 20; yL_gm1= 450; wL_gm1= 300; hL_gm1=h_Logom1;
 
-xbtnm =250; ybtnm= 160; wbtnm = 230; hbtnm=50;
-ybtnm1= 470;
+xbtnm, ybtnm, wbtnm, hbtnm = 250, 160, 230, 50
+ybtnm1 = 470
 # -------------------------------------------------------------------------------------------------------------
 
 
@@ -104,7 +94,7 @@ import sys
 app = QApplication(sys.argv)
 dimensions = QtWidgets.QDesktopWidget().screenGeometry(-1)
 W_SCREEN, H_SCREEN = dimensions.width(), dimensions.height()
-W_SCREEN, H_SCREEN = 1900, 850  # To check how it would look on a bigger screen
+# W_SCREEN, H_SCREEN = 1900, 850  # To check how it would look on a bigger screen
 W_RATIO, H_RATIO = W_SCREEN / 1280, H_SCREEN / 800
 win = MainWindow(W_RATIO, H_RATIO)
 win.show()
