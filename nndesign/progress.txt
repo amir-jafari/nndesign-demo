@@ -1,12 +1,13 @@
-Book 1:
+Book 1: 11 / 43 (or 11 / 72 if we count the chapters after chapter 14)
 
 - Chapter 2:
 	- One Input Neuron -> Done
-	- Two Input Neuron -> Just output value
+	- Two Input Neuron -> Almost done -> Need to put a figure and make it look good.
 
 - Chapter 3:
-    - Perceptron Classification --> No graph, just show calculations
-    - Hamming and Holpfied --> Same, follow MATLAB for the math
+    - Perceptron Classification --> No graph, just show calculations. Basic stuff done. Need to clean and include image.
+    - Hamming Classification --> Basic stuff done. Need to clean and include image.
+    - Hopfield Classification --> Basic stuff done. Need to clean and include image.
 
 - Chapter 4:
     - Decision boundary --> Done
@@ -20,6 +21,9 @@ Book 1:
     - Linear Transformations
     - Eigenvector Game
 
+- Chapter 7:
+    - Suppervised Hebb
+
 - Chapter 8:
     - Taylor Series 1
     - Taylor Series 2
@@ -32,10 +36,15 @@ Book 1:
     - Newton's Method
     - Steepest Descent
 
+- Chapter 10:
+    - Adaptive Noise Cancellation
+    - EEG noise cancellation
+    - Linear Classification
+
 - Chapter 11:
     - Network Function --> Done
     - Back-propagation Calculation
-    - Function Approximation  --> Almost done: TODO: Use FuncAnimation from Cascaded Network, and why S1 value doesn't show. Use levenberg-marqad...
+    - Function Approximation  --> Done
     - Generalization
 
 - Chapter 12:
@@ -45,6 +54,8 @@ Book 1:
     - Variable Learning Rate
     - CG Line Search
     - Conjugate Gradient
+    - Marquardt Step
+    - Marquardt
 
 - Chapter 13:
     - Early Stopping
@@ -53,17 +64,30 @@ Book 1:
     - Early-stopping-Regularization
 
 - Chapter 14:
+    - FIR Network
+    - IIR Network
     - Dynamic Derivatives
     - Recurrent Network Training
 
-Book 2:
+... From here there are another 29 left ...
+
+Book 2: 4 / 7
 
 - Chapter 2:
     - Poslin Network Function: Done
     - Poslin Decision Regions: Having trouble displaying it in ec2 with my screen
-    ... idem ...
+    - Poslin Decision Regions 2D: Idem
+    - Poslin Decision Regions 3D: Idem
     - Cascaded Function: Done
 
 - Chapter 3:
     - Gradient Descent: Done
     - Gradient Descent Stochastic: Done
+
+Overview:
+
+At 02/09/2020, let's say for the first book only, 11 out of 72 have been done. Doing all of them before April 19th means
+doing them in 70 days, i.e, 0.87 per day. Seeing how long some of them are taking, and also the fact that I need to go
+to class and meet with Amir to discuss and improve the current work, this seems too much. If I only do till chapter 14,
+that would be 11 out of 43, which means 1 every two days. This is more reasonable and I should have time to do some for the second book and other stuff.
+I would say I focus on the ones that are being taught in class and then move to deep learning. The rest, I can do them after graduation little by little.

@@ -1,23 +1,36 @@
 from PyQt5 import QtWidgets, QtGui
 from functools import partial
 
+# -------- Global imports ----------------
 from nndesign_layout import NNDLayout
+from get_package_path import PACKAGE_PATH
 
+# ----------------------------------------------------- Book 1 ---------------------------------------------------------
+# ------ Chapter 2 --------
 from One_input_neuron import OneInputNeuron
+from Two_input_neuron import TwoInputNeuron
+# ------ Chapter 3 --------
+from Perceptron_classification import PerceptronClassification
+from Hamming_classification import HammingClassification
+from Hopfield_classification import HopfieldClassification
+# ------ Chapter 4 --------
 from Perceptron_rule import PerceptronRule
 from Decision_boundary import DecisionBoundaries
-from Function_approximation import FunctionApproximation
-from Network_function import NetworkFunction
+# ------ Chapter 9 --------
 from Steepest_descent_quadratic import SteepestDescentQuadratic
 from Comparison_of_methods import ComparisonOfMethods
+# ------ Chapter 11 -------
+from Function_approximation import FunctionApproximation
+from Network_function import NetworkFunction
 
+# ----------------------------------------------------- Book 2 ---------------------------------------------------------
+# ------ Chapter 2 --------
 from Poslin_network_function import PoslinNetworkFunction
 # from Poslin_decision_regions import PoslinDecisionRegions
 from Cascaded_function import CascadedFunction
+# ------ Chapter 3 --------
 from Gradient_descent import GradientDescent
 from Gradient_descent_stochastic import GradientDescentStochastic
-
-from get_package_path import PACKAGE_PATH
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -183,15 +196,19 @@ class MainWindowNN(NNDLayout):
             self.chapter_window1 = OneInputNeuron(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
         elif idx == 2:
-            self.chapter_window2 = two_input_neuron(self.w_ratio, self.h_ratio)
+            self.chapter_window2 = TwoInputNeuron(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
 
     def chapter3(self, idx):
         if idx == 1:
-            self.myOtherWindow = perceptron_classification(self.w_ratio, self.h_ratio)
+            self.chapter_window1 = PerceptronClassification(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
         if idx == 2:
-            self.myOtherWindow1 = hamming_classification(self.w_ratio, self.h_ratio)
+            self.chapter_window2 = HammingClassification(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
         elif idx == 3:
-            self.myOtherWindow1 = hopfield_classification(self.w_ratio, self.h_ratio)
+            self.chapter_window3 = HopfieldClassification(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
 
     def chapter4(self, idx):
         if idx == 1:
