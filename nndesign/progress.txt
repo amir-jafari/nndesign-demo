@@ -14,7 +14,7 @@ Book 1: 11 / 43 (or 11 / 72 if we count the chapters after chapter 14)
     - Perceptron rule --> Done
 
 - Chapter 5:
-    - Gram Schmidt
+    - Gram Schmidt  -> Almost done, but having some very annoying problems
     - Reciprocal Basis
 
 - Chapter 6:

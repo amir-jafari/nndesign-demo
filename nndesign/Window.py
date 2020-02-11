@@ -16,6 +16,8 @@ from Hopfield_classification import HopfieldClassification
 # ------ Chapter 4 --------
 from Perceptron_rule import PerceptronRule
 from Decision_boundary import DecisionBoundaries
+# ------ Chapter 5 --------
+from Gram_Schmidt import GramSchmidt
 # ------ Chapter 9 --------
 from Steepest_descent_quadratic import SteepestDescentQuadratic
 from Comparison_of_methods import ComparisonOfMethods
@@ -220,7 +222,8 @@ class MainWindowNN(NNDLayout):
 
     def chapter5(self, idx):
         if idx == 1:
-            self.myOtherWindow = gram_schmidt(self.w_ratio, self.h_ratio)
+            self.chapter_window1 = GramSchmidt(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
         elif idx == 2:
             self.myOtherWindow1 = reciprocal_basis(self.w_ratio, self.h_ratio)
 
