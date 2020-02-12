@@ -18,12 +18,18 @@ from Perceptron_rule import PerceptronRule
 from Decision_boundary import DecisionBoundaries
 # ------ Chapter 5 --------
 from Gram_Schmidt import GramSchmidt
+from Reciprocal_basis import ReciprocalBasis
+# ------ Chapter 8 --------
+from Tylor_series_1 import TylorSeries1
 # ------ Chapter 9 --------
 from Steepest_descent_quadratic import SteepestDescentQuadratic
 from Comparison_of_methods import ComparisonOfMethods
+from Steepest_descent import SteepestDescent
 # ------ Chapter 11 -------
 from Function_approximation import FunctionApproximation
+from Backpropagation_calculation import BackpropagationCalculation
 from Network_function import NetworkFunction
+from Generalization import Generalization
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -225,7 +231,8 @@ class MainWindowNN(NNDLayout):
             self.chapter_window1 = GramSchmidt(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
         elif idx == 2:
-            self.myOtherWindow1 = reciprocal_basis(self.w_ratio, self.h_ratio)
+            self.chapter_window2 = ReciprocalBasis(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
 
     def chapter6(self, idx):
         print("TODO")
@@ -234,7 +241,9 @@ class MainWindowNN(NNDLayout):
         print("TODO")
 
     def chapter8(self, idx):
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = TylorSeries1(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
 
     def chapter9(self, idx):
         if idx == 1:
@@ -246,7 +255,8 @@ class MainWindowNN(NNDLayout):
         elif idx == 3:
             print("TODO")
         elif idx == 4:
-            print("TODO")
+            self.chapter_window4 = SteepestDescent(self.w_ratio, self.h_ratio)
+            self.chapter_window4.show()
 
     def chapter10(self, idx):
         print("TODO")
@@ -256,12 +266,14 @@ class MainWindowNN(NNDLayout):
             self.chapter_window1 = NetworkFunction(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
         elif idx == 2:
-            print("TODO")
+            self.chapter_window2 = BackpropagationCalculation(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
         elif idx == 3:
-            self.chapter_window4 = FunctionApproximation(self.w_ratio, self.h_ratio)
-            self.chapter_window4.show()
+            self.chapter_window3 = FunctionApproximation(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
         elif idx == 4:
-            print("TODO")
+            self.chapter_window4 = Generalization(self.w_ratio, self.h_ratio)
+            self.chapter_window4.show()
 
     def chapter12(self, idx):
         print("TODO")

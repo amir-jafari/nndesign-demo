@@ -29,7 +29,7 @@ xl2 = 520
 
 
 class NNDLayout(QMainWindow):
-    def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True, create_plot=True):
+    def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True, create_plot=True, create_two_plots=False):
         super(NNDLayout, self).__init__()
 
         self.w_ratio, self.h_ratio = w_ratio, h_ratio
@@ -75,12 +75,31 @@ class NNDLayout(QMainWindow):
             self.figure = Figure()
             self.canvas = FigureCanvas(self.figure)
             self.toolbar = NavigationToolbar(self.canvas, self)
-
             self.wid1 = QtWidgets.QWidget(self)
             self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
             self.wid1.setGeometry(15 * self.w_ratio, 300 * self.h_ratio, 490 * self.w_ratio, 370 * self.h_ratio)
             self.layout1.addWidget(self.canvas)
             self.wid1.setLayout(self.layout1)
+
+        elif create_two_plots:
+
+            self.figure = Figure()
+            self.canvas = FigureCanvas(self.figure)
+            self.toolbar = NavigationToolbar(self.canvas, self)
+            self.wid1 = QtWidgets.QWidget(self)
+            self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+            self.wid1.setGeometry(50 * self.w_ratio, 100 * self.h_ratio, 400 * self.w_ratio, 250 * self.h_ratio)
+            self.layout1.addWidget(self.canvas)
+            self.wid1.setLayout(self.layout1)
+
+            self.figure2 = Figure()
+            self.canvas2 = FigureCanvas(self.figure2)
+            self.toolbar2 = NavigationToolbar(self.canvas2, self)
+            self.wid2 = QtWidgets.QWidget(self)
+            self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+            self.wid2.setGeometry(50 * self.w_ratio, 350 * self.h_ratio, 400 * self.w_ratio, 250 * self.h_ratio)
+            self.layout2.addWidget(self.canvas2)
+            self.wid2.setLayout(self.layout2)
 
     def paintEvent(self, e):
         qp = QtGui.QPainter()
@@ -101,7 +120,7 @@ class NNDLayout(QMainWindow):
             # qp.drawLine(self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio + 35, self.wm - xl1 * self.w_ratio, 750 * self.h_ratio)
             qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, 670 * self.h_ratio)
 
-    def fill_chapter(self, title, number, description, logo_path, icon_path, show_info=True, icon_move_left=0):
+    def fill_chapter(self, title, number, description, logo_path, icon_path, show_info=True, icon_move_left=0, show_pic=True):
 
         # TODO: Use len of title to modify position of text, or actually, to set the line breaks on the right place in order to also scale according to resolution
 
@@ -125,9 +144,10 @@ class NNDLayout(QMainWindow):
         self.icon1.setPixmap(QtGui.QIcon(logo_path).pixmap(wp_pic2_1 * self.w_ratio, hp_pic2_1 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         self.icon1.setGeometry(x_pic2_1 * self.w_ratio, y_pic2_1 * self.h_ratio, w_pic2_1 * self.w_ratio, h_pic2_1 * self.h_ratio)
 
-        self.icon2 = QtWidgets.QLabel(self)
-        self.icon2.setPixmap(QtGui.QIcon(icon_path).pixmap(wp_pic2_2 * self.w_ratio, hp_pic2_2 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon2.setGeometry((x_pic2_2 - icon_move_left) * self.w_ratio, y_pic2_2 * self.h_ratio, w_pic2_2 * self.w_ratio, h_pic2_2 * self.h_ratio)
+        if show_pic:
+            self.icon2 = QtWidgets.QLabel(self)
+            self.icon2.setPixmap(QtGui.QIcon(icon_path).pixmap(wp_pic2_2 * self.w_ratio, hp_pic2_2 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon2.setGeometry((x_pic2_2 - icon_move_left) * self.w_ratio, y_pic2_2 * self.h_ratio, w_pic2_2 * self.w_ratio, h_pic2_2 * self.h_ratio)
 
     def center(self):
         qr = self.frameGeometry()

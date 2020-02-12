@@ -15,19 +15,10 @@ from get_package_path import PACKAGE_PATH
 
 class GramSchmidt(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(GramSchmidt, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(GramSchmidt, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
 
         self.fill_chapter("Gram-Schmidt", 5, " TODO",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")
-
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(50 * self.w_ratio, 100 * self.h_ratio, 400 * self.w_ratio, 250 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
+                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("-", fontdict={'fontsize': 10})
@@ -41,15 +32,6 @@ class GramSchmidt(NNDLayout):
         self.axes1_proj_line, = self.axes_1.plot([], "-")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
-
-        self.figure2 = Figure()
-        self.canvas2 = FigureCanvas(self.figure2)
-        self.toolbar2 = NavigationToolbar(self.canvas2, self)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(50 * self.w_ratio, 350 * self.h_ratio, 400 * self.w_ratio, 250 * self.h_ratio)
-        self.layout2.addWidget(self.canvas2)
-        self.wid2.setLayout(self.layout2)
 
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("-", fontdict={'fontsize': 10})
