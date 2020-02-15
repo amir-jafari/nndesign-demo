@@ -17,7 +17,7 @@ TODO: Main window same shape as the rest
 
 - Chapter 5:
     - Gram Schmidt  -> Done.
-    - Reciprocal Basis  -> Doing it. Do TODO when internet
+    - Reciprocal Basis  -> Done.
 
 - Chapter 6:
     - Linear Transformations -> TODO when internet
@@ -27,14 +27,14 @@ TODO: Main window same shape as the rest
     - Suppervised Hebb --> No idea how this work so putting it off for now. TODO
 
 - Chapter 8:
-    - Taylor Series 1 --> Almost done. TODO: add checkboxes when internet
+    - Taylor Series 1 --> Done.
     - Taylor Series 2  --> This is going to take a bit more effort, TODO
     - Directional Derivatives --> Need internet to figure out how to detect holding button. TODO. If I can't figure it out, could just do it by clicking twice
     - Quadratic Function --> Need to internet to see how to add input boxes. TODO.
 
 - Chapter 9:
-    - Steepest Descent for Quadratic --> Done. TODO: Take out graph every iter --> Animation
-    - Method Comparison --> Done
+    - Steepest Descent for Quadratic --> Done.
+    - Method Comparison --> Done. TODO: Animation
     - Newton's Method --> I think I need internet to find out some calculations. TODO.
     - Steepest Descent --> Almost done. Need to figure out how to clean the contour and point outside. TODO
 

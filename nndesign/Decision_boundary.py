@@ -149,7 +149,7 @@ class DecisionBoundaries(NNDLayout):
         A = vstack([x_coords, ones(len(x_coords))]).T
         m, c = lstsq(A, y_coords)[0]
         # print("Line Solution is y = {m}x + {c}".format(m=m, c=c))
-        self.w[1] = np.random.uniform()
+        self.w[1] = np.random.uniform(-1, 1)
         self.w[0] = np.round(-m * self.w[1], 2)
         scale = np.sqrt(self.w[0] ** 2 + self.w[1] ** 2)
         self.w[0] = np.round(self.w[0] / scale, 2)

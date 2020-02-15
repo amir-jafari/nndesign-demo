@@ -3,6 +3,7 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+from matplotlib.animation import FuncAnimation
 
 from nndesign_layout import NNDLayout
 
@@ -33,6 +34,7 @@ class SteepestDescentQuadratic(NNDLayout):
         self.x_data, self.y_data = [], []
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
+        self.ani, self.event = None, None
 
         self.lr = 0.03
         self.label_lr = QtWidgets.QLabel(self)
@@ -58,31 +60,43 @@ class SteepestDescentQuadratic(NNDLayout):
         self.lr = float(self.slider_lr.value()/100)
         self.label_lr.setText("lr: " + str(self.lr))
         if self.x_data:
-            x_start, y_start = self.x_data[0], self.y_data[0]
-            self.x_data, self.y_data = [], []
-            self.graph()
-            self.x_data, self.y_data = [x_start], [y_start]
-            self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
-            self.steepest_descent(x_start, x_start)
+            if self.ani:
+                self.ani.event_source.stop()
+            self.path.set_data([], [])
+            self.x_data, self.y_data = [self.x_data[0]], [self.y_data[0]]
+            self.canvas.draw()
+            self.run_animation(self.event)
+
+    def animate_init(self):
+        self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        return self.path,
 
     def graph(self):
         self.path.set_data(self.x_data, self.y_data)
         self.canvas.draw()
 
-    def steepest_descent(self, x_start, y_start):
-        x, y = x_start, y_start
-        for i in range(max_epoch):
-            self.graph()
-            gradient = np.dot(a, np.array([x, y])) + b.T
-            x -= self.lr * gradient[0]
-            y -= self.lr * gradient[1]
-            self.x_data.append(x)
-            self.y_data.append(y)
+    def on_animate(self, idx):
+        gradient = np.dot(a, np.array([self.x, self.y])) + b.T
+        self.x -= self.lr * gradient[0]
+        self.y -= self.lr * gradient[1]
+        self.x_data.append(self.x)
+        self.y_data.append(self.y)
+        self.path.set_data(self.x_data, self.y_data)
+        return self.path,
 
     def on_mouseclick(self, event):
+        self.event = event
+        if self.ani:
+            self.ani.event_source.stop()
+        # self.ani = None
+        self.path.set_data([], [])
+        self.x_data, self.y_data = [], []
+        self.canvas.draw()
+        self.run_animation(event)
+
+    def run_animation(self, event):
         if event.xdata != None and event.xdata != None:
-            self.x_data, self.y_data = [], []
-            self.graph()
             self.x_data, self.y_data = [event.xdata], [event.ydata]
-            self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
-            self.steepest_descent(event.xdata, event.ydata)
+            self.x, self.y = event.xdata, event.ydata
+            self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=max_epoch,
+                                     interval=200, repeat=False, blit=True)

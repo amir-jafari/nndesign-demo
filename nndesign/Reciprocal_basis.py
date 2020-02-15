@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-import math
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -126,6 +125,8 @@ class ReciprocalBasis(NNDLayout):
         self.axes1_s2.set_UVC(0, 0)
         self.axes2_v1.set_UVC(0, 0)
         self.axes2_v2.set_UVC(0, 0)
+        self.axes1_x.set_UVC(0, 0)
+        self.axes2_x.set_UVC(0, 0)
         self.axes1_points = []
         self.axes2_line1.set_data([], [])
         self.axes2_line2.set_data([], [])
