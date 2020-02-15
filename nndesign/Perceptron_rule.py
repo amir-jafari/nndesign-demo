@@ -22,7 +22,7 @@ class PerceptronRule(NNDLayout):
                                                 " Secondary mouse button\n to add a negative class.\n Then click Train  ",
                           PACKAGE_PATH + "Chapters/4/Logo_Ch_4.svg", PACKAGE_PATH + "Chapters/4/Percptron1.svg")
 
-        self.data = []
+        self.data, self.data_missclasified = [], []
         self.total_epochs = 0
         self.R = 2  # Num input dimensions
         self.S = 1  # Num neurons
@@ -39,6 +39,8 @@ class PerceptronRule(NNDLayout):
         self.axes.yaxis.set_label_coords(-0.05, 0.5)
         self.pos_line, = self.axes.plot([], 'mo', label="Positive Class")
         self.neg_line, = self.axes.plot([], 'cs', label="Negative Class")
+        self.miss_line_pos, = self.axes.plot([], 'ro')
+        self.miss_line_neg, = self.axes.plot([], 'rs')
         self.decision, = self.axes.plot([], 'r-', label="Decision Boundary")
         self.axes.legend(loc='lower left', fontsize=8, numpoints=1, ncol=3, bbox_to_anchor=(-0.1, -.24, 1.1, -.280))
         self.axes.set_title("Single Neuron Perceptron")
@@ -109,8 +111,23 @@ class PerceptronRule(NNDLayout):
         self.initialize_weights()
 
     def draw_data(self):
-        self.pos_line.set_data([x[0] for x in self.data if x[2] == POS], [y[1] for y in self.data if y[2] == POS])
-        self.neg_line.set_data([x[0] for x in self.data if x[2] == NEG], [y[1] for y in self.data if y[2] == NEG])
+
+        data_pos, data_neg, data_miss_pos, data_miss_neg = [], [], [], []
+        for xy, miss in zip(self.data, self.data_missclasified):
+            if miss:
+                if xy[2] == 1:
+                    data_miss_pos.append(xy)
+                elif xy[2] == 0:
+                    data_miss_neg.append(xy)
+            else:
+                if xy[2] == 1:
+                    data_pos.append(xy)
+                elif xy[2] == 0:
+                    data_neg.append(xy)
+        self.pos_line.set_data([xy[0] for xy in data_pos], [xy[1] for xy in data_pos])
+        self.neg_line.set_data([xy[0] for xy in data_neg], [xy[1] for xy in data_neg])
+        self.miss_line_pos.set_data([xy[0] for xy in data_miss_pos], [xy[1] for xy in data_miss_pos])
+        self.miss_line_neg.set_data([xy[0] for xy in data_miss_neg], [xy[1] for xy in data_miss_neg])
         self.canvas.draw()
 
     def draw_decision_boundary(self):
@@ -128,7 +145,15 @@ class PerceptronRule(NNDLayout):
         """Add an item to the plot"""
         if event.xdata != None and event.xdata != None:
             self.data.append((event.xdata, event.ydata, POS if event.button == 1 else NEG))
-            self.draw_data()
+        self.data_missclasified, error = [], 0
+        for xy in self.data:
+            t_hat = self.run_forward(np.array(xy[0:2]))
+            if t_hat != xy[2]:
+                self.data_missclasified.append(True)
+                error += 1
+            else:
+                self.data_missclasified.append(False)
+        self.draw_data()
 
     def on_clear(self):
         self.data = []
@@ -174,6 +199,15 @@ class PerceptronRule(NNDLayout):
 
                 self.update_run_status()
                 self.draw_decision_boundary()
+                self.data_missclasified, error = [], 0
+                for xy in self.data:
+                    t_hat = self.run_forward(np.array(xy[0:2]))
+                    if t_hat != xy[2]:
+                        self.data_missclasified.append(True)
+                        error += 1
+                    else:
+                        self.data_missclasified.append(False)
+                self.draw_data()
 
     def on_reset(self):
         self.initialize_weights()

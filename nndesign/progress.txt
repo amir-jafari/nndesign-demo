@@ -1,20 +1,22 @@
 Book 1: 11 / 43 (or 11 / 72 if we count the chapters after chapter 14)
 
+TODO: Main window same shape as the rest
+
 - Chapter 2:
 	- One Input Neuron -> Done
-	- Two Input Neuron -> Almost done -> Need to put a figure and make it look good. TODO
+	- Two Input Neuron -> Almost done -> Need to put the figure and make it look good. TODO: Need the figure
 
-- Chapter 3:
-    - Perceptron Classification --> No graph, just show calculations. Basic stuff done. Need to clean and include image. TODO
-    - Hamming Classification --> Basic stuff done. Need to clean and include image. TODO
-    - Hopfield Classification --> Basic stuff done. Need to clean and include image. TODO
+- Chapter 3:  TODO: Need a sequence of different images in order to show them along with the calculations
+    - Perceptron Classification --> Almost done.
+    - Hamming Classification --> Almost done.
+    - Hopfield Classification --> Almost done.
 
 - Chapter 4:
-    - Decision boundary --> Done
-    - Perceptron rule --> Done
+    - Decision boundary --> Done.
+    - Perceptron rule --> Done.
 
 - Chapter 5:
-    - Gram Schmidt  -> Almost done, but having some very annoying problems. TODO
+    - Gram Schmidt  -> Done.
     - Reciprocal Basis  -> Doing it. Do TODO when internet
 
 - Chapter 6:
@@ -31,7 +33,7 @@ Book 1: 11 / 43 (or 11 / 72 if we count the chapters after chapter 14)
     - Quadratic Function --> Need to internet to see how to add input boxes. TODO.
 
 - Chapter 9:
-    - Steepest Descent for Quadratic --> Done
+    - Steepest Descent for Quadratic --> Done. TODO: Take out graph every iter --> Animation
     - Method Comparison --> Done
     - Newton's Method --> I think I need internet to find out some calculations. TODO.
     - Steepest Descent --> Almost done. Need to figure out how to clean the contour and point outside. TODO
@@ -44,8 +46,8 @@ Book 1: 11 / 43 (or 11 / 72 if we count the chapters after chapter 14)
 - Chapter 11:
     - Network Function --> Done
     - Back-propagation Calculation --> Half way there. TODO: Input box, figure and make it look nice.
-    - Function Approximation  --> Done
-    - Generalization  --> Almost done, for some reason cannot really get it to overfit. Should look at the math. TODO
+    - Function Approximation  --> Done. TODO: There are some logic bugs here.
+    - Generalization  --> Almost done, for some reason cannot really get it to overfit. Should look at the math. TODO - It's because we are using the stochastic version
 
 - Chapter 12:
     - Steepest Descent #1 --> Doesn't look to hard, but need 3D. TODO.
@@ -78,11 +80,11 @@ Book 2: 4 / 7
     - Poslin Decision Regions: Having trouble displaying it in ec2 with my screen
     - Poslin Decision Regions 2D: Idem
     - Poslin Decision Regions 3D: Idem
-    - Cascaded Function: Done
+    - Cascaded Function: Done. TODO: The blue line does not update
 
 - Chapter 3:
-    - Gradient Descent: Done
-    - Gradient Descent Stochastic: Done
+    - Gradient Descent: Done. TODO: Animation.
+    - Gradient Descent Stochastic: Done. TODO: Animation.
 
 Overview:
 

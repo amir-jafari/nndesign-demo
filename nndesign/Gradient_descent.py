@@ -27,7 +27,7 @@ class GradientDescent(NNDLayout):
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.axis = Axes3D(self.figure)
-        self.axis.mouse_init
+        # self.axis.mouse_init
 
         self.wid1 = QtWidgets.QWidget(self)
         self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)

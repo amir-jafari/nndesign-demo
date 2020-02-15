@@ -1,5 +1,9 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
+from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
+from mpl_toolkits.mplot3d import Axes3D
 
 from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
@@ -9,56 +13,82 @@ class HopfieldClassification(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(HopfieldClassification, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Hopfield Classification", 3, " Alter the weight and bias\n and input by dragging the\n triangular"
-                                                 " shaped indictors.\n \n Pick the transfer function\n with the F menu.\n "
-                                                 "\n Watch the change\n to the  neuron function\n and its  output.",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")
+        self.fill_chapter("Hopfield Classification", 3, "Click go to TODO",  # TODO
+                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+
+        self.figure = Figure()
+        self.canvas = FigureCanvas(self.figure)
+        self.axis = Axes3D(self.figure)
+        self.toolbar = NavigationToolbar(self.canvas, self)
+        self.wid1 = QtWidgets.QWidget(self)
+        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid1.setGeometry(15 * self.w_ratio, 100 * self.h_ratio, 500 * self.w_ratio, 390 * self.h_ratio)
+        self.layout1.addWidget(self.canvas)
+        self.wid1.setLayout(self.layout1)
+        ys = np.linspace(-1, 1, 100)
+        zs = np.linspace(-1, 1, 100)
+        Y, Z = np.meshgrid(ys, zs)
+        X = 0
+        apple = np.array([-1, 1, -1])
+        orange = np.array([1, 1, -1])
+        self.axis.set_title("Input Space")
+        self.axis.plot_surface(X, Y, Z, alpha=0.5)
+        self.axis.set_xlabel("texture")
+        self.axis.set_xticks([-1, 1])
+        self.axis.set_ylabel("shape")
+        self.axis.set_yticks([-1, 1])
+        self.axis.set_zlabel("weight")
+        self.axis.zaxis._axinfo['label']['space_factor'] = 0.1
+        self.axis.set_zticks([-1, 1])
+        self.axis.scatter(orange[0], orange[1], orange[2], color='orange')
+        self.axis.scatter(apple[0], apple[1], apple[2], color='red')
+        self.canvas.draw()
 
         self.p, self.a1, self.a2, self.fruit = None, None, None, None
 
         self.label_w = QtWidgets.QLabel(self)
         self.label_w.setText("")
         self.label_w.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w.setGeometry(300 * self.w_ratio, 300 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
+        self.label_w.setGeometry(550 * self.w_ratio, 300 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
 
         self.label_b = QtWidgets.QLabel(self)
         self.label_b.setText("")
         self.label_b.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b.setGeometry(300 * self.w_ratio, 330 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
+        self.label_b.setGeometry(550 * self.w_ratio, 330 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
 
         self.label_p = QtWidgets.QLabel(self)
         self.label_p.setText("")
         self.label_p.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_p.setGeometry(300 * self.w_ratio, 360 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
+        self.label_p.setGeometry(550 * self.w_ratio, 360 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
 
         self.label_a_11 = QtWidgets.QLabel(self)
         self.label_a_11.setText("")
         self.label_a_11.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_a_11.setGeometry(300 * self.w_ratio, 390 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
+        self.label_a_11.setGeometry(550 * self.w_ratio, 390 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
 
         self.label_a_12 = QtWidgets.QLabel(self)
         self.label_a_12.setText("")
         self.label_a_12.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_a_12.setGeometry(300 * self.w_ratio, 420 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
+        self.label_a_12.setGeometry(550 * self.w_ratio, 420 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
 
         self.label_a_21 = QtWidgets.QLabel(self)
         self.label_a_21.setText("")
         self.label_a_21.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_a_21.setGeometry(300 * self.w_ratio, 450 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
+        self.label_a_21.setGeometry(550 * self.w_ratio, 450 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
 
         self.label_a_22 = QtWidgets.QLabel(self)
         self.label_a_22.setText("")
         self.label_a_22.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_a_22.setGeometry(300 * self.w_ratio, 480 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
+        self.label_a_22.setGeometry(550 * self.w_ratio, 480 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
 
         self.label_fruit = QtWidgets.QLabel(self)
         self.label_fruit.setText("")
         self.label_fruit.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_fruit.setGeometry(300 * self.w_ratio, 510 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
+        self.label_fruit.setGeometry(550 * self.w_ratio, 510 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
 
         self.run_button = QtWidgets.QPushButton("Go", self)
         self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 420 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
+        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 570 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.run_button.clicked.connect(self.on_run)
 
     def on_run(self):
@@ -76,8 +106,8 @@ class HopfieldClassification(NNDLayout):
             # self.p = np.array([[0.6, 0.98, -0.4]])
             w = np.array([[0.2, 0, 0], [0, 1.2, 0], [0, 0, 0.2]])
             b = np.array([[0.9], [0], [-0.9]])
-            self.a1 = self.satlins(np.dot(w, self.p.T) + b)
-            self.a2 = self.satlins(np.dot(w, self.a1) + b)
+            self.a1 = np.round(self.satlins(np.dot(w, self.p.T) + b), 2)
+            self.a2 = np.round(self.satlins(np.dot(w, self.a1) + b), 2)
             self.fruit = "Orange" if self.a2[1, 0] > 0 else "Apple"
         if self.idx == 1:
             self.label_w.setText("w = [0.2 0 0; 0 1.2 0; 0 0 0.2]")

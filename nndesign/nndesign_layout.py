@@ -88,7 +88,7 @@ class NNDLayout(QMainWindow):
             self.toolbar = NavigationToolbar(self.canvas, self)
             self.wid1 = QtWidgets.QWidget(self)
             self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-            self.wid1.setGeometry(50 * self.w_ratio, 100 * self.h_ratio, 400 * self.w_ratio, 250 * self.h_ratio)
+            self.wid1.setGeometry(120 * self.w_ratio, 120 * self.h_ratio, 270 * self.w_ratio, 270 * self.h_ratio)
             self.layout1.addWidget(self.canvas)
             self.wid1.setLayout(self.layout1)
 
@@ -97,7 +97,7 @@ class NNDLayout(QMainWindow):
             self.toolbar2 = NavigationToolbar(self.canvas2, self)
             self.wid2 = QtWidgets.QWidget(self)
             self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-            self.wid2.setGeometry(50 * self.w_ratio, 350 * self.h_ratio, 400 * self.w_ratio, 250 * self.h_ratio)
+            self.wid2.setGeometry(120 * self.w_ratio, 390 * self.h_ratio, 270 * self.w_ratio, 270 * self.h_ratio)
             self.layout2.addWidget(self.canvas2)
             self.wid2.setLayout(self.layout2)
 

@@ -1,5 +1,7 @@
 Documentation for nndesign:
 
+https://matplotlib.org/3.1.1/users/event_handling.html
+
 - At least on my Mac, sliders only seem to work when selecting them from left to right
 
 - To allow for different screen sizes, we get the screen resolution when running nndesign.py and then scale the absolute coordinates set on my mac accordingly.

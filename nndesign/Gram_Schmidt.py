@@ -1,44 +1,48 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-import math
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
+
 
 from nndesign_layout import NNDLayout
 
 from get_package_path import PACKAGE_PATH
+
+# Figured out why I was having so much trouble with the quiver scaling. It was because the plot was now a square...!!
 
 
 class GramSchmidt(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(GramSchmidt, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
 
-        self.fill_chapter("Gram-Schmidt", 5, " TODO",
+        self.fill_chapter("Gram-Schmidt", 5, " The first orthogonal vector v1,\n is chosen to be the first original\n"
+                          " vector, y1. \n \n To obtain the second orthogonal\n vector, v2, projection of y2 onto\n the"
+                          " first orthogonal vector\n, v1, is subtracted from y2.\n \n Click start to begin.",
                           PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.set_title("-", fontdict={'fontsize': 10})
+        self.axes_1.set_title("Original Vectors", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
         self.axes1_points = []
         self.axes1_v1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, label="y1", color="r")
-        self.axes1_v2 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, label="y2", color="r")
+        self.axes1_v2 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, label="y2", color="g")
         self.axes1_proj = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0)
-        self.axes1_proj1 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0)
         self.axes1_proj_line, = self.axes_1.plot([], "-")
+        self.axes1_proj_line.set_color("black")
+        self.axes_1.legend()
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
-        self.axes_2.set_title("-", fontdict={'fontsize': 10})
+        self.axes_2.set_title("Orthogonalized Vectors", fontdict={'fontsize': 10})
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
-        self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, label="y1", color="g")
-        self.axes2_v2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, label="y2", color="g")
+        self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, label="v1", color="r")
+        self.axes2_v2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, label="v2", color="g")
+        self.axes2_proj_line, = self.axes_2.plot([], "*")
+        self.axes_2.legend()
         self.canvas2.draw()
 
         self.button = QtWidgets.QPushButton("Compute", self)
@@ -54,11 +58,11 @@ class GramSchmidt(NNDLayout):
         self.label_warning = QtWidgets.QLabel(self)
         self.label_warning.setText("")
         self.label_warning.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_warning.setGeometry(self.x_chapter_slider_label * self.w_ratio, 550 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
+        self.label_warning.setGeometry(530 * self.w_ratio, 550 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
 
     def on_mouseclick1(self, event):
         if event.xdata != None and event.xdata != None:
-            self.axes1_points.append((event.xdata, event.ydata))
+            self.axes1_points.append((round(event.xdata, 2), round(event.ydata, 2)))
             self.draw_vector()
 
     def draw_vector(self):
@@ -70,7 +74,7 @@ class GramSchmidt(NNDLayout):
 
     def gram_schmidt(self):
         if len(self.axes1_points) < 2:
-            self.label_warning.setText("WHOOPS! Please enter two vectors")
+            self.label_warning.setText("WHOOPS! Please enter 2 vectors")
             return
         cos_angle = (self.axes1_points[0][0] * self.axes1_points[1][0] + self.axes1_points[1][0] * self.axes1_points[1][1]) / (
             np.sqrt(self.axes1_points[0][0]**2 + self.axes1_points[0][1] ** 2) * np.sqrt(self.axes1_points[1][0]**2 + self.axes1_points[1][1] ** 2)
@@ -96,18 +100,10 @@ class GramSchmidt(NNDLayout):
             a = np.dot(v1.T, v2) / np.dot(v1.T, v1)
             proj = a * v1
             self.axes1_proj.set_UVC(proj[0, 0], proj[1, 0])
-            # self.axes1_proj_line.set_data([proj[0, 0], v2[0, 0]], [proj[1, 0], v2[1, 0]])
-            # self.axes1_proj1 = self.axes_1.quiver([proj[0, 0]], [proj[1, 0]], [v2[0, 0] - proj[0, 0]], [v2[1, 0] - proj[1, 0]], units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0)
-            # self.axes1_proj1 = self.axes_1.quiver([v2[0, 0]], [v2[1, 0]], [proj[0, 0] - v2[0, 0]], [proj[1, 0] - v2[1, 0]], units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0)
-            self.axes1_proj1 = self.axes_1.quiver([proj[0, 0] - np.sqrt(proj[0, 0] ** 2 + proj[1, 0] ** 2)], [proj[1, 0] - np.sqrt(proj[0, 0] ** 2 + proj[1, 0] ** 2)], [v2[0, 0] - np.sqrt(proj[0, 0] ** 2 + proj[1, 0] ** 2)],
-                                                  [v2[1, 0] - np.sqrt(proj[0, 0] ** 2 + proj[1, 0] ** 2)], units="xy", scale=1, headlength=0,
-                                                  headwidth=0, headaxislength=0)
-            # self.axes1_proj_line.set_data([v2[0, 0], proj[0, 0]], [v2[1, 0], proj[1, 0]])
-            # self.axes1_proj_line.set_data([0, proj[0, 0]], [0, proj[1, 0]])
+            self.axes1_proj_line.set_data([proj[0, 0], self.axes1_points[1][0]], [proj[1, 0], self.axes1_points[1][1]])
             v2 = v2 - proj
             self.axes2_v1.set_UVC(v1[0, 0], v1[1, 0])
             self.axes2_v2.set_UVC(v2[0, 0], v2[1, 0])
-            # self.axes1_proj1.set_UVC(v2[0, 0] - np.sqrt(proj[0, 0] ** 2 + proj[1, 0] ** 2), v2[1, 0] - np.sqrt(proj[0, 0] ** 2 + proj[1, 0] ** 2))
         self.canvas.draw()
         self.canvas2.draw()
 
@@ -117,5 +113,7 @@ class GramSchmidt(NNDLayout):
         self.axes2_v1.set_UVC(0, 0)
         self.axes2_v2.set_UVC(0, 0)
         self.axes1_points = []
+        self.axes1_proj.set_UVC(0, 0)
+        self.axes1_proj_line.set_data([], [])
         self.canvas.draw()
         self.canvas2.draw()
