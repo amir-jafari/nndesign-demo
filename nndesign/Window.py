@@ -21,9 +21,12 @@ from Gram_Schmidt import GramSchmidt
 from Reciprocal_basis import ReciprocalBasis
 # ------ Chapter 8 --------
 from Tylor_series_1 import TylorSeries1
+from Tylor_series_2 import TylorSeries2
+from Directional_derivatives import DirectionalDerivatives
 # ------ Chapter 9 --------
 from Steepest_descent_quadratic import SteepestDescentQuadratic
 from Comparison_of_methods import ComparisonOfMethods
+from Newtons_method import NewtonsMethod
 from Steepest_descent import SteepestDescent
 # ------ Chapter 11 -------
 from Function_approximation import FunctionApproximation
@@ -200,6 +203,7 @@ class MainWindowNN(NNDLayout):
             idx += 1
 
     def chapter2(self, idx):
+        self.comboBox1.setCurrentIndex(0)
         if idx == 1:
             self.chapter_window1 = OneInputNeuron(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
@@ -208,6 +212,7 @@ class MainWindowNN(NNDLayout):
             self.chapter_window2.show()
 
     def chapter3(self, idx):
+        self.comboBox2.setCurrentIndex(0)
         if idx == 1:
             self.chapter_window1 = PerceptronClassification(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
@@ -219,6 +224,7 @@ class MainWindowNN(NNDLayout):
             self.chapter_window3.show()
 
     def chapter4(self, idx):
+        self.comboBox3.setCurrentIndex(0)
         if idx == 1:
             self.chapter_window1 = DecisionBoundaries(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
@@ -227,6 +233,7 @@ class MainWindowNN(NNDLayout):
             self.chapter_window2.show()
 
     def chapter5(self, idx):
+        self.comboBox4.setCurrentIndex(0)
         if idx == 1:
             self.chapter_window1 = GramSchmidt(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
@@ -235,17 +242,27 @@ class MainWindowNN(NNDLayout):
             self.chapter_window2.show()
 
     def chapter6(self, idx):
+        self.comboBox1.setCurrentIndex(0)
         print("TODO")
 
     def chapter7(self, idx):
+        self.comboBox2.setCurrentIndex(0)
         print("TODO")
 
     def chapter8(self, idx):
+        self.comboBox3.setCurrentIndex(0)
         if idx == 1:
             self.chapter_window1 = TylorSeries1(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window2 = TylorSeries2(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
+        elif idx == 3:
+            self.chapter_window3 = DirectionalDerivatives(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
 
     def chapter9(self, idx):
+        self.comboBox4.setCurrentIndex(0)
         if idx == 1:
             self.chapter_window1 = SteepestDescentQuadratic(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
@@ -253,15 +270,18 @@ class MainWindowNN(NNDLayout):
             self.chapter_window2 = ComparisonOfMethods(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
         elif idx == 3:
-            print("TODO")
+            self.chapter_window3 = NewtonsMethod(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
         elif idx == 4:
             self.chapter_window4 = SteepestDescent(self.w_ratio, self.h_ratio)
             self.chapter_window4.show()
 
     def chapter10(self, idx):
+        self.comboBox1.setCurrentIndex(0)
         print("TODO")
 
     def chapter11(self, idx):
+        self.comboBox2.setCurrentIndex(0)
         if idx == 1:
             self.chapter_window1 = NetworkFunction(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
@@ -276,33 +296,43 @@ class MainWindowNN(NNDLayout):
             self.chapter_window4.show()
 
     def chapter12(self, idx):
+        self.comboBox3.setCurrentIndex(0)
         print("TODO")
 
     def chapter13(self, idx):
+        self.comboBox4.setCurrentIndex(0)
         print("TODO")
 
     def chapter14(self, idx):
+        self.comboBox1.setCurrentIndex(0)
         print("TODO")
 
     def chapter15(self, idx):
+        self.comboBox2.setCurrentIndex(0)
         print("TODO")
 
     def chapter16(self, idx):
+        self.comboBox3.setCurrentIndex(0)
         print("TODO")
 
     def chapter17(self, idx):
+        self.comboBox4.setCurrentIndex(0)
         print("TODO")
 
     def chapter18(self, idx):
+        self.comboBox1.setCurrentIndex(0)
         print("TODO")
 
     def chapter19(self, idx):
+        self.comboBox2.setCurrentIndex(0)
         print("TODO")
 
     def chapter20(self, idx):
+        self.comboBox3.setCurrentIndex(0)
         print("TODO")
 
     def chapter21(self, idx):
+        self.comboBox4.setCurrentIndex(0)
         print("TODO")
 
     @staticmethod

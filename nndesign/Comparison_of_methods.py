@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+from matplotlib.animation import FuncAnimation
 
 from nndesign_layout import NNDLayout
 
@@ -25,6 +25,7 @@ class ComparisonOfMethods(NNDLayout):
                                                       "\nfor both Steepest Descent\n and Conjugate Gradient",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")  # TODO: Change icons
 
+        self.event, self.ani_1, self.ani_2 = None, None, None
         self.axes_1 = self.figure.add_subplot(2, 1, 1)
         self.axes_1.set_title("Above: Steepest Descent Path | Below: Conjugate Gradient Path", fontdict={'fontsize': 10})
         self.axes_1.contour(X, Y, F)
@@ -41,89 +42,66 @@ class ComparisonOfMethods(NNDLayout):
         self.x_data_2, self.y_data_2 = [], []
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
-
-        self.graph()
-
-        """self.lr = 0.03
-        self.label_lr = QtWidgets.QLabel(self)
-        self.label_lr.setText("lr: 0.001")
-        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_lr.setGeometry(775, 250, 150, 100)
-        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 6)
-        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_lr.setTickInterval(1)
-        self.slider_lr.setValue(3)
-
-        self.wid_lr = QtWidgets.QWidget(self)
-        self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_lr.setGeometry(710, 280, 150, 100)
-        self.layout_lr.addWidget(self.slider_lr)
-        self.wid_lr.setLayout(self.layout_lr)
-
-        self.slider_lr.valueChanged.connect(self.slide)
-
-    def slide(self):
-        self.lr = float(self.slider_lr.value()/100)
-        self.label_lr.setText("lr: " + str(self.lr))
-
-        x_start, y_start = self.x_data_1[0], self.y_data_1[0]
-        self.x_data_1, self.y_data_1 = [], []
-        self.x_data_2, self.y_data_2 = [], []
-        self.graph()
-        self.x_data_1, self.y_data_1 = [x_start], [y_start]
-        self.x_data_2, self.y_data_2 = [x_start], [y_start]
-
-        self.path_1, = self.axes_1.plot([], label="Gradient Descent Path")
-        self.path_2, = self.axes_2.plot([], label="Conjugate Gradient Path")
-        self.steepest_descent(x_start, x_start)
-        self.conjugate_gradient(x_start, y_start)
-        self.graph()"""
-
-    def graph(self):
-        self.path_1.set_data(self.x_data_1, self.y_data_1)
-        self.path_2.set_data(self.x_data_2, self.y_data_2)
         self.canvas.draw()
 
-    def steepest_descent(self, x_start, y_start):
-        x, y = x_start, y_start
-        for i in range(5):
-            gradient = np.dot(a, np.array([x, y])) + b.T
-            p = -gradient
-            hess = a
-            lr = -np.dot(gradient.T, p) / np.dot(p.T, np.dot(hess, p))
-            x += lr * p[0]
-            y += lr * p[1]
-            self.x_data_1.append(x)
-            self.y_data_1.append(y)
-
-    def conjugate_gradient(self, x_start, y_start):  # TODO: Change this
-        x, y = x_start, y_start
-        for i in range(2):
-            if i == 0:
-                gradient = np.dot(a, np.array([x, y])) + b.T
-                p = -gradient
-            elif i == 1:
-                gradient_old = gradient
-                gradient = np.dot(a, np.array([x, y])) + b.T
-                beta = np.dot(gradient.T, gradient) / np.dot(gradient_old.T, gradient_old)
-                p = -gradient + np.dot(beta, p)
-            hess = a
-            lr = -np.dot(gradient, p.T) / np.dot(p.T, np.dot(hess, p))
-            x += lr * p[0]
-            y += lr * p[1]
-            self.x_data_2.append(x)
-            self.y_data_2.append(y)
-
     def on_mouseclick(self, event):
+        self.event = event
+        if self.ani_1:
+            self.ani_1.event_source.stop()
+        if self.ani_2:
+            self.ani_2.event_source.stop()
+        self.path_1.set_data([], [])
+        self.path_2.set_data([], [])
+        self.x_data_1, self.y_data_1 = [], []
+        self.x_data_2, self.y_data_2 = [], []
+        self.canvas.draw()
+        self.run_animation(event)
+
+    def animate_init_1(self):
+        self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        return self.path_1,
+
+    def animate_init_2(self):
+        self.path_2, = self.axes_2.plot([], linestyle='--', marker='o', label="Conjugate Gradient Path")
+        return self.path_2,
+
+    def on_animate_1(self, idx):
+        lr = 0.07
+        gradient = np.dot(a, np.array([self.x_1, self.y_1])) + b.T
+        self.x_1 -= lr * gradient[0]
+        self.y_1 -= lr * gradient[1]
+        self.x_data_1.append(self.x_1)
+        self.y_data_1.append(self.y_1)
+        self.path_1.set_data(self.x_data_1, self.y_data_1)
+        return self.path_1,
+
+    def on_animate_2(self, idx):
+        if self.i == 0:
+            self.gradient = np.dot(a, np.array([self.x_2, self.y_2])) + b.T
+            self.p = -self.gradient
+            self.i += 1
+        elif self.i == 1:
+            gradient_old = self.gradient
+            self.gradient = np.dot(a, np.array([self.x_2, self.y_2])) + b.T
+            beta = np.dot(self.gradient.T, self.gradient) / np.dot(gradient_old.T, gradient_old)
+            self.p = -self.gradient + np.dot(beta, self.p)
+        hess = a
+        lr = -np.dot(self.gradient, self.p.T) / np.dot(self.p.T, np.dot(hess, self.p))
+        self.x_2 += lr * self.p[0]
+        self.y_2 += lr * self.p[1]
+        self.x_data_2.append(self.x_2)
+        self.y_data_2.append(self.y_2)
+        self.path_2.set_data(self.x_data_2, self.y_data_2)
+        return self.path_2,
+
+    def run_animation(self, event):
         if event.xdata != None and event.xdata != None:
-            self.x_data_1, self.y_data_1 = [], []
-            self.x_data_2, self.y_data_2 = [], []
-            self.graph()
             self.x_data_1, self.y_data_1 = [event.xdata], [event.ydata]
             self.x_data_2, self.y_data_2 = [event.xdata], [event.ydata]
-            self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
-            self.path_2, = self.axes_2.plot([], linestyle='--', marker='o', label="Conjugate Gradient Path")
-            self.steepest_descent(event.xdata, event.ydata)
-            self.conjugate_gradient(event.xdata, event.ydata)
-            self.graph()
+            self.x_1, self.y_1 = event.xdata, event.ydata
+            self.x_2, self.y_2 = event.xdata, event.ydata
+            self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=max_epoch,
+                                       interval=200, repeat=False, blit=True)
+            self.i = 0
+            self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=2,
+                                       interval=200, repeat=False, blit=True)

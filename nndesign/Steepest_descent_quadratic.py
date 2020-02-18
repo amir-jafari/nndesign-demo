@@ -54,7 +54,7 @@ class SteepestDescentQuadratic(NNDLayout):
         self.wid_lr.setLayout(self.layout_lr)
 
         self.slider_lr.valueChanged.connect(self.slide)
-        self.graph()
+        self.canvas.draw()
 
     def slide(self):
         self.lr = float(self.slider_lr.value()/100)
@@ -70,10 +70,6 @@ class SteepestDescentQuadratic(NNDLayout):
     def animate_init(self):
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         return self.path,
-
-    def graph(self):
-        self.path.set_data(self.x_data, self.y_data)
-        self.canvas.draw()
 
     def on_animate(self, idx):
         gradient = np.dot(a, np.array([self.x, self.y])) + b.T

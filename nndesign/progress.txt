@@ -1,6 +1,7 @@
 Book 1: 11 / 43 (or 11 / 72 if we count the chapters after chapter 14)
 
 TODO: Main window same shape as the rest
+When it says Done, it is not taking into account final clean up - Leaving that for when we decide on exact dimensions.
 
 - Chapter 2:
 	- One Input Neuron -> Done
@@ -28,15 +29,15 @@ TODO: Main window same shape as the rest
 
 - Chapter 8:
     - Taylor Series 1 --> Done.
-    - Taylor Series 2  --> This is going to take a bit more effort, TODO
-    - Directional Derivatives --> Need internet to figure out how to detect holding button. TODO. If I can't figure it out, could just do it by clicking twice
+    - Taylor Series 2  --> Done.
+    - Directional Derivatives --> Done.
     - Quadratic Function --> Need to internet to see how to add input boxes. TODO.
 
 - Chapter 9:
     - Steepest Descent for Quadratic --> Done.
-    - Method Comparison --> Done. TODO: Animation
-    - Newton's Method --> I think I need internet to find out some calculations. TODO.
-    - Steepest Descent --> Almost done. Need to figure out how to clean the contour and point outside. TODO
+    - Method Comparison --> Done.
+    - Newton's Method --> Done.
+    - Steepest Descent --> Done.
 
 - Chapter 10:
     - Adaptive Noise Cancellation --> No idea how this works. Putting it of for now.
