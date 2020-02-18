@@ -19,15 +19,21 @@ from Decision_boundary import DecisionBoundaries
 # ------ Chapter 5 --------
 from Gram_Schmidt import GramSchmidt
 from Reciprocal_basis import ReciprocalBasis
+# ------ Chapter 6 --------
+from Linear_transformations import LinearTransformations
 # ------ Chapter 8 --------
 from Tylor_series_1 import TylorSeries1
 from Tylor_series_2 import TylorSeries2
 from Directional_derivatives import DirectionalDerivatives
+from Quadratic_function import QuadraticFunction
 # ------ Chapter 9 --------
 from Steepest_descent_quadratic import SteepestDescentQuadratic
 from Comparison_of_methods import ComparisonOfMethods
 from Newtons_method import NewtonsMethod
 from Steepest_descent import SteepestDescent
+# ------ Chapter 10 --------
+from Adaptive_noise_cancellation import AdaptiveNoiseCancellation
+from EEG_noise_cancellation import EEGNoiseCancellation
 # ------ Chapter 11 -------
 from Function_approximation import FunctionApproximation
 from Backpropagation_calculation import BackpropagationCalculation
@@ -243,7 +249,9 @@ class MainWindowNN(NNDLayout):
 
     def chapter6(self, idx):
         self.comboBox1.setCurrentIndex(0)
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = LinearTransformations(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
 
     def chapter7(self, idx):
         self.comboBox2.setCurrentIndex(0)
@@ -260,6 +268,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 3:
             self.chapter_window3 = DirectionalDerivatives(self.w_ratio, self.h_ratio)
             self.chapter_window3.show()
+        elif idx == 4:
+            self.chapter_window4 = QuadraticFunction(self.w_ratio, self.h_ratio)
+            self.chapter_window4.show()
 
     def chapter9(self, idx):
         self.comboBox4.setCurrentIndex(0)
@@ -278,7 +289,14 @@ class MainWindowNN(NNDLayout):
 
     def chapter10(self, idx):
         self.comboBox1.setCurrentIndex(0)
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = AdaptiveNoiseCancellation(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window2 = EEGNoiseCancellation(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
+        elif idx == 3:
+            print("TODO")
 
     def chapter11(self, idx):
         self.comboBox2.setCurrentIndex(0)

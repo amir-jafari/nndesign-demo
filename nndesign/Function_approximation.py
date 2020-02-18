@@ -37,6 +37,7 @@ class FunctionApproximation(NNDLayout):
         self.diff = 1
         self.p = np.linspace(-2, 2, 100)
         self.W1, self.b1, self.W2, self.b2 = None, None, None, None
+        self.ani = None
         self.random_state = 0
         self.init_params()
 
@@ -97,6 +98,8 @@ class FunctionApproximation(NNDLayout):
         self.run_button.clicked.connect(self.on_run)
 
     def slide(self):
+        if self.ani:
+            self.ani.event_source.stop()
         slider_s1 = self.slider_s1.value()
         if self.S1 != slider_s1:
             self.S1 = slider_s1
@@ -124,10 +127,11 @@ class FunctionApproximation(NNDLayout):
 
     # https://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/
     def on_run(self):
+        if self.ani:
+            self.ani.event_source.stop()
         n_epochs = 500
-        self.last_idx = 0
-        ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=n_epochs,
-                            interval=20, repeat=False, blit=True)
+        self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=n_epochs,
+                                 interval=20, repeat=False, blit=True)
 
     def animate_init(self):
         self.net_approx.set_data([], [])

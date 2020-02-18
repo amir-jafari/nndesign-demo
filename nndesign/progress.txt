@@ -21,8 +21,8 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Reciprocal Basis  -> Done.
 
 - Chapter 6:
-    - Linear Transformations -> TODO when internet
-    - Eigenvector Game -> TODO when internet
+    - Linear Transformations -> Math left... TODO
+    - Eigenvector Game -> TODO
 
 - Chapter 7:
     - Suppervised Hebb --> No idea how this work so putting it off for now. TODO
@@ -31,7 +31,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Taylor Series 1 --> Done.
     - Taylor Series 2  --> Done.
     - Directional Derivatives --> Done.
-    - Quadratic Function --> Need to internet to see how to add input boxes. TODO.
+    - Quadratic Function --> Main stuff done. Need to add the A, d and c. Maybe use paint stuff... TODO
 
 - Chapter 9:
     - Steepest Descent for Quadratic --> Done.
@@ -40,14 +40,14 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Steepest Descent --> Done.
 
 - Chapter 10:
-    - Adaptive Noise Cancellation --> No idea how this works. Putting it of for now.
-    - EEG noise cancellation --> Idem.
-    - Linear Classification --> Idem.
+    - Adaptive Noise Cancellation --> Done.
+    - EEG noise cancellation --> TODO. Should be easy using the one above.
+    - Linear Classification --> Moving on for now :/
 
 - Chapter 11:
     - Network Function --> Done
-    - Back-propagation Calculation --> Half way there. TODO: Input box, figure and make it look nice.
-    - Function Approximation  --> Done. TODO: There are some logic bugs here.
+    - Back-propagation Calculation --> Half way there. TODO: figure and make it look nice.
+    - Function Approximation  --> Done.
     - Generalization  --> Almost done, for some reason cannot really get it to overfit. Should look at the math. TODO - It's because we are using the stochastic version
 
 - Chapter 12:

@@ -35,9 +35,18 @@ class BackpropagationCalculation(NNDLayout):
         # TODO: Figure and parameter values
 
         self.label_p = QtWidgets.QLabel(self)  # TODO: Input box
-        self.label_p.setText("")
+        self.label_p.setText("p =")
         self.label_p.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_p.setGeometry(300 * self.w_ratio, 300 * self.h_ratio, 200 * self.w_ratio, 25 * self.h_ratio)
+
+        self.p_box = QtWidgets.QLineEdit()
+        self.p_box.setText("1")
+        self.p_box.setGeometry(315 * self.w_ratio, 260 * self.h_ratio, 50 * self.w_ratio, 100 * self.h_ratio)
+        self.wid3 = QtWidgets.QWidget(self)
+        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid3.setGeometry(315 * self.w_ratio, 260 * self.h_ratio, 50 * self.w_ratio, 100 * self.h_ratio)
+        self.layout3.addWidget(self.p_box)
+        self.wid3.setLayout(self.layout3)
 
         self.label_t = QtWidgets.QLabel(self)
         self.label_t.setText("")
@@ -118,7 +127,8 @@ class BackpropagationCalculation(NNDLayout):
         self.W1, self.b1 = np.array([[-0.27], [-0.41]]), np.array([[-0.48], [-0.13]])
         self.W2, self.b2 = np.array([[0.09, -0.17]]), np.array([[0.48]])
 
-        self.label_p.setText("p = 1");
+        # self.label_p.setText("p = 1");
+        self.p_box.setText("1")
         self.label_t.setText("t = ?");
         self.label_a1.setText("a1 = ?");
         self.label_a2.setText("a2 = ?")
@@ -140,12 +150,12 @@ class BackpropagationCalculation(NNDLayout):
     def update_label(self):
         alpha = 0.1
         if self.idx == 0:
-            self.label_p.setText("p = 1"); self.label_t.setText("t = ?")
+            self.label_t.setText("t = ?")
             self.label_a1.setText("a1 = ?"); self.label_a2.setText("a2 = ?")
             self.label_e.setText("e = ?"); self.label_s2.setText("s2 = ?"); self.label_s1.setText("s1 = ?")
             self.label_W1.setText("W1 = ?"); self.label_b1.setText("b1 = ?")
             self.label_W2.setText("W2 = ?"); self.label_b2.setText("b2 = ?")
-            self.p = 1  # TODO: Input box
+            self.p = float(self.p_box.text())
             self.t = 1 + np.sin(self.p * np.pi / 4)
             n1 = np.dot(self.W1, self.p) + self.b1
             self.a1 = logsigmoid(n1)
