@@ -21,15 +21,18 @@ class ReciprocalBasis(NNDLayout):
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
         self.axes1_points = []
-        self.axes1_v1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, label="v1", color="r")
-        self.axes1_v2 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, label="v2", color="b")
-        self.axes1_s1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, label="s1", color="m")
-        self.axes1_s2 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, label="s2", color="y")
-        self.axes1_x = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, label="x", color="g")
+        self.axes1_v1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
+        self.axes1_v2 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, color="g")
+        self.text_v1, self.text_v2 = None, None
+        self.axes1_s1 = self.axes_1.quiver([0], [0], [1], [0], units="xy", scale=1)
+        self.axes_1.text(1.2, 0, "s1")
+        self.axes1_s2 = self.axes_1.quiver([0], [0], [0], [1], units="xy", scale=1)
+        self.axes_1.text(0, 1.2, "s1")
+        self.axes1_x = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, color="r")
+        self.text_x = None
         self.axes1_proj = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0)
         self.axes1_proj1 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0)
         self.axes1_proj_line, = self.axes_1.plot([], "-")
-        self.axes_1.legend()
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
@@ -37,14 +40,15 @@ class ReciprocalBasis(NNDLayout):
         self.axes_2.set_title("Vector Expansion", fontdict={'fontsize': 10})
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
-        self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, label="v1", color="r")
-        self.axes2_v2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, label="v2", color="b")
-        self.axes2_x = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, label="x", color="g")
+        self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
+        self.axes2_v2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
+        self.text_v1_2, self.text_v2_2 = None, None
+        self.axes2_x = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="r")
+        self.text_x_2 = None
         self.axes2_line1, = self.axes_2.plot([], "-")
         self.axes2_line1.set_color("black")
         self.axes2_line2, = self.axes_2.plot([], "-")
         self.axes2_line2.set_color("black")
-        self.axes_2.legend()
         self.canvas2.draw()
 
         self.button = QtWidgets.QPushButton("Expand", self)
@@ -75,6 +79,10 @@ class ReciprocalBasis(NNDLayout):
     def draw_vector(self):
         if len(self.axes1_points) == 1:
             self.axes1_v1.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
+            if self.text_v1:
+                self.text_v1.remove()
+            mult_factor = 1.4 if self.axes1_points[0][0] < 0 and self.axes1_points[0][1] < 0 else 1.2
+            self.text_v1 = self.axes_1.text(self.axes1_points[0][0] * mult_factor, self.axes1_points[0][1] * mult_factor, "v1")
         elif len(self.axes1_points) == 2:
             cos_angle = (self.axes1_points[0][0] * self.axes1_points[1][0] + self.axes1_points[1][0] *
                          self.axes1_points[1][1]) / (
@@ -88,10 +96,18 @@ class ReciprocalBasis(NNDLayout):
                 self.label_warning.setText("WHOOPS!  You entered parallel vectors, which cannot form a basis. Please try again!")
             else:
                 self.axes1_v2.set_UVC(self.axes1_points[1][0], self.axes1_points[1][1])
-                self.axes1_s1.set_UVC(1, 0)
-                self.axes1_s2.set_UVC(0, 1)
+                if self.text_v2:
+                    self.text_v2.remove()
+                mult_factor = 1.4 if self.axes1_points[1][0] < 0 and self.axes1_points[1][1] < 0 else 1.2
+                self.text_v2 = self.axes_1.text(self.axes1_points[1][0] * mult_factor,
+                                                self.axes1_points[1][1] * mult_factor, "v2")
         elif len(self.axes1_points) == 3:
             self.axes1_x.set_UVC(self.axes1_points[2][0], self.axes1_points[2][1])
+            if self.text_x:
+                self.text_x.remove()
+            mult_factor = 1.4 if self.axes1_points[2][0] < 0 and self.axes1_points[2][1] < 0 else 1.2
+            self.text_v2 = self.axes_1.text(self.axes1_points[2][0] * mult_factor,
+                                            self.axes1_points[2][1] * mult_factor, "x")
         self.canvas.draw()
 
     def expand(self):
@@ -108,12 +124,27 @@ class ReciprocalBasis(NNDLayout):
         self.axes2_line1.set_data([0, xv[0, 0] * self.axes1_points[0][0]], [0, xv[0, 0] * self.axes1_points[0][1]])
         self.axes2_line2.set_data([xv[0, 0] * self.axes1_points[0][0], self.axes1_points[2][0]],
                                   [xv[0, 0] * self.axes1_points[0][1], self.axes1_points[2][1]])
-        self.axes1_v1.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
-        self.axes1_v2.set_UVC(self.axes1_points[1][0], self.axes1_points[1][1])
+        # self.axes1_v1.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
+        # self.axes1_v2.set_UVC(self.axes1_points[1][0], self.axes1_points[1][1])
         self.axes2_v1.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
+        if self.text_v1_2:
+            self.text_v1_2.remove()
+        mult_factor = 1.4 if self.axes1_points[0][0] < 0 and self.axes1_points[0][1] < 0 else 1.2
+        self.text_v1_2 = self.axes_2.text(self.axes1_points[0][0] * mult_factor,
+                                          self.axes1_points[0][1] * mult_factor, "v1")
         self.axes2_v2.set_UVC(self.axes1_points[1][0], self.axes1_points[1][1])
-        self.axes1_x.set_UVC(self.axes1_points[2][0], self.axes1_points[2][1])
+        if self.text_v2_2:
+            self.text_v2_2.remove()
+        mult_factor = 1.4 if self.axes1_points[1][0] < 0 and self.axes1_points[1][1] < 0 else 1.2
+        self.text_v2_2 = self.axes_2.text(self.axes1_points[1][0] * mult_factor,
+                                          self.axes1_points[1][1] * mult_factor, "v2")
+        # self.axes1_x.set_UVC(self.axes1_points[2][0], self.axes1_points[2][1])
         self.axes2_x.set_UVC(self.axes1_points[2][0], self.axes1_points[2][1])
+        if self.text_x_2:
+            self.text_x_2.remove()
+        mult_factor = 1.4 if self.axes1_points[2][0] < 0 and self.axes1_points[2][1] < 0 else 1.2
+        self.text_x_2 = self.axes_2.text(self.axes1_points[2][0] * mult_factor,
+                                         self.axes1_points[2][1] * mult_factor, "x")
 
         self.canvas.draw()
         self.canvas2.draw()
@@ -121,8 +152,6 @@ class ReciprocalBasis(NNDLayout):
     def clear_all(self):
         self.axes1_v1.set_UVC(0, 0)
         self.axes1_v2.set_UVC(0, 0)
-        self.axes1_s1.set_UVC(0, 0)
-        self.axes1_s2.set_UVC(0, 0)
         self.axes2_v1.set_UVC(0, 0)
         self.axes2_v2.set_UVC(0, 0)
         self.axes1_x.set_UVC(0, 0)
@@ -130,5 +159,23 @@ class ReciprocalBasis(NNDLayout):
         self.axes1_points = []
         self.axes2_line1.set_data([], [])
         self.axes2_line2.set_data([], [])
+        if self.text_v1:
+            self.text_v1.remove()
+            self.text_v1 = None
+        if self.text_v2:
+            self.text_v2.remove()
+            self.text_v2 = None
+        if self.text_x:
+            self.text_x.remove()
+            self.text_x = None
+        if self.text_v1_2:
+            self.text_v1_2.remove()
+            self.text_v1_2 = None
+        if self.text_v2_2:
+            self.text_v2_2.remove()
+            self.text_v2_2 = None
+        if self.text_x_2:
+            self.text_x_2.remove()
+            self.text_x_2 = None
         self.canvas.draw()
         self.canvas2.draw()

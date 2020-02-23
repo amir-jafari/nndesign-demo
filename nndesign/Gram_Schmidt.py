@@ -26,12 +26,12 @@ class GramSchmidt(NNDLayout):
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
         self.axes1_points = []
-        self.axes1_v1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, label="y1", color="r")
-        self.axes1_v2 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, label="y2", color="g")
-        self.axes1_proj = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0)
-        self.axes1_proj_line, = self.axes_1.plot([], "-")
-        self.axes1_proj_line.set_color("black")
-        self.axes_1.legend()
+        self.axes1_v1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1)
+        self.axes1_v2 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1)
+        self.axes1_proj = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0, linestyle='dashed', color="red")
+        self.text1, self.text2 = None, None
+        self.axes1_proj_line, = self.axes_1.plot([], "--")
+        self.axes1_proj_line.set_color("red")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
@@ -39,10 +39,10 @@ class GramSchmidt(NNDLayout):
         self.axes_2.set_title("Orthogonalized Vectors", fontdict={'fontsize': 10})
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
-        self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, label="v1", color="r")
-        self.axes2_v2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, label="v2", color="g")
+        self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
+        self.axes2_v2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
+        self.text3, self.text4 = None, None
         self.axes2_proj_line, = self.axes_2.plot([], "*")
-        self.axes_2.legend()
         self.canvas2.draw()
 
         self.button = QtWidgets.QPushButton("Compute", self)
@@ -68,9 +68,18 @@ class GramSchmidt(NNDLayout):
     def draw_vector(self):
         if len(self.axes1_points) == 1:
             self.axes1_v1.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
+            if self.text1:
+                self.text1.remove()
+            mult_factor = 1.4 if self.axes1_points[0][0] < 0 and self.axes1_points[0][1] < 0 else 1.2
+            self.text1 = self.axes_1.text(self.axes1_points[0][0] * mult_factor, self.axes1_points[0][1] * mult_factor, "y1")
+            self.canvas.draw()
         elif len(self.axes1_points) == 2:
             self.axes1_v2.set_UVC(self.axes1_points[1][0], self.axes1_points[1][1])
-        self.canvas.draw()
+            if self.text2:
+                self.text2.remove()
+            mult_factor = 1.4 if self.axes1_points[1][0] < 0 and self.axes1_points[1][1] < 0 else 1.2
+            self.text2 = self.axes_1.text(self.axes1_points[1][0] * mult_factor, self.axes1_points[1][1] * mult_factor, "y2")
+            self.canvas.draw()
 
     def gram_schmidt(self):
         if len(self.axes1_points) < 2:
@@ -104,6 +113,12 @@ class GramSchmidt(NNDLayout):
             v2 = v2 - proj
             self.axes2_v1.set_UVC(v1[0, 0], v1[1, 0])
             self.axes2_v2.set_UVC(v2[0, 0], v2[1, 0])
+            if self.text3:
+                self.text3.remove()
+            self.text3 = self.axes_2.text(v1[0, 0] * 1.2, v1[1, 0] * 1.2, "v1")
+            if self.text4:
+                self.text4.remove()
+            self.text4 = self.axes_2.text(v2[0, 0] * 1.2, v2[1, 0], "v2")
         self.canvas.draw()
         self.canvas2.draw()
 
@@ -115,5 +130,17 @@ class GramSchmidt(NNDLayout):
         self.axes1_points = []
         self.axes1_proj.set_UVC(0, 0)
         self.axes1_proj_line.set_data([], [])
+        if self.text1:
+            self.text1.remove()
+            self.text1 = None
+        if self.text2:
+            self.text2.remove()
+            self.text2 = None
+        if self.text3:
+            self.text3.remove()
+            self.text3 = None
+        if self.text4:
+            self.text4.remove()
+            self.text4 = None
         self.canvas.draw()
         self.canvas2.draw()

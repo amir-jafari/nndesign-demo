@@ -34,6 +34,8 @@ class DecisionBoundaries(NNDLayout):
         self.closest_point = None
 
         self.point_1, self.point_2 = (2, 2), (-2, -2)
+        self.prev_x_diff, self.prev_y_diff = None, None
+        self.current_x_diff, self.current_y_diff = 2 - -2, 2 - -2
         self.data, self.data_missclasified = [], []
         self.axes = self.figure.add_subplot(111)
         self.figure.subplots_adjust(bottom=0.2, left=0.1)
@@ -49,8 +51,8 @@ class DecisionBoundaries(NNDLayout):
         self.miss_line_pos, = self.axes.plot([], 'ro')
         self.miss_line_neg, = self.axes.plot([], 'rs')
         self.decision, = self.axes.plot([], 'r-', label="Decision Boundary")
-        self.point_1_draw, = self.axes.plot([], '*')
-        self.point_2_draw, = self.axes.plot([], '*')
+        self.point_1_draw, = self.axes.plot([], '*', markersize=12)
+        self.point_2_draw, = self.axes.plot([], '*', markersize=12)
         self.weight_vector = self.axes.quiver([0], [0], [1], [-1], units="xy", scale=1, label="Weight vector")
         self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=2,
                          bbox_to_anchor=(0, -.28, 1, -.280), mode='expand')
@@ -93,7 +95,7 @@ class DecisionBoundaries(NNDLayout):
             d_click_p1 = abs(self.point_1[1] - event.ydata)
             d_click_p2 = abs(self.point_2[1] - event.ydata)
             self.closest_point = "1" if d_click_p1 <= d_click_p2 else "2"
-            if min(d_click_p1, d_click_p2) < 0.1:
+            if min(d_click_p1, d_click_p2) < 0.2:
                 self.cid = self.canvas.mpl_connect("button_release_event", self.on_mousepressed)
             else:
                 if self.cid:
@@ -108,6 +110,8 @@ class DecisionBoundaries(NNDLayout):
             self.point_1 = (event.xdata, event.ydata)
         elif self.closest_point == "2":
             self.point_2 = (event.xdata, event.ydata)
+        self.prev_x_diff, self.prev_y_diff = self.current_x_diff, self.current_y_diff
+        self.current_x_diff, self.current_y_diff = self.point_1[0] - self.point_2[0], self.point_1[1] - self.point_2[1]
         self.find_parameters()
         self.draw_decision_boundary()
         self.draw_data()
@@ -149,8 +153,16 @@ class DecisionBoundaries(NNDLayout):
         A = vstack([x_coords, ones(len(x_coords))]).T
         m, c = lstsq(A, y_coords)[0]
         # print("Line Solution is y = {m}x + {c}".format(m=m, c=c))
-        self.w[1] = np.random.uniform(-1, 1)
-        self.w[0] = np.round(-m * self.w[1], 2)
+        if str(self.prev_x_diff)[0] != str(self.current_x_diff)[0]:
+            if str(self.prev_y_diff)[0] != str(self.current_y_diff)[0]:
+                self.w[0] = np.round(-m * self.w[1], 2)
+            else:
+                self.w[1] = np.round(-self.w[0] / m, 2)
+        else:
+            if str(self.prev_y_diff)[0] != str(self.current_y_diff)[0]:
+                self.w[0] = np.round(-m * self.w[1], 2)
+            else:
+                self.w[1] = np.round(-self.w[0] / m, 2)
         scale = np.sqrt(self.w[0] ** 2 + self.w[1] ** 2)
         self.w[0] = np.round(self.w[0] / scale, 2)
         self.w[1] = np.round(self.w[1] / scale, 2)
