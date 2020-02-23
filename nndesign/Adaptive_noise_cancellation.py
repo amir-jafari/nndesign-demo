@@ -123,16 +123,38 @@ class AdaptiveNoiseCancellation(NNDLayout):
         self.layout_mc.addWidget(self.slider_mc)
         self.wid_mc.setLayout(self.layout_mc)
 
+        self.animation_speed = 100
+        self.label_anim_speed = QtWidgets.QLabel(self)
+        self.label_anim_speed.setText("Animation Delay: 100 ms")
+        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
+        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
+                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.slider_anim_speed.setRange(0, 6)
+        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.slider_anim_speed.setTickInterval(1)
+        self.slider_anim_speed.setValue(1)
+        self.wid_anim_speed = QtWidgets.QWidget(self)
+        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
+                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.layout_anim_speed.addWidget(self.slider_anim_speed)
+        self.wid_anim_speed.setLayout(self.layout_anim_speed)
+        self.slider_anim_speed.valueChanged.connect(self.slide)
+
         self.w, self.e = None, None
         self.canvas2.mpl_connect('button_press_event', self.on_mouseclick)
         self.slider_lr.valueChanged.connect(self.slide)
         self.slider_mc.valueChanged.connect(self.slide)
+        self.slider_anim_speed.valueChanged.connect(self.slide)
 
     def slide(self):
         self.lr = float(self.slider_lr.value() / 10)
         self.label_lr.setText("lr: " + str(self.lr))
         self.mc = float(self.slider_mc.value() / 10)
         self.label_mc.setText("mc: " + str(self.mc))
+        self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.w1_data:
             if self.ani_2:
                 self.ani_2.event_source.stop()
@@ -190,6 +212,6 @@ class AdaptiveNoiseCancellation(NNDLayout):
 
     def run_animation(self):
         self.ani_2 = FuncAnimation(self.figure2, self.on_animate_2, init_func=self.animate_init_2, frames=int(ts),
-                                   interval=100, repeat=False, blit=True)
+                                   interval=self.animation_speed, repeat=False, blit=True)
         self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=int(ts),
-                                   interval=100, repeat=False, blit=True)
+                                   interval=self.animation_speed, repeat=False, blit=True)

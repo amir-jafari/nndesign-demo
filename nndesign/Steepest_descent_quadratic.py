@@ -46,19 +46,39 @@ class SteepestDescentQuadratic(NNDLayout):
         self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_lr.setTickInterval(1)
         self.slider_lr.setValue(3)
-
         self.wid_lr = QtWidgets.QWidget(self)
         self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
         self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 280 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout_lr.addWidget(self.slider_lr)
         self.wid_lr.setLayout(self.layout_lr)
 
+        self.animation_speed = 200
+        self.label_anim_speed = QtWidgets.QLabel(self)
+        self.label_anim_speed.setText("Animation Delay: 200 ms")
+        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
+        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
+                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.slider_anim_speed.setRange(0, 6)
+        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.slider_anim_speed.setTickInterval(1)
+        self.slider_anim_speed.setValue(2)
+        self.wid_anim_speed = QtWidgets.QWidget(self)
+        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
+                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.layout_anim_speed.addWidget(self.slider_anim_speed)
+        self.wid_anim_speed.setLayout(self.layout_anim_speed)
+
         self.slider_lr.valueChanged.connect(self.slide)
+        self.slider_anim_speed.valueChanged.connect(self.slide)
         self.canvas.draw()
 
     def slide(self):
         self.lr = float(self.slider_lr.value()/100)
         self.label_lr.setText("lr: " + str(self.lr))
+        self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.x_data:
             if self.ani:
                 self.ani.event_source.stop()
@@ -95,4 +115,4 @@ class SteepestDescentQuadratic(NNDLayout):
             self.x_data, self.y_data = [event.xdata], [event.ydata]
             self.x, self.y = event.xdata, event.ydata
             self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=max_epoch,
-                                     interval=200, repeat=False, blit=True)
+                                     interval=self.animation_speed, repeat=False, blit=True)

@@ -65,7 +65,27 @@ class SteepestDescent(NNDLayout):
                                 self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout_lr.addWidget(self.slider_lr)
         self.wid_lr.setLayout(self.layout_lr)
+
+        self.animation_speed = 500
+        self.label_anim_speed = QtWidgets.QLabel(self)
+        self.label_anim_speed.setText("Animation Delay: 500 ms")
+        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
+        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
+                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.slider_anim_speed.setRange(0, 6)
+        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.slider_anim_speed.setTickInterval(1)
+        self.slider_anim_speed.setValue(5)
+        self.wid_anim_speed = QtWidgets.QWidget(self)
+        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
+                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.layout_anim_speed.addWidget(self.slider_anim_speed)
+        self.wid_anim_speed.setLayout(self.layout_anim_speed)
+
         self.slider_lr.valueChanged.connect(self.slide)
+        self.slider_anim_speed.valueChanged.connect(self.slide)
 
     def animate_init_1(self):
         self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
@@ -137,13 +157,15 @@ class SteepestDescent(NNDLayout):
         if event.xdata != None and event.xdata != None:
             self.x_data, self.y_data = [self.x], [self.y]
             self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=max_epoch,
-                                       interval=200, repeat=False, blit=True)
+                                       interval=self.animation_speed, repeat=False, blit=True)
             self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=max_epoch,
-                                       interval=200, repeat=False, blit=True)
+                                       interval=self.animation_speed, repeat=False, blit=True)
 
     def slide(self):
         self.lr = float(self.slider_lr.value()/100)
         self.label_lr.setText("lr: " + str(self.lr))
+        self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.x_data:
             if self.ani_1:
                 self.ani_1.event_source.stop()

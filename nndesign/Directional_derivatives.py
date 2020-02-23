@@ -42,7 +42,7 @@ class DirectionalDerivatives(NNDLayout):
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Function F")
         self.point, = self.axes_1.plot([], marker='*')
-        self.line, = self.axes_1.plot([], linestyle="--")
+        self.line, = self.axes_1.plot([], linestyle="-", color="blue")
         self.line_data_x, self.line_data_y = [], []
         self.axes_1.contour(X1, X2, F)
         self.canvas.draw()
@@ -51,8 +51,8 @@ class DirectionalDerivatives(NNDLayout):
         self.label_dirder = QtWidgets.QLabel(self)
         self.label_dirder.setText("Directional Derivative")
         self.label_dirder.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_dirder.setGeometry((self.x_chapter_slider_label - 50) * self.w_ratio, 400 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.slider_dirder = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.label_dirder.setGeometry((self.x_chapter_slider_label - 50) * self.w_ratio, 370 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
+        self.slider_dirder = QtWidgets.QSlider(QtCore.Qt.Vertical)
         self.slider_dirder.setRange(-60, 60)
         self.slider_dirder.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_dirder.setTickInterval(1)
@@ -60,7 +60,7 @@ class DirectionalDerivatives(NNDLayout):
 
         self.wid3 = QtWidgets.QWidget(self)
         self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 430 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.wid3.setGeometry((self.x_chapter_usual + 30) * self.w_ratio, 430 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout3.addWidget(self.slider_dirder)
         self.wid3.setLayout(self.layout3)
 

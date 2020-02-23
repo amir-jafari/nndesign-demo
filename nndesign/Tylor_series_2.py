@@ -105,9 +105,11 @@ class TylorSeries2(NNDLayout):
 
         self.axis1.set_title("Function", fontdict={'fontsize': 10})
         self.axis1.plot_surface(XX, YY, FF)
+        self.axis1.view_init(30, 60)
         self.canvas3.draw()
 
         self.axis2.set_title("Approximation", fontdict={'fontsize': 10})
+        self.axis2.view_init(30, 60)
         self.canvas4.draw()
 
     def on_mouseclick(self, event):
