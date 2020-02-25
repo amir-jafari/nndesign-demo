@@ -29,29 +29,29 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 
 - Chapter 8:
     - Taylor Series 1 --> Done.
-    - Taylor Series 2  --> Done. TODO: Rotate 3D function
-    - Directional Derivatives --> Done. TODO: Make bar vertical, line non dashed
+    - Taylor Series 2  --> Done.
+    - Directional Derivatives --> Done.
     - Quadratic Function --> Main stuff done. Need to add the A, d and c. Maybe use paint stuff... TODO --> Put sliders same format in blank space
 
 - Chapter 9:
-    - Steepest Descent for Quadratic --> Done. TODO: Make speed a slide bar
+    - Steepest Descent for Quadratic --> Done.
     - Method Comparison --> Done.
     - Newton's Method --> Done.
     - Steepest Descent --> Done.
 
 - Chapter 10:
     - Adaptive Noise Cancellation --> Done.
-    - EEG noise cancellation --> TODO. Should be easy using the one above.
+    - EEG noise cancellation --> TODO - Make speed a slide bar. Load private/eegdata.mat.
     - Linear Classification --> Moving on for now :/
 
 - Chapter 11:
-    - Network Function --> Done - TODO: Fix scaling
-    - Back-propagation Calculation --> Half way there. TODO: figure and make it look nice. Make it one by one, use pT instead of p'
+    - Network Function --> Done
+    - Back-propagation Calculation --> Half way there. TODO: figure and make it look nice. Make it one by one, use pT instead of p'  --> Gonna need LaTeX for that
     - Function Approximation  --> Done. - TODO: Include Marqadt
     - Generalization  --> Almost done, for some reason cannot really get it to overfit. Should look at the math. TODO - It's because we are using the stochastic version
 
 - Chapter 12:
-    - Steepest Descent #1 --> Doesn't look to hard, but need 3D. TODO.
+    - Steepest Descent #1 --> TODO. - Can't access target function ... :/
     - Steepest Descent #2 --> Idem. TODO.
     - Momentum --> Same stuff.
     - Variable Learning Rate --> Getting error on MATLAB.
@@ -61,10 +61,10 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Marquardt --> Idem.
 
 - Chapter 13:
-    - Early Stopping
-    - Regularization
-    - Bayesian Regularization
-    - Early-stopping-Regularization
+    - Early Stopping - Almost done. TODO: Figure out how to make animations of two things on the same plot
+    - Regularization - Almost done. TODO: Include regularization stuff
+    - Bayesian Regularization - Putting off for now
+    - Early-stopping-Regularization - Mmm
 
 - Chapter 14:
     - FIR Network

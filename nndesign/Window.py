@@ -39,6 +39,11 @@ from Function_approximation import FunctionApproximation
 from Backpropagation_calculation import BackpropagationCalculation
 from Network_function import NetworkFunction
 from Generalization import Generalization
+# ------ Chapter 12 -------
+from Steepest_descent_backprop_1 import SteepestDescentBackprop1
+# ------ Chapter 13 -------
+from Early_stopping import EarlyStopping
+from Regularization import Regularization
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -315,11 +320,22 @@ class MainWindowNN(NNDLayout):
 
     def chapter12(self, idx):
         self.comboBox3.setCurrentIndex(0)
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = SteepestDescentBackprop1(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
+        else:
+            print("TODO")
 
     def chapter13(self, idx):
         self.comboBox4.setCurrentIndex(0)
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = EarlyStopping(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window2 = Regularization(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
+        else:
+            print("TODO")
 
     def chapter14(self, idx):
         self.comboBox1.setCurrentIndex(0)
