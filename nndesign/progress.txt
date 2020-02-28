@@ -41,7 +41,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 
 - Chapter 10:
     - Adaptive Noise Cancellation --> Done.
-    - EEG noise cancellation --> TODO - Make speed a slide bar. Load private/eegdata.mat.
+    - EEG noise cancellation --> Done.
     - Linear Classification --> Moving on for now :/
 
 - Chapter 11:
@@ -61,7 +61,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Marquardt --> Idem.
 
 - Chapter 13:
-    - Early Stopping - Almost done. TODO: Figure out how to make animations of two things on the same plot
+    - Early Stopping - Almost done. TODO: Figure out how to make animations of two things on the same plot - Use full batch
     - Regularization - Almost done. TODO: Include regularization stuff
     - Bayesian Regularization - Putting off for now
     - Early-stopping-Regularization - Mmm

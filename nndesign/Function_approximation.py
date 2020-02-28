@@ -26,6 +26,24 @@ def purelin_der(n):
     return np.array([1]).reshape(n.shape)
 
 
+def log_delta(a, d=None, w=None):
+    na, ma = a.shape
+    if d is None and w is None:
+        return -np.kron(np.ones((1, ma)), np.eye(na))
+    else:
+        return np.dot(w.T, d)
+
+
+def marq(p, d):
+    s, _ = d.shape
+    r, _ = p.shape
+    return np.kron(p.T, np.ones((1, s))) * np.kron(np.ones((1, r)), d.T)
+
+
+mu_initial = 0.01
+mingrad = 0.001
+
+
 class FunctionApproximation(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(FunctionApproximation, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -130,11 +148,77 @@ class FunctionApproximation(NNDLayout):
         if self.ani:
             self.ani.event_source.stop()
         n_epochs = 500
-        self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=n_epochs,
+        self.ani = FuncAnimation(self.figure, self.on_animate_v2, init_func=self.animate_init_v2, frames=n_epochs,
                                  interval=20, repeat=False, blit=True)
 
     def animate_init(self):
         self.net_approx.set_data([], [])
+        return self.net_approx,
+
+    def animate_init_v2(self):
+        self.p = self.p.reshape(1, -1)
+        self.mu = mu_initial
+        self.RS = self.S1 * 1
+        self.RS1 = self.RS + 1
+        self.RSS = self.RS + self.S1
+        self.RSS1 = self.RSS + 1
+        self.RSS2 = self.RSS + self.S1 * 1
+        self.RSS3 = self.RSS2 + 1
+        self.RSS4 = self.RSS2 + 1
+        self.net_approx.set_data([], [])
+        return self.net_approx,
+
+    def on_animate_v2(self, idx):
+
+        self.mu = self.mu / 10
+        a1 = logsigmoid(np.dot(self.W1, self.p) + self.b1)
+        a2 = purelin(np.dot(self.W2, a1) + self.b2)
+        ii = np.eye(self.RSS4)
+
+        a1 = np.kron(a1, np.ones((1, 1)))
+        d2 = log_delta(a2)
+        d1 = log_delta(a1, d2, self.W2)
+        jac1 = marq(np.kron(self.p, np.ones((1, 1))), d1)
+        jac2 = marq(a1, d2)
+        jac = np.hstack((jac1, d1.T))
+        jac = np.hstack((jac, jac2))
+        jac = np.hstack((jac, d2.T))
+        e = self.f_to_approx(self.p) - a2
+        error_prev = np.dot(e, e.T).item()
+
+        je = np.dot(jac.T, e.T)
+        grad = np.sqrt(np.dot(je.T, je)).item()
+        if grad < mingrad:
+            self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
+            return self.net_approx,
+
+        jj = np.dot(jac.T, jac)
+        while True:
+
+            dw = -np.dot(np.linalg.inv(jj + ii * self.mu), je)
+            W1 = self.W1 + dw[:self.S1]
+            b1 = self.b1 + dw[self.S1:self.S1 * 2]
+            W2 = self.W2[0] + dw[self.S1 * 2:self.S1 * 3].reshape(-1)
+            b2 = self.b2[0] + dw[self.S1 * 3].reshape(-1)
+            # self.W1 += dw[:self.S1]
+            # self.b1 += dw[self.S1:self.S1 * 2]
+            # self.W2[0] += dw[self.S1 * 2:self.S1 * 3].reshape(-1)
+            # self.b2[0] += dw[self.S1 * 3].reshape(-1)
+
+            a1 = logsigmoid(np.dot(W1, self.p) + b1)
+            a2 = purelin(np.dot(W2, a1) + b2)
+            e = self.f_to_approx(self.p) - a2
+            error = np.dot(e, e.T).item()
+            if error >= error_prev:
+                self.mu = self.mu * 10
+                if self.mu > 1e10:
+                    break
+                error_prev = error
+            else:
+                break
+
+        self.W1, self.b1, self.W2[0], self.b2[0] = W1, b1, W2, b2
+        self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
         return self.net_approx,
 
     def on_animate(self, idx):
