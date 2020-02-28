@@ -41,7 +41,7 @@ class EarlyStopping(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(EarlyStopping, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
 
-        self.fill_chapter("Steepest Descent", 9, " TODO",
+        self.fill_chapter("Early Stopping", 9, " TODO",
                           PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
 
         self.train_error, self.error_train = [], None
@@ -65,8 +65,9 @@ class EarlyStopping(NNDLayout):
 
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("Approximation Fa", fontdict={'fontsize': 10})
-        self.train_e, = self.axes_2.plot([], linestyle='-', color="b")
-        self.test_e, = self.axes_2.plot([], linestyle='-', color="r")
+        self.train_e, = self.axes_2.plot([], [], linestyle='-', color="b", label="train error")
+        self.test_e, = self.axes_2.plot([], [], linestyle='-', color="r", label="test error")
+        self.axes_2.legend()
         self.axes_2.set_xlim(0, max_epoch)
         self.axes_2.set_ylim(0, 20)
         self.canvas2.draw()
@@ -89,9 +90,9 @@ class EarlyStopping(NNDLayout):
         self.layout_nsd.addWidget(self.slider_nsd)
         self.wid_nsd.setLayout(self.layout_nsd)
 
-        self.animation_speed = 500
+        self.animation_speed = 0
         self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 500 ms")
+        self.label_anim_speed.setText("Animation Delay: 0 ms")
         self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
                                           self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
@@ -99,7 +100,7 @@ class EarlyStopping(NNDLayout):
         self.slider_anim_speed.setRange(0, 6)
         self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(5)
+        self.slider_anim_speed.setValue(0)
         self.wid_anim_speed = QtWidgets.QWidget(self)
         self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
         self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
@@ -115,16 +116,15 @@ class EarlyStopping(NNDLayout):
         self.run_button.setStyleSheet("font-size:13px")
         self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 500 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.run_button.clicked.connect(self.on_run)
+        self.init_params()
+        self.full_batch = False
 
     def animate_init_1(self):
-        self.train_e, = self.axes_2.plot([], linestyle='--')
-        return self.train_e,
+        self.train_e.set_data([], [])
+        self.test_e.set_data([], [])
+        return self.train_e, self.test_e
 
     def animate_init_2(self):
-        self.test_e, = self.axes_2.plot([], linestyle='-', color="r")
-        return self.test_e,
-
-    def animate_init_3(self):
         self.net_approx.set_data([], [])
         return self.net_approx,
 
@@ -132,16 +132,11 @@ class EarlyStopping(NNDLayout):
         self.error_train, self.error_test = self.train()
         self.train_error.append(self.error_train)
         self.train_e.set_data(list(range(len(self.train_error))), self.train_error)
-        print("---", self.error_train)
-        return self.train_e,
-
-    def on_animate_2(self, idx):
         self.test_error.append(self.error_test)
         self.test_e.set_data(list(range(len(self.test_error))), self.test_error)
-        print(self.error_test)
-        return self.test_e,
+        return self.train_e, self.test_e
 
-    def on_animate_3(self, idx):
+    def on_animate_2(self, idx):
         nn_output = []
         for sample, target in zip(pp0, tt0):
             a, n2, n1, a1, a0 = self.forward(sample)
@@ -150,17 +145,11 @@ class EarlyStopping(NNDLayout):
         return self.net_approx,
 
     def on_run(self):
-        self.init_params()
         if self.ani_1:
             self.ani_1.event_source.stop()
         if self.ani_2:
             self.ani_2.event_source.stop()
-        if self.ani_3:
-            self.ani_3.event_source.stop()
         self.train_error, self.test_error = [], []
-        self.train_e.set_data([], [])
-        self.test_e.set_data([], [])
-        self.net_approx.set_data([], [])
         self.canvas.draw()
         self.canvas2.draw()
         self.run_animation()
@@ -168,12 +157,11 @@ class EarlyStopping(NNDLayout):
     def run_animation(self):
         self.ani_1 = FuncAnimation(self.figure2, self.on_animate_1, init_func=self.animate_init_1, frames=max_epoch,
                                    interval=self.animation_speed, repeat=False, blit=True)
-        self.ani_2 = FuncAnimation(self.figure2, self.on_animate_2, init_func=self.animate_init_2, frames=max_epoch,
-                                   interval=self.animation_speed, repeat=False, blit=True)
-        self.ani_3 = FuncAnimation(self.figure, self.on_animate_3, init_func=self.animate_init_3, frames=max_epoch,
+        self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=max_epoch,
                                    interval=self.animation_speed, repeat=False, blit=True)
 
     def slide(self):
+        self.init_params()
         np.random.seed(self.random_state)
         self.nsd = float(self.slider_nsd.value() / 10)
         self.label_nsd.setText("Noise standard deviation: " + str(self.nsd))
@@ -185,13 +173,11 @@ class EarlyStopping(NNDLayout):
                 self.ani_1.event_source.stop()
             if self.ani_2:
                 self.ani_2.event_source.stop()
-            if self.ani_3:
-                self.ani_3.event_source.stop()
             self.train_error, self.test_error = [], []
             self.net_approx.set_data([], [])
-            self.canvas.draw()
-            self.canvas2.draw()
-            self.run_animation()
+        self.canvas.draw()
+        self.canvas2.draw()
+        self.run_animation()
 
     def plot_train_test_data(self):
         self.tt = np.sin(2 * np.pi * pp / T) + np.random.uniform(-2, 2, pp.shape) * 0.2 * self.nsd
@@ -220,7 +206,7 @@ class EarlyStopping(NNDLayout):
     def train(self):
         alpha = 0.03
 
-        error_train = []
+        error_train, dw1, db1, dw2, db2 = [], 0, 0, 0, 0
         for sample, target in zip(pp, self.tt):
             a, n2, n1, a1, a0 = self.forward(sample)
             e = target - a
@@ -233,13 +219,28 @@ class EarlyStopping(NNDLayout):
             F1_der = np.diag(logsigmoid_der(n1).reshape(-1))
             s1 = np.dot(F1_der, np.dot(self.W2.T, s))
 
+            if self.full_batch:
+                dw1 += np.dot(s1, a0.T)
+                db1 += s1
+                dw2 += np.dot(s, a1.T)
+                db2 += s
+            else:
+                # Updates the weights and biases
+                # Hidden Layer
+                self.W1 += -alpha * np.dot(s1, a0.T)
+                self.b1 += -alpha * s1
+                # Output Layer
+                self.W2 += -alpha * np.dot(s, a1.T)
+                self.b2 += -alpha * s
+
+        if self.full_batch:
             # Updates the weights and biases
             # Hidden Layer
-            self.W1 += -alpha * np.dot(s1, a0.T)
-            self.b1 += -alpha * s1
+            self.W1 += -alpha * dw1
+            self.b1 += -alpha * db1
             # Output Layer
-            self.W2 += -alpha * np.dot(s, a1.T)
-            self.b2 += -alpha * s
+            self.W2 += -alpha * dw2
+            self.b2 += -alpha * db2
 
         error_test = []
         for sample, target in zip(p, self.t):

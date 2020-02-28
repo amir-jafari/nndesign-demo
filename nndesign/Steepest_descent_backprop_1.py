@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
+from scipy.io import loadmat
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
@@ -28,7 +29,6 @@ def purelin(n):
 
 def purelin_der(n):
     return np.array([1]).reshape(n.shape)
-
 
 P = np.linspace(-2, 2)
 
@@ -87,15 +87,13 @@ class SteepestDescentBackprop1(NNDLayout):
         self.wid2.setLayout(self.layout2)
 
         self.axes = self.figure.add_subplot(1, 1, 1)
-        self.axes.contour(X, Y, F)
-        self.axes.set_xlim(-2, 2)
-        self.axes.set_ylim(-2, 2)
+        # self.axes.set_xlim(-2, 2)
+        # self.axes.set_ylim(-2, 2)
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data, self.y_data = [], []
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.ani, self.event = None, None
-
         self.axes2.set_title("Function", fontdict={'fontsize': 10})
         """w11, w12 = np.linspace(-5, 15, 100), np.linspace(-5, 15, 100)
         b11, b12 = np.linspace(-5, 15, 100), np.linspace(-5, 15, 100)
@@ -113,8 +111,23 @@ class SteepestDescentBackprop1(NNDLayout):
         E = self.f_to_approx(P) - A2
         # FF = self.forward()
         self.axes2.plot_surface(W11, W12, E)"""
-        self.axes2.view_init(30, 60)
-        self.canvas2.draw()
+        
+        self.pair_of_params = 1
+        self.plot_data()
+
+        self.comboBox1 = QtWidgets.QComboBox(self)
+        self.comboBox1.addItems(["Pair 1", 'Pair 2', 'Pair 3'])
+        self.label_combo = QtWidgets.QLabel(self)
+        self.label_combo.setText("Pair of parameters")
+        self.label_combo.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
+        self.label_combo.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 550 * self.h_ratio,
+                                     150 * self.w_ratio, 100 * self.h_ratio)
+        self.wid2 = QtWidgets.QWidget(self)
+        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 580 * self.h_ratio,
+                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.layout2.addWidget(self.comboBox1)
+        self.wid2.setLayout(self.layout2)
 
         self.lr = 0.03
         self.label_lr = QtWidgets.QLabel(self)
@@ -150,9 +163,24 @@ class SteepestDescentBackprop1(NNDLayout):
         self.layout_anim_speed.addWidget(self.slider_anim_speed)
         self.wid_anim_speed.setLayout(self.layout_anim_speed)
 
+        self.comboBox1.currentIndexChanged.connect(self.change_pair_of_params)
         self.slider_lr.valueChanged.connect(self.slide)
         self.slider_anim_speed.valueChanged.connect(self.slide)
         self.canvas.draw()
+
+    def change_pair_of_params(self, idx):
+        self.pair_of_params = idx
+        self.plot_data()
+
+    def plot_data(self):
+        f_data = loadmat("nndbp{}.mat".format(self.pair_of_params))
+        x1, y1 = np.meshgrid(f_data["x1"], f_data["y1"])
+        x2, y2 = np.meshgrid(f_data["x2"], f_data["y2"])
+        self.axes.contour(x1, y1, f_data["E1"], list(f_data["levels"].reshape(-1)))
+        self.axes2.plot_surface(x2, y2, f_data["E2"])
+        self.axes2.view_init(30, 60)
+        self.canvas.draw()
+        self.canvas2.draw()
 
     def slide(self):
         self.lr = float(self.slider_lr.value()/100)
@@ -214,3 +242,6 @@ class SteepestDescentBackprop1(NNDLayout):
 
     def f_to_approx(self, p):
         return 1 + np.sin(np.pi * p * 4 / 5)
+
+    def init_params(self):
+        print("!")
