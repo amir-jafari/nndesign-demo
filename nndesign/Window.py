@@ -41,6 +41,7 @@ from Network_function import NetworkFunction
 from Generalization import Generalization
 # ------ Chapter 12 -------
 from Steepest_descent_backprop_1 import SteepestDescentBackprop1
+from Steepest_descent_backprop_2 import SteepestDescentBackprop2
 # ------ Chapter 13 -------
 from Early_stopping import EarlyStopping
 from Regularization import Regularization
@@ -323,6 +324,9 @@ class MainWindowNN(NNDLayout):
         if idx == 1:
             self.chapter_window1 = SteepestDescentBackprop1(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window2 = SteepestDescentBackprop2(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
         else:
             print("TODO")
 

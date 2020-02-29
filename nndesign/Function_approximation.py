@@ -14,6 +14,11 @@ def logsigmoid(n):
     return 1 / (1 + np.exp(-n))
 
 
+def logsigmoid_stable(n):
+    n = np.clip(n, -100, 100)
+    return 1 / (1 + np.exp(-n))
+
+
 def logsigmoid_der(n):
     return (1 - 1 / (1 + np.exp(-n))) * 1 / (1 + np.exp(-n))
 
@@ -26,12 +31,20 @@ def purelin_der(n):
     return np.array([1]).reshape(n.shape)
 
 
-def log_delta(a, d=None, w=None):
+def lin_delta(a, d=None, w=None):
     na, ma = a.shape
     if d is None and w is None:
         return -np.kron(np.ones((1, ma)), np.eye(na))
     else:
         return np.dot(w.T, d)
+
+
+def log_delta(a, d=None, w=None):
+    s1, _ = a.shape
+    if d is None and w is None:
+        return -np.kron((1 - a) * a, np.ones((1, s1))) * np.kron(np.ones((1, s1)), np.eye(s1))
+    else:
+        return (1 - a) * a * np.dot(w.T, d)
 
 
 def marq(p, d):
@@ -55,9 +68,13 @@ class FunctionApproximation(NNDLayout):
         self.diff = 1
         self.p = np.linspace(-2, 2, 100)
         self.W1, self.b1, self.W2, self.b2 = None, None, None, None
+        self.mu = None
         self.ani = None
         self.random_state = 0
         self.init_params()
+        self.error_prev, self.ii = 1000, None
+        self.RS, self.RS1, self.RSS, self.RSS1 = None, None, None, None
+        self.RSS2, self.RSS3, self.RSS4 = None, None, None
 
         self.axes = self.figure.add_subplot(111)
         self.figure.subplots_adjust(bottom=0.2, left=0.1)
@@ -116,6 +133,7 @@ class FunctionApproximation(NNDLayout):
         self.run_button.clicked.connect(self.on_run)
 
     def slide(self):
+        self.error_prev = 1000
         if self.ani:
             self.ani.event_source.stop()
         slider_s1 = self.slider_s1.value()
@@ -130,11 +148,11 @@ class FunctionApproximation(NNDLayout):
         self.plot_f()
 
     def init_params(self):
-        np.random.seed(self.random_state)
-        self.W1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
-        self.b1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
-        self.W2 = np.random.uniform(-0.5, 0.5, (1, self.S1))
-        self.b2 = np.random.uniform(-0.5, 0.5, (1, 1))
+        # np.random.seed(self.random_state)
+        self.W1 = 2 * np.random.uniform(0, 1, (self.S1, 1)) - 1
+        self.b1 = 2 * np.random.uniform(0, 1, (self.S1, 1)) - 1
+        self.W2 = 2 * np.random.uniform(0, 1, (1, self.S1)) - 1
+        self.b2 = 2 * np.random.uniform(0, 0, (1, 1)) - 1
 
     def plot_f(self):
         self.data_to_approx.set_data(self.p, 1 + np.sin(np.pi * self.p * self.diff / 5))
@@ -165,59 +183,67 @@ class FunctionApproximation(NNDLayout):
         self.RSS2 = self.RSS + self.S1 * 1
         self.RSS3 = self.RSS2 + 1
         self.RSS4 = self.RSS2 + 1
+        self.ii = np.eye(self.RSS4)
         self.net_approx.set_data([], [])
         return self.net_approx,
 
     def on_animate_v2(self, idx):
 
-        self.mu = self.mu / 10
-        a1 = logsigmoid(np.dot(self.W1, self.p) + self.b1)
+        a1 = logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
         a2 = purelin(np.dot(self.W2, a1) + self.b2)
-        ii = np.eye(self.RSS4)
-
-        a1 = np.kron(a1, np.ones((1, 1)))
-        d2 = log_delta(a2)
-        d1 = log_delta(a1, d2, self.W2)
-        jac1 = marq(np.kron(self.p, np.ones((1, 1))), d1)
-        jac2 = marq(a1, d2)
-        jac = np.hstack((jac1, d1.T))
-        jac = np.hstack((jac, jac2))
-        jac = np.hstack((jac, d2.T))
         e = self.f_to_approx(self.p) - a2
-        error_prev = np.dot(e, e.T).item()
+        error = np.dot(e, e.T).item()
 
-        je = np.dot(jac.T, e.T)
-        grad = np.sqrt(np.dot(je.T, je)).item()
-        if grad < mingrad:
+        if error <= 0.005:
+            print("Error goal reached!")
             self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
             return self.net_approx,
 
-        jj = np.dot(jac.T, jac)
-        while True:
+        self.mu /= 10
 
-            dw = -np.dot(np.linalg.inv(jj + ii * self.mu), je)
-            W1 = self.W1 + dw[:self.S1]
-            b1 = self.b1 + dw[self.S1:self.S1 * 2]
-            W2 = self.W2[0] + dw[self.S1 * 2:self.S1 * 3].reshape(-1)
-            b2 = self.b2[0] + dw[self.S1 * 3].reshape(-1)
-            # self.W1 += dw[:self.S1]
-            # self.b1 += dw[self.S1:self.S1 * 2]
-            # self.W2[0] += dw[self.S1 * 2:self.S1 * 3].reshape(-1)
-            # self.b2[0] += dw[self.S1 * 3].reshape(-1)
+        while error >= self.error_prev:
+            try:
 
-            a1 = logsigmoid(np.dot(W1, self.p) + b1)
-            a2 = purelin(np.dot(W2, a1) + b2)
-            e = self.f_to_approx(self.p) - a2
-            error = np.dot(e, e.T).item()
-            if error >= error_prev:
-                self.mu = self.mu * 10
+                a1 = np.kron(a1, np.ones((1, 1)))
+                d2 = lin_delta(a2)
+                d1 = log_delta(a1, d2, self.W2)
+                jac1 = marq(np.kron(self.p, np.ones((1, 1))), d1)  # Does it need a row of 0s?
+                jac2 = marq(a1, d2)
+                jac = np.hstack((jac1, d1.T))
+                jac = np.hstack((jac, jac2))
+                jac = np.hstack((jac, d2.T))
+                je = np.dot(jac.T, e.T)
+
+                grad = np.sqrt(np.dot(je.T, je)).item()
+                if grad < mingrad:
+                    self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
+                    return self.net_approx,
+
+                # Can't get this operation to produce the same results as MATLAB...
+                dw = -np.dot(np.linalg.inv(np.dot(jac.T, jac) + self.mu * self.ii), je)
+                self.W1 += dw[:self.RS]
+                self.b1 += dw[self.RS:self.RSS]
+                self.W2 += dw[self.RSS:self.RSS2].reshape(1, -1)
+                self.b2 += dw[self.RSS2].reshape(1, 1)
+
+                a1 = logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
+                a2 = purelin(np.dot(self.W2, a1) + self.b2)
+                e = self.f_to_approx(self.p) - a2
+                error = np.dot(e, e.T).item()
+
+                self.mu *= 10
                 if self.mu > 1e10:
                     break
-                error_prev = error
-            else:
-                break
 
-        self.W1, self.b1, self.W2[0], self.b2[0] = W1, b1, W2, b2
+            except Exception as e:
+                if str(e) == "Singular matrix":
+                    self.mu *= 10
+                else:
+                    raise e
+
+        if error < self.error_prev:
+            self.error_prev = error
+
         self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
         return self.net_approx,
 

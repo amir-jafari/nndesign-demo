@@ -39,9 +39,9 @@ A1 = logsigmoid(np.dot(W1, P) + b1)
 T = logsigmoid(np.dot(W2, A1) + b2)
 
 
-class SteepestDescentBackprop1(NNDLayout):
+class SteepestDescentBackprop2(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(SteepestDescentBackprop1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(SteepestDescentBackprop2, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
         self.fill_chapter("Steepest Descent for Quadratic", 9, " Click anywhere to start an\n initial guess. The gradient\n descent path will be shown\n"
                                                                " Modify the learning rate\n by moving the slide bar",
@@ -56,19 +56,9 @@ class SteepestDescentBackprop1(NNDLayout):
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.wid1 = QtWidgets.QWidget(self)
         self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(260 * self.w_ratio, 400 * self.h_ratio, 260 * self.w_ratio, 260 * self.h_ratio)
+        self.wid1.setGeometry(50 * self.w_ratio, 200 * self.h_ratio, 450 * self.w_ratio, 450 * self.h_ratio)
         self.layout1.addWidget(self.canvas)
         self.wid1.setLayout(self.layout1)
-
-        self.figure2 = Figure()
-        self.canvas2 = FigureCanvas(self.figure2)
-        self.axes2 = Axes3D(self.figure2)
-        self.toolbar2 = NavigationToolbar(self.canvas2, self)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(10 * self.w_ratio, 400 * self.h_ratio, 260 * self.w_ratio, 260 * self.h_ratio)
-        self.layout2.addWidget(self.canvas2)
-        self.wid2.setLayout(self.layout2)
 
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
@@ -76,8 +66,7 @@ class SteepestDescentBackprop1(NNDLayout):
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.ani, self.event = None, None
-        self.axes2.set_title("Sum Sq. Error", fontdict={'fontsize': 10})
-        
+
         self.pair_of_params = 1
         self.pair_params = [["W1(1, 1)", "W2(1, 1)"], ["W1(1, 1)", "W2(1, 1)"], ["W1(1, 1)", "W2(1, 1)"]]
         self.plot_data()
@@ -98,6 +87,22 @@ class SteepestDescentBackprop1(NNDLayout):
         self.layout2.addWidget(self.comboBox1)
         self.wid2.setLayout(self.layout2)
 
+        self.lr = 3.5
+        self.label_lr = QtWidgets.QLabel(self)
+        self.label_lr.setText("lr: 3.5")
+        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
+        self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 250 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.slider_lr.setRange(0, 200)
+        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.slider_lr.setTickInterval(1)
+        self.slider_lr.setValue(35)
+        self.wid_lr = QtWidgets.QWidget(self)
+        self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 280 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.layout_lr.addWidget(self.slider_lr)
+        self.wid_lr.setLayout(self.layout_lr)
+
         self.animation_speed = 100
         self.label_anim_speed = QtWidgets.QLabel(self)
         self.label_anim_speed.setText("Animation Delay: 100 ms")
@@ -117,6 +122,7 @@ class SteepestDescentBackprop1(NNDLayout):
         self.wid_anim_speed.setLayout(self.layout_anim_speed)
 
         self.comboBox1.currentIndexChanged.connect(self.change_pair_of_params)
+        self.slider_lr.valueChanged.connect(self.slide)
         self.slider_anim_speed.valueChanged.connect(self.slide)
         self.canvas.draw()
 
@@ -132,14 +138,9 @@ class SteepestDescentBackprop1(NNDLayout):
         while self.axes.collections:
             for collection in self.axes.collections:
                 collection.remove()
-        while self.axes2.collections:
-            for collection in self.axes2.collections:
-                collection.remove()
         f_data = loadmat("nndbp{}.mat".format(self.pair_of_params))
         x1, y1 = np.meshgrid(f_data["x1"], f_data["y1"])
-        x2, y2 = np.meshgrid(f_data["x2"], f_data["y2"])
         self.axes.contour(x1, y1, f_data["E1"], list(f_data["levels"].reshape(-1)))
-        self.axes2.plot_surface(x2, y2, f_data["E2"])
         if self.pair_of_params == 1:
             self.axes.set_xlim(-5, 15)
             self.axes.set_ylim(-5, 15)
@@ -151,13 +152,11 @@ class SteepestDescentBackprop1(NNDLayout):
             self.axes.set_ylim(-10, 10)
         self.axes.set_xlabel(self.pair_params[self.pair_of_params - 1][0])
         self.axes.set_ylabel(self.pair_params[self.pair_of_params - 1][1])
-        self.axes2.set_xlabel(self.pair_params[self.pair_of_params - 1][0])
-        self.axes2.set_ylabel(self.pair_params[self.pair_of_params - 1][1])
-        # self.axes2.view_init(30, 60)
         self.canvas.draw()
-        self.canvas2.draw()
 
     def slide(self):
+        self.lr = float(self.slider_lr.value()/10)
+        self.label_lr.setText("lr: " + str(self.lr))
         self.animation_speed = int(self.slider_anim_speed.value()) * 100
         self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.x_data:
@@ -183,6 +182,7 @@ class SteepestDescentBackprop1(NNDLayout):
 
         D2 = a2 * (1 - a2) * e
         D1 = a1 * (1 - a1) * np.dot(self.W2.T, D2)
+
         dW1 = np.dot(D1, P.T) * self.lr
         db1 = D1 * self.lr
         dW2 = np.dot(D2, a1.T) * self.lr
@@ -222,13 +222,10 @@ class SteepestDescentBackprop1(NNDLayout):
             self.x, self.y = event.xdata, event.ydata
             if self.pair_of_params == 1:
                 self.W1[0, 0], self.W2[0, 0] = self.x, self.y
-                self.lr, self.epochs = 3.5, 1000
             elif self.pair_of_params == 2:
                 self.W1[0, 0], self.b1[0, 0] = self.x, self.y
-                self.lr, self.epochs = 25, 300
             elif self.pair_of_params == 3:
                 self.b1[0, 0], self.b2[0, 0] = self.x, self.y
-                self.lr, self.epochs = 25, 60
             self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=1000,
                                      interval=self.animation_speed, repeat=False, blit=True)
 
