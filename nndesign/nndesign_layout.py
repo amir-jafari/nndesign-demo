@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow
 
+import numpy as np
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
@@ -192,3 +193,46 @@ class NNDLayout(QMainWindow):
         qpixmap = QtGui.QPixmap(qimage)
 
         return qpixmap
+
+    @staticmethod
+    def logsigmoid(n):
+        return 1 / (1 + np.exp(-n))
+
+    @staticmethod
+    def logsigmoid_stable(n):
+        n = np.clip(n, -100, 100)
+        return 1 / (1 + np.exp(-n))
+
+    @staticmethod
+    def logsigmoid_der(n):
+        return (1 - 1 / (1 + np.exp(-n))) * 1 / (1 + np.exp(-n))
+
+    @staticmethod
+    def purelin(n):
+        return n
+
+    @staticmethod
+    def purelin_der(n):
+        return np.array([1]).reshape(n.shape)
+
+    @staticmethod
+    def lin_delta(a, d=None, w=None):
+        na, ma = a.shape
+        if d is None and w is None:
+            return -np.kron(np.ones((1, ma)), np.eye(na))
+        else:
+            return np.dot(w.T, d)
+
+    @staticmethod
+    def log_delta(a, d=None, w=None):
+        s1, _ = a.shape
+        if d is None and w is None:
+            return -np.kron((1 - a) * a, np.ones((1, s1))) * np.kron(np.ones((1, s1)), np.eye(s1))
+        else:
+            return (1 - a) * a * np.dot(w.T, d)
+
+    @staticmethod
+    def marq(p, d):
+        s, _ = d.shape
+        r, _ = p.shape
+        return np.kron(p.T, np.ones((1, s))) * np.kron(np.ones((1, r)), d.T)

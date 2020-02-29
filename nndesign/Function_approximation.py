@@ -9,52 +9,8 @@ from nndesign_layout import NNDLayout
 
 from get_package_path import PACKAGE_PATH
 
-
-def logsigmoid(n):
-    return 1 / (1 + np.exp(-n))
-
-
-def logsigmoid_stable(n):
-    n = np.clip(n, -100, 100)
-    return 1 / (1 + np.exp(-n))
-
-
-def logsigmoid_der(n):
-    return (1 - 1 / (1 + np.exp(-n))) * 1 / (1 + np.exp(-n))
-
-
-def purelin(n):
-    return n
-
-
-def purelin_der(n):
-    return np.array([1]).reshape(n.shape)
-
-
-def lin_delta(a, d=None, w=None):
-    na, ma = a.shape
-    if d is None and w is None:
-        return -np.kron(np.ones((1, ma)), np.eye(na))
-    else:
-        return np.dot(w.T, d)
-
-
-def log_delta(a, d=None, w=None):
-    s1, _ = a.shape
-    if d is None and w is None:
-        return -np.kron((1 - a) * a, np.ones((1, s1))) * np.kron(np.ones((1, s1)), np.eye(s1))
-    else:
-        return (1 - a) * a * np.dot(w.T, d)
-
-
-def marq(p, d):
-    s, _ = d.shape
-    r, _ = p.shape
-    return np.kron(p.T, np.ones((1, s))) * np.kron(np.ones((1, r)), d.T)
-
-
 mu_initial = 0.01
-mingrad = 0.001
+mingrad = 0.0001
 
 
 class FunctionApproximation(NNDLayout):
@@ -75,6 +31,7 @@ class FunctionApproximation(NNDLayout):
         self.error_prev, self.ii = 1000, None
         self.RS, self.RS1, self.RSS, self.RSS1 = None, None, None, None
         self.RSS2, self.RSS3, self.RSS4 = None, None, None
+        self.error_goal_reached = False
 
         self.axes = self.figure.add_subplot(111)
         self.figure.subplots_adjust(bottom=0.2, left=0.1)
@@ -133,6 +90,7 @@ class FunctionApproximation(NNDLayout):
         self.run_button.clicked.connect(self.on_run)
 
     def slide(self):
+        self.error_goal_reached = False
         self.error_prev = 1000
         if self.ani:
             self.ani.event_source.stop()
@@ -174,6 +132,7 @@ class FunctionApproximation(NNDLayout):
         return self.net_approx,
 
     def animate_init_v2(self):
+        self.error_goal_reached = False
         self.p = self.p.reshape(1, -1)
         self.mu = mu_initial
         self.RS = self.S1 * 1
@@ -189,13 +148,15 @@ class FunctionApproximation(NNDLayout):
 
     def on_animate_v2(self, idx):
 
-        a1 = logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
-        a2 = purelin(np.dot(self.W2, a1) + self.b2)
+        a1 = self.logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
+        a2 = self.purelin(np.dot(self.W2, a1) + self.b2)
         e = self.f_to_approx(self.p) - a2
         error = np.dot(e, e.T).item()
 
         if error <= 0.005:
-            print("Error goal reached!")
+            if self.error_goal_reached:
+                print("Error goal reached!")
+                self.error_goal_reached = None
             self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
             return self.net_approx,
 
@@ -205,10 +166,10 @@ class FunctionApproximation(NNDLayout):
             try:
 
                 a1 = np.kron(a1, np.ones((1, 1)))
-                d2 = lin_delta(a2)
-                d1 = log_delta(a1, d2, self.W2)
-                jac1 = marq(np.kron(self.p, np.ones((1, 1))), d1)  # Does it need a row of 0s?
-                jac2 = marq(a1, d2)
+                d2 = self.lin_delta(a2)
+                d1 = self.log_delta(a1, d2, self.W2)
+                jac1 = self.marq(np.kron(self.p, np.ones((1, 1))), d1)
+                jac2 = self.marq(a1, d2)
                 jac = np.hstack((jac1, d1.T))
                 jac = np.hstack((jac, jac2))
                 jac = np.hstack((jac, d2.T))
@@ -226,8 +187,8 @@ class FunctionApproximation(NNDLayout):
                 self.W2 += dw[self.RSS:self.RSS2].reshape(1, -1)
                 self.b2 += dw[self.RSS2].reshape(1, 1)
 
-                a1 = logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
-                a2 = purelin(np.dot(self.W2, a1) + self.b2)
+                a1 = self.logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
+                a2 = self.purelin(np.dot(self.W2, a1) + self.b2)
                 e = self.f_to_approx(self.p) - a2
                 error = np.dot(e, e.T).item()
 
@@ -248,39 +209,30 @@ class FunctionApproximation(NNDLayout):
         return self.net_approx,
 
     def on_animate(self, idx):
+
         alpha = 0.03
         nn_output = []
+
         for sample in self.p:
-            # Propagates the input forward
-            # Reshapes input as 1x1
+
             a0 = sample.reshape(-1, 1)
-            # Hidden Layer's Net Input
             n1 = np.dot(self.W1, a0) + self.b1
-            #  Hidden Layer's Transformation
-            a1 = logsigmoid(n1)
-            # Output Layer's Net Input
+            a1 = self.logsigmoid(n1)
             n2 = np.dot(self.W2, a1) + self.b2
-            # Output Layer's Transformation
-            a = purelin(n2)  # (a2 = a)
+            a = self.purelin(n2)
             nn_output.append(a)
 
-            # Back-propagates the sensitivities
-            # Compares our NN's output with the real value
             e = self.f_to_approx(a0) - a
-            # error = np.append(error, e)
-            # Output Layer
-            F2_der = np.diag(purelin_der(n2).reshape(-1))
+
+            F2_der = np.diag(self.purelin_der(n2).reshape(-1))
             s = -2 * np.dot(F2_der, e)  # (s2 = s)
-            # Hidden Layer
-            F1_der = np.diag(logsigmoid_der(n1).reshape(-1))
+            F1_der = np.diag(self.logsigmoid_der(n1).reshape(-1))
             s1 = np.dot(F1_der, np.dot(self.W2.T, s))
 
-            # Updates the weights and biases
-            # Hidden Layer
             self.W1 += -alpha * np.dot(s1, a0.T)
             self.b1 += -alpha * s1
-            # Output Layer
             self.W2 += -alpha * np.dot(s, a1.T)
             self.b2 += -alpha * s
+
         self.net_approx.set_data(self.p, nn_output)
         return self.net_approx,

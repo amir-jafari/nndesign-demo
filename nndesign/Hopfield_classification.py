@@ -41,10 +41,11 @@ class HopfieldClassification(NNDLayout):
         self.axis.zaxis._axinfo['label']['space_factor'] = 0.1
         self.axis.set_zticks([-1, 1])
         self.axis.scatter(orange[0], orange[1], orange[2], color='orange')
-        self.axis.scatter(apple[0], apple[1], apple[2], color='red')
+        self.axis.scatter(apple[0], apple[1], apple[2], color='yellow')
+        self.line1, self.line2, self.line3 = None, None, None
         self.canvas.draw()
 
-        self.p, self.a1, self.a2, self.fruit = None, None, None, None
+        self.p, self.a1, self.a2, self.fruit, self.label = None, None, None, None, None
 
         self.label_w = QtWidgets.QLabel(self)
         self.label_w.setText("")
@@ -86,6 +87,12 @@ class HopfieldClassification(NNDLayout):
         self.label_fruit.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_fruit.setGeometry(550 * self.w_ratio, 510 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
 
+        self.icon3 = QtWidgets.QLabel(self)
+        self.icon3.setPixmap(
+            QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio,
+                                                                    QtGui.QIcon.Normal, QtGui.QIcon.On))
+        self.icon3.setGeometry(15 * self.w_ratio, 500 * self.h_ratio, 500 * self.w_ratio, 150 * self.h_ratio)
+
         self.run_button = QtWidgets.QPushButton("Go", self)
         self.run_button.setStyleSheet("font-size:13px")
         self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 570 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
@@ -109,12 +116,30 @@ class HopfieldClassification(NNDLayout):
             self.a1 = np.round(self.satlins(np.dot(w, self.p.T) + b), 2)
             self.a2 = np.round(self.satlins(np.dot(w, self.a1) + b), 2)
             self.fruit = "Orange" if self.a2[1, 0] > 0 else "Apple"
+            self.label = 1 if self.fruit == "Apple" else 0
+            if self.line1:
+                self.line1.pop().remove()
+                self.line2.pop().remove()
+                self.line3.pop().remove()
+                self.canvas.draw()
         if self.idx == 1:
             self.label_w.setText("w = [0.2 0 0; 0 1.2 0; 0 0 0.2]")
-        elif self.idx == 2:
             self.label_b.setText("b = [0.9; 0; -0.9]")
+            if self.label == 1:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_2.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            else:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_7.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        elif self.idx == 2:
+            if self.label == 1:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            else:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         elif self.idx == 3:
             self.label_p.setText("p = [{} {} {}]".format(self.p[0, 0], self.p[0, 1], self.p[0, 2]))
+            self.line1 = self.axis.plot3D([self.p[0, 0]] * 10, np.linspace(-1, 1, 10), [self.p[0, 2]] * 10, color="g")
+            self.line2 = self.axis.plot3D([self.p[0, 0]] * 10, [self.p[0, 1]] * 10, np.linspace(-1, 1, 10), color="g")
+            self.line3 = self.axis.plot3D(np.linspace(-1, 1, 10), [self.p[0, 1]] * 10, [self.p[0, 2]] * 10, color="g")
+            self.canvas.draw()
         elif self.idx == 4:
             self.label_a_11.setText("a1 = satlins(W * p + b)")
         elif self.idx == 5:
@@ -125,6 +150,21 @@ class HopfieldClassification(NNDLayout):
             self.label_a_22.setText("a2 = [{} {} {}]".format(self.a2[0, 0], self.a2[1, 0], self.a2[2, 0]))
         elif self.idx == 8:
             self.label_fruit.setText("Fruit = {}".format(self.fruit))
+        elif self.idx == 9:
+            if self.label == 1:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_4.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            else:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_9.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        elif self.idx == 10:
+            if self.label == 1:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_5.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            else:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_10.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        elif self.idx == 11:
+            if self.label == 1:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_6.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            else:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_11.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         else:
             pass
         self.idx += 1

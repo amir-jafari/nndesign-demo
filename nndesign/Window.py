@@ -67,31 +67,31 @@ xbtn1, ybtn1, wbtn1, hbtn1, add2 = 10, 635, 60, 30, 65
 w_Logo1, h_Logo1, xL_g1, yL_g1, add_l = 100, 80, 100, 110, 140
 
 BOOK1_CHAPTERS_DEMOS = {
-    2: ["Neuron Model & Network Architecture:", "Chapter2 demos", "One-input Neuron", "Two-input Neuron"],
-    3: ["An Illustrative Example", "Chapter3 demos", "Perceptron classification", "Hamming classification", "Hopfield classification"],
-    4: ["Perceptron Learning Rule", "Chapter4 demos", "Decision boundaries", "Perceptron rule"],
-    5: ["Signal & weight Vector Spaces", "Chapter5 demos", "Gram schmidt", "Reciprocal basis"],
-    6: ["Linear Transformations For N. Networks", "Chapter6 demos", "Linear transformations ", "Eigenvector game"],
-    7: ["Supervised Hebb", "Chapter7 demos", "Supervised Hebb"],
-    8: ["Performance Surfaces & Optimum Points", "Chapter8 demos", "Tylor series #1", "Tylor series #2", "Directional derivatives ", "Quadratic function"],
-    9: ["Performance Optimization", "Chapter9 demos", "Steepest descent for Quadratic", "Method comparison", "Newton's method", "Steepest descent"],
-    10: ["Widrow - Hoff Learning", "Chapter10 demos", "Adaptive noise cancellation", "EEG noise cancellation", "Linear classification"],
-    11: ["Backpropagation", "Chapter11 demos", "Network Function", "Backpropagation Calculation", "Function Approximation", "Generalization"],
-    12: ["Variations on Backpropagation", "Chapter12 demos", "Steepest Descent #1", "Steepest Descent #2", "Momentum", "Variable Learning Rate", "CG Line Search", "Conjugate Gradient", "Marquardt Step", "Marquardt" ],
-    13: ["Generalization", "Chapter13 demos", "Early Stopping", "Regularization", "Bayesian Regularization", "Early Stopping-Regularization"],
-    14: ["Dynamic Networks", "Chapter14 demos", "FIR Network", "IIR Network", "Dynamic Derivatives", "Recurrent Network Training"],
-    15: ["Associative Learning", "Chapter15 demos", "Unsupervised Hebb", "Effects of Decay Rate", "Hebb with Decay", "Graphical Instar", "Outstar"],
-    16: ["Competitive Networks", "Chapter16 demos", "Competitive Classification", "Competitive Learning", "1-D Feature Map", "2-D Feature Map", "LVQ 1", "LVQ 2"],
-    17: ["Competitive Networks", "Chapter17 demos", "Network Function Radial", "Pattern Classification", "Linear Least Squares", "Orthogonal Least Squares", "Non Linear Optimization"],
-    18: ["Grossberg Network", "Chapter18 demos", "Leaky Integrator", "Shunting Network", "Grossberg Layer 1", "Grossberg Layer 2", "Adaptive Weights"],
-    19: ["Adaptive Resonance Theory", "Chapter19 demos", "ART1 Layer 1", "ART1 Layer 2", "Orienting Subsystem", "ART1 Algorithm"],
-    20: ["Stability", "Chapter20 demos", "Dynamical System"],
-    21: ["Hopfield Network", "Chapter21 demos", "Hopfield Network"]
+    2: ["Neuron Model & Network Architecture:", "Chapter 2 demos", "One-input Neuron", "Two-input Neuron"],
+    3: ["An Illustrative Example", "Chapter 3 demos", "Perceptron classification", "Hamming classification", "Hopfield classification"],
+    4: ["Perceptron Learning Rule", "Chapter 4 demos", "Decision boundaries", "Perceptron rule"],
+    5: ["Signal & weight Vector Spaces", "Chapter 5 demos", "Gram schmidt", "Reciprocal basis"],
+    6: ["Linear Transformations For N. Networks", "Chapter 6 demos", "Linear transformations ", "Eigenvector game"],
+    7: ["Supervised Hebb", "Chapter 7 demos", "Supervised Hebb"],
+    8: ["Performance Surfaces & Optimum Points", "Chapter 8 demos", "Tylor series #1", "Tylor series #2", "Directional derivatives ", "Quadratic function"],
+    9: ["Performance Optimization", "Chapter 9 demos", "Steepest descent for Quadratic", "Method comparison", "Newton's method", "Steepest descent"],
+    10: ["Widrow - Hoff Learning", "Chapter 10 demos", "Adaptive noise cancellation", "EEG noise cancellation", "Linear classification"],
+    11: ["Backpropagation", "Chapter 11 demos", "Network Function", "Backpropagation Calculation", "Function Approximation", "Generalization"],
+    12: ["Variations on Backpropagation", "Chapter 12 demos", "Steepest Descent #1", "Steepest Descent #2", "Momentum", "Variable Learning Rate", "CG Line Search", "Conjugate Gradient", "Marquardt Step", "Marquardt" ],
+    13: ["Generalization", "Chapter 13 demos", "Early Stopping", "Regularization", "Bayesian Regularization", "Early Stopping-Regularization"],
+    14: ["Dynamic Networks", "Chapter 14 demos", "FIR Network", "IIR Network", "Dynamic Derivatives", "Recurrent Network Training"],
+    15: ["Associative Learning", "Chapter 15 demos", "Unsupervised Hebb", "Effects of Decay Rate", "Hebb with Decay", "Graphical Instar", "Outstar"],
+    16: ["Competitive Networks", "Chapter 16 demos", "Competitive Classification", "Competitive Learning", "1-D Feature Map", "2-D Feature Map", "LVQ 1", "LVQ 2"],
+    17: ["Competitive Networks", "Chapter 17 demos", "Network Function Radial", "Pattern Classification", "Linear Least Squares", "Orthogonal Least Squares", "Non Linear Optimization"],
+    18: ["Grossberg Network", "Chapter 18 demos", "Leaky Integrator", "Shunting Network", "Grossberg Layer 1", "Grossberg Layer 2", "Adaptive Weights"],
+    19: ["Adaptive Resonance Theory", "Chapter 19 demos", "ART1 Layer 1", "ART1 Layer 2", "Orienting Subsystem", "ART1 Algorithm"],
+    20: ["Stability", "Chapter 20 demos", "Dynamical System"],
+    21: ["Hopfield Network", "Chapter 21 demos", "Hopfield Network"]
 }
 
 BOOK2_CHAPTERS_DEMOS = {
-    2: ["Multilayer Networks", "Chapter2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
-    3: ["Multilayer Network Train", "Chapter3 demos", "Gradient Descent", "Gradient Descent Stochastic"]
+    2: ["Multilayer Networks", "Chapter 2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
+    3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Gradient Descent Stochastic"]
 }
 # -------------------------------------------------------------------------------------------------------------
 
