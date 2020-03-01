@@ -236,3 +236,17 @@ class NNDLayout(QMainWindow):
         s, _ = d.shape
         r, _ = p.shape
         return np.kron(p.T, np.ones((1, s))) * np.kron(np.ones((1, r)), d.T)
+
+    @staticmethod
+    def compet(n, axis=None):
+        if axis is not None:
+            max_idx = np.argmax(n, axis=axis)
+            out = np.zeros(n.shape)
+            for i in range(out.shape[1]):
+                out[max_idx[i], i] = 1
+            return out
+        else:
+            max_idx = np.argmax(n)
+            out = np.zeros(n.shape)
+            out[max_idx] = 1
+            return out

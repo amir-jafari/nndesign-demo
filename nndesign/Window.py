@@ -46,6 +46,10 @@ from Steepest_descent_backprop_2 import SteepestDescentBackprop2
 from Early_stopping import EarlyStopping
 from Regularization import Regularization
 
+# ------ Chapter 16 -------
+from Competitive_classification import CompetitiveClassification
+from Competitive_learning import CompetitiveLearning
+
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
 from Poslin_network_function import PoslinNetworkFunction
@@ -351,7 +355,14 @@ class MainWindowNN(NNDLayout):
 
     def chapter16(self, idx):
         self.comboBox3.setCurrentIndex(0)
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = CompetitiveClassification(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window2 = CompetitiveLearning(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
+        else:
+            print("TODO")
 
     def chapter17(self, idx):
         self.comboBox4.setCurrentIndex(0)

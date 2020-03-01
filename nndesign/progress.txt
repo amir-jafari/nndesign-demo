@@ -72,7 +72,16 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Dynamic Derivatives
     - Recurrent Network Training
 
-... From here there are another 29 left ...
+...
+
+- Chapter 16:
+    - Competitive Classification - Done
+    - Competitive Learning - Most of it done - just need to add a bit more functionality
+    - 1-D Feature Map
+    - 2-D Feature Map
+    - LVQ1
+    - LVQ2
+
 
 Book 2: 4 / 7
 
