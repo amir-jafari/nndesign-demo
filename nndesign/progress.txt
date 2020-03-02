@@ -21,7 +21,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Reciprocal Basis  -> Done.
 
 - Chapter 6:
-    - Linear Transformations -> Almost done. Need to fix a few stuff... TODO.
+    - Linear Transformations -> Almost done. There is something wrong with the math, but I've been over it and it looks good... TODO
     - Eigenvector Game -> TODO
 
 - Chapter 7:
@@ -77,7 +77,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 - Chapter 16:
     - Competitive Classification - Done
     - Competitive Learning - Done
-    - 1-D Feature Map
+    - 1-D Feature Map - On progress
     - 2-D Feature Map
     - LVQ1
     - LVQ2
