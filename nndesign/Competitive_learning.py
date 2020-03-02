@@ -33,7 +33,6 @@ class CompetitiveLearning(NNDLayout):
         self.wid1.setLayout(self.layout1)
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         # self.axes_1.add_patch(plt.Circle((0, 0), 1.7, color='r'))
-        self.axes_1.set_title("Original Vectors", fontdict={'fontsize': 10})
         self.axes_1.set_yticks([0])
         self.axes_1.set_xticks([0])
         self.axes_1.set_xlim(-1.2, 1.2)
@@ -62,22 +61,56 @@ class CompetitiveLearning(NNDLayout):
         self.update_plot()
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
+        self.cid, self.w_change = None, None
 
-        """self.button = QtWidgets.QPushButton("Compute", self)
-        self.button.setStyleSheet("font-size:13px")
-        self.button.setGeometry(self.x_chapter_button * self.w_ratio, 500 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.button.clicked.connect(self.gram_schmidt)
-
-        self.button = QtWidgets.QPushButton("Restart", self)
-        self.button.setStyleSheet("font-size:13px")
-        self.button.setGeometry(self.x_chapter_button * self.w_ratio, 530 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.button.clicked.connect(self.clear_all)"""
+        self.label_lr = QtWidgets.QLabel(self)
+        self.label_lr.setText("Learning rate: 0.4")
+        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
+        self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 400, self.w_chapter_slider * self.w_ratio,
+                                  50 * self.h_ratio)
+        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.slider_lr.setRange(0, 10)
+        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.slider_lr.setTickInterval(1)
+        self.slider_lr.setValue(4)
+        self.wid_lr = QtWidgets.QWidget(self)
+        self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 430 * self.h_ratio,
+                                self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
+        self.layout_lr.addWidget(self.slider_lr)
+        self.wid_lr.setLayout(self.layout_lr)
+        self.alpha = float(self.slider_lr.value() / 10)
+        self.slider_lr.valueChanged.connect(self.slide)
 
         self.run_button = QtWidgets.QPushButton("Train", self)
         self.run_button.setStyleSheet("font-size:13px")
         self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 500 * self.h_ratio,
                                     self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.run_button.clicked.connect(self.on_run)
+
+        self.run_button = QtWidgets.QPushButton("Random", self)
+        self.run_button.setStyleSheet("font-size:13px")
+        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 530 * self.h_ratio,
+                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
+        self.run_button.clicked.connect(self.init_weights)
+
+    def slide(self):
+        if self.ani:
+            self.ani.event_source.stop()
+        self.alpha = float(self.slider_lr.value() / 10)
+        self.label_lr.setText("Learning_rate: {}".format(self.alpha))
+        self.update_plot()
+        self.canvas.draw()
+        # self.on_run()
+
+    def init_weights(self):
+        if self.ani:
+            self.ani.event_source.stop()
+        self.W_1 = [np.random.uniform(-1, 1), np.random.uniform(-1, 1)]
+        self.W_2 = [np.random.uniform(-1, 1), np.random.uniform(-1, 1)]
+        self.W_3 = [np.random.uniform(-1, 1), np.random.uniform(-1, 1)]
+        self.update_plot()
+        self.canvas.draw()
 
     def update_plot(self):
         self.axes1_w1.set_UVC(self.W_1[0], self.W_1[1])
@@ -139,9 +172,50 @@ class CompetitiveLearning(NNDLayout):
 
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:
+
             if self.ani:
                 self.ani.event_source.stop()
-            self.p_x.append(event.xdata)
-            self.p_y.append(event.ydata)
-            self.update_plot()
-            self.canvas.draw()
+
+            # https://stackoverflow.com/questions/39840030/distance-between-point-and-a-line-from-two-points/39840218
+            d_w_1 = np.linalg.norm(np.cross(
+                np.array([self.W_1[0], self.W_1[1]]) - np.array([0, 0]),
+                np.array([0, 0]) - np.array([event.xdata, event.ydata])
+            )) / np.linalg.norm(np.array([self.W_1[0], self.W_1[1]]) - np.array([0, 0]))
+            d_w_2 = np.linalg.norm(np.cross(
+                np.array([self.W_2[0], self.W_2[1]]) - np.array([0, 0]),
+                np.array([0, 0]) - np.array([event.xdata, event.ydata])
+            )) / np.linalg.norm(np.array([self.W_2[0], self.W_2[1]]) - np.array([0, 0]))
+            d_w_3 = np.linalg.norm(np.cross(
+                np.array([self.W_3[0], self.W_3[1]]) - np.array([0, 0]),
+                np.array([0, 0]) - np.array([event.xdata, event.ydata])
+            )) / np.linalg.norm(np.array([self.W_3[0], self.W_3[1]]) - np.array([0, 0]))
+            min_d_idx, min_d = np.argmin([d_w_1, d_w_2, d_w_3]), np.min([d_w_1, d_w_2, d_w_3])
+
+            if min_d < 0.03:
+                self.w_change = min_d_idx + 1
+                if self.w_change == 1:
+                    self.axes1_w1.set_UVC(0, 0)
+                elif self.w_change == 2:
+                    self.axes1_w2.set_UVC(0, 0)
+                elif self.w_change == 3:
+                    self.axes1_w3.set_UVC(0, 0)
+                self.canvas.draw()
+                self.cid = self.canvas.mpl_connect("button_release_event", self.on_mousepressed)
+            else:
+                if self.cid:
+                    self.canvas.mpl_disconnect(self.cid)
+                self.cid = None
+                self.p_x.append(event.xdata)
+                self.p_y.append(event.ydata)
+                self.update_plot()
+                self.canvas.draw()
+
+    def on_mousepressed(self, event):
+        if self.w_change == 1:
+            self.W_1 = [event.xdata, event.ydata]
+        elif self.w_change == 2:
+            self.W_2 = [event.xdata, event.ydata]
+        elif self.w_change == 3:
+            self.W_3 = [event.xdata, event.ydata]
+        self.update_plot()
+        self.canvas.draw()

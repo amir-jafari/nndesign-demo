@@ -21,16 +21,16 @@ from get_package_path import PACKAGE_PATH
 # T(v2) = y2 —> v21 * T(e1) + v22 * T(e2) = y21 * e1 + y22 * e2
 #               ----------------------------——————————————————————
 # 			T(e1) = ( y11 * e1 + y12  * e2 - v12 * T(e2) ) / v11 = ( y21 * e1 + y22 * e2 - v22 * T(e2) ) / v21 —>
-# 			—> - v12 * T(e2) = (v11 / v21)  * ( y21 * e1 + y22 * e2 - v22 * T(e2) ) - y11 * e1 + y12  * e2 —>
-# 			—> T(e2) * (-v12 + v22 * v11 / v21) = (v11 / v21)  * ( y21 * e1 + y22 * e2) - y11 * e1 + y12  * e2 —>
-# 			—> T(e2) = ( ( v11 * y21 / v21 - y11 ) * e1 + ( v11 * y22 / v21 + y12 ) * e2 ) / (-v12 + v22 * v11 / v21)
-# 			—> T(e1) = ( y11 - v12 * ( v11 * y21 / v21 - y11 ) / (-v12 + v22 * v11 / v21) ) * e1 +
-# 						+ ( y12 - v12 * ( v11 * y22 / v21 + y12 ) / (-v12 + v22 * v11 / v21) ) * e2
+# 			—> - v12 * T(e2) = (v11 / v21)  * ( y21 * e1 + y22 * e2 - v22 * T(e2) ) - y11 * e1 - y12  * e2 —>
+# 			—> T(e2) * (-v12 + v22 * v11 / v21) = (v11 / v21)  * ( y21 * e1 + y22 * e2) - y11 * e1 - y12  * e2 —>
+# 			—> T(e2) = ( ( v11 * y21 / v21 - y11 ) * e1 + ( v11 * y22 / v21 - y12 ) * e2 ) / (-v12 + v22 * v11 / v21)
+# 			—> T(e1) = (1/v11) * ( y11 - v12 * ( v11 * y21 / v21 - y11 ) / (-v12 + v22 * v11 / v21) ) * e1 +
+# 						+ (1/v11) * ( y12 - v12 * ( v11 * y22 / v21 - y12 ) / (-v12 + v22 * v11 / v21) ) * e2
 #
 # A_div = -v12 + v22 * v11 / v21
 #
-# A = [ T(e1) T(e2) ] = [  (y11 - v12 * ( v11 * y21 / v21 - y11 ) / A_div) / v11    ( v11 * y21 / v21 - y11 ) / A_div   ]
-# 				 [  (y12 - v12 * ( v11 * y22 / v21 + y12 ) /A_div) / v11     ( v11 * y22 / v21 + y12 ) / A_div ]
+# A = [ T(e1) T(e2) ] = [  (1/v11) * (y11 - v12 * ( v11 * y21 / v21 - y11 ) / A_div)    ( v11 * y21 / v21 - y11 ) / A_div   ]
+# 				 [  (1/v11) * ( y12 - v12 * ( v11 * y22 / v21 - y12 ) / A_div)     ( v11 * y22 / v21 - y12 ) / A_div ]
 
 
 class LinearTransformations(NNDLayout):
@@ -134,17 +134,21 @@ class LinearTransformations(NNDLayout):
                 self.axes_1.quiver([0], [0], [event.xdata], [event.ydata], units="xy", scale=1, label="Transformed 2", color="r")
                 self.canvas.mpl_disconnect(self.cid2)
                 v1, y1, v2, y2 = self.vectors[0], self.vectors[1], self.vectors[2], self.vectors[3]
-                A_div = (-v1[1] + v2[1] * v1[0] / v2[0])
+                # A_div = -v12 + v22 * v11 / v21
+                # A = [ T(e1) T(e2) ] =
+                # [(1/v11) * (y11 - v12 * (v11 * y21 / v21 - y11) / A_div)   (v11 * y21 / v21 - y11) / A_div ]
+                # [(1/v11) * (y12 - v12 * (v11 * y22 / v21 - y12) / A_div)  (v11 * y22 / v21 - y12) / A_div ]
+                A_div = -v1[1] + v2[1] * v1[0] / v2[0]
                 A_11 = (y1[0] - v1[1] * (v1[0] * y2[0] / v2[0] - y1[0]) / A_div) / v1[0]
                 A_12 = (v1[0] * y2[0] / v2[0] - y1[0]) / A_div
-                A_21 = (y1[1] - v1[1] * (v1[0] - y2[1] / v2[0] + y1[1]) / A_div) / v1[0]
-                A_22 = (v1[0] + y2[1] / v2[0] + y1[1]) / A_div
+                A_21 = (y1[1] - v1[1] * (v1[0] * y2[1] / v2[0] - y1[1]) / A_div) / v1[0]
+                A_22 = (v1[0] * y2[1] / v2[0] - y1[1]) / A_div
                 self.A = np.array([[A_11, A_12], [A_21, A_22]])
                 e, v = np.linalg.eig(self.A)
                 if "complex" in str(v.dtype):
                     print("Complex!!!")
                 else:
-                    self.axes_2.quiver([0], [0], [-v[0, 0]], [-v[0, 1]], units="xy", scale=1, label="Eigenvector 1", color="g")
+                    self.axes_2.quiver([0], [0], [v[0, 0]], [v[0, 1]], units="xy", scale=1, label="Eigenvector 1", color="g")
                     self.axes_2.quiver([0], [0], [v[1, 0]], [v[1, 1]], units="xy", scale=1, label="Eigenvector 2", color="g")
                 self.canvas2.draw()
             else:

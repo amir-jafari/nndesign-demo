@@ -21,19 +21,25 @@ class OneInputNeuron(NNDLayout):
 
         self.comboBox1 = QtWidgets.QComboBox(self)
         self.comboBox1_functions = [self.purelin, self.hardlim, self.hardlims, self.satlin, self.satlins, self.logsig, self.tansig]
-        self.comboBox1.addItems(["Purelin", 'Hardlim', 'Hardlims', 'Satlin', 'Satlins', 'LogSig', 'TanSig'])
+        self.comboBox1_functions_str = ["purelin", 'hardlim', 'hardlims', 'satlin', 'satlins', 'logsig', 'tansig']
+        self.comboBox1.addItems(self.comboBox1_functions_str)
         self.func1 = self.purelin
         self.label_f = QtWidgets.QLabel(self)
         self.label_f.setText("f")
         self.label_f.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_f.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 550 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
 
+        self.label_eq = QtWidgets.QLabel(self)
+        self.label_eq.setText("a = purelin(w * p + b)")
+        self.label_eq.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
+        self.label_eq.setGeometry((self.x_chapter_slider_label - 30) * self.w_ratio, 350 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
+
         self.label_w = QtWidgets.QLabel(self)
         self.label_w.setText("w")
         self.label_w.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_w.setGeometry(self.x_chapter_slider_label * self.w_ratio, 400 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
         self.slider_w = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w.setRange(-3, 3)
+        self.slider_w.setRange(-30, 30)
         self.slider_w.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_w.setTickInterval(1)
         self.slider_w.setValue(1)
@@ -43,7 +49,7 @@ class OneInputNeuron(NNDLayout):
         self.label_b.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_b.setGeometry(self.x_chapter_slider_label * self.w_ratio, 470 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
         self.slider_b = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b.setRange(-3, 3)
+        self.slider_b.setRange(-30, 30)
         self.slider_b.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_b.setTickInterval(1)
         self.slider_b.setValue(0)
@@ -76,9 +82,24 @@ class OneInputNeuron(NNDLayout):
 
         a = self.figure.add_subplot(1, 1, 1)
         a.clear()  # Clear the plot
+        a.set_xlim(-2, 2)
+        a.set_ylim(-2, 2)
+        # a.set_xticks([0], minor=True)
+        # a.set_yticks([0], minor=True)
+        # a.set_xticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
+        # a.set_yticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
+        # a.grid(which="minor")
+        a.set_xticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
+        a.set_yticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
+        a.plot([0] * 10, np.linspace(-2, 2, 10), color="black", linestyle="--", linewidth=0.2)
+        a.plot(np.linspace(-2, 2, 10), [0] * 10, color="black", linestyle="--", linewidth=0.2)
+        a.set_xlabel("$p$")
+        a.xaxis.set_label_coords(1, -0.025)
+        a.set_ylabel("$a$")
+        a.yaxis.set_label_coords(-0.025, 1)
 
-        weight = self.slider_w.value()
-        bias = self.slider_b.value()
+        weight = self.slider_w.value() / 10
+        bias = self.slider_b.value() / 10
         self.label_w.setText("w: " + str(weight))
         self.label_b.setText("b: " + str(bias))
         p = np.arange(-4, 4, 0.1)
@@ -87,16 +108,17 @@ class OneInputNeuron(NNDLayout):
 
         a.plot(p, out, markersize=3, color="red")
         # Setting limits so that the point moves instead of the plot.
-        a.set_xlim(-4, 4)
-        a.set_ylim(-2, 2)
+        # a.set_xlim(-4, 4)
+        # a.set_ylim(-2, 2)
         # add grid and axes
-        a.grid(True, which='both')
-        a.axhline(y=0, color='k')
-        a.axvline(x=0, color='k')
+        # a.grid(True, which='both')
+        # a.axhline(y=0, color='k')
+        # a.axvline(x=0, color='k')
         self.canvas.draw()
 
     def change_transfer_function(self, idx):
         self.func1 = self.comboBox1_functions[idx]
+        self.label_eq.setText("a = {}(w * p + b)".format(self.comboBox1_functions_str[idx]))
         self.graph()
 
     @staticmethod

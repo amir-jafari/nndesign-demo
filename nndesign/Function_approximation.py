@@ -18,7 +18,7 @@ class FunctionApproximation(NNDLayout):
         super(FunctionApproximation, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Function Approximation", 11, "Click the train button to train\n the log-sig ...",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")  # TODO: Logo and Icon
+                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)  # TODO: Logo and Icon
 
         self.S1 = 4
         self.diff = 1
@@ -123,7 +123,7 @@ class FunctionApproximation(NNDLayout):
     def on_run(self):
         if self.ani:
             self.ani.event_source.stop()
-        n_epochs = 500
+        n_epochs = 5000
         self.ani = FuncAnimation(self.figure, self.on_animate_v2, init_func=self.animate_init_v2, frames=n_epochs,
                                  interval=20, repeat=False, blit=True)
 
@@ -160,7 +160,10 @@ class FunctionApproximation(NNDLayout):
             self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
             return self.net_approx,
 
+        # TODO: Look into this
         self.mu /= 10
+        if idx % 500 == 0:
+            self.mu = mu_initial
 
         while error >= self.error_prev:
             try:

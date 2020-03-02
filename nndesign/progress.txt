@@ -47,7 +47,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 - Chapter 11:
     - Network Function --> Done
     - Back-propagation Calculation --> Half way there. TODO: figure and make it look nice. Make it one by one, use pT instead of p'  --> Gonna need LaTeX for that
-    - Function Approximation  --> Done.
+    - Function Approximation  --> Done. TODO: Maybe include an option to switch between Gradient Descent to Marqdt?
     - Generalization  --> Even when using Marqadt, still doesn't overfit... TODO
 
 - Chapter 12:
@@ -76,7 +76,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 
 - Chapter 16:
     - Competitive Classification - Done
-    - Competitive Learning - Most of it done - just need to add a bit more functionality
+    - Competitive Learning - Done
     - 1-D Feature Map
     - 2-D Feature Map
     - LVQ1

@@ -15,133 +15,139 @@ class NetworkFunction(NNDLayout):
         super(NetworkFunction, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Network Function", 11, " Alter the network's parameters\n by dragging the slide bars",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_info=False)  # TODO: Change icons
+                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_info=False, show_pic=False)  # TODO: Change icons
 
         self.comboBox1 = QtWidgets.QComboBox(self)
         self.comboBox1_functions = [self.purelin, self.logsig, self.tansig]
-        self.comboBox1.addItems(["Purelin", 'LogSig', 'TanSig'])
-        self.comboBox1.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 580 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.comboBox1_functions_str = ["purelin", 'logsig', 'tansig']
+        self.comboBox1.addItems(self.comboBox1_functions_str)
+        self.comboBox1.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 640 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.func1 = self.purelin
         self.label_f = QtWidgets.QLabel(self)
         self.label_f.setText("f")
         self.label_f.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_f.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 570 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.label_f.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 600 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
 
         self.wid2 = QtWidgets.QWidget(self)
         self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 590 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 620 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.layout2.addWidget(self.comboBox1)
         self.wid2.setLayout(self.layout2)
+
+        self.label_eq = QtWidgets.QLabel(self)
+        self.label_eq.setText("a = purelin(w2 * tansig(w1 * p + b1) + b2))")
+        self.label_eq.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
+        self.label_eq.setGeometry(180 * self.w_ratio, 270 * self.h_ratio, (self.w_chapter_slider + 100) * self.w_ratio, 50 * self.h_ratio)
 
         self.label_w1_1 = QtWidgets.QLabel(self)
         self.label_w1_1.setText("w1_1")
         self.label_w1_1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w1_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 100 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.label_w1_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 120 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.slider_w1_1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w1_1.setRange(-10, 10)
+        self.slider_w1_1.setRange(-100, 100)
         self.slider_w1_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w1_1.setTickInterval(1)
+        self.slider_w1_1.setTickInterval(10)
         self.slider_w1_1.setValue(10)
 
         self.wid_w1_1 = QtWidgets.QWidget(self)
         self.layout_w1_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w1_1.setGeometry(self.x_chapter_usual * self.w_ratio, 130 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.wid_w1_1.setGeometry(self.x_chapter_usual * self.w_ratio, 140 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.layout_w1_1.addWidget(self.slider_w1_1)
         self.wid_w1_1.setLayout(self.layout_w1_1)
 
         self.label_w1_2 = QtWidgets.QLabel(self)
         self.label_w1_2.setText("w1_2")
         self.label_w1_2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w1_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 170 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.label_w1_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 170 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.slider_w1_2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w1_2.setRange(-10, 10)
+        self.slider_w1_2.setRange(-100, 100)
         self.slider_w1_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w1_2.setTickInterval(1)
+        self.slider_w1_2.setTickInterval(10)
         self.slider_w1_2.setValue(10)
 
         self.wid_w1_2 = QtWidgets.QWidget(self)
         self.layout_w1_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w1_2.setGeometry(self.x_chapter_usual * self.w_ratio, 200 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.wid_w1_2.setGeometry(self.x_chapter_usual * self.w_ratio, 200 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.layout_w1_2.addWidget(self.slider_w1_2)
         self.wid_w1_2.setLayout(self.layout_w1_2)
 
         self.label_b1_1 = QtWidgets.QLabel(self)
         self.label_b1_1.setText("b1_1")
         self.label_b1_1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b1_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 240 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.label_b1_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 240 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.slider_b1_1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b1_1.setRange(-10, 10)
+        self.slider_b1_1.setRange(-100, 100)
         self.slider_b1_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b1_1.setTickInterval(1)
+        self.slider_b1_1.setTickInterval(10)
         self.slider_b1_1.setValue(-10)
 
         self.wid_b1_1 = QtWidgets.QWidget(self)
         self.layout_b1_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_b1_1.setGeometry(self.x_chapter_usual * self.w_ratio, 270 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.wid_b1_1.setGeometry(self.x_chapter_usual * self.w_ratio, 270 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.layout_b1_1.addWidget(self.slider_b1_1)
         self.wid_b1_1.setLayout(self.layout_b1_1)
 
         self.label_b1_2 = QtWidgets.QLabel(self)
         self.label_b1_2.setText("b1_2")
         self.label_b1_2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b1_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 310 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.label_b1_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 310 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.slider_b1_2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b1_2.setRange(-10, 10)
+        self.slider_b1_2.setRange(-100, 100)
         self.slider_b1_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b1_2.setTickInterval(1)
+        self.slider_b1_2.setTickInterval(10)
         self.slider_b1_2.setValue(10)
 
         self.wid_b1_2 = QtWidgets.QWidget(self)
         self.layout_b1_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_b1_2.setGeometry(self.x_chapter_usual * self.w_ratio, 340 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.wid_b1_2.setGeometry(self.x_chapter_usual * self.w_ratio, 340 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.layout_b1_2.addWidget(self.slider_b1_2)
         self.wid_b1_2.setLayout(self.layout_b1_2)
 
         self.label_w2_1 = QtWidgets.QLabel(self)
         self.label_w2_1.setText("w2_1")
         self.label_w2_1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w2_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 380 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.label_w2_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 380 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.slider_w2_1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w2_1.setRange(-3, 3)
+        self.slider_w2_1.setRange(-100, 100)
         self.slider_w2_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w2_1.setTickInterval(1)
-        self.slider_w2_1.setValue(1)
+        self.slider_w2_1.setTickInterval(10)
+        self.slider_w2_1.setValue(10)
 
         self.wid_w2_1 = QtWidgets.QWidget(self)
         self.layout_w2_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w2_1.setGeometry(self.x_chapter_usual * self.w_ratio, 410 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.wid_w2_1.setGeometry(self.x_chapter_usual * self.w_ratio, 410 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.layout_w2_1.addWidget(self.slider_w2_1)
         self.wid_w2_1.setLayout(self.layout_w2_1)
 
         self.label_w2_2 = QtWidgets.QLabel(self)
         self.label_w2_2.setText("w2_2")
         self.label_w2_2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w2_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 450 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.label_w2_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 450 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.slider_w2_2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w2_2.setRange(-3, 3)
+        self.slider_w2_2.setRange(-100, 100)
         self.slider_w2_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w2_2.setTickInterval(1)
-        self.slider_w2_2.setValue(1)
+        self.slider_w2_2.setTickInterval(10)
+        self.slider_w2_2.setValue(10)
 
         self.wid_w2_2 = QtWidgets.QWidget(self)
         self.layout_w2_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w2_2.setGeometry(self.x_chapter_usual * self.w_ratio, 480 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.wid_w2_2.setGeometry(self.x_chapter_usual * self.w_ratio, 480 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.layout_w2_2.addWidget(self.slider_w2_2)
         self.wid_w2_2.setLayout(self.layout_w2_2)
 
         self.label_b2 = QtWidgets.QLabel(self)
         self.label_b2.setText("b1_2")
         self.label_b2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 520 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.label_b2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 520 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.slider_b2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b2.setRange(-3, 3)
+        self.slider_b2.setRange(-100, 100)
         self.slider_b2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b2.setTickInterval(1)
+        self.slider_b2.setTickInterval(10)
         self.slider_b2.setValue(0)
 
         self.wid_b2 = QtWidgets.QWidget(self)
         self.layout_b2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_b2.setGeometry(self.x_chapter_usual * self.w_ratio, 550 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.wid_b2.setGeometry(self.x_chapter_usual * self.w_ratio, 550 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.layout_b2.addWidget(self.slider_b2)
         self.wid_b2.setLayout(self.layout_b2)
 
@@ -160,14 +166,41 @@ class NetworkFunction(NNDLayout):
 
         a = self.figure.add_subplot(1, 1, 1)
         a.clear()  # Clear the plot
+        a.set_xlim(-2, 2)
+        a.set_ylim(-2, 2)
+        # a.set_xticks([0], minor=True)
+        # a.set_yticks([0], minor=True)
+        # a.set_xticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
+        # a.set_yticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
+        # a.grid(which="minor")
+        a.set_xticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
+        a.set_yticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
+        a.plot([0]*10, np.linspace(-2, 2, 10), color="black", linestyle="--", linewidth=0.2)
+        a.plot(np.linspace(-2, 2, 10), [0]*10, color="black", linestyle="--", linewidth=0.2)
+        a.set_xlabel("$p$")
+        a.xaxis.set_label_coords(1, -0.025)
+        a.set_ylabel("$a$")
+        a.yaxis.set_label_coords(-0.025, 1)
 
-        weight1_1 = self.slider_w1_1.value()
-        weight1_2 = self.slider_w1_2.value()
-        bias1_1 = self.slider_b1_1.value()
-        bias1_2 = self.slider_b1_2.value()
-        weight2_1 = self.slider_w2_1.value()
-        weight2_2 = self.slider_w2_2.value()
-        bias2 = self.slider_b2.value()
+        # ax.set_xticks(major_ticks)
+        # ax.set_xticks(minor_ticks, minor=True)
+        # ax.set_yticks(major_ticks)
+        # ax.set_yticks(minor_ticks, minor=True)
+        #
+        # # And a corresponding grid
+        # ax.grid(which='both')
+        #
+        # # Or if you want different settings for the grids:
+        # ax.grid(which='minor', alpha=0.2)
+        # ax.grid(which='major', alpha=0.5)
+
+        weight1_1 = self.slider_w1_1.value() / 10
+        weight1_2 = self.slider_w1_2.value() / 10
+        bias1_1 = self.slider_b1_1.value() / 10
+        bias1_2 = self.slider_b1_2.value() / 10
+        weight2_1 = self.slider_w2_1.value() / 10
+        weight2_2 = self.slider_w2_2.value() / 10
+        bias2 = self.slider_b2.value() / 10
 
         self.label_w1_1.setText("w1_1: " + str(weight1_1))
         self.label_w1_2.setText("w1_2: " + str(weight1_2))
@@ -186,16 +219,17 @@ class NetworkFunction(NNDLayout):
 
         a.plot(p, out.reshape(-1), markersize=3, color="red")
         # Setting limits so that the point moves instead of the plot.
-        a.set_xlim(-2, 2)
-        a.set_ylim(-2, 2)
+        # a.set_xlim(-2, 2)
+        # a.set_ylim(-2, 2)
         # add grid and axes
-        a.grid(True, which='both')
-        a.axhline(y=0, color='k')
-        a.axvline(x=0, color='k')
+        # a.grid(True, which='both')
+        # a.axhline(y=0, color='k')
+        # a.axvline(x=0, color='k')
         self.canvas.draw()
 
     def change_transfer_function(self, idx):
         self.func1 = self.comboBox1_functions[idx]
+        self.label_eq.setText("a = {}(w2 * tansig(w1 * p + b1) + b2))".format(self.comboBox1_functions_str[idx]))
         self.graph()
 
     @staticmethod
