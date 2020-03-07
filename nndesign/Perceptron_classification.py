@@ -40,8 +40,8 @@ class PerceptronClassification(NNDLayout):
         self.axis.set_zlabel("weight")
         self.axis.zaxis._axinfo['label']['space_factor'] = 0.1
         self.axis.set_zticks([-1, 1])
-        self.axis.scatter(orange[0], orange[1], orange[2], color='orange')
-        self.axis.scatter(apple[0], apple[1], apple[2], color='yellow')
+        self.axis.scatter(orange[0], orange[1], orange[2], color='yellow')
+        self.axis.scatter(apple[0], apple[1], apple[2], color='orange')
         self.line1, self.line2, self.line3 = None, None, None
         self.canvas.draw()
 
@@ -120,7 +120,7 @@ class PerceptronClassification(NNDLayout):
             self.label_a_1.setText(""); self.label_a_2.setText(""); self.label_a_3.setText("")
             self.label_fruit.setText("")
             self.p = np.round(np.random.uniform(-1, 1, (1, 3)), 2)
-            self.a = 0 * self.p[0, 0] + 1 * self.p[0, 1] + 0 * self.p[0, 2]
+            self.a = 1 * self.p[0, 0] + 0 * self.p[0, 1] + 0 * self.p[0, 2]
             self.label = 1 if self.a >= 0 else -1
             if self.line1:
                 self.line1.pop().remove()
@@ -128,7 +128,7 @@ class PerceptronClassification(NNDLayout):
                 self.line3.pop().remove()
                 self.canvas.draw()
         if self.idx == 1:
-            self.label_w.setText("w = [0 1 0]")
+            self.label_w.setText("w = [1 0 0]")
             self.label_b.setText("b = 0")
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_2.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -150,7 +150,7 @@ class PerceptronClassification(NNDLayout):
         elif self.idx == 5:
             self.label_a_2.setText("a = hardlims({})".format(self.a))
         elif self.idx == 6:
-            self.label_a_3.setText("a =" + str(self.label))
+            self.label_a_3.setText("a = " + str(self.label))
         elif self.idx == 7:
             self.label_fruit.setText("Fruit = {}".format("Apple" if self.label == 1 else "Orange"))
         elif self.idx == 8:

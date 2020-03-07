@@ -107,10 +107,10 @@ class FunctionApproximation(NNDLayout):
 
     def init_params(self):
         # np.random.seed(self.random_state)
-        self.W1 = 2 * np.random.uniform(0, 1, (self.S1, 1)) - 1
-        self.b1 = 2 * np.random.uniform(0, 1, (self.S1, 1)) - 1
-        self.W2 = 2 * np.random.uniform(0, 1, (1, self.S1)) - 1
-        self.b2 = 2 * np.random.uniform(0, 0, (1, 1)) - 1
+        self.W1 = 2 * np.random.uniform(0, 1, (self.S1, 1)) - 0.5
+        self.b1 = 2 * np.random.uniform(0, 1, (self.S1, 1)) - 0.5
+        self.W2 = 2 * np.random.uniform(0, 1, (1, self.S1)) - 0.5
+        self.b2 = 2 * np.random.uniform(0, 0, (1, 1)) - 0.5
 
     def plot_f(self):
         self.data_to_approx.set_data(self.p, 1 + np.sin(np.pi * self.p * self.diff / 5))
@@ -166,6 +166,7 @@ class FunctionApproximation(NNDLayout):
             self.mu = mu_initial
 
         while error >= self.error_prev:
+
             try:
 
                 a1 = np.kron(a1, np.ones((1, 1)))
@@ -183,7 +184,7 @@ class FunctionApproximation(NNDLayout):
                     self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
                     return self.net_approx,
 
-                # Can't get this operation to produce the same results as MATLAB...
+                # Can't get this operation to produce the exact same results as MATLAB...
                 dw = -np.dot(np.linalg.inv(np.dot(jac.T, jac) + self.mu * self.ii), je)
                 self.W1 += dw[:self.RS]
                 self.b1 += dw[self.RS:self.RSS]
@@ -201,6 +202,7 @@ class FunctionApproximation(NNDLayout):
 
             except Exception as e:
                 if str(e) == "Singular matrix":
+                    print("The matrix was singular... Increasing mu 10-fold")
                     self.mu *= 10
                 else:
                     raise e

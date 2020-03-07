@@ -127,7 +127,7 @@ class OneDFeatureMap(NNDLayout):
         self.run_button.setStyleSheet("font-size:13px")
         self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 600 * self.h_ratio,
                                     self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run_3)
+        self.run_button.clicked.connect(self.on_run)
 
         self.slider_lr.valueChanged.connect(self.slide)
         self.slider_nei.valueChanged.connect(self.slide)
@@ -165,10 +165,20 @@ class OneDFeatureMap(NNDLayout):
             self.lr = (self.lr - 0.01) * 0.998 + 0.01
             self.nei = (self.nei - 1) * NDEC + 1
 
-        for i in range(NN - 1):
-            from_ = Nfrom[i]
-            to_ = Nto[i]
+        for i in range(NN):
+            from_ = Nfrom[i] - 1
+            to_ = Nto[i] - 1
+            print(self.W[from_, 0], self.W[to_, 0], "---", self.W[from_, 1], self.W[to_, 1])
             self.lines.append(self.axis1.plot([self.W[from_, 0], self.W[to_, 0]], [self.W[from_, 1], self.W[to_, 1]], color="red"))
+        print("------")
+        print(self.lr, self.nei)
+
+        nei_temp = self.nei
+        self.slider_lr.setValue(self.lr * 100)
+        self.nei = nei_temp
+        self.slider_nei.setValue(self.nei * 10)
+        self.label_lr.setText("Learning rate: " + str(self.lr))
+        self.label_nei.setText("Neighborhood: " + str(self.nei))
 
         self.canvas.draw()
 
@@ -196,10 +206,14 @@ class OneDFeatureMap(NNDLayout):
         self.W = self.W + self.lr * np.dot(a, np.ones((1, r))) * (np.dot(np.ones((s, 1)), p.T) - self.W)
         self.lr = (self.lr - 0.01) * 0.998 + 0.01
         self.nei = (self.nei - 1) * NDEC + 1
+        self.slider_lr.setValue(self.lr * 100)
+        self.slider_nei.setValue(self.nei * 10)
+        self.label_lr.setText("Learning rate: " + str(self.lr))
+        self.label_nei.setText("Neighborhood: " + str(self.nei))
 
         for i in range(NN - 1):
-            from_ = Nfrom[i]
-            to_ = Nto[i]
+            from_ = Nfrom[i] - 1
+            to_ = Nto[i] - 1
             self.lines_anim[i].set_data([self.W[from_, 0], self.W[to_, 0]], [self.W[from_, 1], self.W[to_, 1]])
 
     def on_run_2(self):
@@ -232,11 +246,16 @@ class OneDFeatureMap(NNDLayout):
         self.lr = (self.lr - 0.01) * 0.998 + 0.01
         self.nei = (self.nei - 1) * NDEC + 1
 
+        self.slider_lr.setValue(self.lr * 100)
+        self.slider_nei.setValue(self.nei * 10)
+        self.label_lr.setText("Learning rate: " + str(self.lr))
+        self.label_nei.setText("Neighborhood: " + str(self.nei))
+
         data_to_plot_x = []
         data_to_plot_y = []
         for i in range(NN - 1):
-            from_ = Nfrom[i]
-            to_ = Nto[i]
+            from_ = Nfrom[i] - 1
+            to_ = Nto[i] - 1
             data_to_plot_x += [self.W[from_, 0], self.W[to_, 0]]
             data_to_plot_y += [self.W[from_, 1], self.W[to_, 1]]
         self.lines_anim_3.set_data(data_to_plot_x, data_to_plot_y)
@@ -246,6 +265,5 @@ class OneDFeatureMap(NNDLayout):
         if self.ani_3:
             self.ani_3.event_source.stop()
         self.ani_3 = FuncAnimation(self.figure, self.on_animate_3, init_func=self.animate_init_3,
-                                 frames=500, interval=0, repeat=False, blit=False)
+                                   frames=500, interval=10, repeat=False, blit=False)
         self.canvas.draw()
-

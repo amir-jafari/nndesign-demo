@@ -188,9 +188,13 @@ class Generalization(NNDLayout):
         e = self.f_to_approx(self.p) - a2
         error = np.dot(e, e.T).item()
 
+        # TODO: Look into this
         self.mu /= 10
+        if idx % 500 == 0:
+            self.mu = mu_initial
 
         while error >= self.error_prev:
+
             try:
 
                 a1 = np.kron(a1, np.ones((1, 1)))
@@ -208,7 +212,7 @@ class Generalization(NNDLayout):
                     self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
                     return self.net_approx,
 
-                # Can't get this operation to produce the same results as MATLAB...
+                # Can't get this operation to produce the exact same results as MATLAB...
                 dw = -np.dot(np.linalg.inv(np.dot(jac.T, jac) + self.mu * self.ii), je)
                 self.W1 += dw[:self.RS]
                 self.b1 += dw[self.RS:self.RSS]

@@ -4,11 +4,11 @@ TODO: Main window same shape as the rest
 When it says Done, it is not taking into account final clean up - Leaving that for when we decide on exact dimensions.
 
 - Chapter 2:
-	- One Input Neuron -> Done
-	- Two Input Neuron -> Almost done -> Need to put the figure and make it look good. TODO: Need the figure
+	- One Input Neuron -> Done.
+	- Two Input Neuron -> Done.
 
 - Chapter 3:  TODO: There is a displacement of some stuff :/ for the svg files
-    - Perceptron Classification --> Almost done.
+    - Perceptron Classification --> Almost done. : pptx --> ... --> svg
     - Hamming Classification --> Almost done.
     - Hopfield Classification --> Almost done.
 
@@ -21,7 +21,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Reciprocal Basis  -> Done.
 
 - Chapter 6:
-    - Linear Transformations -> Almost done. There is something wrong with the math, but I've been over it and it looks good... TODO
+    - Linear Transformations -> Done.
     - Eigenvector Game -> TODO
 
 - Chapter 7:

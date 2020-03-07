@@ -155,6 +155,7 @@ class DecisionBoundaries(NNDLayout):
         # print("Line Solution is y = {m}x + {c}".format(m=m, c=c))
         if str(self.prev_x_diff)[0] != str(self.current_x_diff)[0]:
             if str(self.prev_y_diff)[0] != str(self.current_y_diff)[0]:
+                self.w[1] = -self.w[1]
                 self.w[0] = np.round(-m * self.w[1], 2)
             else:
                 self.w[1] = np.round(-self.w[0] / m, 2)

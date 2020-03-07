@@ -49,7 +49,7 @@ class LinearTransformations(NNDLayout):
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.wid1 = QtWidgets.QWidget(self)
         self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(20 * self.w_ratio, 120 * self.h_ratio, 230 * self.w_ratio, 230 * self.h_ratio)
+        self.wid1.setGeometry(100 * self.w_ratio, 90 * self.h_ratio, 300 * self.w_ratio, 300 * self.h_ratio)
         self.layout1.addWidget(self.canvas)
         self.wid1.setLayout(self.layout1)
         self.vectors = []
@@ -69,7 +69,7 @@ class LinearTransformations(NNDLayout):
         self.toolbar2 = NavigationToolbar(self.canvas2, self)
         self.wid2 = QtWidgets.QWidget(self)
         self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(270 * self.w_ratio, 120 * self.h_ratio, 230 * self.w_ratio, 230 * self.h_ratio)
+        self.wid2.setGeometry(100 * self.w_ratio, 380 * self.h_ratio, 300 * self.w_ratio, 300 * self.h_ratio)
         self.layout2.addWidget(self.canvas2)
         self.wid2.setLayout(self.layout2)
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
@@ -78,6 +78,7 @@ class LinearTransformations(NNDLayout):
         self.axes_2.set_title("Transformed Vectors")
         self.point2, = self.axes_2.plot([], marker='*')
         self.line2, = self.axes_2.plot([], linestyle="--")
+        self.text_2 = self.axes_2.text(-0.7, 0, "")
         self.line_data_x2, self.line_data_y2 = [], []
         self.canvas2.draw()
         self.canvas2.mpl_connect('button_press_event', self.on_mouseclick2)
@@ -106,6 +107,7 @@ class LinearTransformations(NNDLayout):
                 collection.remove()
         self.line, = self.axes_1.plot([], linestyle="--", color="gray")
         self.line2, = self.axes_2.plot([], linestyle="--")
+        self.text_2.set_text("")
         self.line_data_x2, self.line_data_y2 = [], []
         while self.axes_2.collections:
             for collection in self.axes_2.collections:
@@ -120,9 +122,11 @@ class LinearTransformations(NNDLayout):
             if n_vectors == 1:
                 self.line_data_x, self.line_data_y = [event.xdata], [event.ydata]
                 self.line.set_data(self.line_data_x, self.line_data_y)
+                # self.temp_1 = (event.xdata, event.ydata)
                 self.axes_1.quiver([0], [0], [event.xdata], [event.ydata], units="xy", scale=1, label="Vector 1")
                 self.cid1 = self.canvas.mpl_connect("motion_notify_event", self.on_mousepressed1)
             elif n_vectors == 2:
+                # self.temp_2 = (event.xdata, event.ydata)
                 self.axes_1.quiver([0], [0], [event.xdata], [event.ydata], units="xy", scale=1, label="Transformed 1", color="r")
                 self.canvas.mpl_disconnect(self.cid1)
             elif n_vectors == 3:
@@ -146,10 +150,12 @@ class LinearTransformations(NNDLayout):
                 self.A = np.array([[A_11, A_12], [A_21, A_22]])
                 e, v = np.linalg.eig(self.A)
                 if "complex" in str(v.dtype):
-                    print("Complex!!!")
+                    self.text_2.set_text("Complex Eigenvectors!")
                 else:
-                    self.axes_2.quiver([0], [0], [v[0, 0]], [v[0, 1]], units="xy", scale=1, label="Eigenvector 1", color="g")
-                    self.axes_2.quiver([0], [0], [v[1, 0]], [v[1, 1]], units="xy", scale=1, label="Eigenvector 2", color="g")
+                    # print(v)
+                    self.text_2.set_text("")
+                    self.axes_2.quiver([0], [0], [v[0, 0]], [v[1, 0]], units="xy", scale=1, label="Eigenvector 1", color="g")
+                    self.axes_2.quiver([0], [0], [v[0, 1]], [v[1, 1]], units="xy", scale=1, label="Eigenvector 2", color="g")
                 self.canvas2.draw()
             else:
                 return
@@ -194,6 +200,12 @@ class LinearTransformations(NNDLayout):
             self.axes_2.collections[-1].remove()
             self.axes_2.collections[-1].remove()
             self.axes_2.quiver([0], [0], [event.xdata], [event.ydata], units="xy", scale=1)
+            # print("original vector 1:", self.temp_1)
+            # print("new vector:", event.xdata, event.ydata)
+            # print("........")
             v_transformed = np.dot(self.A, np.array([[event.xdata], [event.ydata]]))
+            # print("original vector 1 transformed:", self.temp_2)
+            # print("new vector transformed:", v_transformed)
+            # print("\n-----\n")
             self.axes_2.quiver([0], [0], [v_transformed[0, 0]], [v_transformed[1, 0]], units="xy", scale=1, color="g")
             self.canvas2.draw()
