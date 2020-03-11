@@ -47,7 +47,7 @@ class NetworkFunction(NNDLayout):
         self.slider_w1_1.setRange(-100, 100)
         self.slider_w1_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_w1_1.setTickInterval(10)
-        self.slider_w1_1.setValue(10)
+        self.slider_w1_1.setValue(100)
 
         self.wid_w1_1 = QtWidgets.QWidget(self)
         self.layout_w1_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -63,7 +63,7 @@ class NetworkFunction(NNDLayout):
         self.slider_w1_2.setRange(-100, 100)
         self.slider_w1_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_w1_2.setTickInterval(10)
-        self.slider_w1_2.setValue(10)
+        self.slider_w1_2.setValue(100)
 
         self.wid_w1_2 = QtWidgets.QWidget(self)
         self.layout_w1_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -79,7 +79,7 @@ class NetworkFunction(NNDLayout):
         self.slider_b1_1.setRange(-100, 100)
         self.slider_b1_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_b1_1.setTickInterval(10)
-        self.slider_b1_1.setValue(-10)
+        self.slider_b1_1.setValue(-100)
 
         self.wid_b1_1 = QtWidgets.QWidget(self)
         self.layout_b1_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -95,7 +95,7 @@ class NetworkFunction(NNDLayout):
         self.slider_b1_2.setRange(-100, 100)
         self.slider_b1_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_b1_2.setTickInterval(10)
-        self.slider_b1_2.setValue(10)
+        self.slider_b1_2.setValue(100)
 
         self.wid_b1_2 = QtWidgets.QWidget(self)
         self.layout_b1_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -213,7 +213,7 @@ class NetworkFunction(NNDLayout):
         weight_1, bias_1 = np.array([[weight1_1, weight1_2]]), np.array([[bias1_1, bias1_2]])
         weight_2, bias_2 = np.array([[weight2_1], [weight2_2]]), np.array([[bias2]])
 
-        p = np.arange(-4, 4, 0.1)
+        p = np.arange(-4, 4, 0.01)
         func = np.vectorize(self.func1)
         out = func(np.dot(self.tansig(np.dot(p.reshape(-1, 1), weight_1) + bias_1), weight_2) + bias_2)
 

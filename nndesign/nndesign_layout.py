@@ -30,8 +30,14 @@ xl2 = 520
 
 
 class NNDLayout(QMainWindow):
-    def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True, create_plot=True, create_two_plots=False):
+    def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True,
+                 create_plot=True, create_plot_coords=(90, 300, 370, 370),
+                 create_two_plots=False, print_mouse_coords=False):
+
         super(NNDLayout, self).__init__()
+
+        self.print_mouse_coords = print_mouse_coords
+        self.setMouseTracking(print_mouse_coords)
 
         self.w_ratio, self.h_ratio = w_ratio, h_ratio
         if chapter_window:
@@ -78,7 +84,8 @@ class NNDLayout(QMainWindow):
             self.toolbar = NavigationToolbar(self.canvas, self)
             self.wid1 = QtWidgets.QWidget(self)
             self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-            self.wid1.setGeometry(15 * self.w_ratio, 300 * self.h_ratio, 490 * self.w_ratio, 370 * self.h_ratio)
+            self.wid1.setGeometry(create_plot_coords[0] * self.w_ratio, create_plot_coords[1] * self.h_ratio,
+                                  create_plot_coords[2] * self.w_ratio, create_plot_coords[3] * self.h_ratio)
             self.layout1.addWidget(self.canvas)
             self.wid1.setLayout(self.layout1)
 
@@ -155,6 +162,10 @@ class NNDLayout(QMainWindow):
         cp = QtWidgets.QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
+
+    def mouseMoveEvent(self, event):
+        if self.print_mouse_coords:
+            print('Mouse coords: ( %d : %d )' % (event.x(), event.y()))
 
     # https://stackoverflow.com/questions/32035251/displaying-latex-in-pyqt-pyside-qtablewidget
     def mathTex_to_QPixmap(self, mathTex, fs):

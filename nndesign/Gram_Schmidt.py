@@ -32,6 +32,12 @@ class GramSchmidt(NNDLayout):
         self.text1, self.text2 = None, None
         self.axes1_proj_line, = self.axes_1.plot([], "--")
         self.axes1_proj_line.set_color("red")
+        self.axes_1.set_xticks([-2, -1, 0, 1])
+        self.axes_1.set_yticks([-2, -1, 0, 1])
+        self.axes_1.set_xlabel("$x$")
+        self.axes_1.xaxis.set_label_coords(1, -0.025)
+        self.axes_1.set_ylabel("$y$")
+        self.axes_1.yaxis.set_label_coords(-0.025, 1)
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
@@ -42,6 +48,12 @@ class GramSchmidt(NNDLayout):
         self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
         self.axes2_v2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
         self.text3, self.text4 = None, None
+        self.axes_2.set_xticks([-2, -1, 0, 1])
+        self.axes_2.set_yticks([-2, -1, 0, 1])
+        self.axes_2.set_xlabel("$x$")
+        self.axes_2.xaxis.set_label_coords(1, -0.025)
+        self.axes_2.set_ylabel("$y$")
+        self.axes_2.yaxis.set_label_coords(-0.025, 1)
         self.axes2_proj_line, = self.axes_2.plot([], "*")
         self.canvas2.draw()
 

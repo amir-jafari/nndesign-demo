@@ -20,30 +20,32 @@ F = (a[0, 0] * X ** 2 + a[0, 1] + a[1, 0] * X * Y + a[1, 1] * Y ** 2) / 2 + b[0]
 
 class ComparisonOfMethods(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(ComparisonOfMethods, self).__init__(w_ratio, h_ratio, main_menu=1)
+        super(ComparisonOfMethods, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
 
         self.fill_chapter("Comparison of Methods", 9, " Click anywhere to start an\n initial guess. The gradient\n descent path will be shown"
                                                       "\nfor both Steepest Descent\n and Conjugate Gradient",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")  # TODO: Change icons
+                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg",
+                          show_pic=False)
 
         self.event, self.ani_1, self.ani_2 = None, None, None
-        self.axes_1 = self.figure.add_subplot(2, 1, 1)
-        self.axes_1.set_title("Above: Steepest Descent Path | Below: Conjugate Gradient Path", fontdict={'fontsize': 10})
+        self.axes_1 = self.figure.add_subplot(1, 1, 1)
+        self.axes_1.set_title("Steepest Descent Path", fontdict={'fontsize': 10})
         self.axes_1.contour(X, Y, F)
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
         self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data_1, self.y_data_1 = [], []
-        self.axes_2 = self.figure.add_subplot(2, 1, 2)
-        # self.axes_2.set_title("Conjugate Gradient Path")
+        self.canvas.draw()
+
+        self.axes_2 = self.figure2.add_subplot(1, 1, 1)
+        self.axes_2.set_title("Conjugate Gradient Path")
         self.axes_2.contour(X, Y, F)
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
         self.path_2, = self.axes_2.plot([], linestyle='--', marker='o', label="Conjugate Gradient Path")
         self.x_data_2, self.y_data_2 = [], []
-        self.canvas.draw()
-        self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
-        self.canvas.draw()
+        self.canvas2.mpl_connect('button_press_event', self.on_mouseclick)
+        self.canvas2.draw()
 
         self.animation_speed = 500
         self.label_anim_speed = QtWidgets.QLabel(self)
@@ -77,6 +79,7 @@ class ComparisonOfMethods(NNDLayout):
             self.x_data_1, self.y_data_1 = [self.x_data_1[0]], [self.y_data_1[0]]
             self.x_data_2, self.y_data_2 = [self.x_data_2[0]], [self.y_data_2[0]]
             self.canvas.draw()
+            self.canvas2.draw()
             self.run_animation(self.event)
 
     def on_mouseclick(self, event):
@@ -90,6 +93,7 @@ class ComparisonOfMethods(NNDLayout):
         self.x_data_1, self.y_data_1 = [], []
         self.x_data_2, self.y_data_2 = [], []
         self.canvas.draw()
+        self.canvas2.draw()
         self.run_animation(event)
 
     def animate_init_1(self):
@@ -101,10 +105,16 @@ class ComparisonOfMethods(NNDLayout):
         return self.path_2,
 
     def on_animate_1(self, idx):
-        lr = 0.07
         gradient = np.dot(a, np.array([self.x_1, self.y_1])) + b.T
+        p_g = -gradient
+        hess = a
+        lr = -np.dot(gradient, p_g.T) / np.dot(p_g.T, np.dot(hess, p_g))
         self.x_1 -= lr * gradient[0]
         self.y_1 -= lr * gradient[1]
+        # lr = 0.07
+        # gradient = np.dot(a, np.array([self.x_1, self.y_1])) + b.T
+        # self.x_1 -= lr * gradient[0]
+        # self.y_1 -= lr * gradient[1]
         self.x_data_1.append(self.x_1)
         self.y_data_1.append(self.y_1)
         self.path_1.set_data(self.x_data_1, self.y_data_1)
@@ -135,8 +145,8 @@ class ComparisonOfMethods(NNDLayout):
             self.x_data_2, self.y_data_2 = [event.xdata], [event.ydata]
             self.x_1, self.y_1 = event.xdata, event.ydata
             self.x_2, self.y_2 = event.xdata, event.ydata
-            self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=max_epoch,
+            self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=5,
                                        interval=self.animation_speed, repeat=False, blit=True)
             self.i = 0
-            self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=2,
+            self.ani_2 = FuncAnimation(self.figure2, self.on_animate_2, init_func=self.animate_init_2, frames=2,
                                        interval=self.animation_speed, repeat=False, blit=True)

@@ -14,7 +14,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 
 - Chapter 4:
     - Decision boundary --> Done.
-    - Perceptron rule --> Done.
+    - Perceptron rule --> Done. TODO: Highlight chosen point to do perceptron rule
 
 - Chapter 5:
     - Gram Schmidt  -> Done.
@@ -31,7 +31,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Taylor Series 1 --> Done.
     - Taylor Series 2  --> Done.
     - Directional Derivatives --> Done.
-    - Quadratic Function --> Main stuff done. Need to add the A, d and c. Maybe use paint stuff... TODO --> Put sliders same format in blank space
+    - Quadratic Function --> Main stuff done. Need to add the A, d and c. Maybe use paint stuff... TODO  - font bigger
 
 - Chapter 9:
     - Steepest Descent for Quadratic --> Done.
@@ -40,15 +40,16 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Steepest Descent --> Done.
 
 - Chapter 10:
-    - Adaptive Noise Cancellation --> Done.
-    - EEG noise cancellation --> Done.
+    - Adaptive Noise Cancellation --> Done. TODO: Stop animation. Animation data is changing - lr path different than MATLAB.
+    Looked into this for a while, couldn't find the error yet
+    - EEG noise cancellation --> Done. TODO: Difference
     - Linear Classification --> Moving on for now :/
 
 - Chapter 11:
-    - Network Function --> Done
+    - Network Function --> Done. TODO: Put sliders with the Figure.
     - Back-propagation Calculation --> Half way there. TODO: figure and make it look nice. Make it one by one, use pT instead of p'  --> Gonna need LaTeX for that
-    - Function Approximation  --> Done. TODO: Maybe include an option to switch between Gradient Descent to Marqdt?
-    - Generalization  --> Even when using Marqadt, still doesn't overfit... TODO
+    - Function Approximation  --> Done.
+    - Generalization  --> Done.
 
 - Chapter 12:
     - Steepest Descent #1 --> Almost done - don't know why second and third thing don't behave correctly... TODO

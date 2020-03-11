@@ -15,7 +15,7 @@ mingrad = 0.0001
 
 class FunctionApproximation(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(FunctionApproximation, self).__init__(w_ratio, h_ratio, main_menu=1)
+        super(FunctionApproximation, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(20, 200, 480, 480))
 
         self.fill_chapter("Function Approximation", 11, "Click the train button to train\n the log-sig ...",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)  # TODO: Logo and Icon
@@ -132,8 +132,13 @@ class FunctionApproximation(NNDLayout):
         return self.net_approx,
 
     def animate_init_v2(self):
+        self.init_params()
         self.error_goal_reached = False
         self.p = self.p.reshape(1, -1)
+        self.a1 = self.logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
+        self.a2 = self.purelin(np.dot(self.W2, self.a1) + self.b2)
+        self.e = self.f_to_approx(self.p) - self.a2
+        self.error_prev = np.dot(self.e, self.e.T).item()
         self.mu = mu_initial
         self.RS = self.S1 * 1
         self.RS1 = self.RS + 1
@@ -147,58 +152,56 @@ class FunctionApproximation(NNDLayout):
         return self.net_approx,
 
     def on_animate_v2(self, idx):
+        """ Marqdt version """
 
-        a1 = self.logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
-        a2 = self.purelin(np.dot(self.W2, a1) + self.b2)
-        e = self.f_to_approx(self.p) - a2
-        error = np.dot(e, e.T).item()
+        self.mu /= 10
 
-        if error <= 0.005:
-            if self.error_goal_reached:
-                print("Error goal reached!")
-                self.error_goal_reached = None
-            self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
+        self.a1 = np.kron(self.a1, np.ones((1, 1)))
+        d2 = self.lin_delta(self.a2)
+        d1 = self.log_delta(self.a1, d2, self.W2)
+        jac1 = self.marq(np.kron(self.p, np.ones((1, 1))), d1)
+        jac2 = self.marq(self.a1, d2)
+        jac = np.hstack((jac1, d1.T))
+        jac = np.hstack((jac, jac2))
+        jac = np.hstack((jac, d2.T))
+        je = np.dot(jac.T, self.e.T)
+
+        grad = np.sqrt(np.dot(je.T, je)).item()
+        if grad < mingrad:
+            self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
             return self.net_approx,
 
-        # TODO: Look into this
-        self.mu /= 10
-        if idx % 500 == 0:
-            self.mu = mu_initial
+        jj = np.dot(jac.T, jac)
+        # Can't get this operation to produce the exact same results as MATLAB...
+        dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+        dW1 = dw[:self.RS]
+        db1 = dw[self.RS:self.RSS]
+        dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
+        db2 = dw[self.RSS2].reshape(1, 1)
+
+        self.a1 = self.logsigmoid_stable(np.dot((self.W1 + dW1), self.p) + self.b1 + db1)
+        self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
+        self.e = self.f_to_approx(self.p) - self.a2
+        error = np.dot(self.e, self.e.T).item()
 
         while error >= self.error_prev:
 
             try:
 
-                a1 = np.kron(a1, np.ones((1, 1)))
-                d2 = self.lin_delta(a2)
-                d1 = self.log_delta(a1, d2, self.W2)
-                jac1 = self.marq(np.kron(self.p, np.ones((1, 1))), d1)
-                jac2 = self.marq(a1, d2)
-                jac = np.hstack((jac1, d1.T))
-                jac = np.hstack((jac, jac2))
-                jac = np.hstack((jac, d2.T))
-                je = np.dot(jac.T, e.T)
-
-                grad = np.sqrt(np.dot(je.T, je)).item()
-                if grad < mingrad:
-                    self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
-                    return self.net_approx,
-
-                # Can't get this operation to produce the exact same results as MATLAB...
-                dw = -np.dot(np.linalg.inv(np.dot(jac.T, jac) + self.mu * self.ii), je)
-                self.W1 += dw[:self.RS]
-                self.b1 += dw[self.RS:self.RSS]
-                self.W2 += dw[self.RSS:self.RSS2].reshape(1, -1)
-                self.b2 += dw[self.RSS2].reshape(1, 1)
-
-                a1 = self.logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
-                a2 = self.purelin(np.dot(self.W2, a1) + self.b2)
-                e = self.f_to_approx(self.p) - a2
-                error = np.dot(e, e.T).item()
-
                 self.mu *= 10
                 if self.mu > 1e10:
                     break
+
+                dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+                dW1 = dw[:self.RS]
+                db1 = dw[self.RS:self.RSS]
+                dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
+                db2 = dw[self.RSS2].reshape(1, 1)
+
+                self.a1 = self.logsigmoid_stable(np.dot((self.W1 + dW1), self.p) + self.b1 + db1)
+                self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
+                self.e = self.f_to_approx(self.p) - self.a2
+                error = np.dot(self.e, self.e.T).item()
 
             except Exception as e:
                 if str(e) == "Singular matrix":
@@ -208,12 +211,24 @@ class FunctionApproximation(NNDLayout):
                     raise e
 
         if error < self.error_prev:
+            self.W1 += dW1
+            self.b1 += db1
+            self.W2 += dW2
+            self.b2 += db2
             self.error_prev = error
 
-        self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
+        if self.error_prev <= 0.005:
+            if self.error_goal_reached:
+                print("Error goal reached!")
+                self.error_goal_reached = None
+            self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
+            return self.net_approx,
+
+        self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
         return self.net_approx,
 
     def on_animate(self, idx):
+        """ GD version """
 
         alpha = 0.03
         nn_output = []

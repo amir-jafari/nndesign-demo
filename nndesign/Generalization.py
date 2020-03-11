@@ -16,10 +16,10 @@ mingrad = 0.001
 
 class Generalization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(Generalization, self).__init__(w_ratio, h_ratio, main_menu=1)
+        super(Generalization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(20, 200, 480, 480))
 
         self.fill_chapter("Generalization", 11, "Click the train button to train\n the log-sig ...",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")  # TODO: Logo and Icon
+                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)  # TODO: Logo and Icon
 
         self.S1 = 4
         self.diff = 1
@@ -111,8 +111,17 @@ class Generalization(NNDLayout):
 
     def init_params(self):
         # np.random.seed(self.random_state)
+        p_min, p_max = np.min(self.p), np.max(self.p)
+        magw = 2.8 * self.S1 ** (1 / 1)
         self.W1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
-        self.b1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
+        self.W1[self.W1 < 0] = -1
+        self.W1[self.W1 >= 0] = 1
+        self.W1 *= magw
+        self.b1 = magw * np.random.uniform(-0.5, 0.5, (self.S1, 1))
+        rng = p_min - p_max
+        mid = 0.5 * (p_min + p_max)
+        self.W1 = 2 * self.W1 / rng
+        self.b1 = self.b1 - self.W1 * mid
         self.W2 = np.random.uniform(-0.5, 0.5, (1, self.S1))
         self.b2 = np.random.uniform(-0.5, 0.5, (1, 1))
 
@@ -129,25 +138,11 @@ class Generalization(NNDLayout):
     def on_run(self):
         if self.ani:
             self.ani.event_source.stop()
-        n_epochs = 500
+        n_epochs = 100
         self.ani = FuncAnimation(self.figure, self.on_animate_v2, init_func=self.animate_init_v2, frames=n_epochs,
                                  interval=20, repeat=False, blit=True)
 
     def animate_init(self):
-        self.net_approx.set_data([], [])
-        return self.net_approx,
-
-    def animate_init_v2(self):
-        self.p = self.p.reshape(1, -1)
-        self.mu = mu_initial
-        self.RS = self.S1 * 1
-        self.RS1 = self.RS + 1
-        self.RSS = self.RS + self.S1
-        self.RSS1 = self.RSS + 1
-        self.RSS2 = self.RSS + self.S1 * 1
-        self.RSS3 = self.RSS2 + 1
-        self.RSS4 = self.RSS2 + 1
-        self.ii = np.eye(self.RSS4)
         self.net_approx.set_data([], [])
         return self.net_approx,
 
@@ -181,61 +176,94 @@ class Generalization(NNDLayout):
         self.net_approx.set_data(p, a)
         return self.net_approx,
 
+    def animate_init_v2(self):
+        self.init_params()
+        self.error_goal_reached = False
+        self.p = self.p.reshape(1, -1)
+        self.a1 = self.logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
+        self.a2 = self.purelin(np.dot(self.W2, self.a1) + self.b2)
+        self.e = self.f_to_approx(self.p) - self.a2
+        self.error_prev = np.dot(self.e, self.e.T).item()
+        self.mu = mu_initial
+        self.RS = self.S1 * 1
+        self.RS1 = self.RS + 1
+        self.RSS = self.RS + self.S1
+        self.RSS1 = self.RSS + 1
+        self.RSS2 = self.RSS + self.S1 * 1
+        self.RSS3 = self.RSS2 + 1
+        self.RSS4 = self.RSS2 + 1
+        self.ii = np.eye(self.RSS4)
+        self.net_approx.set_data([], [])
+        return self.net_approx,
+
     def on_animate_v2(self, idx):
+        """ Marqdt version """
 
-        a1 = self.logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
-        a2 = self.purelin(np.dot(self.W2, a1) + self.b2)
-        e = self.f_to_approx(self.p) - a2
-        error = np.dot(e, e.T).item()
-
-        # TODO: Look into this
         self.mu /= 10
-        if idx % 500 == 0:
-            self.mu = mu_initial
+
+        self.a1 = np.kron(self.a1, np.ones((1, 1)))
+        d2 = self.lin_delta(self.a2)
+        d1 = self.log_delta(self.a1, d2, self.W2)
+        jac1 = self.marq(np.kron(self.p, np.ones((1, 1))), d1)
+        jac2 = self.marq(self.a1, d2)
+        jac = np.hstack((jac1, d1.T))
+        jac = np.hstack((jac, jac2))
+        jac = np.hstack((jac, d2.T))
+        je = np.dot(jac.T, self.e.T)
+
+        # grad = np.sqrt(np.dot(je.T, je)).item()
+        # if grad < mingrad:
+        #     self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
+        #     return self.net_approx,
+
+        jj = np.dot(jac.T, jac)
+        # Can't get this operation to produce the exact same results as MATLAB...
+        dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+        dW1 = dw[:self.RS]
+        db1 = dw[self.RS:self.RSS]
+        dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
+        db2 = dw[self.RSS2].reshape(1, 1)
+
+        self.a1 = self.logsigmoid_stable(np.dot((self.W1 + dW1), self.p) + self.b1 + db1)
+        self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
+        self.e = self.f_to_approx(self.p) - self.a2
+        error = np.dot(self.e, self.e.T).item()
 
         while error >= self.error_prev:
 
             try:
 
-                a1 = np.kron(a1, np.ones((1, 1)))
-                d2 = self.lin_delta(a2)
-                d1 = self.log_delta(a1, d2, self.W2)
-                jac1 = self.marq(np.kron(self.p, np.ones((1, 1))), d1)
-                jac2 = self.marq(a1, d2)
-                jac = np.hstack((jac1, d1.T))
-                jac = np.hstack((jac, jac2))
-                jac = np.hstack((jac, d2.T))
-                je = np.dot(jac.T, e.T)
-
-                grad = np.sqrt(np.dot(je.T, je)).item()
-                if grad < mingrad:
-                    self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
-                    return self.net_approx,
-
-                # Can't get this operation to produce the exact same results as MATLAB...
-                dw = -np.dot(np.linalg.inv(np.dot(jac.T, jac) + self.mu * self.ii), je)
-                self.W1 += dw[:self.RS]
-                self.b1 += dw[self.RS:self.RSS]
-                self.W2 += dw[self.RSS:self.RSS2].reshape(1, -1)
-                self.b2 += dw[self.RSS2].reshape(1, 1)
-
-                a1 = self.logsigmoid_stable(np.dot(self.W1, self.p) + self.b1)
-                a2 = self.purelin(np.dot(self.W2, a1) + self.b2)
-                e = self.f_to_approx(self.p) - a2
-                error = np.dot(e, e.T).item()
-
                 self.mu *= 10
                 if self.mu > 1e10:
                     break
 
+                dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+                dW1 = dw[:self.RS]
+                db1 = dw[self.RS:self.RSS]
+                dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
+                db2 = dw[self.RSS2].reshape(1, 1)
+
+                self.a1 = self.logsigmoid_stable(np.dot((self.W1 + dW1), self.p) + self.b1 + db1)
+                self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
+                self.e = self.f_to_approx(self.p) - self.a2
+                error = np.dot(self.e, self.e.T).item()
+
             except Exception as e:
                 if str(e) == "Singular matrix":
+                    print("The matrix was singular... Increasing mu 10-fold")
                     self.mu *= 10
                 else:
                     raise e
 
         if error < self.error_prev:
+            self.W1 += dW1
+            self.b1 += db1
+            self.W2 += dW2
+            self.b2 += db2
             self.error_prev = error
 
-        self.net_approx.set_data(self.p.reshape(-1), a2.reshape(-1))
+        p = np.linspace(-2, 2, 100).reshape(1, -1)
+        a1 = self.logsigmoid_stable(np.dot(self.W1, p) + self.b1)
+        a2 = self.purelin(np.dot(self.W2, a1) + self.b2)
+        self.net_approx.set_data(p.reshape(-1), a2.reshape(-1))
         return self.net_approx,

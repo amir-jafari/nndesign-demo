@@ -20,11 +20,11 @@ F = (a[0, 0] * X ** 2 + a[0, 1] + a[1, 0] * X * Y + a[1, 1] * Y ** 2) / 2 + b[0]
 
 class SteepestDescentQuadratic(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(SteepestDescentQuadratic, self).__init__(w_ratio, h_ratio, main_menu=1)
+        super(SteepestDescentQuadratic, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(25, 160, 470, 470))
 
         self.fill_chapter("Steepest Descent for Quadratic", 9, " Click anywhere to start an\n initial guess. The gradient\n descent path will be shown\n"
                                                                " Modify the learning rate\n by moving the slide bar",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")  # TODO: Change icons
+                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
 
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.axes.contour(X, Y, F)
@@ -42,10 +42,10 @@ class SteepestDescentQuadratic(NNDLayout):
         self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 250 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 6)
+        self.slider_lr.setRange(0, 12)
         self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_lr.setTickInterval(1)
-        self.slider_lr.setValue(3)
+        self.slider_lr.setValue(6)
         self.wid_lr = QtWidgets.QWidget(self)
         self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
         self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 280 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
@@ -75,7 +75,7 @@ class SteepestDescentQuadratic(NNDLayout):
         self.canvas.draw()
 
     def slide(self):
-        self.lr = float(self.slider_lr.value()/100)
+        self.lr = float(self.slider_lr.value() / 200)
         self.label_lr.setText("lr: " + str(self.lr))
         self.animation_speed = int(self.slider_anim_speed.value()) * 100
         self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")

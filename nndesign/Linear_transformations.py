@@ -61,6 +61,12 @@ class LinearTransformations(NNDLayout):
         self.line_data_x, self.line_data_y = [], []
         self.line2 = None
         self.line_data_x2, self.line_data_y2 = [], []
+        self.axes_1.set_xticks([-1, -0.5, 0, 0.5])
+        self.axes_1.set_yticks([-1, -0.5, 0, 0.5])
+        self.axes_1.set_xlabel("$x$")
+        self.axes_1.xaxis.set_label_coords(1, -0.025)
+        self.axes_1.set_ylabel("$y$")
+        self.axes_1.yaxis.set_label_coords(-0.025, 1)
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
@@ -80,6 +86,12 @@ class LinearTransformations(NNDLayout):
         self.line2, = self.axes_2.plot([], linestyle="--")
         self.text_2 = self.axes_2.text(-0.7, 0, "")
         self.line_data_x2, self.line_data_y2 = [], []
+        self.axes_2.set_xticks([-1, -0.5, 0, 0.5])
+        self.axes_2.set_yticks([-1, -0.5, 0, 0.5])
+        self.axes_2.set_xlabel("$x$")
+        self.axes_2.xaxis.set_label_coords(1, -0.025)
+        self.axes_2.set_ylabel("$y$")
+        self.axes_2.yaxis.set_label_coords(-0.025, 1)
         self.canvas2.draw()
         self.canvas2.mpl_connect('button_press_event', self.on_mouseclick2)
 

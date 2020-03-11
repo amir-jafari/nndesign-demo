@@ -66,9 +66,9 @@ class SteepestDescent(NNDLayout):
         self.layout_lr.addWidget(self.slider_lr)
         self.wid_lr.setLayout(self.layout_lr)
 
-        self.animation_speed = 500
+        self.animation_speed = 0
         self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 500 ms")
+        self.label_anim_speed.setText("Animation Delay: 0 ms")
         self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
                                           self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
@@ -76,7 +76,7 @@ class SteepestDescent(NNDLayout):
         self.slider_anim_speed.setRange(0, 6)
         self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(5)
+        self.slider_anim_speed.setValue(0)
         self.wid_anim_speed = QtWidgets.QWidget(self)
         self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
         self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,

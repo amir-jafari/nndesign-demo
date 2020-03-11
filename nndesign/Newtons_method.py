@@ -33,6 +33,7 @@ class NewtonsMethod(NNDLayout):
         self.ani_1, self.ani_2, self.event, self.x, self.y = None, None, None, None, None
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
+        self.axes_1.text(-0.9, 1.7, ">Click me<")
         self.axes_1.contour(X, Y, F)
         self.axes_1.set_title("Function F", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)

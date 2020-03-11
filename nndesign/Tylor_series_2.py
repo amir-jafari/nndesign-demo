@@ -14,8 +14,9 @@ from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
 
 
-x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
-              0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])
+# x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
+#               0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])
+x = np.linspace(-2, 2, 1000)
 y = np.copy(x)
 X, Y = np.meshgrid(x, y)
 F = (Y - X) ** 4 + 8 * X * Y - X + Y + 3
@@ -93,6 +94,12 @@ class TylorSeries2(NNDLayout):
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
         self.axes1_point, = self.axes_1.plot([], "*")
+        self.axes_1.set_xticks([-2, -1, 0, 1])
+        self.axes_1.set_yticks([-2, -1, 0, 1])
+        self.axes_1.set_xlabel("$x$")
+        self.axes_1.xaxis.set_label_coords(1, -0.025)
+        self.axes_1.set_ylabel("$y$")
+        self.axes_1.yaxis.set_label_coords(-0.025, 1)
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
@@ -100,22 +107,40 @@ class TylorSeries2(NNDLayout):
         self.axes_2.set_title("Approximation", fontdict={'fontsize': 10})
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
+        self.axes_2.set_xticks([-2, -1, 0, 1])
+        self.axes_2.set_yticks([-2, -1, 0, 1])
+        self.axes_2.set_xlabel("$x$")
+        self.axes_2.xaxis.set_label_coords(1, -0.025)
+        self.axes_2.set_ylabel("$y$")
+        self.axes_2.yaxis.set_label_coords(-0.025, 1)
         self.axes2_point, = self.axes_2.plot([], "*")
         self.canvas2.draw()
 
         self.axis1.set_title("Function", fontdict={'fontsize': 10})
         self.axis1.plot_surface(XX, YY, FF)
+        self.axis1.set_xticks([-2, -1, 0, 1])
+        self.axis1.set_yticks([-2, -1, 0, 1])
+        self.axis1.set_xlabel("$x$")
+        self.axis1.xaxis.set_label_coords(1, -0.025)
+        self.axis1.set_ylabel("$y$")
+        self.axis1.yaxis.set_label_coords(-0.025, 1)
         self.axis1.view_init(30, 60)
         self.canvas3.draw()
 
         self.axis2.set_title("Approximation", fontdict={'fontsize': 10})
+        self.axis2.set_xticks([-2, -1, 0, 1])
+        self.axis2.set_yticks([-2, -1, 0, 1])
+        self.axis2.set_xlabel("$x$")
+        self.axis2.xaxis.set_label_coords(1, -0.025)
+        self.axis2.set_ylabel("$y$")
+        self.axis2.yaxis.set_label_coords(-0.025, 1)
         self.axis2.view_init(30, 60)
         self.canvas4.draw()
 
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:
 
-            # Checks whether the clicked point is in the contour
+            """# Checks whether the clicked point is in the contour
             x_event, y_event = event.xdata, event.ydata
             if round(x_event, 1) * 10 % 2 == 1:
                 x_event += 0.06
@@ -126,7 +151,10 @@ class TylorSeries2(NNDLayout):
                 if round(y_event, 1) * 10 % 2 == 1:
                     y_event = event.ydata - 0.06
             x_event = round(x_event, 1)
-            y_event = round(y_event, 1)
+            y_event = round(y_event, 1)"""
+            d_x, d_y = event.xdata - x, event.ydata - y
+            x_event = x[np.argmin(np.abs(d_x))]
+            y_event = y[np.argmin(np.abs(d_y))]
             if F[np.bitwise_and(X == x_event, Y == y_event)].item() == 12:
                 return
 
@@ -170,7 +198,7 @@ class TylorSeries2(NNDLayout):
         while self.axis2.collections:
             for collection in self.axis2.collections:
                 collection.remove()
-        # Draws new contour
+        # Draws new surface
         dXX, dYY = XX - self.x, YY - self.y
         if self.order == 0:
             Fa = np.zeros(XX.shape) + Fo

@@ -17,38 +17,10 @@ class ReciprocalBasis(NNDLayout):
                           PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.set_title("Basis Vectors", fontdict={'fontsize': 10})
-        self.axes_1.set_xlim(-2, 2)
-        self.axes_1.set_ylim(-2, 2)
-        self.axes1_points = []
-        self.axes1_v1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
-        self.axes1_v2 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, color="g")
-        self.text_v1, self.text_v2 = None, None
-        self.axes1_s1 = self.axes_1.quiver([0], [0], [1], [0], units="xy", scale=1)
-        self.axes_1.text(1.2, 0, "s1")
-        self.axes1_s2 = self.axes_1.quiver([0], [0], [0], [1], units="xy", scale=1)
-        self.axes_1.text(0, 1.2, "s1")
-        self.axes1_x = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, color="r")
-        self.text_x = None
-        self.axes1_proj = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0)
-        self.axes1_proj1 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0)
-        self.axes1_proj_line, = self.axes_1.plot([], "-")
-        self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
-
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
-        self.axes_2.set_title("Vector Expansion", fontdict={'fontsize': 10})
-        self.axes_2.set_xlim(-2, 2)
-        self.axes_2.set_ylim(-2, 2)
-        self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
-        self.axes2_v2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
-        self.text_v1_2, self.text_v2_2 = None, None
-        self.axes2_x = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="r")
-        self.text_x_2 = None
-        self.axes2_line1, = self.axes_2.plot([], "-")
-        self.axes2_line1.set_color("black")
-        self.axes2_line2, = self.axes_2.plot([], "-")
-        self.axes2_line2.set_color("black")
+        self.fill_plots()
+        self.canvas.draw()
         self.canvas2.draw()
 
         self.button = QtWidgets.QPushButton("Expand", self)
@@ -70,6 +42,54 @@ class ReciprocalBasis(NNDLayout):
         self.label_warning.setText("")
         self.label_warning.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_warning.setGeometry(510 * self.w_ratio, 550 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
+
+    def fill_plots(self):
+
+        self.axes_1.set_title("Basis Vectors", fontdict={'fontsize': 10})
+        self.axes_1.set_xlim(-2, 2)
+        self.axes_1.set_ylim(-2, 2)
+        self.axes1_points = []
+        self.axes1_v1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
+        self.axes1_v2 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
+        self.text_v1, self.text_v2 = None, None
+        self.axes1_s1 = self.axes_1.quiver([0], [0], [1], [0], units="xy", scale=1)
+        self.axes_1.text(1.2, 0, "s1")
+        self.axes1_s2 = self.axes_1.quiver([0], [0], [0], [1], units="xy", scale=1)
+        self.axes_1.text(0, 1.2, "s1")
+        self.axes1_x = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, color="r")
+        self.text_x = None
+        self.axes1_proj = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, headlength=0, headwidth=0,
+                                             headaxislength=0)
+        self.axes1_proj1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, headlength=0, headwidth=0,
+                                              headaxislength=0)
+        self.axes1_proj_line, = self.axes_1.plot([], "-")
+        self.axes_1.set_xticks([-2, -1, 0, 1])
+        self.axes_1.set_yticks([-2, -1, 0, 1])
+        self.axes_1.set_xlabel("$x$")
+        self.axes_1.xaxis.set_label_coords(1, -0.025)
+        self.axes_1.set_ylabel("$y$")
+        self.axes_1.yaxis.set_label_coords(-0.025, 1)
+
+        self.axes_2.set_title("Vector Expansion", fontdict={'fontsize': 10})
+        self.axes_2.set_xlim(-2, 2)
+        self.axes_2.set_ylim(-2, 2)
+        self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
+        self.axes2_v2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
+        self.text_v1_2, self.text_v2_2 = None, None
+        self.axes2_x = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="r")
+        self.text_x_2 = None
+        self.axes_2_l1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="black")
+        self.axes_2_l2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="black")
+        # self.axes2_line1, = self.axes_2.plot([], "-")
+        # self.axes2_line1.set_color("black")
+        # self.axes2_line2, = self.axes_2.plot([], "-")
+        # self.axes2_line2.set_color("black")
+        self.axes_2.set_xticks([-2, -1, 0, 1])
+        self.axes_2.set_yticks([-2, -1, 0, 1])
+        self.axes_2.set_xlabel("$x$")
+        self.axes_2.xaxis.set_label_coords(1, -0.025)
+        self.axes_2.set_ylabel("$y$")
+        self.axes_2.yaxis.set_label_coords(-0.025, 1)
 
     def on_mouseclick1(self, event):
         if event.xdata != None and event.xdata != None:
@@ -121,9 +141,13 @@ class ReciprocalBasis(NNDLayout):
         xv = np.dot(np.linalg.inv(b), x)
         explanation += "The expansion for x in terms of \nv1 and v2 is:\n x = {} * v1 + {} * v2".format(round(xv[0, 0], 2), round(xv[1, 0], 2))
         self.label_explanation.setText(explanation)
-        self.axes2_line1.set_data([0, xv[0, 0] * self.axes1_points[0][0]], [0, xv[0, 0] * self.axes1_points[0][1]])
-        self.axes2_line2.set_data([xv[0, 0] * self.axes1_points[0][0], self.axes1_points[2][0]],
-                                  [xv[0, 0] * self.axes1_points[0][1], self.axes1_points[2][1]])
+        # self.axes2_line1.set_data([0, xv[0, 0] * self.axes1_points[0][0]], [0, xv[0, 0] * self.axes1_points[0][1]])
+        # self.axes2_line2.set_data([xv[0, 0] * self.axes1_points[0][0], self.axes1_points[2][0]],
+        #                           [xv[0, 0] * self.axes1_points[0][1], self.axes1_points[2][1]])
+        self.axes_2_l1.set_UVC(xv[0, 0] * self.axes1_points[0][0], xv[0, 0] * self.axes1_points[0][1])
+        self.axes_2_l2 = self.axes_2.quiver([xv[0, 0] * self.axes1_points[0][0]], [xv[0, 0] * self.axes1_points[0][1]],
+                                            [self.axes1_points[2][0] - xv[0, 0] * self.axes1_points[0][0]], [self.axes1_points[2][1] - xv[0, 0] * self.axes1_points[0][1]],
+                                            units="xy", scale=1, color="black")
         # self.axes1_v1.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
         # self.axes1_v2.set_UVC(self.axes1_points[1][0], self.axes1_points[1][1])
         self.axes2_v1.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
@@ -145,37 +169,12 @@ class ReciprocalBasis(NNDLayout):
         mult_factor = 1.4 if self.axes1_points[2][0] < 0 and self.axes1_points[2][1] < 0 else 1.2
         self.text_x_2 = self.axes_2.text(self.axes1_points[2][0] * mult_factor,
                                          self.axes1_points[2][1] * mult_factor, "x")
-
         self.canvas.draw()
         self.canvas2.draw()
 
     def clear_all(self):
-        self.axes1_v1.set_UVC(0, 0)
-        self.axes1_v2.set_UVC(0, 0)
-        self.axes2_v1.set_UVC(0, 0)
-        self.axes2_v2.set_UVC(0, 0)
-        self.axes1_x.set_UVC(0, 0)
-        self.axes2_x.set_UVC(0, 0)
-        self.axes1_points = []
-        self.axes2_line1.set_data([], [])
-        self.axes2_line2.set_data([], [])
-        if self.text_v1:
-            self.text_v1.remove()
-            self.text_v1 = None
-        if self.text_v2:
-            self.text_v2.remove()
-            self.text_v2 = None
-        if self.text_x:
-            self.text_x.remove()
-            self.text_x = None
-        if self.text_v1_2:
-            self.text_v1_2.remove()
-            self.text_v1_2 = None
-        if self.text_v2_2:
-            self.text_v2_2.remove()
-            self.text_v2_2 = None
-        if self.text_x_2:
-            self.text_x_2.remove()
-            self.text_x_2 = None
+        self.axes_1.clear()
+        self.axes_2.clear()
+        self.fill_plots()
         self.canvas.draw()
         self.canvas2.draw()

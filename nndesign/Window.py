@@ -21,6 +21,8 @@ from Gram_Schmidt import GramSchmidt
 from Reciprocal_basis import ReciprocalBasis
 # ------ Chapter 6 --------
 from Linear_transformations import LinearTransformations
+# ------ Chapter 7 --------
+from Supervised_Hebb import SupervisedHebb
 # ------ Chapter 8 --------
 from Tylor_series_1 import TylorSeries1
 from Tylor_series_2 import TylorSeries2
@@ -266,7 +268,9 @@ class MainWindowNN(NNDLayout):
 
     def chapter7(self, idx):
         self.comboBox2.setCurrentIndex(0)
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = SupervisedHebb(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
 
     def chapter8(self, idx):
         self.comboBox3.setCurrentIndex(0)
