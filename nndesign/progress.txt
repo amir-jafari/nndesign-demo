@@ -1,6 +1,8 @@
 Book 1: 11 / 43 (or 11 / 72 if we count the chapters after chapter 14)
 
-TODO: Main window same shape as the rest
+google sheets
+
+TODO: Main window 1/4 to 1/4, try square, same shape as the rest - 
 When it says Done, it is not taking into account final clean up - Leaving that for when we decide on exact dimensions.
 
 - Chapter 2:
@@ -35,7 +37,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 
 - Chapter 9:
     - Steepest Descent for Quadratic --> Done.
-    - Method Comparison --> Done.
+    - Method Comparison --> Done.  TODO: Make clickable two plots
     - Newton's Method --> Done.
     - Steepest Descent --> Done.
 
