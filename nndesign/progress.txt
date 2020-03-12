@@ -24,10 +24,11 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 
 - Chapter 6:
     - Linear Transformations -> Done.
-    - Eigenvector Game -> TODO
+    - Eigenvector Game -> Main functionality done. Need :D face and make it look better overall. TODO
+      Can also use this https://doc.qt.io/qtforpython/PySide2/QtMultimedia/QSound.html to include sound
 
 - Chapter 7:
-    - Suppervised Hebb --> No idea how this work so putting it off for now. TODO
+    - Suppervised Hebb --> Almost done. Plotting the weights is left
 
 - Chapter 8:
     - Taylor Series 1 --> Done.

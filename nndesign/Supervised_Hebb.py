@@ -11,6 +11,7 @@ import matplotlib.patches as patches
 import matplotlib.collections as coll
 from matplotlib import cm
 from matplotlib.colors import ListedColormap
+import matplotlib.pyplot as plt
 
 from nndesign_layout import NNDLayout
 
@@ -33,6 +34,10 @@ class SupervisedHebb(NNDLayout):
         self.fill_chapter("Supervised Hebb", 7, "TODO",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
 
+        self.label_pattern1 = QtWidgets.QLabel(self)
+        self.label_pattern1.setText("Pattern 1")
+        self.label_pattern1.setFont(QtGui.QFont("Times New Roman", 14))
+        self.label_pattern1.setGeometry(75 * self.w_ratio, 105 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
         self.figure1 = Figure()
         self.canvas1 = FigureCanvas(self.figure1)
         self.toolbar1 = NavigationToolbar(self.canvas1, self)
@@ -50,7 +55,7 @@ class SupervisedHebb(NNDLayout):
                 if self.pattern11[yi, xi] == 1:
                     sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="yellow", alpha=0.5)
+                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                 self.axis1.add_patch(sq)
         self.axis1.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
         self.axis1.axis("off")
@@ -59,6 +64,10 @@ class SupervisedHebb(NNDLayout):
 
         # --
 
+        self.label_pattern2 = QtWidgets.QLabel(self)
+        self.label_pattern2.setText("Pattern 2")
+        self.label_pattern2.setFont(QtGui.QFont("Times New Roman", 14))
+        self.label_pattern2.setGeometry(235 * self.w_ratio, 105 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
         self.figure2 = Figure(frameon=False)
         self.canvas2 = FigureCanvas(self.figure2)
         self.toolbar2 = NavigationToolbar(self.canvas2, self)
@@ -76,7 +85,7 @@ class SupervisedHebb(NNDLayout):
                 if self.pattern22[yi, xi] == 1:
                     sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="yellow", alpha=0.5)
+                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                 self.axis2.add_patch(sq)
         self.axis2.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
         self.axis2.axis("off")
@@ -85,6 +94,10 @@ class SupervisedHebb(NNDLayout):
 
         # --
 
+        self.label_pattern3 = QtWidgets.QLabel(self)
+        self.label_pattern3.setText("Pattern 3")
+        self.label_pattern3.setFont(QtGui.QFont("Times New Roman", 14))
+        self.label_pattern3.setGeometry(390 * self.w_ratio, 105 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
         self.figure3 = Figure()
         self.canvas3 = FigureCanvas(self.figure3)
         self.toolbar3 = NavigationToolbar(self.canvas3, self)
@@ -102,7 +115,7 @@ class SupervisedHebb(NNDLayout):
                 if self.pattern33[yi, xi] == 1:
                     sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="yellow", alpha=0.5)
+                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                 self.axis3.add_patch(sq)
         self.axis3.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
         self.axis3.axis("off")
@@ -111,6 +124,10 @@ class SupervisedHebb(NNDLayout):
 
         # ---
 
+        self.label_pattern4 = QtWidgets.QLabel(self)
+        self.label_pattern4.setText("Test Pattern")
+        self.label_pattern4.setFont(QtGui.QFont("Times New Roman", 14))
+        self.label_pattern4.setGeometry(115 * self.w_ratio, 325 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
         self.figure4 = Figure()
         self.canvas4 = FigureCanvas(self.figure4)
         self.toolbar4 = NavigationToolbar(self.canvas4, self)
@@ -128,7 +145,7 @@ class SupervisedHebb(NNDLayout):
                 if self.pattern44[yi, xi] == 1:
                     sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="gray")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="yellow", alpha=0.5)
+                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                 self.axis4.add_patch(sq)
         self.axis4.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
         self.axis4.axis("off")
@@ -137,6 +154,10 @@ class SupervisedHebb(NNDLayout):
 
         # ---
 
+        self.label_pattern5 = QtWidgets.QLabel(self)
+        self.label_pattern5.setText("Response Pattern")
+        self.label_pattern5.setFont(QtGui.QFont("Times New Roman", 14))
+        self.label_pattern5.setGeometry(320 * self.w_ratio, 325 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
         self.figure5 = Figure()
         self.canvas5 = FigureCanvas(self.figure5)
         self.toolbar5 = NavigationToolbar(self.canvas5, self)
@@ -152,7 +173,7 @@ class SupervisedHebb(NNDLayout):
                 if self.pattern11[yi, xi] == 1:
                     sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="red")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="yellow", alpha=0.5)
+                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                 self.axis5.add_patch(sq)
         self.axis5.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
         self.axis5.axis("off")
@@ -164,7 +185,7 @@ class SupervisedHebb(NNDLayout):
         self.comboBox1.addItems(["Hebb", 'Pseudoinverse'])
         self.label_f = QtWidgets.QLabel(self)
         self.label_f.setText("Rule")
-        self.label_f.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
+        self.label_f.setFont(QtGui.QFont("Times New Roman", 14, italic=True))
         self.label_f.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 550 * self.h_ratio,
                                  150 * self.w_ratio, 100 * self.h_ratio)
         self.comboBox1.currentIndexChanged.connect(self.change_rule)
@@ -184,16 +205,22 @@ class SupervisedHebb(NNDLayout):
 
     def on_run(self):
 
-        print("TODO")
+        pattern = np.array([self.pattern1, self.pattern2, self.pattern3]).T * 2 - 1
+        if self.rule == 0:
+            w = np.dot(pattern, pattern.T)
+        elif self.rule == 1:
+            w = np.dot(pattern, np.linalg.pinv(pattern))
+        plt.imshow(w)
+        plt.title("Network Weights")
+        plt.xlabel("Input")
+        plt.ylabel("Neuron")
+        # TODO: Make actual squares with difference in size
 
     def on_mouseclick1(self, event):
         if event.xdata != None and event.xdata != None:
             d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
             d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
             xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
-            print(d_x, xxx)
-            print(d_y, yyy)
-            print("---")
             while self.axis1.patches:
                 self.axis1.patches.pop()
             if self.pattern11[yyy, xxx] == 1:
@@ -206,7 +233,7 @@ class SupervisedHebb(NNDLayout):
                     if self.pattern11[yi, xi] == 1:
                         sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="yellow", alpha=0.5)
+                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                     self.axis1.add_patch(sq)
             self.canvas1.draw()
             self.response()
@@ -228,7 +255,7 @@ class SupervisedHebb(NNDLayout):
                     if self.pattern22[yi, xi] == 1:
                         sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="yellow", alpha=0.5)
+                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                     self.axis2.add_patch(sq)
             self.canvas2.draw()
             self.response()
@@ -250,7 +277,7 @@ class SupervisedHebb(NNDLayout):
                     if self.pattern33[yi, xi] == 1:
                         sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="yellow", alpha=0.5)
+                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                     self.axis3.add_patch(sq)
             self.canvas3.draw()
             self.response()
@@ -272,7 +299,7 @@ class SupervisedHebb(NNDLayout):
                     if self.pattern44[yi, xi] == 1:
                         sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="gray")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="yellow", alpha=0.5)
+                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                     self.axis4.add_patch(sq)
             self.canvas4.draw()
             self.response()
@@ -292,7 +319,7 @@ class SupervisedHebb(NNDLayout):
                 if a[yi, xi] > 0:
                     sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="red")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="yellow", alpha=0.5)
+                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                 self.axis5.add_patch(sq)
         self.canvas5.draw()
 

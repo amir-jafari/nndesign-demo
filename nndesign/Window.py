@@ -21,6 +21,7 @@ from Gram_Schmidt import GramSchmidt
 from Reciprocal_basis import ReciprocalBasis
 # ------ Chapter 6 --------
 from Linear_transformations import LinearTransformations
+from Eigenvector_game import EigenvectorGame
 # ------ Chapter 7 --------
 from Supervised_Hebb import SupervisedHebb
 # ------ Chapter 8 --------
@@ -265,6 +266,9 @@ class MainWindowNN(NNDLayout):
         if idx == 1:
             self.chapter_window1 = LinearTransformations(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window2 = EigenvectorGame(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
 
     def chapter7(self, idx):
         self.comboBox2.setCurrentIndex(0)
