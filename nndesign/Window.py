@@ -45,6 +45,7 @@ from Generalization import Generalization
 # ------ Chapter 12 -------
 from Steepest_descent_backprop_1 import SteepestDescentBackprop1
 from Steepest_descent_backprop_2 import SteepestDescentBackprop2
+from Momentum import Momentum
 # ------ Chapter 13 -------
 from Early_stopping import EarlyStopping
 from Regularization import Regularization
@@ -340,6 +341,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 2:
             self.chapter_window2 = SteepestDescentBackprop2(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
+        elif idx == 3:
+            self.chapter_window3 = Momentum(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
         else:
             print("TODO")
 

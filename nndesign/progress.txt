@@ -57,7 +57,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 - Chapter 12:
     - Steepest Descent #1 --> Done.
     - Steepest Descent #2 --> Done.
-    - Momentum --> No gonna do this till I fix the previous ones...
+    - Momentum --> Done.
     - Variable Learning Rate --> Getting error on MATLAB.
     - CG Line Search --> Getting error on MATLAB.
     - Conjugate Gradient --> Getting error on MATLAB.
