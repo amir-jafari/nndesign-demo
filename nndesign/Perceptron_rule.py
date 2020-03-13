@@ -47,15 +47,18 @@ class PerceptronRule(NNDLayout):
         self.miss_line_pos, = self.axes.plot([], 'ro')
         self.miss_line_neg, = self.axes.plot([], 'rs')
         self.highlight_data, = self.axes.plot([], "*", markersize=16)
+        self.highlight_data_miss, = self.axes.plot([], "*", markersize=16, color="red")
         self.decision, = self.axes.plot([], 'r-', label="Decision Boundary")
-        self.axes.legend(loc='lower left', fontsize=8, numpoints=1, ncol=3, bbox_to_anchor=(-0.1, -.24, 1.1, -.280))
+        self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=2,
+                         bbox_to_anchor=(0, -.28, 1, -.280), mode='expand')
+        # self.axes.legend(loc='lower left', fontsize=8, numpoints=1, ncol=3, bbox_to_anchor=(-0.1, -.24, 1.1, -.280))
         self.axes.set_title("Single Neuron Perceptron")
         self.canvas.draw()
         # Add event handler for a mouseclick in the plot
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
         self.epoch_label = QtWidgets.QLabel(self)
-        self.epoch_label.setText("Epochs so far: 0")
+        self.epoch_label.setText("Iterations so far: 0")
         self.epoch_label.setFixedHeight(20)
         self.wid2 = QtWidgets.QWidget(self)
         self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -68,14 +71,14 @@ class PerceptronRule(NNDLayout):
         self.error_label.setFixedHeight(20)
         self.wid4 = QtWidgets.QWidget(self)
         self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 540 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.wid4.setGeometry(self.x_chapter_usual * self.w_ratio, 580 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout4.addWidget(self.error_label)
         self.wid4.setLayout(self.layout4)
 
         self.warning_label = QtWidgets.QLabel(self)
         self.warning_label.setText("")
         # self.warning_label.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
-        self.warning_label.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 520 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
+        self.warning_label.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 550 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
 
         self.epr_label = QtWidgets.QLabel("Epochs to run")
         wid6 = QtWidgets.QWidget(self)
@@ -118,9 +121,13 @@ class PerceptronRule(NNDLayout):
         self.clear_button.setGeometry(self.x_chapter_button * self.w_ratio, 300 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.clear_button.clicked.connect(self.on_clear)
 
-        self.ani = None
+        self.ani1, self.ani2 = None, None
         self.initialize_weights()
         self.learn = None
+
+        self.initialize_weights()
+        self.draw_decision_boundary()
+        self.canvas.draw()
 
     def draw_data(self):
 
@@ -154,25 +161,29 @@ class PerceptronRule(NNDLayout):
         # self.canvas.draw()
 
     def on_mouseclick(self, event):
-        if self.ani:
-            self.ani.event_source.stop()
         """Add an item to the plot"""
         if event.xdata != None and event.xdata != None:
             self.data.append((event.xdata, event.ydata, POS if event.button == 1 else NEG))
-        self.data_missclasified, error = [], 0
-        for xy in self.data:
-            t_hat = self.run_forward(np.array(xy[0:2]))
-            if t_hat != xy[2]:
-                self.data_missclasified.append(True)
-                error += 1
-            else:
-                self.data_missclasified.append(False)
-        self.draw_data()
-        self.canvas.draw()
+            if self.ani1:
+                self.ani1.event_source.stop()
+            if self.ani2:
+                self.ani2.event_source.stop()
+            self.data_missclasified, error = [], 0
+            for xy in self.data:
+                t_hat = self.run_forward(np.array(xy[0:2]))
+                if t_hat != xy[2]:
+                    self.data_missclasified.append(True)
+                    error += 1
+                else:
+                    self.data_missclasified.append(False)
+            self.draw_data()
+            self.canvas.draw()
 
     def on_clear(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        if self.ani1:
+            self.ani1.event_source.stop()
+        if self.ani2:
+            self.ani2.event_source.stop()
         self.data = []
         self.clear_decision_boundary()
         self.initialize_weights()
@@ -183,16 +194,18 @@ class PerceptronRule(NNDLayout):
 
     def update_run_status(self):
         if self.total_epochs == 0:
-            self.epoch_label.setText("Epochs so far: 0")
+            self.epoch_label.setText("Iterations so far: 0")
             self.error_label.setText("Error: ---")
         else:
-            self.epoch_label.setText("Epochs so far: {}".format(self.total_epochs))
+            self.epoch_label.setText("Iterations so far: {}".format(self.total_epochs))
             self.error_label.setText("Error: {}".format(self.total_error))
 
     def on_run(self):
 
-        if self.ani:
-            self.ani.event_source.stop()
+        if self.ani1:
+            self.ani1.event_source.stop()
+        if self.ani2:
+            self.ani2.event_source.stop()
 
         if int(self.epochs_per_run.currentText()) > 1:
 
@@ -235,26 +248,30 @@ class PerceptronRule(NNDLayout):
         else:
 
             self.learn = False
-            self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init,
-                                     frames=len(self.data) * 2 + 1,
-                                     interval=1000, repeat=False, blit=True)
+            self.ani1 = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init,
+                                      frames=len(self.data) * 2 + 1,
+                                      interval=1000, repeat=False, blit=False)
             self.canvas.draw()
 
     def on_run_2(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        if self.ani1:
+            self.ani1.event_source.stop()
+        if self.ani2:
+            self.ani2.event_source.stop()
         self.learn = False
-        self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=len(self.data) * 2 + 1,
-                                 interval=1000, repeat=False, blit=True)
+        self.ani1 = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=len(self.data) * 2 + 1,
+                                  interval=1000, repeat=False, blit=False)
         self.canvas.draw()
 
     def on_run_3(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        if self.ani1:
+            self.ani1.event_source.stop()
+        if self.ani2:
+            self.ani2.event_source.stop()
         self.learn = True
         random.shuffle(self.data)
-        self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=3,
-                                 interval=1000, repeat=False, blit=True)
+        self.ani2 = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=3,
+                                  interval=1000, repeat=False, blit=False)
         self.canvas.draw()
 
     def animate_init(self):
@@ -266,23 +283,24 @@ class PerceptronRule(NNDLayout):
         self.all_t_hat = np.array([self.run_forward(np.array(xy[0:2])) for xy in self.data])
         self.total_error = abs(np.array([t[2] for t in self.data]) - self.all_t_hat).sum()
         # self.canvas.draw()
-        return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data
+        return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
 
     def on_animate(self, idx):
         """ GD version """
 
         if len(self.data) < 2:
             self.warning_label.setText("Please select at least two\ndata points before training")
-            return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data
+            return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
         else:
             if len(np.unique([cls[2] for cls in self.data])) == 1:
                 self.warning_label.setText("Please select at least one\ndata point of each class")
-                return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data
+                return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
             else:
                 self.warning_label.setText("")
 
                 if self.total_error == 0:
-                    return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data
+                    self.warning_label.setText("The error is 0! Learning or\nTraining will have no effect")
+                    return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
 
                 # training = self.data.copy()
                 # np.random.shuffle(training)
@@ -293,14 +311,24 @@ class PerceptronRule(NNDLayout):
                 # else:
                 if self.learn and idx == 2:
                     self.highlight_data.set_data([], [])
-                    return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data
+                    self.highlight_data_miss.set_data([], [])
+                    self.draw_decision_boundary()
+                    return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
                 if idx == len(self.data) * 2:
                     self.highlight_data.set_data([], [])
-                    return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data
+                    self.highlight_data_miss.set_data([], [])
+                    self.draw_decision_boundary()
+                    return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
                 else:
                     if idx % 2 == 0:
-                        self.highlight_data.set_data([self.data[int(idx / 2)][0]], [self.data[int(idx / 2)][1]])
+                        t_hat = self.run_forward(np.array(self.data[int(idx / 2)][0:2]))
+                        if t_hat != self.data[int(idx / 2)][2]:
+                            self.highlight_data_miss.set_data([self.data[int(idx / 2)][0]], [self.data[int(idx / 2)][1]])
+                        else:
+                            self.highlight_data.set_data([self.data[int(idx / 2)][0]], [self.data[int(idx / 2)][1]])
                     else:
+                        self.highlight_data.set_data([], [])
+                        self.highlight_data_miss.set_data([], [])
                         self.train_one_iteration(np.array(self.data[idx // 2][0:2]), self.data[idx // 2][2])
                         self.total_epochs += 1
 
@@ -320,23 +348,28 @@ class PerceptronRule(NNDLayout):
                         self.data_missclasified.append(False)
                 self.draw_data()
 
-                self.epoch_label.setText("Epochs so far: {}".format(self.total_epochs))
+                self.epoch_label.setText("Iterations so far: {}".format(self.total_epochs))
                 self.error_label.setText("Error: {}".format(self.total_error))
 
-                return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data
+                return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
 
     def on_reset(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        if self.ani1:
+            self.ani1.event_source.stop()
+        if self.ani2:
+            self.ani2.event_source.stop()
         self.initialize_weights()
         self.total_epochs = 0
         self.update_run_status()
         self.clear_decision_boundary()
+        self.draw_decision_boundary()
         self.canvas.draw()
 
     def on_undo_mouseclick(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        if self.ani1:
+            self.ani1.event_source.stop()
+        if self.ani2:
+            self.ani2.event_source.stop()
         if self.data:
             self.data.pop()
             self.draw_data()
@@ -365,7 +398,9 @@ class PerceptronRule(NNDLayout):
                (self.Weights[1] if self.Weights[1] != 0 else .000001)
 
     def initialize_weights(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        if self.ani1:
+            self.ani1.event_source.stop()
+        if self.ani2:
+            self.ani2.event_source.stop()
         self.Weights = (np.random.random(self.R) - 0.5) * 20
         self.bias = (np.random.random(self.S) - 0.5) * 20
