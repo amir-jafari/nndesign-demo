@@ -38,7 +38,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 
 - Chapter 9:
     - Steepest Descent for Quadratic --> Done.
-    - Method Comparison --> Done.  TODO: Make clickable two plots
+    - Method Comparison --> Done.
     - Newton's Method --> Done.
     - Steepest Descent --> Done.
 

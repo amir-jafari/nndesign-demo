@@ -35,6 +35,7 @@ class ComparisonOfMethods(NNDLayout):
         self.axes_1.set_ylim(-2, 2)
         self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data_1, self.y_data_1 = [], []
+        self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.canvas.draw()
 
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
