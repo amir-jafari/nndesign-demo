@@ -55,8 +55,8 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Generalization  --> Done.
 
 - Chapter 12:
-    - Steepest Descent #1 --> Almost done - don't know why second and third thing don't behave correctly... TODO
-    - Steepest Descent #2 --> Idem. TODO.
+    - Steepest Descent #1 --> Done.
+    - Steepest Descent #2 --> Done.
     - Momentum --> No gonna do this till I fix the previous ones...
     - Variable Learning Rate --> Getting error on MATLAB.
     - CG Line Search --> Getting error on MATLAB.

@@ -45,7 +45,7 @@ class SteepestDescentBackprop1(NNDLayout):
 
         self.fill_chapter("Steepest Descent for Quadratic", 9, " Click anywhere to start an\n initial guess. The gradient\n descent path will be shown\n"
                                                                " Modify the learning rate\n by moving the slide bar",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")  # TODO: Change icons
+                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)  # TODO: Change icons
 
         self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
@@ -79,7 +79,7 @@ class SteepestDescentBackprop1(NNDLayout):
         self.axes2.set_title("Sum Sq. Error", fontdict={'fontsize': 10})
         
         self.pair_of_params = 1
-        self.pair_params = [["W1(1, 1)", "W2(1, 1)"], ["W1(1, 1)", "W2(1, 1)"], ["W1(1, 1)", "W2(1, 1)"]]
+        self.pair_params = [["W1(1, 1)", "W2(1, 1)"], ["W1(1, 1)", "b1(1)"], ["b1(1)", "b1(2)"]]
         self.plot_data()
 
         self.x, self.y = None, None
@@ -139,18 +139,26 @@ class SteepestDescentBackprop1(NNDLayout):
         x1, y1 = np.meshgrid(f_data["x1"], f_data["y1"])
         x2, y2 = np.meshgrid(f_data["x2"], f_data["y2"])
         self.axes.contour(x1, y1, f_data["E1"], list(f_data["levels"].reshape(-1)))
-        self.axes2.plot_surface(x2, y2, f_data["E2"])
+        self.axes2.plot_surface(x2, y2, f_data["E2"], color="blue")
         if self.pair_of_params == 1:
             self.axes.set_xlim(-5, 15)
             self.axes.set_ylim(-5, 15)
+            self.axes.set_xticks([-5, 0, 5, 10])
+            self.axes.set_yticks([-5, 0, 5, 10])
         elif self.pair_of_params == 2:
             self.axes.set_xlim(-10, 30)
             self.axes.set_ylim(-20, 10)
+            self.axes.set_xticks([-10, 0, 10, 20])
+            self.axes.set_yticks([-20, -15, -10, -5, 0, 5])
         elif self.pair_of_params == 3:
             self.axes.set_xlim(-10, 10)
             self.axes.set_ylim(-10, 10)
-        self.axes.set_xlabel(self.pair_params[self.pair_of_params - 1][0])
-        self.axes.set_ylabel(self.pair_params[self.pair_of_params - 1][1])
+            self.axes.set_xticks([-10, -5, 0, 5])
+            self.axes.set_xticks([-10, -5, 0, 5])
+        self.axes.set_xlabel(self.pair_params[self.pair_of_params - 1][0], fontsize=8)
+        self.axes.xaxis.set_label_coords(0.95, -0.025)
+        self.axes.set_ylabel(self.pair_params[self.pair_of_params - 1][1], fontsize=8)
+        self.axes.yaxis.set_label_coords(-0.025, 0.95)
         self.axes2.set_xlabel(self.pair_params[self.pair_of_params - 1][0])
         self.axes2.set_ylabel(self.pair_params[self.pair_of_params - 1][1])
         # self.axes2.view_init(30, 60)
@@ -184,9 +192,9 @@ class SteepestDescentBackprop1(NNDLayout):
         D2 = a2 * (1 - a2) * e
         D1 = a1 * (1 - a1) * np.dot(self.W2.T, D2)
         dW1 = np.dot(D1, P.T) * self.lr
-        db1 = D1 * self.lr
+        db1 = np.dot(D1, np.ones((D1.shape[1], 1))) * self.lr
         dW2 = np.dot(D2, a1.T) * self.lr
-        db2 = D2 * self.lr
+        db2 = np.dot(D2, np.ones((D2.shape[1], 1))) * self.lr
 
         if self.pair_of_params == 1:
             self.W1[0, 0] += dW1[0, 0]
@@ -198,8 +206,8 @@ class SteepestDescentBackprop1(NNDLayout):
             self.x, self.y = self.W1[0, 0], self.b1[0, 0]
         elif self.pair_of_params == 3:
             self.b1[0, 0] += db1[0, 0]
-            self.b2[0, 0] += db2[0, 0]
-            self.x, self.y = self.b1[0, 0], self.b2[0, 0]
+            self.b1[1, 0] += db1[1, 0]
+            self.x, self.y = self.b1[0, 0], self.b1[1, 0]
 
         self.x_data.append(self.x)
         self.y_data.append(self.y)
@@ -227,9 +235,9 @@ class SteepestDescentBackprop1(NNDLayout):
                 self.W1[0, 0], self.b1[0, 0] = self.x, self.y
                 self.lr, self.epochs = 25, 300
             elif self.pair_of_params == 3:
-                self.b1[0, 0], self.b2[0, 0] = self.x, self.y
+                self.b1[0, 0], self.b1[1, 0] = self.x, self.y
                 self.lr, self.epochs = 25, 60
-            self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=1000,
+            self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=self.epochs,
                                      interval=self.animation_speed, repeat=False, blit=True)
 
     def init_params(self):

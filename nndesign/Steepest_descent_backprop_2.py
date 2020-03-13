@@ -45,7 +45,7 @@ class SteepestDescentBackprop2(NNDLayout):
 
         self.fill_chapter("Steepest Descent for Quadratic", 9, " Click anywhere to start an\n initial guess. The gradient\n descent path will be shown\n"
                                                                " Modify the learning rate\n by moving the slide bar",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")  # TODO: Change icons
+                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)  # TODO: Change icons
 
         self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
@@ -68,7 +68,7 @@ class SteepestDescentBackprop2(NNDLayout):
         self.ani, self.event = None, None
 
         self.pair_of_params = 1
-        self.pair_params = [["W1(1, 1)", "W2(1, 1)"], ["W1(1, 1)", "W2(1, 1)"], ["W1(1, 1)", "W2(1, 1)"]]
+        self.pair_params = [["W1(1, 1)", "W2(1, 1)"], ["W1(1, 1)", "b1(1)"], ["b1(1)", "b1(2)"]]
         self.plot_data()
 
         self.x, self.y = None, None
@@ -144,14 +144,22 @@ class SteepestDescentBackprop2(NNDLayout):
         if self.pair_of_params == 1:
             self.axes.set_xlim(-5, 15)
             self.axes.set_ylim(-5, 15)
+            self.axes.set_xticks([-5, 0, 5, 10])
+            self.axes.set_yticks([-5, 0, 5, 10])
         elif self.pair_of_params == 2:
             self.axes.set_xlim(-10, 30)
             self.axes.set_ylim(-20, 10)
+            self.axes.set_xticks([-10, 0, 10, 20])
+            self.axes.set_yticks([-20, -15, -10, -5, 0, 5])
         elif self.pair_of_params == 3:
             self.axes.set_xlim(-10, 10)
             self.axes.set_ylim(-10, 10)
-        self.axes.set_xlabel(self.pair_params[self.pair_of_params - 1][0])
-        self.axes.set_ylabel(self.pair_params[self.pair_of_params - 1][1])
+            self.axes.set_xticks([-10, -5, 0, 5])
+            self.axes.set_xticks([-10, -5, 0, 5])
+        self.axes.set_xlabel(self.pair_params[self.pair_of_params - 1][0], fontsize=8)
+        self.axes.xaxis.set_label_coords(0.95, -0.025)
+        self.axes.set_ylabel(self.pair_params[self.pair_of_params - 1][1], fontsize=8)
+        self.axes.yaxis.set_label_coords(-0.025, 0.95)
         self.canvas.draw()
 
     def slide(self):
@@ -182,11 +190,10 @@ class SteepestDescentBackprop2(NNDLayout):
 
         D2 = a2 * (1 - a2) * e
         D1 = a1 * (1 - a1) * np.dot(self.W2.T, D2)
-
         dW1 = np.dot(D1, P.T) * self.lr
-        db1 = D1 * self.lr
+        db1 = np.dot(D1, np.ones((D1.shape[1], 1))) * self.lr
         dW2 = np.dot(D2, a1.T) * self.lr
-        db2 = D2 * self.lr
+        db2 = np.dot(D2, np.ones((D2.shape[1], 1))) * self.lr
 
         if self.pair_of_params == 1:
             self.W1[0, 0] += dW1[0, 0]
@@ -198,8 +205,8 @@ class SteepestDescentBackprop2(NNDLayout):
             self.x, self.y = self.W1[0, 0], self.b1[0, 0]
         elif self.pair_of_params == 3:
             self.b1[0, 0] += db1[0, 0]
-            self.b2[0, 0] += db2[0, 0]
-            self.x, self.y = self.b1[0, 0], self.b2[0, 0]
+            self.b1[1, 0] += db1[1, 0]
+            self.x, self.y = self.b1[0, 0], self.b1[1, 0]
 
         self.x_data.append(self.x)
         self.y_data.append(self.y)
@@ -225,7 +232,7 @@ class SteepestDescentBackprop2(NNDLayout):
             elif self.pair_of_params == 2:
                 self.W1[0, 0], self.b1[0, 0] = self.x, self.y
             elif self.pair_of_params == 3:
-                self.b1[0, 0], self.b2[0, 0] = self.x, self.y
+                self.b1[0, 0], self.b1[1, 0] = self.x, self.y
             self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=1000,
                                      interval=self.animation_speed, repeat=False, blit=True)
 
