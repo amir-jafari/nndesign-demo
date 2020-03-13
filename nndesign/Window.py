@@ -46,6 +46,8 @@ from Generalization import Generalization
 from Steepest_descent_backprop_1 import SteepestDescentBackprop1
 from Steepest_descent_backprop_2 import SteepestDescentBackprop2
 from Momentum import Momentum
+from Variable_learning_rate import VariableLearningRate
+from Conjugate_gradient import ConjugateGradient
 # ------ Chapter 13 -------
 from Early_stopping import EarlyStopping
 from Regularization import Regularization
@@ -123,6 +125,7 @@ class MainWindowNN(NNDLayout):
         # ---- Chapter icons and dropdown menus ----
 
         self.chapter_window1, self.chapter_window2, self.chapter_window3, self.chapter_window4 = None, None, None, None
+        self.chapter_window5, self.chapter_window6, self.chapter_window7, self.chapter_window8 = None, None, None, None
 
         self.icon1 = QtWidgets.QLabel(self)
         self.comboBox1 = QtWidgets.QComboBox(self)
@@ -344,6 +347,12 @@ class MainWindowNN(NNDLayout):
         elif idx == 3:
             self.chapter_window3 = Momentum(self.w_ratio, self.h_ratio)
             self.chapter_window3.show()
+        elif idx == 4:
+            self.chapter_window4 = VariableLearningRate(self.w_ratio, self.h_ratio)
+            self.chapter_window4.show()
+        elif idx == 6:
+            self.chapter_window6 = ConjugateGradient(self.w_ratio, self.h_ratio)
+            self.chapter_window6.show()
         else:
             print("TODO")
 

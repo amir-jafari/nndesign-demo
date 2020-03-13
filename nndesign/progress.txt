@@ -58,9 +58,9 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Steepest Descent #1 --> Done.
     - Steepest Descent #2 --> Done.
     - Momentum --> Done.
-    - Variable Learning Rate --> Getting error on MATLAB.
+    - Variable Learning Rate --> Done.
     - CG Line Search --> Getting error on MATLAB.
-    - Conjugate Gradient --> Getting error on MATLAB.
+    - Conjugate Gradient --> Done.
     - Marquardt Step -->  No gonna do this till I fix the previous ones...
     - Marquardt -->  No gonna do this till I fix the previous ones...
 
