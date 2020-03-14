@@ -5,6 +5,7 @@ import numpy as np
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
+import math
 # from matplotlib import rc
 # rc('text', usetex=True)
 
@@ -261,3 +262,43 @@ class NNDLayout(QMainWindow):
             out = np.zeros(n.shape)
             out[max_idx] = 1
             return out
+
+    @staticmethod
+    def hardlim(x):
+        if x < 0:
+            return 0
+        else:
+            return 1
+
+    @staticmethod
+    def hardlims(x):
+        if x < 0:
+            return -1
+        else:
+            return 1
+
+    @staticmethod
+    def satlin(x):
+        if x < 0:
+            return 0
+        elif x < 1:
+            return x
+        else:
+            return 1
+
+    @staticmethod
+    def satlins(x):
+        if x < -1:
+            return 0
+        elif x < 1:
+            return x
+        else:
+            return 1
+
+    @staticmethod
+    def logsig(x):
+        return 1 / (1 + math.e ** (-x))
+
+    @staticmethod
+    def tansig(x):
+        return 2 / (1 + math.e ** (-2 * x)) - 1

@@ -52,7 +52,8 @@ from Marquardt import Marquardt
 # ------ Chapter 13 -------
 from Early_stopping import EarlyStopping
 from Regularization import Regularization
-
+# ------ Chapter 15 -------
+from Effects_of_decay_rate import EffectsOfDecayRate
 # ------ Chapter 16 -------
 from Competitive_classification import CompetitiveClassification
 from Competitive_learning import CompetitiveLearning
@@ -377,7 +378,11 @@ class MainWindowNN(NNDLayout):
 
     def chapter15(self, idx):
         self.comboBox2.setCurrentIndex(0)
-        print("TODO")
+        if idx == 2:
+            self.chapter_window2 = EffectsOfDecayRate(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
+        else:
+            print("TODO")
 
     def chapter16(self, idx):
         self.comboBox3.setCurrentIndex(0)

@@ -76,7 +76,9 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Dynamic Derivatives
     - Recurrent Network Training
 
-...
+- Chapter 15:
+    - Unsupervised Hebb
+    - Effects of Decay Rate - Done.
 
 - Chapter 16:
     - Competitive Classification - Done
