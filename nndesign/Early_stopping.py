@@ -11,7 +11,7 @@ from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
 
 
-max_epoch = 1000
+max_epoch = 100
 
 T = 2
 pp0 = np.linspace(-1, 1, 201)
@@ -48,7 +48,7 @@ class EarlyStopping(NNDLayout):
         self.test_error, self.error_test = [], None
         self.ani_1, self.ani_2, self.ani_3 = None, None, None
         self.W1, self.b1, self.W2, self.b2 = None, None, None, None
-        self.S1, self.random_state = 10, 42
+        self.S1, self.random_state = 20, 42
         np.random.seed(self.random_state)
         self.tt, self.t = None, None
 
@@ -69,7 +69,7 @@ class EarlyStopping(NNDLayout):
         self.test_e, = self.axes_2.plot([], [], linestyle='-', color="r", label="test error")
         self.axes_2.legend()
         self.axes_2.set_xlim(0, max_epoch)
-        self.axes_2.set_ylim(0, 20)
+        self.axes_2.set_ylim(-0.1, 20)
         self.canvas2.draw()
 
         self.nsd = 1
@@ -90,9 +90,9 @@ class EarlyStopping(NNDLayout):
         self.layout_nsd.addWidget(self.slider_nsd)
         self.wid_nsd.setLayout(self.layout_nsd)
 
-        self.animation_speed = 0
+        self.animation_speed = 100
         self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 0 ms")
+        self.label_anim_speed.setText("Animation Delay: 100 ms")
         self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
                                           self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
@@ -100,7 +100,7 @@ class EarlyStopping(NNDLayout):
         self.slider_anim_speed.setRange(0, 6)
         self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(0)
+        self.slider_anim_speed.setValue(1)
         self.wid_anim_speed = QtWidgets.QWidget(self)
         self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
         self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
@@ -120,8 +120,23 @@ class EarlyStopping(NNDLayout):
         self.full_batch = False
 
     def animate_init_1(self):
+        self.error_goal_reached = False
+        self.a1 = self.logsigmoid_stable(np.dot(self.W1, pp.reshape(1, -1)) + self.b1)
+        self.a2 = self.purelin(np.dot(self.W2, self.a1) + self.b2)
+        self.e = self.tt.reshape(1, -1) - self.a2
+        self.error_prev = np.dot(self.e, self.e.T).item()
+        self.mu = 10
+        self.RS = self.S1 * 1
+        self.RS1 = self.RS + 1
+        self.RSS = self.RS + self.S1
+        self.RSS1 = self.RSS + 1
+        self.RSS2 = self.RSS + self.S1 * 1
+        self.RSS3 = self.RSS2 + 1
+        self.RSS4 = self.RSS2 + 1
+        self.ii = np.eye(self.RSS4)
         self.train_e.set_data([], [])
         self.test_e.set_data([], [])
+        self.net_approx.set_data([], [])
         return self.train_e, self.test_e
 
     def animate_init_2(self):
@@ -129,7 +144,7 @@ class EarlyStopping(NNDLayout):
         return self.net_approx,
 
     def on_animate_1(self, idx):
-        self.error_train, self.error_test = self.train()
+        self.error_train, self.error_test = self.train_v2()
         self.train_error.append(self.error_train)
         self.train_e.set_data(list(range(len(self.train_error))), self.train_error)
         self.test_error.append(self.error_test)
@@ -145,16 +160,22 @@ class EarlyStopping(NNDLayout):
         return self.net_approx,
 
     def on_run(self):
+        self.init_params()
         if self.ani_1:
             self.ani_1.event_source.stop()
         if self.ani_2:
             self.ani_2.event_source.stop()
+        self.net_approx.set_data([], [])
         self.train_error, self.test_error = [], []
         self.canvas.draw()
         self.canvas2.draw()
         self.run_animation()
 
     def run_animation(self):
+        if self.ani_1:
+            self.ani_1.event_source.stop()
+        if self.ani_2:
+            self.ani_2.event_source.stop()
         self.ani_1 = FuncAnimation(self.figure2, self.on_animate_1, init_func=self.animate_init_1, frames=max_epoch,
                                    interval=self.animation_speed, repeat=False, blit=True)
         self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=max_epoch,
@@ -168,13 +189,12 @@ class EarlyStopping(NNDLayout):
         self.plot_train_test_data()
         self.animation_speed = int(self.slider_anim_speed.value()) * 100
         self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
-        if self.train_error:
-            if self.ani_1:
-                self.ani_1.event_source.stop()
-            if self.ani_2:
-                self.ani_2.event_source.stop()
-            self.train_error, self.test_error = [], []
-            self.net_approx.set_data([], [])
+        if self.ani_1:
+            self.ani_1.event_source.stop()
+        if self.ani_2:
+            self.ani_2.event_source.stop()
+        self.train_error, self.test_error = [], []
+        self.net_approx.set_data([], [])
         self.canvas.draw()
         self.canvas2.draw()
         self.run_animation()
@@ -249,3 +269,90 @@ class EarlyStopping(NNDLayout):
             error_test.append(e)
 
         return np.sum(np.abs(error_train)), np.sum(np.abs(error_test))
+
+    def train_v2(self):
+
+        self.mu /= 2
+
+        self.a1 = np.kron(self.a1, np.ones((1, 1)))
+        d2 = self.lin_delta(self.a2)
+        d1 = self.log_delta(self.a1, d2, self.W2)
+        jac1 = self.marq(np.kron(pp.reshape(1, -1), np.ones((1, 1))), d1)
+        jac2 = self.marq(self.a1, d2)
+        jac = np.hstack((jac1, d1.T))
+        jac = np.hstack((jac, jac2))
+        jac = np.hstack((jac, d2.T))
+        je = np.dot(jac.T, self.e.T)
+
+        grad = np.sqrt(np.dot(je.T, je)).item()
+        if grad < 1e-8:
+            error_test = []
+            for sample, target in zip(p, self.t):
+                a, n2, n1, a1, a0 = self.forward(sample)
+                e = target - a
+                error_test.append(e)
+            return self.error_prev, np.sum(np.abs(error_test))
+
+        jj = np.dot(jac.T, jac)
+        # Can't get this operation to produce the exact same results as MATLAB...
+        dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+        dW1 = dw[:self.RS]
+        db1 = dw[self.RS:self.RSS]
+        dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
+        db2 = dw[self.RSS2].reshape(1, 1)
+
+        self.a1 = self.logsigmoid_stable(np.dot((self.W1 + dW1), pp.reshape(1, -1)) + self.b1 + db1)
+        self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
+        self.e = self.tt.reshape(1, -1) - self.a2
+        error = np.dot(self.e, self.e.T).item()
+
+        while error >= self.error_prev:
+
+            try:
+
+                self.mu *= 2
+                if self.mu > 1e10:
+                    break
+
+                dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+                dW1 = dw[:self.RS]
+                db1 = dw[self.RS:self.RSS]
+                dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
+                db2 = dw[self.RSS2].reshape(1, 1)
+
+                self.a1 = self.logsigmoid_stable(np.dot((self.W1 + dW1), pp.reshape(1, -1)) + self.b1 + db1)
+                self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
+                self.e = self.tt.reshape(1, -1) - self.a2
+                error = np.dot(self.e, self.e.T).item()
+
+            except Exception as e:
+                if str(e) == "Singular matrix":
+                    print("The matrix was singular... Increasing mu 10-fold")
+                    self.mu *= 2
+                else:
+                    raise e
+
+        if error < self.error_prev:
+            self.W1 += dW1
+            self.b1 += db1
+            self.W2 += dW2
+            self.b2 += db2
+            self.error_prev = error
+
+        if self.error_prev <= 0.005:
+            if self.error_goal_reached:
+                print("Error goal reached!")
+                self.error_goal_reached = None
+            error_test = []
+            for sample, target in zip(p, self.t):
+                a, n2, n1, a1, a0 = self.forward(sample)
+                e = target - a
+                error_test.append(e)
+            return self.error_prev, np.sum(np.abs(error_test))
+
+        error_test = []
+        for sample, target in zip(p, self.t):
+            a, n2, n1, a1, a0 = self.forward(sample)
+            e = target - a
+            error_test.append(e)
+        return self.error_prev, np.sum(np.abs(error_test))
