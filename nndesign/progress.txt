@@ -79,6 +79,8 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 - Chapter 15:
     - Unsupervised Hebb
     - Effects of Decay Rate - Done.
+    - Hebb with Decay
+    - Graphical Instar - Done.
 
 - Chapter 16:
     - Competitive Classification - Done
