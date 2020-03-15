@@ -19,6 +19,7 @@ tt0 = np.sin(2 * np.pi * pp0 / T)
 
 pp = np.linspace(-0.95, 0.95, 20)
 p = np.linspace(-1, 1, 21)
+P = np.linspace(-1, 1, 100)
 
 
 def logsigmoid(n):
@@ -41,12 +42,12 @@ class Regularization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(Regularization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=True)
 
-        self.fill_chapter("Steepest Descent", 9, " TODO",
+        self.fill_chapter("Regularization", 9, " TODO",
                           PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
 
         self.ani, self.tt, self.clicked = None, None, False
         self.W1, self.b1, self.W2, self.b2 = None, None, None, None
-        self.S1, self.random_state = 10, 42
+        self.S1, self.random_state = 20, 42
         np.random.seed(self.random_state)
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
@@ -77,9 +78,9 @@ class Regularization(NNDLayout):
         self.layout_nsd.addWidget(self.slider_nsd)
         self.wid_nsd.setLayout(self.layout_nsd)
 
-        self.animation_speed = 500
+        self.animation_speed = 100
         self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 500 ms")
+        self.label_anim_speed.setText("Animation Delay: 100 ms")
         self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
                                           self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
@@ -87,7 +88,7 @@ class Regularization(NNDLayout):
         self.slider_anim_speed.setRange(0, 6)
         self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(5)
+        self.slider_anim_speed.setValue(1)
         self.wid_anim_speed = QtWidgets.QWidget(self)
         self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
         self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
@@ -121,7 +122,7 @@ class Regularization(NNDLayout):
 
         self.run_button = QtWidgets.QPushButton("Train", self)
         self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 550 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
+        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 600 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.run_button.clicked.connect(self.on_run)
 
         self.init_params()
@@ -168,6 +169,113 @@ class Regularization(NNDLayout):
         self.net_approx.set_data(pp, nn_output)
         return self.net_approx,
 
+    def animate_init_v2(self):
+        self.init_params()
+        self.error_goal_reached = False
+        self.a1 = self.tansig(np.dot(self.W1, pp.reshape(1, -1)) + self.b1)
+        self.a2 = self.purelin(np.dot(self.W2, self.a1) + self.b2)
+        self.e = self.tt.reshape(1, -1) - self.a2
+        self.error_prev = np.dot(self.e, self.e.T).item()
+        for param in [self.W1, self.b1, self.W2, self.b2]:
+            self.error_prev += self.regularization_ratio * np.dot(param.reshape(1, -1), param.reshape(-1, 1)).item()
+        self.mu = 0.01
+        self.RS = self.S1 * 1
+        self.RS1 = self.RS + 1
+        self.RSS = self.RS + self.S1
+        self.RSS1 = self.RSS + 1
+        self.RSS2 = self.RSS + self.S1 * 1
+        self.RSS3 = self.RSS2 + 1
+        self.RSS4 = self.RSS2 + 1
+        self.ii = np.eye(self.RSS4)
+        self.net_approx.set_data([], [])
+        return self.net_approx,
+
+    def on_animate_v2(self, idx):
+        """ Marqdt version """
+
+        self.mu /= 10
+
+        self.a1 = np.kron(self.a1, np.ones((1, 1)))
+        d2 = self.lin_delta(self.a2)
+        d1 = self.tan_delta(self.a1, d2, self.W2)
+        jac1 = self.marq(np.kron(pp.reshape(1, -1), np.ones((1, 1))), d1)
+        jac2 = self.marq(self.a1, d2)
+        jac = np.hstack((jac1, d1.T))
+        jac = np.hstack((jac, jac2))
+        jac = np.hstack((jac, d2.T))
+        je = np.dot(jac.T, self.e.T)
+
+        grad = np.sqrt(np.dot(je.T, je)).item()
+        # for param in [self.W1, self.b1, self.W2, self.b2]:
+        #     grad += self.regularization_ratio * np.dot(param, param.T).item()
+        if grad < 1e-7:
+            self.net_approx.set_data(P, self.forward(P.reshape(1, -1)))
+            return self.net_approx,
+
+        jj = np.dot(jac.T, jac)
+        # Can't get this operation to produce the exact same results as MATLAB...
+        dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+        dW1 = dw[:self.RS]
+        db1 = dw[self.RS:self.RSS]
+        dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
+        db2 = dw[self.RSS2].reshape(1, 1)
+
+        self.a1 = self.tansig(np.dot((self.W1 + dW1), pp.reshape(1, -1)) + self.b1 + db1)
+        self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
+        self.e = self.tt.reshape(1, -1) - self.a2
+        error = np.dot(self.e, self.e.T).item()
+        for param in [self.W1 + dW1, self.b1 + db1, self.W2 + dW2, self.b2 + db2]:
+            error += self.regularization_ratio * np.dot(param.reshape(1, -1), param.reshape(-1, 1)).item()
+
+        while error >= self.error_prev:
+
+            try:
+
+                self.mu *= 10
+                if self.mu > 1e10:
+                    break
+
+                dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+                dW1 = dw[:self.RS]
+                db1 = dw[self.RS:self.RSS]
+                dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
+                db2 = dw[self.RSS2].reshape(1, 1)
+
+                self.a1 = self.tansig(np.dot((self.W1 + dW1), pp.reshape(1, -1)) + self.b1 + db1)
+                self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
+                self.e = self.tt.reshape(1, -1) - self.a2
+                error = np.dot(self.e, self.e.T).item()
+                for param in [self.W1 + dW1, self.b1 + db1, self.W2 + dW2, self.b2 + db2]:
+                    error += self.regularization_ratio * np.dot(param.reshape(1, -1), param.reshape(-1, 1)).item()
+
+            except Exception as e:
+                if str(e) == "Singular matrix":
+                    print("The matrix was singular... Increasing mu 10-fold")
+                    self.mu *= 10
+                else:
+                    raise e
+
+        if error < self.error_prev:
+            self.W1 += dW1
+            self.b1 += db1
+            self.W2 += dW2
+            self.b2 += db2
+            self.error_prev = error
+
+        if self.error_prev <= 0:
+            if self.error_goal_reached:
+                print("Error goal reached!")
+                self.error_goal_reached = None
+            self.net_approx.set_data(P, self.forward(P.reshape(1, -1)))
+            return self.net_approx,
+
+        self.net_approx.set_data(P, self.forward(P.reshape(1, -1)))
+        return self.net_approx,
+
+    def forward(self, p_in):
+        a1 = self.tansig(np.dot(self.W1, p_in) + self.b1)
+        return self.purelin(np.dot(self.W2, a1) + self.b2)
+
     def on_run(self):
         self.clicked = True
         if self.ani:
@@ -175,7 +283,7 @@ class Regularization(NNDLayout):
         self.run_animation()
 
     def run_animation(self):
-        self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=max_epoch,
+        self.ani = FuncAnimation(self.figure, self.on_animate_v2, init_func=self.animate_init_v2, frames=max_epoch,
                                  interval=self.animation_speed, repeat=False, blit=True)
 
     def plot_train_test_data(self):
@@ -183,6 +291,8 @@ class Regularization(NNDLayout):
         self.train_points.set_data(pp, self.tt)
 
     def slide(self):
+        if self.ani:
+            self.ani.event_source.stop()
         np.random.seed(self.random_state)
         self.nsd = float(self.slider_nsd.value() / 10)
         self.label_nsd.setText("Noise standard deviation: " + str(self.nsd))
@@ -190,10 +300,7 @@ class Regularization(NNDLayout):
         self.animation_speed = int(self.slider_anim_speed.value()) * 100
         self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         self.regularization_ratio = int(self.slider_rer.value()) / 100
-        self.label_rer.setText("Animation Delay: " + str(self.regularization_ratio) + " ms")
-        # trainParam.ro = ab
-        if self.ani:
-            self.ani.event_source.stop()
+        self.label_rer.setText("Regularization Ratio: " + str(self.regularization_ratio))
         self.net_approx.set_data([], [])
         self.canvas.draw()
         if self.clicked:

@@ -52,6 +52,7 @@ from Marquardt import Marquardt
 # ------ Chapter 13 -------
 from Early_stopping import EarlyStopping
 from Regularization import Regularization
+from Bayesian_regularization import BayesianRegularization
 # ------ Chapter 15 -------
 from Effects_of_decay_rate import EffectsOfDecayRate
 from Graphical_instar import GraphicalInstar
@@ -370,6 +371,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 2:
             self.chapter_window2 = Regularization(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
+        elif idx == 3:
+            self.chapter_window3 = BayesianRegularization(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
         else:
             print("TODO")
 

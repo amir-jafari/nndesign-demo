@@ -66,8 +66,8 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 
 - Chapter 13:
     - Early Stopping - Done.
-    - Regularization - Almost done. TODO: Include regularization stuff
-    - Bayesian Regularization - Putting off for now
+    - Regularization - Done.
+    - Bayesian Regularization - Almost done - small bug not sure where...
     - Early-stopping-Regularization - Mmm
 
 - Chapter 14:

@@ -244,6 +244,14 @@ class NNDLayout(QMainWindow):
             return (1 - a) * a * np.dot(w.T, d)
 
     @staticmethod
+    def tan_delta(a, d=None, w=None):
+        s1, _ = a.shape
+        if d is None and w is None:
+            return -np.kron(1 - a * a, np.ones((1, s1))) * np.kron(np.ones((1, s1)), np.eye(s1))
+        else:
+            return (1 - a * a) * np.dot(w.T, d)
+
+    @staticmethod
     def marq(p, d):
         s, _ = d.shape
         r, _ = p.shape
