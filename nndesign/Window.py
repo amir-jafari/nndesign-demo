@@ -64,6 +64,9 @@ from Lvq1 import LVQ1
 from Lvq2 import LVQ2
 # ------ Chapter 17 -------
 from Network_function_radial import NetworkFunctionRadial
+from Pattern_classification import PatternClassification
+# ------ Chapter 18 -------
+from Leaky_integrator import LeakyIntegrator
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -421,12 +424,19 @@ class MainWindowNN(NNDLayout):
         if idx == 1:
             self.chapter_window1 = NetworkFunctionRadial(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window2 = PatternClassification(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
         else:
             print("TODO")
 
     def chapter18(self, idx):
         self.comboBox1.setCurrentIndex(0)
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = LeakyIntegrator(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
+        else:
+            print("TODO")
 
     def chapter19(self, idx):
         self.comboBox2.setCurrentIndex(0)
