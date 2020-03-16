@@ -60,6 +60,7 @@ from Graphical_instar import GraphicalInstar
 from Competitive_classification import CompetitiveClassification
 from Competitive_learning import CompetitiveLearning
 from OneD_feature_map import OneDFeatureMap
+from Lvq1 import LVQ1
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -403,6 +404,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 3:
             self.chapter_window3 = OneDFeatureMap(self.w_ratio, self.h_ratio)
             self.chapter_window3.show()
+        elif idx == 5:
+            self.chapter_window5 = LVQ1(self.w_ratio, self.h_ratio)
+            self.chapter_window5.show()
         else:
             print("TODO")
 

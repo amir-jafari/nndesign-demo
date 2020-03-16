@@ -301,7 +301,7 @@ class BayesianRegularization(NNDLayout):
         a0 = sample.reshape(-1, 1)
         # Hidden Layer's Net Input
         n1 = np.dot(self.W1, a0) + self.b1
-        #  Hidden Layer's Transformation
+        #  Hidden Layer's Transformation
         a1 = self.tansig(n1)
         # Output Layer's Net Input
         n2 = np.dot(self.W2, a1) + self.b2
