@@ -62,6 +62,8 @@ from Competitive_learning import CompetitiveLearning
 from OneD_feature_map import OneDFeatureMap
 from Lvq1 import LVQ1
 from Lvq2 import LVQ2
+# ------ Chapter 17 -------
+from Network_function_radial import NetworkFunctionRadial
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -99,7 +101,7 @@ BOOK1_CHAPTERS_DEMOS = {
     14: ["Dynamic Networks", "Chapter 14 demos", "FIR Network", "IIR Network", "Dynamic Derivatives", "Recurrent Network Training"],
     15: ["Associative Learning", "Chapter 15 demos", "Unsupervised Hebb", "Effects of Decay Rate", "Hebb with Decay", "Graphical Instar", "Outstar"],
     16: ["Competitive Networks", "Chapter 16 demos", "Competitive Classification", "Competitive Learning", "1-D Feature Map", "2-D Feature Map", "LVQ 1", "LVQ 2"],
-    17: ["Competitive Networks", "Chapter 17 demos", "Network Function Radial", "Pattern Classification", "Linear Least Squares", "Orthogonal Least Squares", "Non Linear Optimization"],
+    17: ["Radial Basis Function", "Chapter 17 demos", "Network Function Radial", "Pattern Classification", "Linear Least Squares", "Orthogonal Least Squares", "Non Linear Optimization"],
     18: ["Grossberg Network", "Chapter 18 demos", "Leaky Integrator", "Shunting Network", "Grossberg Layer 1", "Grossberg Layer 2", "Adaptive Weights"],
     19: ["Adaptive Resonance Theory", "Chapter 19 demos", "ART1 Layer 1", "ART1 Layer 2", "Orienting Subsystem", "ART1 Algorithm"],
     20: ["Stability", "Chapter 20 demos", "Dynamical System"],
@@ -416,7 +418,11 @@ class MainWindowNN(NNDLayout):
 
     def chapter17(self, idx):
         self.comboBox4.setCurrentIndex(0)
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = NetworkFunctionRadial(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
+        else:
+            print("TODO")
 
     def chapter18(self, idx):
         self.comboBox1.setCurrentIndex(0)

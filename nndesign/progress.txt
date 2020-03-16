@@ -83,12 +83,15 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Graphical Instar - Done.
 
 - Chapter 16:
-    - Competitive Classification - Done
-    - Competitive Learning - Done
+    - Competitive Classification - Done.
+    - Competitive Learning - Done.
     - 1-D Feature Map - On progress
     - 2-D Feature Map
     - LVQ1 - Done.
     - LVQ2 - Done.
+
+- Chapter 17:
+    - Network Function Radial - Done.
 
 
 Book 2: 4 / 7
