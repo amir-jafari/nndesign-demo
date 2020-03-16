@@ -67,6 +67,7 @@ from Network_function_radial import NetworkFunctionRadial
 from Pattern_classification import PatternClassification
 # ------ Chapter 18 -------
 from Leaky_integrator import LeakyIntegrator
+from Shunting_network import ShuntingNetwork
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -435,6 +436,9 @@ class MainWindowNN(NNDLayout):
         if idx == 1:
             self.chapter_window1 = LeakyIntegrator(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window2 = ShuntingNetwork(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
         else:
             print("TODO")
 

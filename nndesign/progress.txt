@@ -96,6 +96,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 
 - Chapter 18:
     - Leaky Integrator - Done.
+    - Shunting Network - Done.
 
 
 Book 2: 4 / 7
