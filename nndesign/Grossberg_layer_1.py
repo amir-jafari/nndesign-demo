@@ -14,25 +14,25 @@ from get_package_path import PACKAGE_PATH
 t = np.arange(0, 5.1, 0.1)
 
 
-class ShuntingNetwork(NNDLayout):
+class GrossbergLayer1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(ShuntingNetwork, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(25, 150, 450, 450))
+        super(GrossbergLayer1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(25, 150, 450, 450))
 
-        self.fill_chapter("Shunting Network", 2, " TODO",
+        self.fill_chapter("Grossberg Layer 1", 2, " TODO",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
 
         self.axis = self.figure.add_subplot(1, 1, 1)
         self.axis.set_xlim(0, 5)
         self.axis.set_ylim(-5, 5)
-        self.axis.plot([0] * 10, np.linspace(0, 5, 10), color="black", linestyle="--", linewidth=0.2)
-        self.axis.plot(np.linspace(-5, 5, 10), [0] * 10, color="black", linestyle="--", linewidth=0.2)
+        self.axis.plot([0] * 20, np.linspace(-5, 5, 20), color="black", linestyle="--", linewidth=0.2)
+        self.axis.plot(np.linspace(0, 5, 10), [0] * 10, color="black", linestyle="--", linewidth=0.2)
         self.axis.set_xlabel("Time")
-        self.axis.set_ylabel("Output n")
+        self.axis.set_ylabel("Net inputs n(1), n(2)")
         self.axis.set_title("Response")
-        self.lines = []
+        self.lines1, self.lines2 = [], []
 
         self.label_input_pos = QtWidgets.QLabel(self)
-        self.label_input_pos.setText("Input p+: 1.00")
+        self.label_input_pos.setText("Input p(1): 1.00")
         self.label_input_pos.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_input_pos.setGeometry(self.x_chapter_slider_label * self.w_ratio, 200 * self.h_ratio,
                                          150 * self.w_ratio, 100 * self.h_ratio)
@@ -49,7 +49,7 @@ class ShuntingNetwork(NNDLayout):
         self.wid3.setLayout(self.layout3)
 
         self.label_input_neg = QtWidgets.QLabel(self)
-        self.label_input_neg.setText("Input p-: 0.00")
+        self.label_input_neg.setText("Input p(2): 0.00")
         self.label_input_neg.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_input_neg.setGeometry(self.x_chapter_slider_label * self.w_ratio, 270 * self.h_ratio,
                                          150 * self.w_ratio, 100 * self.h_ratio)
@@ -135,8 +135,9 @@ class ShuntingNetwork(NNDLayout):
 
         self.graph()
 
-    def shunt(self, t, y):
-        return (-y + (self.bp - y) * self.pp - (y + self.bn) * self.pn) / self.e
+    def layer1(self, t, y):
+        return [(-y[0] + (self.bp - y[0]) * self.pp - (y[0] + self.bn) * self.pn) / self.e,
+                (-y[1] + (self.bp - y[1]) * self.pn - (y[1] + self.bn) * self.pp) / self.e]
 
     def graph(self):
         if self.do_graph:
@@ -145,29 +146,39 @@ class ShuntingNetwork(NNDLayout):
             self.bp = self.slider_bias_pos.value() / 10
             self.bn = self.slider_bias_neg.value() / 10
             self.e = self.slider_tcte.value() / 10
-            self.label_input_pos.setText("Input p+: " + str(round(self.pp, 2)))
-            self.label_input_neg.setText("Input p-: " + str(round(self.pn, 2)))
+            self.label_input_pos.setText("Input p(1): " + str(round(self.pp, 2)))
+            self.label_input_neg.setText("Input p(2): " + str(round(self.pn, 2)))
             self.label_bias_pos.setText("Bias b+: " + str(round(self.bp, 2)))
             self.label_bias_neg.setText("Bias b- " + str(round(self.bn, 2)))
             self.label_tcte.setText("Tme Constant: " + str(round(self.e, 2)))
-            r = ode(self.shunt).set_integrator("zvode")
-            r.set_initial_value(0, 0)
+            r = ode(self.layer1).set_integrator("zvode")
+            r.set_initial_value([0, 0], 0)
             t1 = 5
             dt = 0.1
-            out = []
+            out_1, out_2 = [], []
             while r.successful() and r.t < t1:
-                out.append(r.integrate(r.t + dt))
-            while len(self.lines) > 3:
-                self.lines.pop(0).remove()
-            for line in self.lines:
-                line.set_color("gray")
+                out = r.integrate(r.t + dt)
+                out_1.append(out[0])
+                out_2.append(out[1])
+            while len(self.lines1) > 1:
+                self.lines1.pop(0).remove()
+            while len(self.lines2) > 1:
+                self.lines2.pop(0).remove()
+            for line in self.lines1:
+                # line.set_color("gray")
                 line.set_alpha(0.5)
-            self.lines.append(self.axis.plot(t, out, color="red")[0])
+            for line in self.lines2:
+                # line.set_color("gray")
+                line.set_alpha(0.5)
+            self.lines1.append(self.axis.plot(t, out_1, color="red")[0])
+            self.lines2.append(self.axis.plot(t, out_2, color="green")[0])
             self.canvas.draw()
 
     def on_clear(self):
-        while len(self.lines) > 1:
-            self.lines.pop(0).remove()
+        while len(self.lines1) > 1:
+            self.lines1.pop(0).remove()
+        while len(self.lines2) > 1:
+            self.lines2.pop(0).remove()
         self.canvas.draw()
 
     def on_random(self):

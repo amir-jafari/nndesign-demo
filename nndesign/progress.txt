@@ -111,4 +111,3 @@ Book 2: 4 / 7
 - Chapter 3:
     - Gradient Descent: Done. TODO: Animation.
     - Gradient Descent Stochastic: Done. TODO: Animation.
-

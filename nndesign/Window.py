@@ -68,6 +68,7 @@ from Pattern_classification import PatternClassification
 # ------ Chapter 18 -------
 from Leaky_integrator import LeakyIntegrator
 from Shunting_network import ShuntingNetwork
+from Grossberg_layer_1 import GrossbergLayer1
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -439,6 +440,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 2:
             self.chapter_window2 = ShuntingNetwork(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
+        elif idx == 3:
+            self.chapter_window3 = GrossbergLayer1(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
         else:
             print("TODO")
 
