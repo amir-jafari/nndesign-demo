@@ -101,6 +101,10 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Grossberg Layer 2 - Almost Done. Need to move boxes and include W2 paint
     - Adaptive Weights - Done.
 
+- Chapter 19:
+    - ART1 Layer 1 - Almost Done. There is a math or logic bug somewhere.
+    - ART1 Layer 2 - Done.
+
 Book 2: 4 / 7
 
 - Chapter 2:

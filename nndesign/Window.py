@@ -71,6 +71,9 @@ from Shunting_network import ShuntingNetwork
 from Grossberg_layer_1 import GrossbergLayer1
 from Grossberg_layer_2 import GrossbergLayer2
 from Adaptive_weights import AdaptiveWeights
+# ------ Chapter 19 -------
+from Art1_layer1 import ART1Layer1
+from Art1_layer2 import ART1Layer2
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -453,8 +456,15 @@ class MainWindowNN(NNDLayout):
             self.chapter_window5.show()
 
     def chapter19(self, idx):
+        if idx == 1:
+            self.chapter_window1 = ART1Layer1(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window2 = ART1Layer2(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
+        else:
+            print("TODO")
         self.comboBox2.setCurrentIndex(0)
-        print("TODO")
 
     def chapter20(self, idx):
         self.comboBox3.setCurrentIndex(0)
