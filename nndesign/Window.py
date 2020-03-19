@@ -70,6 +70,7 @@ from Leaky_integrator import LeakyIntegrator
 from Shunting_network import ShuntingNetwork
 from Grossberg_layer_1 import GrossbergLayer1
 from Grossberg_layer_2 import GrossbergLayer2
+from Adaptive_weights import AdaptiveWeights
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -447,8 +448,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 4:
             self.chapter_window4 = GrossbergLayer2(self.w_ratio, self.h_ratio)
             self.chapter_window4.show()
-        else:
-            print("TODO")
+        elif idx == 5:
+            self.chapter_window5 = AdaptiveWeights(self.w_ratio, self.h_ratio)
+            self.chapter_window5.show()
 
     def chapter19(self, idx):
         self.comboBox2.setCurrentIndex(0)

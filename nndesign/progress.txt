@@ -99,6 +99,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Shunting Network - Done.
     - Grossberg Layer 1 - Done.
     - Grossberg Layer 2 - Almost Done. Need to move boxes and include W2 paint
+    - Adaptive Weights - Done.
 
 Book 2: 4 / 7
 
