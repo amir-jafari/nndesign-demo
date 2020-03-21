@@ -53,6 +53,8 @@ from Marquardt import Marquardt
 from Early_stopping import EarlyStopping
 from Regularization import Regularization
 from Bayesian_regularization import BayesianRegularization
+# ------ Chapter 14 -------
+from FIR_network import FIRNetwork
 # ------ Chapter 15 -------
 from Effects_of_decay_rate import EffectsOfDecayRate
 from Graphical_instar import GraphicalInstar
@@ -393,8 +395,12 @@ class MainWindowNN(NNDLayout):
             print("TODO")
 
     def chapter14(self, idx):
+        if idx == 1:
+            self.chapter_window1 = FIRNetwork(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
+        else:
+            print("TODO")
         self.comboBox1.setCurrentIndex(0)
-        print("TODO")
 
     def chapter15(self, idx):
         self.comboBox2.setCurrentIndex(0)

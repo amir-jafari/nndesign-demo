@@ -71,7 +71,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Early-stopping-Regularization - Mmm
 
 - Chapter 14:
-    - FIR Network
+    - FIR Network - Almost done - need figure.
     - IIR Network
     - Dynamic Derivatives
     - Recurrent Network Training
