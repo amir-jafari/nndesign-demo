@@ -56,6 +56,7 @@ from Bayesian_regularization import BayesianRegularization
 # ------ Chapter 14 -------
 from FIR_network import FIRNetwork
 from IIR_network import IIRNetwork
+from Dynamic_derivatives import DynamicDerivatives
 # ------ Chapter 15 -------
 from Effects_of_decay_rate import EffectsOfDecayRate
 from Graphical_instar import GraphicalInstar
@@ -402,6 +403,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 2:
             self.chapter_window2 = IIRNetwork(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
+        elif idx == 3:
+            self.chapter_window3 = DynamicDerivatives(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
         else:
             print("TODO")
         self.comboBox1.setCurrentIndex(0)
