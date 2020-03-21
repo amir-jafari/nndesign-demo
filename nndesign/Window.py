@@ -57,6 +57,7 @@ from Bayesian_regularization import BayesianRegularization
 from FIR_network import FIRNetwork
 from IIR_network import IIRNetwork
 from Dynamic_derivatives import DynamicDerivatives
+from Recurrent_network_training import RecurrentNetworkTraining
 # ------ Chapter 15 -------
 from Effects_of_decay_rate import EffectsOfDecayRate
 from Graphical_instar import GraphicalInstar
@@ -406,8 +407,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 3:
             self.chapter_window3 = DynamicDerivatives(self.w_ratio, self.h_ratio)
             self.chapter_window3.show()
-        else:
-            print("TODO")
+        elif idx == 4:
+            self.chapter_window4 = RecurrentNetworkTraining(self.w_ratio, self.h_ratio)
+            self.chapter_window4.show()
         self.comboBox1.setCurrentIndex(0)
 
     def chapter15(self, idx):

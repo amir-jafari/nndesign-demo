@@ -310,3 +310,7 @@ class NNDLayout(QMainWindow):
     @staticmethod
     def tansig(x):
         return 2 / (1 + math.e ** (-2 * x)) - 1
+
+    def nndtansig(self, x):
+        a = self.tansig(x)
+

@@ -82,7 +82,7 @@ class IIRNetwork(NNDLayout):
         self.wid3.setLayout(self.layout3)
 
         self.label_w1 = QtWidgets.QLabel(self)
-        self.label_w1.setText("iW(1): -0.5")
+        self.label_w1.setText("lW(1): -0.5")
         self.label_w1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_w1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 270 * self.h_ratio, 150 * self.w_ratio,
                                   100 * self.h_ratio)
@@ -144,7 +144,7 @@ class IIRNetwork(NNDLayout):
         weight_0 = self.slider_w0.value() / 10
         weight_1 = self.slider_w1.value() / 10
         self.label_w0.setText("iW(0): " + str(weight_0))
-        self.label_w1.setText("iW(1): " + str(weight_1))
+        self.label_w1.setText("lW(1): " + str(weight_1))
 
         a0, a_1, t, t1 = 0, 0, list(range(1, len(p) + 1)), list(range(len(p) + 1))
         num = np.array([weight_0])
