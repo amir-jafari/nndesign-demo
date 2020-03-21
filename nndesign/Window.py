@@ -55,6 +55,7 @@ from Regularization import Regularization
 from Bayesian_regularization import BayesianRegularization
 # ------ Chapter 14 -------
 from FIR_network import FIRNetwork
+from IIR_network import IIRNetwork
 # ------ Chapter 15 -------
 from Effects_of_decay_rate import EffectsOfDecayRate
 from Graphical_instar import GraphicalInstar
@@ -398,6 +399,9 @@ class MainWindowNN(NNDLayout):
         if idx == 1:
             self.chapter_window1 = FIRNetwork(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
+        elif idx == 2:
+            self.chapter_window2 = IIRNetwork(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
         else:
             print("TODO")
         self.comboBox1.setCurrentIndex(0)

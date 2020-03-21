@@ -72,7 +72,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 
 - Chapter 14:
     - FIR Network - Almost done - need figure.
-    - IIR Network
+    - IIR Network - Doing
     - Dynamic Derivatives
     - Recurrent Network Training
 
