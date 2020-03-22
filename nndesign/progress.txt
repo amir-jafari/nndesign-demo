@@ -46,7 +46,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Adaptive Noise Cancellation --> Done. TODO: Stop animation. Animation data is changing - lr path different than MATLAB.
     Looked into this for a while, couldn't find the error yet
     - EEG noise cancellation --> Done. TODO: Difference
-    - Linear Classification --> Moving on for now :/
+    - Linear Classification --> Doing
 
 - Chapter 11:
     - Network Function --> Done. TODO: Put sliders with the Figure.
@@ -81,6 +81,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Effects of Decay Rate - Done.
     - Hebb with Decay
     - Graphical Instar - Done.
+    - Outstar
 
 - Chapter 16:
     - Competitive Classification - Done.
@@ -105,6 +106,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - ART1 Layer 1 - Almost Done. There is a math or logic bug somewhere.
     - ART1 Layer 2 - Done.
     - Orienting Subsytem - Done.
+    - ART1 Algorithm
 
 Book 2: 4 / 7
 

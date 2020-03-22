@@ -37,6 +37,7 @@ from Steepest_descent import SteepestDescent
 # ------ Chapter 10 --------
 from Adaptive_noise_cancellation import AdaptiveNoiseCancellation
 from EEG_noise_cancellation import EEGNoiseCancellation
+from Linear_classification import LinearClassification
 # ------ Chapter 11 -------
 from Function_approximation import FunctionApproximation
 from Backpropagation_calculation import BackpropagationCalculation
@@ -343,7 +344,8 @@ class MainWindowNN(NNDLayout):
             self.chapter_window2 = EEGNoiseCancellation(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
         elif idx == 3:
-            print("TODO")
+            self.chapter_window3 = LinearClassification(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
 
     def chapter11(self, idx):
         self.comboBox2.setCurrentIndex(0)
