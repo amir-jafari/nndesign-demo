@@ -84,6 +84,8 @@ from Orienting_subsystem import OrientingSubsystem
 from Art1_algorithm import ART1Algorithm
 # ------ Chapter 20 -------
 from Dynamical_system import DynamicalSystem
+# ------ Chapter 21 -------
+from Hopfield_network import HopfieldNetwork
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -500,7 +502,9 @@ class MainWindowNN(NNDLayout):
 
     def chapter21(self, idx):
         self.comboBox4.setCurrentIndex(0)
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = HopfieldNetwork(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
 
     @staticmethod
     def new_window6():

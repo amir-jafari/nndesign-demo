@@ -111,6 +111,9 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 - Chapter 20:
     - Dynamical System - Done.
 
+- Chapter 21:
+    - Hopfield Network - Math bug
+
 Book 2: 4 / 7
 
 - Chapter 2:
