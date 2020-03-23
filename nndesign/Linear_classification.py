@@ -60,7 +60,7 @@ class LinearClassification(NNDLayout):
                 self.axis1.add_patch(sq)
         self.axis1.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
         self.axis1.axis("off")
-        self.canvas1.show()
+        self.canvas1.draw()
         self.canvas1.mpl_connect("button_press_event", self.on_mouseclick1)
 
         self.button1 = QtWidgets.QPushButton("->", self)
@@ -96,7 +96,7 @@ class LinearClassification(NNDLayout):
                 self.axis2.add_patch(sq)
         self.axis2.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
         self.axis2.axis("off")
-        self.canvas2.show()
+        self.canvas2.draw()
         self.canvas2.mpl_connect("button_press_event", self.on_mouseclick2)
 
         self.button2 = QtWidgets.QPushButton("->", self)
@@ -132,7 +132,7 @@ class LinearClassification(NNDLayout):
                 self.axis3.add_patch(sq)
         self.axis3.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
         self.axis3.axis("off")
-        self.canvas3.show()
+        self.canvas3.draw()
         self.canvas3.mpl_connect("button_press_event", self.on_mouseclick3)
 
         self.button3 = QtWidgets.QPushButton("->", self)
@@ -317,22 +317,6 @@ class LinearClassification(NNDLayout):
         self.canvas9.draw()
 
         # --
-
-        self.comboBox1 = QtWidgets.QComboBox(self)
-        self.comboBox1.addItems(["Hebb", 'Pseudoinverse'])
-        self.label_f = QtWidgets.QLabel(self)
-        self.label_f.setText("Rule")
-        self.label_f.setFont(QtGui.QFont("Times New Roman", 14, italic=True))
-        self.label_f.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 550 * self.h_ratio,
-                                 150 * self.w_ratio, 100 * self.h_ratio)
-        self.comboBox1.currentIndexChanged.connect(self.change_rule)
-        self.rule = 0
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 580 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox1)
-        self.wid2.setLayout(self.layout2)
 
         self.run_button = QtWidgets.QPushButton("Weights", self)
         self.run_button.setStyleSheet("font-size:13px")
@@ -570,10 +554,6 @@ class LinearClassification(NNDLayout):
         self.ani = FuncAnimation(self.figure9, self.on_animate, init_func=self.animate_init,
                                  frames=abs(self.angle - self.angle_end), interval=50, repeat=False, blit=False)
         self.canvas9.draw()
-
-    def change_rule(self, idx):
-        self.rule = idx
-        self.response()
 
     def draw_meter(self):
         r = np.arange(0, 0.9, 0.01)

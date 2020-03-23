@@ -81,6 +81,7 @@ from Adaptive_weights import AdaptiveWeights
 from Art1_layer1 import ART1Layer1
 from Art1_layer2 import ART1Layer2
 from Orienting_subsystem import OrientingSubsystem
+from Art1_algorithm import ART1Algorithm
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -475,6 +476,7 @@ class MainWindowNN(NNDLayout):
             self.chapter_window5.show()
 
     def chapter19(self, idx):
+        self.comboBox2.setCurrentIndex(0)
         if idx == 1:
             self.chapter_window1 = ART1Layer1(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
@@ -484,9 +486,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 3:
             self.chapter_window3 = OrientingSubsystem(self.w_ratio, self.h_ratio)
             self.chapter_window3.show()
-        else:
-            print("TODO")
-        self.comboBox2.setCurrentIndex(0)
+        elif idx == 4:
+            self.chapter_window4 = ART1Algorithm(self.w_ratio, self.h_ratio)
+            self.chapter_window4.show()
 
     def chapter20(self, idx):
         self.comboBox3.setCurrentIndex(0)
