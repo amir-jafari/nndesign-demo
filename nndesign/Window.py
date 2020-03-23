@@ -82,6 +82,8 @@ from Art1_layer1 import ART1Layer1
 from Art1_layer2 import ART1Layer2
 from Orienting_subsystem import OrientingSubsystem
 from Art1_algorithm import ART1Algorithm
+# ------ Chapter 20 -------
+from Dynamical_system import DynamicalSystem
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
@@ -492,7 +494,9 @@ class MainWindowNN(NNDLayout):
 
     def chapter20(self, idx):
         self.comboBox3.setCurrentIndex(0)
-        print("TODO")
+        if idx == 1:
+            self.chapter_window1 = DynamicalSystem(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
 
     def chapter21(self, idx):
         self.comboBox4.setCurrentIndex(0)
