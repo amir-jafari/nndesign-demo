@@ -95,6 +95,8 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Network Function Radial - Done.
     - Pattern Classification - Almost Done.
     - Linear Least Squares - Done.
+    - Orthogonal Least Squares - Half way there - math is pretty hard - bug somewhere
+    - Non Linear Optimization - TODO when fix one above
 
 - Chapter 18:
     - Leaky Integrator - Done.

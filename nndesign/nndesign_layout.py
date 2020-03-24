@@ -206,6 +206,72 @@ class NNDLayout(QMainWindow):
 
         return qpixmap
 
+    def set_layout(self, layout_coords, widget):
+        wid = QtWidgets.QWidget(self)
+        layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        wid.setGeometry(layout_coords[0] * self.w_ratio, layout_coords[1] * self.h_ratio,
+                        layout_coords[2] * self.w_ratio, layout_coords[3] * self.h_ratio)
+        layout.addWidget(widget)
+        wid.setLayout(layout)
+
+    def make_label(self, label_attr_name, label_str, label_coords, font_name="Times New Roman", font_size=12, italics=False):
+        setattr(self, label_attr_name, QtWidgets.QLabel(self))
+        label = getattr(self, label_attr_name)
+        label.setText(label_str)
+        label.setFont(QtGui.QFont(font_name, font_size, italic=italics))
+        label.setGeometry(label_coords[0] * self.w_ratio, label_coords[1] * self.h_ratio,
+                          label_coords[2] * self.w_ratio, label_coords[3] * self.h_ratio)
+
+    def make_plot(self, plot_number, plot_coords):
+        if plot_number == 1:  # This  is to avoid breaking all the code where
+            plot_number = ""  # I call the first plot figure instead of figure1
+        setattr(self, "figure" + str(plot_number), Figure())
+        setattr(self, "canvas" + str(plot_number), FigureCanvas(getattr(self, "figure" + str(plot_number))))
+        self.set_layout(plot_coords, getattr(self, "canvas" + str(plot_number)))
+
+    def make_combobox(self, combobox_number, combobox_items, combobox_coords, f_connect, label_attr_name=None, label_str="?",
+                      label_coords=None, label_font_name="Times New Roman", label_font_size=12, label_italics=False):
+        setattr(self, "comboBox" + str(combobox_number), QtWidgets.QComboBox(self))
+        combobox = getattr(self, "comboBox" + str(combobox_number))
+        combobox.addItems(combobox_items)
+        combobox.setGeometry(combobox_coords[0] * self.w_ratio, combobox_coords[1] * self.h_ratio,
+                             combobox_coords[2] * self.w_ratio, combobox_coords[3] * self.h_ratio)
+        if label_attr_name:
+            if not label_coords:
+                label_coords = (combobox_coords[0] + 80, combobox_coords[1] - 20, combobox_coords[2], combobox_coords[3])
+            self.make_label(label_attr_name, label_str, label_coords, label_font_name, label_font_size, label_italics)
+        self.set_layout(combobox_coords, combobox)
+        combobox.currentIndexChanged.connect(f_connect)
+
+    def make_slider(self, slider_attr_name, slider_type, slider_range, slider_tick_pos, slider_tick_interval,
+                    slider_value, slider_coords, f_connect, label_attr_name=None, label_str="?", label_coords=None,
+                    label_font_name="Times New Roman", label_font_size=12, label_italics=False):
+        setattr(self, slider_attr_name, QtWidgets.QSlider(slider_type))
+        slider = getattr(self, slider_attr_name)
+        slider.setRange(slider_range[0], slider_range[1])
+        slider.setTickPosition(slider_tick_pos)
+        slider.setTickInterval(slider_tick_interval)
+        slider.setValue(slider_value)
+        if label_attr_name:
+            if not label_coords:
+                label_coords = (slider_coords[0] + 80, slider_coords[1] - 30, slider_coords[2], slider_coords[3])
+            self.make_label(label_attr_name, label_str, label_coords, label_font_name, label_font_size, label_italics)
+        self.set_layout(slider_coords, slider)
+        slider.valueChanged.connect(f_connect)
+
+    def make_button(self, button_attr_name, button_str, button_coords, f_connect, font_size="font-size:13px"):
+        setattr(self, button_attr_name, QtWidgets.QPushButton(button_str, self))
+        button = getattr(self, button_attr_name)
+        button.setStyleSheet(font_size)
+        button.setGeometry(button_coords[0] * self.w_ratio, button_coords[1] * self.h_ratio,
+                           button_coords[2] * self.w_ratio, button_coords[3] * self.h_ratio)
+        button.clicked.connect(f_connect)
+
+    def get_slider_value_and_update(self, slider, slider_label, value_multiplier=1, round_pos=0):
+        value = slider.value() * value_multiplier
+        slider_label.setText(slider_label.text()[:slider_label.text().find(":") + 2] + str(round(value, round_pos)))
+        return value
+
     @staticmethod
     def logsigmoid(n):
         return 1 / (1 + np.exp(-n))
@@ -313,4 +379,3 @@ class NNDLayout(QMainWindow):
 
     def nndtansig(self, x):
         a = self.tansig(x)
-
