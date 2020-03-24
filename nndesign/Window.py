@@ -71,6 +71,7 @@ from Lvq2 import LVQ2
 # ------ Chapter 17 -------
 from Network_function_radial import NetworkFunctionRadial
 from Pattern_classification import PatternClassification
+from Linear_least_squares import LinearLeastSquares
 # ------ Chapter 18 -------
 from Leaky_integrator import LeakyIntegrator
 from Shunting_network import ShuntingNetwork
@@ -458,6 +459,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 2:
             self.chapter_window2 = PatternClassification(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
+        elif idx == 3:
+            self.chapter_window3 = LinearLeastSquares(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
         else:
             print("TODO")
 
