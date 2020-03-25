@@ -61,7 +61,7 @@ When it says Done, it is not taking into account final clean up - Leaving that f
     - Variable Learning Rate --> Done.
     - CG Line Search --> Getting error on MATLAB.
     - Conjugate Gradient --> Done.
-    - Marquardt Step -->  No gonna do this till I fix the previous ones...
+    - Marquardt Step -->  Doing
     - Marquardt -->  Done.
 
 - Chapter 13:

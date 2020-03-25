@@ -49,6 +49,7 @@ from Steepest_descent_backprop_2 import SteepestDescentBackprop2
 from Momentum import Momentum
 from Variable_learning_rate import VariableLearningRate
 from Conjugate_gradient import ConjugateGradient
+from Marquardt_step import MarquardtStep
 from Marquardt import Marquardt
 # ------ Chapter 13 -------
 from Early_stopping import EarlyStopping
@@ -386,6 +387,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 6:
             self.chapter_window6 = ConjugateGradient(self.w_ratio, self.h_ratio)
             self.chapter_window6.show()
+        elif idx == 7:
+            self.chapter_window7 = MarquardtStep(self.w_ratio, self.h_ratio)
+            self.chapter_window7.show()
         elif idx == 8:
             self.chapter_window8 = Marquardt(self.w_ratio, self.h_ratio)
             self.chapter_window8.show()
