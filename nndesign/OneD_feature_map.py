@@ -35,8 +35,9 @@ for i in range(NN):
 N = N + N.T
 
 P = np.ones((3, 1000))
-P[:2, :] = np.random.uniform(0, 1, (2, 1000)) - 0.5
-P = P / (np.ones((3, 1)) * np.sqrt(np.sum(P ** 2, axis=0)))
+# np.random.seed(0)  # This is only for testing - comment out for production
+P[:2, :] = np.random.random((1000, 2)).T - 0.5  # The transpose is done so we get the same random numbers as in MATLAB
+P = np.divide(P, (np.ones((3, 1)) * np.sqrt(np.sum(P ** 2, axis=0))))
 
 up = np.arange(-0.5, 0.5, 0.1)
 down = -np.copy(up)
@@ -82,12 +83,14 @@ class OneDFeatureMap(NNDLayout):
 
         self.W = W
         self.ani = None
-        self.ani_3 = None
+        self.n_runs = 0
 
         # self.label_eq = QtWidgets.QLabel(self)
         # self.label_eq.setText("a = purelin(w * p + b)")
         # self.label_eq.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         # self.label_eq.setGeometry((self.x_chapter_slider_label - 30) * self.w_ratio, 350 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
+
+        self.make_label("label_presentations", "Presentations: 0", (self.x_chapter_slider_label - 40, 300, 150, 100), )
 
         self.label_lr = QtWidgets.QLabel(self)
         self.label_lr.setText("Learning rate: 1")
@@ -127,23 +130,42 @@ class OneDFeatureMap(NNDLayout):
         self.run_button.setStyleSheet("font-size:13px")
         self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 600 * self.h_ratio,
                                     self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
+        self.run_button.clicked.connect(self.on_run_2)
 
+        self.make_button("reset_button", "Reset", (self.x_chapter_button, 630, self.w_chapter_button, self.h_chapter_button), self.on_reset)
+
+        self.do_slide = True
         self.slider_lr.valueChanged.connect(self.slide)
         self.slider_nei.valueChanged.connect(self.slide)
 
-    def slide(self):
-        self.lr = self.slider_lr.value() / 100
-        self.nei = self.slider_nei.value() / 10
+    def on_reset(self):
+        self.W = W
+        while self.lines_anim:
+            self.lines_anim.pop().remove()
+        self.canvas.draw()
+        self.do_slide = False
+        self.lr = 1
+        self.nei = 21
         self.label_lr.setText("Learning rate: " + str(self.lr))
         self.label_nei.setText("Neighborhood: " + str(self.nei))
+        self.slider_lr.setValue(self.lr * 100)
+        self.slider_nei.setValue(self.nei * 10)
+        self.do_slide = True
+        self.n_runs = 0
+        self.label_presentations.setText("Presentations: 0")
+
+    def slide(self):
+        if self.do_slide:
+            self.lr = self.slider_lr.value() / 100
+            self.nei = self.slider_nei.value() / 10
+            self.label_lr.setText("Learning rate: " + str(self.lr))
+            self.label_nei.setText("Neighborhood: " + str(self.nei))
 
     def on_run(self):
 
         if self.lines:
             for line in self.lines:
                 line.pop(0).remove()
-            self.canvas.draw()
             self.lines = []
 
         s, r = self.W.shape
@@ -151,10 +173,10 @@ class OneDFeatureMap(NNDLayout):
 
         for z in range(500):
 
-            q = min(int(np.floor(np.random.uniform(0, 1) * Q + 1)), 999)
+            q = int(np.fix(np.random.random() * Q))
             p = P[:, q].reshape(-1, 1)
 
-            a = self.compet(np.dot(W, p))
+            a = self.compet_(np.dot(self.W, p))
             i = np.argmax(a)
             N_c = np.copy(N)[:, i]
             N_c[N_c <= self.nei] = 1
@@ -170,8 +192,6 @@ class OneDFeatureMap(NNDLayout):
             to_ = Nto[i] - 1
             print(self.W[from_, 0], self.W[to_, 0], "---", self.W[from_, 1], self.W[to_, 1])
             self.lines.append(self.axis1.plot([self.W[from_, 0], self.W[to_, 0]], [self.W[from_, 1], self.W[to_, 1]], color="red"))
-        print("------")
-        print(self.lr, self.nei)
 
         nei_temp = self.nei
         self.slider_lr.setValue(self.lr * 100)
@@ -183,33 +203,37 @@ class OneDFeatureMap(NNDLayout):
         self.canvas.draw()
 
     def animate_init(self):
-        self.lines_anim = []
+        while self.lines_anim:
+            self.lines_anim.pop().remove()
         for _ in range(NN - 1):
             self.lines_anim.append(self.axis1.plot([], color="red")[0])
-        self.canvas.draw()
 
     def on_animate(self, idx):
 
         s, r = self.W.shape
         Q = P.shape[1]
 
-        q = min(int(np.floor(np.random.uniform(0, 1) * Q + 1)), 999)
-        p = P[:, q].reshape(-1, 1)
+        for z in range(100):
+            q = int(np.fix(np.random.random() * Q))
+            p = P[:, q].reshape(-1, 1)
 
-        a = self.compet(np.dot(W, p))
-        i = np.argmax(a)
-        N_c = np.copy(N)[:, i]
-        N_c[N_c <= self.nei] = 1
-        N_c[N_c != 1] = 0
-        a = 0.5 * (a + N_c.reshape(-1, 1))
+            a = self.compet_(np.dot(self.W, p))
+            i = np.argmax(a)
+            N_c = np.copy(N)[:, i]
+            N_c[N_c <= self.nei] = 1
+            N_c[N_c != 1] = 0
+            a = 0.5 * (a + N_c.reshape(-1, 1))
 
-        self.W = self.W + self.lr * np.dot(a, np.ones((1, r))) * (np.dot(np.ones((s, 1)), p.T) - self.W)
-        self.lr = (self.lr - 0.01) * 0.998 + 0.01
-        self.nei = (self.nei - 1) * NDEC + 1
-        self.slider_lr.setValue(self.lr * 100)
-        self.slider_nei.setValue(self.nei * 10)
-        self.label_lr.setText("Learning rate: " + str(self.lr))
-        self.label_nei.setText("Neighborhood: " + str(self.nei))
+            self.W = self.W + self.lr * np.dot(a, np.ones((1, r))) * (np.dot(np.ones((s, 1)), p.T) - self.W)
+            self.lr = (self.lr - 0.01) * 0.998 + 0.01
+            self.nei = (self.nei - 1) * NDEC + 1
+            self.do_slide = False
+            self.slider_lr.setValue(self.lr * 100)
+            self.slider_nei.setValue(self.nei * 10)
+            self.label_lr.setText("Learning rate: " + str(round(self.lr, 2)))
+            self.label_nei.setText("Neighborhood: " + str(round(self.nei, 2)))
+            self.do_slide = True
+            self.label_presentations.setText("Presentations: " + str((self.n_runs - 1) * 500 + idx * 100 + z + 1))
 
         for i in range(NN - 1):
             from_ = Nfrom[i] - 1
@@ -219,51 +243,14 @@ class OneDFeatureMap(NNDLayout):
     def on_run_2(self):
         if self.ani:
             self.ani.event_source.stop()
+        self.n_runs += 1
         self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init,
-                                 frames=500, interval=0, repeat=False, blit=False)
+                                 frames=5, interval=0, repeat=False, blit=False)
         self.canvas.draw()
 
-    def animate_init_3(self):
-        self.lines_anim_3, = self.axis1.plot([], color="red")
-        return self.lines_anim_3,
-
-    def on_animate_3(self, idx):
-
-        s, r = self.W.shape
-        Q = P.shape[1]
-
-        q = min(int(np.floor(np.random.uniform(0, 1) * Q + 1)), 999)
-        p = P[:, q].reshape(-1, 1)
-
-        a = self.compet(np.dot(W, p))
-        i = np.argmax(a)
-        N_c = np.copy(N)[:, i]
-        N_c[N_c <= self.nei] = 1
-        N_c[N_c != 1] = 0
-        a = 0.5 * (a + N_c.reshape(-1, 1))
-
-        self.W = self.W + self.lr * np.dot(a, np.ones((1, r))) * (np.dot(np.ones((s, 1)), p.T) - self.W)
-        self.lr = (self.lr - 0.01) * 0.998 + 0.01
-        self.nei = (self.nei - 1) * NDEC + 1
-
-        self.slider_lr.setValue(self.lr * 100)
-        self.slider_nei.setValue(self.nei * 10)
-        self.label_lr.setText("Learning rate: " + str(self.lr))
-        self.label_nei.setText("Neighborhood: " + str(self.nei))
-
-        data_to_plot_x = []
-        data_to_plot_y = []
-        for i in range(NN - 1):
-            from_ = Nfrom[i] - 1
-            to_ = Nto[i] - 1
-            data_to_plot_x += [self.W[from_, 0], self.W[to_, 0]]
-            data_to_plot_y += [self.W[from_, 1], self.W[to_, 1]]
-        self.lines_anim_3.set_data(data_to_plot_x, data_to_plot_y)
-        return self.lines_anim_3,
-
-    def on_run_3(self):
-        if self.ani_3:
-            self.ani_3.event_source.stop()
-        self.ani_3 = FuncAnimation(self.figure, self.on_animate_3, init_func=self.animate_init_3,
-                                   frames=500, interval=10, repeat=False, blit=False)
-        self.canvas.draw()
+    @staticmethod
+    def compet_(n):
+        max_idx = np.argmax(n)
+        out = np.zeros(n.shape)
+        out[max_idx] = 1
+        return out

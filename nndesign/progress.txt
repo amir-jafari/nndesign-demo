@@ -2,6 +2,8 @@ Book 1: 11 / 43 (or 11 / 72 if we count the chapters after chapter 14)
 
 google sheets
 
+http://www.walkingrandomly.com/?p=5479
+
 TODO: Main window 1/4 to 1/4, try square, same shape as the rest - 
 When it says Done, it is not taking into account final clean up - Leaving that for when we decide on exact dimensions.
 
