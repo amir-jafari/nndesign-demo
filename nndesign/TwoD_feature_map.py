@@ -11,10 +11,10 @@ from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
 
 
-Sx, Sy = 1, 20
+Sx, Sy = 6, 6
 S = Sx * Sy
 max_dist = np.ceil(np.sqrt(np.sum(np.array([Sx, Sy]) ** 2)))
-NDEC = 0.998
+NDEC = 0.999
 
 W = np.zeros((S, 3))
 W[:, -1] = 1
@@ -25,7 +25,7 @@ for i in range(S):
     for j in range(i):
         N[i, j] = np.sqrt(np.sum((Ind2Pos[i, :] - Ind2Pos[j, :]) ** 2))
 
-Nfrom, Nto = list(range(2, 21)), list(range(1, 20))
+Nto, Nfrom = np.where(N.T == 1)
 NN = len(Nfrom)
 NV = np.zeros((1, NN))
 for i in range(NN):
@@ -48,9 +48,9 @@ zz = np.array([list(xx), list(yy)])
 zz = zz / (np.ones((2, 1)) * np.sqrt(np.sum(zz ** 2, axis=0) + 1))
 
 
-class OneDFeatureMap(NNDLayout):
+class TwoDFeatureMap(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(OneDFeatureMap, self).__init__(w_ratio, h_ratio, main_menu=1)
+        super(TwoDFeatureMap, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("One input neuron", 2, "",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
@@ -86,15 +86,15 @@ class OneDFeatureMap(NNDLayout):
         self.lr = 1
 
         self.label_nei = QtWidgets.QLabel(self)
-        self.label_nei.setText("Neighborhood: 21")
+        self.label_nei.setText("Neighborhood: " + str(max_dist))
         self.label_nei.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_nei.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 470 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
         self.slider_nei = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_nei.setRange(0, 210)
+        self.slider_nei.setRange(0, max_dist * 10)
         self.slider_nei.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_nei.setTickInterval(10)
-        self.slider_nei.setValue(210)
-        self.nei = 21
+        self.slider_nei.setTickInterval(1)
+        self.slider_nei.setValue(max_dist * 10)
+        self.nei = max_dist
 
         self.wid3 = QtWidgets.QWidget(self)
         self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -127,7 +127,7 @@ class OneDFeatureMap(NNDLayout):
         self.canvas.draw()
         self.do_slide = False
         self.lr = 1
-        self.nei = 21
+        self.nei = max_dist
         self.label_lr.setText("Learning rate: " + str(self.lr))
         self.label_nei.setText("Neighborhood: " + str(self.nei))
         self.slider_lr.setValue(self.lr * 100)
@@ -170,8 +170,8 @@ class OneDFeatureMap(NNDLayout):
             self.nei = (self.nei - 1) * NDEC + 1
 
         for i in range(NN):
-            from_ = Nfrom[i] - 1
-            to_ = Nto[i] - 1
+            from_ = Nfrom[i]
+            to_ = Nto[i]
             print(self.W[from_, 0], self.W[to_, 0], "---", self.W[from_, 1], self.W[to_, 1])
             self.lines.append(self.axis1.plot([self.W[from_, 0], self.W[to_, 0]], [self.W[from_, 1], self.W[to_, 1]], color="red"))
 
@@ -187,8 +187,8 @@ class OneDFeatureMap(NNDLayout):
     def animate_init(self):
         while self.lines_anim:
             self.lines_anim.pop().remove()
-        for _ in range(NN - 1):
-            self.lines_anim.append(self.axis1.plot([], color="red")[0])
+        for _ in range(NN):
+            self.lines_anim.append(self.axis1.plot([], color="red", linewidth=0.5)[0])
 
     def on_animate(self, idx):
 
@@ -217,9 +217,9 @@ class OneDFeatureMap(NNDLayout):
             self.do_slide = True
             self.label_presentations.setText("Presentations: " + str((self.n_runs - 1) * 500 + idx * 100 + z + 1))
 
-        for i in range(NN - 1):
-            from_ = Nfrom[i] - 1
-            to_ = Nto[i] - 1
+        for i in range(NN):
+            from_ = Nfrom[i]
+            to_ = Nto[i]
             self.lines_anim[i].set_data([self.W[from_, 0], self.W[to_, 0]], [self.W[from_, 1], self.W[to_, 1]])
 
     def on_run_2(self):

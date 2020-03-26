@@ -68,6 +68,7 @@ from Graphical_instar import GraphicalInstar
 from Competitive_classification import CompetitiveClassification
 from Competitive_learning import CompetitiveLearning
 from OneD_feature_map import OneDFeatureMap
+from TwoD_feature_map import TwoDFeatureMap
 from Lvq1 import LVQ1
 from Lvq2 import LVQ2
 # ------ Chapter 17 -------
@@ -449,14 +450,15 @@ class MainWindowNN(NNDLayout):
         elif idx == 3:
             self.chapter_window3 = OneDFeatureMap(self.w_ratio, self.h_ratio)
             self.chapter_window3.show()
+        elif idx == 4:
+            self.chapter_window4 = TwoDFeatureMap(self.w_ratio, self.h_ratio)
+            self.chapter_window4.show()
         elif idx == 5:
             self.chapter_window5 = LVQ1(self.w_ratio, self.h_ratio)
             self.chapter_window5.show()
         elif idx == 6:
             self.chapter_window6 = LVQ2(self.w_ratio, self.h_ratio)
             self.chapter_window6.show()
-        else:
-            print("TODO")
 
     def chapter17(self, idx):
         self.comboBox4.setCurrentIndex(0)

@@ -88,8 +88,8 @@ When it says Done, it is not taking into account final clean up - Leaving that f
 - Chapter 16:
     - Competitive Classification - Done.
     - Competitive Learning - Done.
-    - 1-D Feature Map - On progress
-    - 2-D Feature Map
+    - 1-D Feature Map - Done.
+    - 2-D Feature Map - Done.
     - LVQ1 - Done.
     - LVQ2 - Done.
 
