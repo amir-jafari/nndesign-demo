@@ -48,6 +48,7 @@ from Steepest_descent_backprop_1 import SteepestDescentBackprop1
 from Steepest_descent_backprop_2 import SteepestDescentBackprop2
 from Momentum import Momentum
 from Variable_learning_rate import VariableLearningRate
+from Conjugate_gradient_line_search import ConjugateGradientLineSearch
 from Conjugate_gradient import ConjugateGradient
 from Marquardt_step import MarquardtStep
 from Marquardt import Marquardt
@@ -384,6 +385,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 4:
             self.chapter_window4 = VariableLearningRate(self.w_ratio, self.h_ratio)
             self.chapter_window4.show()
+        elif idx == 5:
+            self.chapter_window5 = ConjugateGradientLineSearch(self.w_ratio, self.h_ratio)
+            self.chapter_window5.show()
         elif idx == 6:
             self.chapter_window6 = ConjugateGradient(self.w_ratio, self.h_ratio)
             self.chapter_window6.show()
@@ -393,8 +397,6 @@ class MainWindowNN(NNDLayout):
         elif idx == 8:
             self.chapter_window8 = Marquardt(self.w_ratio, self.h_ratio)
             self.chapter_window8.show()
-        else:
-            print("TODO")
 
     def chapter13(self, idx):
         self.comboBox4.setCurrentIndex(0)
