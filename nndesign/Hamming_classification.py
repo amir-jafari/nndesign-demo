@@ -1,8 +1,5 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 
 from nndesign_layout import NNDLayout
@@ -13,18 +10,12 @@ class HammingClassification(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(HammingClassification, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Hamming Classification", 3, "Click GO to TODO", # TODO
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Hamming Classification", 3, "Click [Go] to send a fruit\ndown the belt to be\nclassified"
+                          " by a Hamming\nnetwork.\n\nThe calculations for the\nHamming network will\nappear below.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_3.svg", None)
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
+        self.make_plot(1, (15, 100, 500, 390))
         self.axis = Axes3D(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(15 * self.w_ratio, 100 * self.h_ratio, 500 * self.w_ratio, 390 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
         ys = np.linspace(-1, 1, 100)
         zs = np.linspace(-1, 1, 100)
         Y, Z = np.meshgrid(ys, zs)
@@ -47,61 +38,21 @@ class HammingClassification(NNDLayout):
 
         self.p, self.a1, self.a2, self.fruit, self.label = None, None, None, None, None
 
-        self.label_w1 = QtWidgets.QLabel(self)
-        self.label_w1.setText("")
-        self.label_w1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w1.setGeometry(550 * self.w_ratio, 300 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
-
-        self.label_b = QtWidgets.QLabel(self)
-        self.label_b.setText("")
-        self.label_b.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b.setGeometry(550 * self.w_ratio, 330 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
-
-        self.label_w2 = QtWidgets.QLabel(self)
-        self.label_w2.setText("")
-        self.label_w2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w2.setGeometry(550 * self.w_ratio, 360 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
-
-        self.label_p = QtWidgets.QLabel(self)
-        self.label_p.setText("")
-        self.label_p.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_p.setGeometry(550 * self.w_ratio, 390 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
-
-        self.label_a_11 = QtWidgets.QLabel(self)
-        self.label_a_11.setText("")
-        self.label_a_11.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_a_11.setGeometry(550 * self.w_ratio, 420 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
-
-        self.label_a_12 = QtWidgets.QLabel(self)
-        self.label_a_12.setText("")
-        self.label_a_12.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_a_12.setGeometry(550 * self.w_ratio, 450 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
-
-        self.label_a_21 = QtWidgets.QLabel(self)
-        self.label_a_21.setText("")
-        self.label_a_21.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_a_21.setGeometry(550 * self.w_ratio, 480 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
-
-        self.label_a_22 = QtWidgets.QLabel(self)
-        self.label_a_22.setText("")
-        self.label_a_22.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_a_22.setGeometry(550 * self.w_ratio, 510 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
-
-        self.label_fruit = QtWidgets.QLabel(self)
-        self.label_fruit.setText("")
-        self.label_fruit.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_fruit.setGeometry(550 * self.w_ratio, 540 * self.h_ratio, 150 * self.w_ratio, 25 * self.h_ratio)
+        self.make_label("label_w1", "", (550, 300, 150, 25))
+        self.make_label("label_b", "", (550, 330, 150, 25))
+        self.make_label("label_w2", "", (550, 360, 150, 25))
+        self.make_label("label_p", "", (550, 390, 150, 25))
+        self.make_label("label_a_11", "", (550, 420, 150, 25))
+        self.make_label("label_a_12", "", (550, 450, 150, 25))
+        self.make_label("label_a_21", "", (550, 480, 150, 25))
+        self.make_label("label_a_22", "", (550, 510, 150, 25))
+        self.make_label("label_fruit", "", (550, 540, 150, 25))
 
         self.icon3 = QtWidgets.QLabel(self)
-        self.icon3.setPixmap(
-            QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio,
-                                                                    QtGui.QIcon.Normal, QtGui.QIcon.On))
+        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         self.icon3.setGeometry(15 * self.w_ratio, 500 * self.h_ratio, 500 * self.w_ratio, 150 * self.h_ratio)
 
-        self.run_button = QtWidgets.QPushButton("Go", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 570 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
+        self.make_button("run_button", "Go", (self.x_chapter_button, 570, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
     def on_run(self):
         self.timer = QtCore.QTimer()

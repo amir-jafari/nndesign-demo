@@ -14,8 +14,8 @@ class OneInputNeuron(NNDLayout):
         super(OneInputNeuron, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
         self.fill_chapter("One-Input Neuron", 2, "Alter the weight, bias and\ninput by dragging the\ntriangular"
-                                                 " shaped indicators.<p>Pick the transfer function\nwith the f menu."
-                                                 "<p>Watch the change to the\nneuron function and its\noutput.",
+                                                 " shaped indicators.\n\nPick the transfer function\nwith the f menu."
+                                                 "\n\nWatch the change to the\nneuron function and its\noutput.",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")
 
         self.make_plot(1)

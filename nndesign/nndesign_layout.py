@@ -19,7 +19,7 @@ WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 580, 800 - 120  # For my Mac - original 
 
 xlabel, ylabel, wlabel, hlabel, add = 30, 5, 500, 100, 20
 
-x_info, y_info, w_info, h_info = 535, 70, 450, 250
+x_info, y_info, w_info, h_info = 535, 100, 450, 250
 
 wp_pic2_1 = 100; hp_pic2_1 = 80; x_pic2_1 = 550; y_pic2_1= 50; w_pic2_1= wp_pic2_1; h_pic2_1=hp_pic2_1;
 wp_pic2_2 = 500; hp_pic2_2 = 200; x_pic2_2 = 130; y_pic2_2= 100; w_pic2_2= 500; h_pic2_2=200;
@@ -147,7 +147,8 @@ class NNDLayout(QMainWindow):
             # qp.drawLine(self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio + 35, self.wm - xl1 * self.w_ratio, 750 * self.h_ratio)
             qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, yl4 * self.h_ratio)
 
-    def fill_chapter(self, title, number, description, logo_path, icon_path=None, show_info=True, icon_move_left=0):
+    def fill_chapter(self, title, number, description, logo_path, icon_path=None, show_info=True, icon_move_left=0,
+                     description_coords=(x_info, y_info, w_info, h_info)):
 
         len_ref = len("One-Input Neuron")
         len_current = len(title)
@@ -155,9 +156,13 @@ class NNDLayout(QMainWindow):
         self.make_label("label4", "Chapter {}".format(number), (x_chapter, 630, 150, 50), font_size=14)
 
         if show_info:
-            paragraphs = description.split("<p>")
-            for idx, paragraph in enumerate(paragraphs):
-                self.make_label("label{}".format(idx + 5), paragraph, (x_info, y_info + idx * 60, w_info, h_info))
+            # paragraphs = description.split("<p>")
+            # y_pos = y_info
+            self.make_label("label5", description, (description_coords[0], description_coords[1], description_coords[2], description_coords[3]))
+            # for idx, paragraph in enumerate(paragraphs):
+            #     self.make_label("label{}".format(idx + 5), paragraph, (x_info, y_pos, w_info, h_info))
+            #     n_lines = len(paragraph.split("\n")) + 1
+            #     y_pos += (n_lines * 10 + 20) * self.h_ratio
 
         self.icon1 = QtWidgets.QLabel(self)
         self.icon1.setPixmap(QtGui.QIcon(logo_path).pixmap(wp_pic2_1 * self.w_ratio, hp_pic2_1 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))

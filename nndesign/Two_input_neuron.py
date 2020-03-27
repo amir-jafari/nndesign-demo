@@ -1,6 +1,4 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-import math
-import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
@@ -15,8 +13,8 @@ class TwoInputNeuron(NNDLayout):
         super(TwoInputNeuron, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
         self.fill_chapter("Two input neuron", 2, "Alter the input values by\nclicking and dragging the\ntriangular"
-                                                 " shaped indicators.<p>Alter the weight and bias in\nthe same way."
-                                                 " Use the menu\nto pick a transfer function.<p>The net input and"
+                                                 " shaped indicators.\n\nAlter the weight and bias in\nthe same way."
+                                                 " Use the menu\nto pick a transfer function.\n\nThe net input and"
                                                  " the output\nwill respond to each change",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg")
 
