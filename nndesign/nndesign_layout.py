@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow
 
+import warnings
 import numpy as np
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
@@ -11,14 +12,14 @@ import math
 
 
 WM_MAC_MAIN, HM_MAC_MAIN = 1280 - 750, 800 - 120  # For my Mac
-WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 580, 800 - 120  # For my Mac
+WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 580, 800 - 120  # For my Mac - original size
 
 # -------------------------------------------------------------------------------------------------------------
-xlabel, ylabel, wlabel, hlabel, add = 30, 5, 500, 100, 20
-xtabel, ytlabel = 120, 25
-xautor, yautor = 100, 580
+# Original Size
 
-x_info, y_info, w_info, h_info = 530, 100, 450, 250
+xlabel, ylabel, wlabel, hlabel, add = 30, 5, 500, 100, 20
+
+x_info, y_info, w_info, h_info = 535, 70, 450, 250
 
 wp_pic2_1 = 100; hp_pic2_1 = 80; x_pic2_1 = 550; y_pic2_1= 50; w_pic2_1= wp_pic2_1; h_pic2_1=hp_pic2_1;
 wp_pic2_2 = 500; hp_pic2_2 = 200; x_pic2_2 = 130; y_pic2_2= 100; w_pic2_2= 500; h_pic2_2=200;
@@ -27,6 +28,27 @@ wp_pic2_2 = 500; hp_pic2_2 = 200; x_pic2_2 = 130; y_pic2_2= 100; w_pic2_2= 500; 
 # Starting line point for my MAC. The ending point is determined by the w, h and ratio of screen compared to mine
 xl1, yl1 = 10, 90
 xl2 = 520
+xl3, xl4 = 560, 700
+yl4 = 670
+x_chapter = 560
+
+# New size
+
+"""WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 192, 800 - 120
+
+xlabel, ylabel, wlabel, hlabel, add = 30 * 1.5542857143, 5, 500, 100, 20
+
+x_info, y_info, w_info, h_info = 535 * 1.5542857143, 70, 450 * 1.5542857143, 250
+
+wp_pic2_1 = 100; hp_pic2_1 = 80; x_pic2_1 = 550 * 1.5542857143; y_pic2_1= 50; w_pic2_1= wp_pic2_1; h_pic2_1=hp_pic2_1;
+wp_pic2_2 = 500 * 1.5542857143; hp_pic2_2 = 200; x_pic2_2 = 130; y_pic2_2= 100; w_pic2_2= 500 * 1.5542857143; h_pic2_2=200;
+
+xl1, yl1 = 10, 90
+xl2 = 520 * 1.5542857143
+xl3, xl4 = 560 * 1.5542857143, 700 * 1.5542857143
+yl4 = 670
+x_chapter = 560 * 1.5542857143"""
+
 # -------------------------------------------------------------------------------------------------------------
 
 
@@ -58,14 +80,8 @@ class NNDLayout(QMainWindow):
         self.draw_vertical = draw_vertical
         if main_menu == 1:
             self.setWindowTitle("Neural Network Design")
-            self.label1 = QtWidgets.QLabel(self)
-            self.label1.setText("Neural Network")
-            self.label1.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
-            self.label1.setGeometry(xlabel * self.w_ratio, ylabel * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
-            self.label2 = QtWidgets.QLabel(self)
-            self.label2.setText("DESIGN")
-            self.label2.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
-            self.label2.setGeometry(xlabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
+            self.make_label("label1", "Neural Network", (xlabel, ylabel + add, wlabel, hlabel), font_size=18, italics=True)
+            self.make_label("label1", "DESIGN", (xlabel + 120, ylabel + add, wlabel, hlabel), font_size=18)
 
         if main_menu == 2:
             self.setWindowTitle("Neural Network Design")
@@ -123,40 +139,37 @@ class NNDLayout(QMainWindow):
         qp.setPen(pen)
         # qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio)
         qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, xl2 * self.w_ratio, yl1 * self.h_ratio)
+        qp.drawLine(xl3 * self.w_ratio, yl4 * self.h_ratio, xl4 * self.w_ratio, yl4 * self.h_ratio)
+
         if self.draw_vertical:
             pen = QtGui.QPen(QtCore.Qt.darkBlue, 4, QtCore.Qt.SolidLine)
             qp.setPen(pen)
             # qp.drawLine(self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio + 35, self.wm - xl1 * self.w_ratio, 750 * self.h_ratio)
-            qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, 670 * self.h_ratio)
+            qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, yl4 * self.h_ratio)
 
-    def fill_chapter(self, title, number, description, logo_path, icon_path, show_info=True, icon_move_left=0, show_pic=True):
+    def fill_chapter(self, title, number, description, logo_path, icon_path=None, show_info=True, icon_move_left=0):
 
-        # TODO: Use len of title to modify position of text, or actually, to set the line breaks on the right place in order to also scale according to resolution
-
-        self.label3 = QtWidgets.QLabel(self)
-        self.label3.setText(title)
-        self.label3.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
-        self.label3.setGeometry((xl2 - 120) * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
-
-        self.label4 = QtWidgets.QLabel(self)
-        self.label4.setText("Chapter {}".format(number))
-        self.label4.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
-        self.label4.setGeometry((xl2 - 120) * self.w_ratio, ylabel * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
+        len_ref = len("One-Input Neuron")
+        len_current = len(title)
+        self.make_label("label3", title, (xl2 - 135 - (len_current - len_ref) * 5.5, ylabel + add, wlabel, hlabel), font_size=18)
+        self.make_label("label4", "Chapter {}".format(number), (x_chapter, 630, 150, 50), font_size=14)
 
         if show_info:
-            self.label5 = QtWidgets.QLabel(self)
-            self.label5.setText(description)
-            self.label5.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
-            self.label5.setGeometry(x_info * self.w_ratio, y_info * self.h_ratio, w_info * self.w_ratio, h_info * self.h_ratio)
+            paragraphs = description.split("<p>")
+            for idx, paragraph in enumerate(paragraphs):
+                self.make_label("label{}".format(idx + 5), paragraph, (x_info, y_info + idx * 60, w_info, h_info))
 
         self.icon1 = QtWidgets.QLabel(self)
         self.icon1.setPixmap(QtGui.QIcon(logo_path).pixmap(wp_pic2_1 * self.w_ratio, hp_pic2_1 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         self.icon1.setGeometry(x_pic2_1 * self.w_ratio, y_pic2_1 * self.h_ratio, w_pic2_1 * self.w_ratio, h_pic2_1 * self.h_ratio)
 
-        if show_pic:
+        if icon_path:
             self.icon2 = QtWidgets.QLabel(self)
             self.icon2.setPixmap(QtGui.QIcon(icon_path).pixmap(wp_pic2_2 * self.w_ratio, hp_pic2_2 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             self.icon2.setGeometry((x_pic2_2 - icon_move_left) * self.w_ratio, y_pic2_2 * self.h_ratio, w_pic2_2 * self.w_ratio, h_pic2_2 * self.h_ratio)
+            # w_pic2_2 = 400
+            # h_pic2_2 = 200
+            # self.show_image("icon2", icon_path, (x_pic2_2 - icon_move_left, y_pic2_2, w_pic2_2, h_pic2_2))
 
     def center(self):
         qr = self.frameGeometry()
@@ -206,6 +219,13 @@ class NNDLayout(QMainWindow):
 
         return qpixmap
 
+    def show_image(self, image_attr_name, image_path, image_coords):
+        setattr(self, image_attr_name, QtWidgets.QLabel(self))
+        img = getattr(self, image_attr_name)
+        img.setPixmap(QtGui.QPixmap(image_path).scaled(image_coords[2] * self.w_ratio, image_coords[3] * self.h_ratio))
+        img.setGeometry(image_coords[0] * self.w_ratio, image_coords[1] * self.h_ratio,
+                        image_coords[2] * self.w_ratio, image_coords[3] * self.h_ratio)
+
     def set_layout(self, layout_coords, widget):
         wid = QtWidgets.QWidget(self)
         layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
@@ -214,7 +234,7 @@ class NNDLayout(QMainWindow):
         layout.addWidget(widget)
         wid.setLayout(layout)
 
-    def make_label(self, label_attr_name, label_str, label_coords, font_name="Times New Roman", font_size=12, italics=False):
+    def make_label(self, label_attr_name, label_str, label_coords, font_name="Times New Roman", font_size=14, italics=False):
         setattr(self, label_attr_name, QtWidgets.QLabel(self))
         label = getattr(self, label_attr_name)
         label.setText(label_str)
@@ -222,7 +242,7 @@ class NNDLayout(QMainWindow):
         label.setGeometry(label_coords[0] * self.w_ratio, label_coords[1] * self.h_ratio,
                           label_coords[2] * self.w_ratio, label_coords[3] * self.h_ratio)
 
-    def make_plot(self, plot_number, plot_coords):
+    def make_plot(self, plot_number, plot_coords=(90, 300, 370, 370)):
         if plot_number == 1:  # This  is to avoid breaking all the code where
             plot_number = ""  # I call the first plot figure instead of figure1
         setattr(self, "figure" + str(plot_number), Figure())
@@ -240,12 +260,15 @@ class NNDLayout(QMainWindow):
             if not label_coords:
                 label_coords = (combobox_coords[0] + 80, combobox_coords[1] - 20, combobox_coords[2], combobox_coords[3])
             self.make_label(label_attr_name, label_str, label_coords, label_font_name, label_font_size, label_italics)
+        if combobox_coords[-1] > 50 * self.h_ratio:
+            warnings.warn("Setting combobox with too high height ({}).".format(combobox_coords[-1] * self.h_ratio)
+                          + " This may result in interactive problems")
         self.set_layout(combobox_coords, combobox)
         combobox.currentIndexChanged.connect(f_connect)
 
     def make_slider(self, slider_attr_name, slider_type, slider_range, slider_tick_pos, slider_tick_interval,
-                    slider_value, slider_coords, f_connect, label_attr_name=None, label_str="?", label_coords=None,
-                    label_font_name="Times New Roman", label_font_size=12, label_italics=False):
+                    slider_value, slider_coords, f_connect=None, label_attr_name=None, label_str="?", label_coords=None,
+                    label_font_name="Times New Roman", label_font_size=14, label_italics=False):
         setattr(self, slider_attr_name, QtWidgets.QSlider(slider_type))
         slider = getattr(self, slider_attr_name)
         slider.setRange(slider_range[0], slider_range[1])
@@ -256,8 +279,13 @@ class NNDLayout(QMainWindow):
             if not label_coords:
                 label_coords = (slider_coords[0] + 80, slider_coords[1] - 30, slider_coords[2], slider_coords[3])
             self.make_label(label_attr_name, label_str, label_coords, label_font_name, label_font_size, label_italics)
+        if slider_coords[-1] > 50 * self.h_ratio and slider_type == QtCore.Qt.Horizontal:
+            warnings.warn("Setting horizontal slider {} with too much height ({}).".format(
+                slider_attr_name, slider_coords[-1] * self.h_ratio
+            ) + " This may result in interactive problems")
         self.set_layout(slider_coords, slider)
-        slider.valueChanged.connect(f_connect)
+        if f_connect:
+            slider.valueChanged.connect(f_connect)
 
     def make_button(self, button_attr_name, button_str, button_coords, f_connect, font_size="font-size:13px"):
         setattr(self, button_attr_name, QtWidgets.QPushButton(button_str, self))
@@ -336,6 +364,10 @@ class NNDLayout(QMainWindow):
             out = np.zeros(n.shape)
             out[max_idx] = 1
             return out
+
+    @staticmethod
+    def poslin(n):
+        return n * (n > 0)
 
     @staticmethod
     def hardlim(x):

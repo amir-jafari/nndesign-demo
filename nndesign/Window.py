@@ -8,6 +8,7 @@ from get_package_path import PACKAGE_PATH
 # ----------------------------------------------------- Book 1 ---------------------------------------------------------
 # ------ Chapter 2 --------
 from One_input_neuron import OneInputNeuron
+# from One_input_neuron_new import OneInputNeuron
 from Two_input_neuron import TwoInputNeuron
 # ------ Chapter 3 --------
 from Perceptron_classification import PerceptronClassification
