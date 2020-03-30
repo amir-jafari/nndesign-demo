@@ -71,7 +71,10 @@ class GramSchmidt(NNDLayout):
 
     def on_mouseclick1(self, event):
         if event.xdata != None and event.xdata != None:
-            if self.text_start:
+            if len(self.axes1_points) == 0:
+                self.text_start.remove()
+                self.text_start = self.axes_1.text(-0.7, -0.075, "<ONCE MORE>")
+            elif len(self.axes1_points) == 1:
                 self.text_start.remove()
                 self.text_start = None
             if event.xdata > 0.8 or event.xdata < -0.8:
@@ -84,6 +87,7 @@ class GramSchmidt(NNDLayout):
             self.draw_vector()
 
     def draw_vector(self):
+        self.label_warning.setText("")
         if len(self.axes1_points) == 1:
             self.axes1_v1.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
             if self.text1:
@@ -160,6 +164,9 @@ class GramSchmidt(NNDLayout):
         if self.text4:
             self.text4.remove()
             self.text4 = None
+        if self.text_start:
+            self.text_start.remove()
         self.text_start = self.axes_1.text(-0.7, -0.075, "<CLICK ON ME>")
+        self.label_warning.setText("")
         self.canvas.draw()
         self.canvas2.draw()
