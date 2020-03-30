@@ -21,31 +21,41 @@ def hardlim(n):
 
 class DecisionBoundaries(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(DecisionBoundaries, self).__init__(w_ratio, h_ratio, main_menu=1)
+        super(DecisionBoundaries, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Decision Boundaries", 4, " Move the perceptron decision\n boundary by dragging the stars\n Try to divide the points so that\n"
-                                                    " none of them are red \n Left-click on the plot to add a positive class \n Right-click to add a negative class\n",
-                          PACKAGE_PATH + "Chapters/4/Logo_Ch_4.svg", PACKAGE_PATH + "Chapters/4/Percptron1.svg")  # TODO: get icon
+        self.fill_chapter("Decision Boundaries", 4, "Move the perceptron\ndecision boundary by\ndragging the stars.\n\nTry to divide the points so\nthat "
+                                                    "none of them are red.\n\nLeft-click on the plot to add\na positive class.\n\nRight-click to add a\nnegative class.\n\n"
+                                                    "The weight and bias will\ntake on values associated\nwith the chosen decision\nboundary.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_4.svg", None,  # PACKAGE_PATH + "Chapters/4/Percptron1.svg"
+                          description_coords=(535, 140, 450, 300))
 
-        self.w = np.ones((2,))
-        self.w[1] = -1
-        self.b = np.zeros((1,))
-        self.cid = None
+        self.make_label("label_error", "Error: ---", (self.x_chapter_slider_label, 580, 150, 100))
+
+        # self.w = np.ones((2,))
+        # self.w[1] = -1
+        # self.b = np.zeros((1,))
+        self.w = np.array([1.79, 0.894])
+        self.b = np.array([1.79])
+        self.cid, self.cid2 = None, None
         self.closest_point = None
 
-        self.point_1, self.point_2 = (2, 2), (-2, -2)
+        self.point_1, self.point_2 = (-2, 2), (0, -2)
         self.prev_x_diff, self.prev_y_diff = None, None
         self.current_x_diff, self.current_y_diff = 2 - -2, 2 - -2
-        self.data, self.data_missclasified = [], []
+        self.data = [(1, 1, 1), (0, 0, 0), (1, 0, 0), (0, 1, 0)]
+
+        self.make_plot(1, (5, 150, 510, 510))
         self.axes = self.figure.add_subplot(111)
         self.figure.subplots_adjust(bottom=0.2, left=0.1)
-        self.axes.set_xlim(-5, 5)
-        self.axes.set_ylim(-5, 5)
+        self.axes.set_xlim(-3, 3)
+        self.axes.set_ylim(-3, 3)
         self.axes.tick_params(labelsize=8)
-        self.axes.set_xlabel("$p^1$", fontsize=10)
-        self.axes.xaxis.set_label_coords(0.5, 0.1)
-        self.axes.set_ylabel("$p^2$", fontsize=10)
-        self.axes.yaxis.set_label_coords(-0.05, 0.5)
+        # self.axes.set_xlabel("$p^1$", fontsize=10)
+        # self.axes.xaxis.set_label_coords(0.5, 0.1)
+        # self.axes.set_ylabel("$p^2$", fontsize=10)
+        # self.axes.yaxis.set_label_coords(-0.05, 0.5)
+        self.axes.plot([0] * 20, np.linspace(-3, 3, 20), linestyle="dashed", linewidth=0.5)
+        self.axes.plot(np.linspace(-3, 3, 20), [0] * 20, linestyle="dashed", linewidth=0.5)
         self.pos_line, = self.axes.plot([], 'mo', label="Positive Class")
         self.neg_line, = self.axes.plot([], 'cs', label="Negative Class")
         self.miss_line_pos, = self.axes.plot([], 'ro')
@@ -57,37 +67,32 @@ class DecisionBoundaries(NNDLayout):
         self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=2,
                          bbox_to_anchor=(0, -.28, 1, -.280), mode='expand')
         self.axes.set_title("Single Neuron Perceptron")
-        self.canvas.draw()
-        self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
-
-        latex_w = self.mathTex_to_QPixmap("$W = [1.0 \quad -1.0]$", 5)
-        self.latex_w = QtWidgets.QLabel(self)
-        self.latex_w.setPixmap(latex_w)
-        self.latex_w.setGeometry((self.x_chapter_usual + 15) * self.w_ratio, 350 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-
-        latex_b = self.mathTex_to_QPixmap("$b = [0.0]$", 5)
-        self.latex_b = QtWidgets.QLabel(self)
-        self.latex_b.setPixmap(latex_b)
-        self.latex_b.setGeometry((self.x_chapter_usual + 30) * self.w_ratio, 390 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-
-        self.undo_click_button = QtWidgets.QPushButton("Undo Last Mouse Click", self)
-        self.undo_click_button.setStyleSheet("font-size:13px")
-        self.undo_click_button.setGeometry(self.x_chapter_button * self.w_ratio, 500 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.undo_click_button.clicked.connect(self.on_undo_mouseclick)
-
-        self.clear_button = QtWidgets.QPushButton("Clear Data", self)
-        self.clear_button.setStyleSheet("font-size:13px")
-        self.clear_button.setGeometry(self.x_chapter_button * self.w_ratio, 550 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.clear_button.clicked.connect(self.on_clear)
-
-        self.label_error = QtWidgets.QLabel(self)
-        self.label_error.setText("Error: ---")
-        self.label_error.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_error.setGeometry(self.x_chapter_slider_label * self.w_ratio, 600 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-
         self.point_1_draw.set_data([self.point_1[0]], [self.point_1[1]])
         self.point_2_draw.set_data([self.point_2[0]], [self.point_2[1]])
         self.draw_decision_boundary()
+        self.compute_error()
+        self.draw_data()
+        self.canvas.draw()
+        self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
+
+        # latex_w = self.mathTex_to_QPixmap("$W = [1.0 \quad -1.0]$", 6)
+        latex_w = self.mathTex_to_QPixmap("$W = [1.0 \quad -1.0]$", 10)
+        self.latex_w = QtWidgets.QLabel(self)
+        self.latex_w.setPixmap(latex_w)
+        # self.latex_w.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 420 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
+        self.latex_w.setGeometry(50 * self.w_ratio, 80 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
+
+        # latex_b = self.mathTex_to_QPixmap("$b = [0.0]$", 6)
+        latex_b = self.mathTex_to_QPixmap("$b = [0.0]$", 10)
+        self.latex_b = QtWidgets.QLabel(self)
+        self.latex_b.setPixmap(latex_b)
+        # self.latex_b.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 450 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
+        self.latex_b.setGeometry(350 * self.w_ratio, 80 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
+
+        self.make_button("undo_click_button", "Undo Last Mouse Click",
+                         (self.x_chapter_button, 550, self.w_chapter_button, self.h_chapter_button), self.on_undo_mouseclick)
+        self.make_button("clear_button", "Clear Data",
+                         (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.on_clear)
 
     def on_mouseclick(self, event):
         """Add an item to the plot"""
@@ -96,16 +101,22 @@ class DecisionBoundaries(NNDLayout):
             d_click_p2 = abs(self.point_2[1] - event.ydata)
             self.closest_point = "1" if d_click_p1 <= d_click_p2 else "2"
             if min(d_click_p1, d_click_p2) < 0.2:
+                self.cid2 = self.canvas.mpl_connect("motion_notify_event", self.on_mouse_drag)
                 self.cid = self.canvas.mpl_connect("button_release_event", self.on_mousepressed)
             else:
                 if self.cid:
                     self.canvas.mpl_disconnect(self.cid)
-                self.cid = None
+                if self.cid2:
+                    self.canvas.mpl_disconnect(self.cid2)
+                self.cid, self.cid2 = None, None
                 self.data.append((event.xdata, event.ydata, POS if event.button == 1 else NEG))
                 self.compute_error()
                 self.draw_data()
 
-    def on_mousepressed(self, event):
+    def on_mouse_drag(self, event):
+        self.on_mousepressed(event, disconnect=False)
+
+    def on_mousepressed(self, event, disconnect=True):
         if self.closest_point == "1":
             self.point_1 = (event.xdata, event.ydata)
         elif self.closest_point == "2":
@@ -116,6 +127,9 @@ class DecisionBoundaries(NNDLayout):
         self.draw_decision_boundary()
         self.draw_data()
         self.compute_error()
+        if disconnect:
+            self.canvas.mpl_disconnect(self.cid2)
+
 
     def draw_data(self):
         self.point_1_draw.set_data([self.point_1[0]], [self.point_1[1]])
@@ -168,8 +182,8 @@ class DecisionBoundaries(NNDLayout):
         self.w[0] = np.round(self.w[0] / scale, 2)
         self.w[1] = np.round(self.w[1] / scale, 2)
         self.b = np.round(np.array([-c * self.w[1]]), 2)
-        self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(self.w[0], self.w[1]), 5))
-        self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(self.b[0]), 5))
+        self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(self.w[0], self.w[1]), 10))
+        self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(self.b[0]), 10))
         self.compute_error()
         # p2 = -w1*p1/w2 - b/w2
 
