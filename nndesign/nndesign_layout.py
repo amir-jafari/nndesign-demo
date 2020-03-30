@@ -254,8 +254,8 @@ class NNDLayout(QMainWindow):
         setattr(self, "canvas" + str(plot_number), FigureCanvas(getattr(self, "figure" + str(plot_number))))
         self.set_layout(plot_coords, getattr(self, "canvas" + str(plot_number)))
 
-    def make_combobox(self, combobox_number, combobox_items, combobox_coords, f_connect, label_attr_name=None, label_str="?",
-                      label_coords=None, label_font_name="Times New Roman", label_font_size=12, label_italics=False):
+    def make_combobox(self, combobox_number, combobox_items, combobox_coords, f_connect=None, label_attr_name=None, label_str="?",
+                      label_coords=None, label_font_name="Times New Roman", label_font_size=14, label_italics=False):
         setattr(self, "comboBox" + str(combobox_number), QtWidgets.QComboBox(self))
         combobox = getattr(self, "comboBox" + str(combobox_number))
         combobox.addItems(combobox_items)
@@ -269,7 +269,8 @@ class NNDLayout(QMainWindow):
             warnings.warn("Setting combobox with too high height ({}).".format(combobox_coords[-1] * self.h_ratio)
                           + " This may result in interactive problems")
         self.set_layout(combobox_coords, combobox)
-        combobox.currentIndexChanged.connect(f_connect)
+        if f_connect:
+            combobox.currentIndexChanged.connect(f_connect)
 
     def make_slider(self, slider_attr_name, slider_type, slider_range, slider_tick_pos, slider_tick_interval,
                     slider_value, slider_coords, f_connect=None, label_attr_name=None, label_str="?", label_coords=None,

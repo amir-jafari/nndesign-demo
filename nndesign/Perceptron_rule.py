@@ -21,27 +21,50 @@ def hardlim(n):
 
 class PerceptronRule(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(PerceptronRule, self).__init__(w_ratio, h_ratio, main_menu=1)
+        super(PerceptronRule, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Perceptron rule", 4, " On the plot, click the\n Primary mouse button\n to add a positive class.\n"
-                                                " Secondary mouse button\n to add a negative class.\n Then click Train  ",
-                          PACKAGE_PATH + "Chapters/4/Logo_Ch_4.svg", PACKAGE_PATH + "Chapters/4/Percptron1.svg")
+        self.fill_chapter("Perceptron rule", 4, "Left-click on the plot to add\na positive class.\n\nRight-click to add a\nnegative class.\n\n"
+                                                "Click [Learn] to apply the\nperceptron rule to a\nsingle vector."
+                                                "\n\nClick [Train] to apply the\nrule to all the vectors\nfor n_epochs.\n\n"
+                                                "Click [Random] to initialize \nparameters randomly.",
+                          PACKAGE_PATH + "Chapters/4/Logo_Ch_4.svg", None, description_coords=(535, 80, 450, 400))
 
-        self.data, self.data_missclasified = [], []
+        self.make_label("error_label", "Error: ---", (320, 615, 50, 100))
+        self.make_label("epoch_label", " -   Iterations so far: 0", (370, 615, 150, 100))
+        self.make_label("warning_label", "", (20, 615, 400, 100))
+
+        self.data = [(1, 2, 1), (0, -1, 0), (-1, 2, 0)]
+        self.Weights = np.array([1, -0.8])
+        self.bias = np.array([0])
+        self.total_error = 0
+        self.data_missclasified, error = [], 0
+        for xy in self.data:
+            t_hat = self.run_forward(np.array(xy[0:2]))
+            if t_hat != xy[2]:
+                self.data_missclasified.append(True)
+                error += 1
+            else:
+                self.data_missclasified.append(False)
+        self.total_error += error
+        self.error_label.setText("Error: {}".format(self.total_error))
+
         self.total_epochs = 0
         self.R = 2  # Num input dimensions
         self.S = 1  # Num neurons
 
         # Add a plot
+        self.make_plot(1, (5, 150, 510, 510))
         self.axes = self.figure.add_subplot(111)
         self.figure.subplots_adjust(bottom=0.2, left=0.1)
-        self.axes.set_xlim(0, 10)
-        self.axes.set_ylim(0, 10)
+        self.axes.set_xlim(-3, 3)
+        self.axes.set_ylim(-3, 3)
         self.axes.tick_params(labelsize=10)
-        self.axes.set_xlabel("$p^1$", fontsize=10)
-        self.axes.xaxis.set_label_coords(0.5, 0.1)
-        self.axes.set_ylabel("$p^2$", fontsize=10)
-        self.axes.yaxis.set_label_coords(-0.05, 0.5)
+        # self.axes.set_xlabel("$p^1$", fontsize=10)
+        # self.axes.xaxis.set_label_coords(0.5, 0.1)
+        # self.axes.set_ylabel("$p^2$", fontsize=10)
+        # self.axes.yaxis.set_label_coords(-0.05, 0.5)
+        self.axes.plot([0] * 20, np.linspace(-3, 3, 20), linestyle="dashed", linewidth=0.5, color="gray")
+        self.axes.plot(np.linspace(-3, 3, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
         self.pos_line, = self.axes.plot([], 'mo', label="Positive Class")
         self.neg_line, = self.axes.plot([], 'cs', label="Negative Class")
         self.miss_line_pos, = self.axes.plot([], 'ro')
@@ -57,76 +80,45 @@ class PerceptronRule(NNDLayout):
         # Add event handler for a mouseclick in the plot
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
-        self.epoch_label = QtWidgets.QLabel(self)
-        self.epoch_label.setText("Iterations so far: 0")
-        self.epoch_label.setFixedHeight(20)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 600 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.epoch_label)
-        self.wid2.setLayout(self.layout2)
+        self.make_combobox(1, ["1", "10", "100", "1000"], (self.x_chapter_usual, 530, self.w_chapter_slider, 100),
+                           label_attr_name="whatever", label_str="Epochs to Run",
+                           label_coords=(self.x_chapter_usual + 30, 530 - 20, self.w_chapter_slider, 100))
 
-        self.error_label = QtWidgets.QLabel(self)
-        self.error_label.setText("Error: ---")
-        self.error_label.setFixedHeight(20)
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(self.x_chapter_usual * self.w_ratio, 580 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout4.addWidget(self.error_label)
-        self.wid4.setLayout(self.layout4)
+        self.make_combobox(2, ["Yes", "No"], (self.x_chapter_usual, 580, self.w_chapter_slider, 100),
+                           label_attr_name="whatever", label_str="Use Bias",
+                           label_coords=(self.x_chapter_usual + 30, 580 - 20, self.w_chapter_slider, 100))
+        self.use_bias = self.comboBox2.currentText() == "Yes"
 
-        self.warning_label = QtWidgets.QLabel(self)
-        self.warning_label.setText("")
-        # self.warning_label.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
-        self.warning_label.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 550 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
-
-        self.epr_label = QtWidgets.QLabel("Epochs to run")
-        wid6 = QtWidgets.QWidget(self)
-        layout6 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        wid6.setGeometry((self.x_chapter_usual + 5) * self.w_ratio, 480 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        layout6.addWidget(self.epr_label)
-        wid6.setLayout(layout6)
-        self.epochs_per_run = QtWidgets.QComboBox(self)
-        self.epochs_per_run.addItems(["1", "10", "100", "1000"])
-        self.epochs_per_run.setCurrentIndex(0)
-        wid7 = QtWidgets.QWidget(self)
-        layout7 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        wid7.setGeometry(self.x_chapter_usual * self.w_ratio, 500 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        layout7.addWidget(self.epochs_per_run)
-        wid7.setLayout(layout7)
-
-        self.run_button = QtWidgets.QPushButton("Train", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 460 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
-
-        self.run_button = QtWidgets.QPushButton("Learn", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 420 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run_3)
-
-        self.rerun_button = QtWidgets.QPushButton("Reset to Start", self)
-        self.rerun_button.setStyleSheet("font-size:13px")
-        self.rerun_button.setGeometry(self.x_chapter_button * self.w_ratio, 380 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.rerun_button.clicked.connect(self.on_reset)
-
-        self.undo_click_button = QtWidgets.QPushButton("Undo Last Mouse Click", self)
-        self.undo_click_button.setStyleSheet("font-size:13px")
-        self.undo_click_button.setGeometry(self.x_chapter_button * self.w_ratio, 340 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.undo_click_button.clicked.connect(self.on_undo_mouseclick)
-
-        self.clear_button = QtWidgets.QPushButton("Clear Data", self)
-        self.clear_button.setStyleSheet("font-size:13px")
-        self.clear_button.setGeometry(self.x_chapter_button * self.w_ratio, 300 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.clear_button.clicked.connect(self.on_clear)
+        self.make_button("run_button", "Train",
+                         (self.x_chapter_button, 520, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Learn",
+                         (self.x_chapter_button, 495, self.w_chapter_button, self.h_chapter_button), self.on_run_3)
+        self.make_button("rerun_button", "Random",
+                         (self.x_chapter_button, 470, self.w_chapter_button, self.h_chapter_button), self.on_reset)
+        self.make_button("undo_click_button", "Undo Last Mouse Click",
+                         (self.x_chapter_button, 445, self.w_chapter_button, self.h_chapter_button), self.on_undo_mouseclick)
+        self.make_button("clear_button", "Clear Data",
+                         (self.x_chapter_button, 420, self.w_chapter_button, self.h_chapter_button),
+                         self.on_clear)
 
         self.ani1, self.ani2 = None, None
-        self.initialize_weights()
         self.learn = None
 
-        self.initialize_weights()
+        # latex_w = self.mathTex_to_QPixmap("$W = [1.0 \quad -1.0]$", 6)
+        latex_w = self.mathTex_to_QPixmap("$W = [1.0 \quad -0.8]$", 10)
+        self.latex_w = QtWidgets.QLabel(self)
+        self.latex_w.setPixmap(latex_w)
+        # self.latex_w.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 420 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
+        self.latex_w.setGeometry(50 * self.w_ratio, 80 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
+
+        # latex_b = self.mathTex_to_QPixmap("$b = [0.0]$", 6)
+        latex_b = self.mathTex_to_QPixmap("$b = [0.0]$", 10)
+        self.latex_b = QtWidgets.QLabel(self)
+        self.latex_b.setPixmap(latex_b)
+        # self.latex_b.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 450 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
+        self.latex_b.setGeometry(350 * self.w_ratio, 80 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
         self.draw_decision_boundary()
+        self.draw_data()
         self.canvas.draw()
 
     def draw_data(self):
@@ -185,7 +177,7 @@ class PerceptronRule(NNDLayout):
         if self.ani2:
             self.ani2.event_source.stop()
         self.data = []
-        self.clear_decision_boundary()
+        # self.clear_decision_boundary()
         self.initialize_weights()
         self.total_epochs = 0
         self.update_run_status()
@@ -194,10 +186,10 @@ class PerceptronRule(NNDLayout):
 
     def update_run_status(self):
         if self.total_epochs == 0:
-            self.epoch_label.setText("Iterations so far: 0")
+            self.epoch_label.setText(" -   Iterations so far: 0")
             self.error_label.setText("Error: ---")
         else:
-            self.epoch_label.setText("Iterations so far: {}".format(self.total_epochs))
+            self.epoch_label.setText(" -   Iterations so far: {}".format(self.total_epochs))
             self.error_label.setText("Error: {}".format(self.total_error))
 
     def on_run(self):
@@ -207,17 +199,21 @@ class PerceptronRule(NNDLayout):
         if self.ani2:
             self.ani2.event_source.stop()
 
-        if int(self.epochs_per_run.currentText()) > 1:
+        self.use_bias = self.comboBox2.currentText() == "Yes"
+        if not self.use_bias:
+            self.bias = np.array([0])
+
+        if int(self.comboBox1.currentText()) > 1:
 
             if len(self.data) < 2:
-                self.warning_label.setText("Please select at least two\ndata points before training")
+                self.warning_label.setText("Please select at least two data points before training.")
             else:
                 if len(np.unique([cls[2] for cls in self.data])) == 1:
-                    self.warning_label.setText("Please select at least one\ndata point of each class")
+                    self.warning_label.setText("Please select at least one data point of each class.")
                 else:
                     self.warning_label.setText("")
                     # Do 10 epochs
-                    for epoch in range(int(self.epochs_per_run.currentText())):
+                    for epoch in range(int(self.comboBox1.currentText())):
 
                         # training = self.data.copy()
                         # np.random.shuffle(training)
@@ -280,6 +276,9 @@ class PerceptronRule(NNDLayout):
         # self.miss_line_pos.set_data([], [])
         # self.miss_line_neg.set_data([], [])
         # self.decision.set_data([], [])
+        self.use_bias = self.comboBox2.currentText() == "Yes"
+        if not self.use_bias:
+            self.bias = np.array([0])
         self.all_t_hat = np.array([self.run_forward(np.array(xy[0:2])) for xy in self.data])
         self.total_error = abs(np.array([t[2] for t in self.data]) - self.all_t_hat).sum()
         # self.canvas.draw()
@@ -289,17 +288,17 @@ class PerceptronRule(NNDLayout):
         """ GD version """
 
         if len(self.data) < 2:
-            self.warning_label.setText("Please select at least two\ndata points before training")
+            self.warning_label.setText("Please select at least two data points before training.")
             return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
         else:
             if len(np.unique([cls[2] for cls in self.data])) == 1:
-                self.warning_label.setText("Please select at least one\ndata point of each class")
+                self.warning_label.setText("Please select at least one data point of each class.")
                 return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
             else:
                 self.warning_label.setText("")
 
                 if self.total_error == 0:
-                    self.warning_label.setText("The error is 0! Learning or\nTraining will have no effect")
+                    self.warning_label.setText("The error is 0!")
                     return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
 
                 # training = self.data.copy()
@@ -348,8 +347,11 @@ class PerceptronRule(NNDLayout):
                         self.data_missclasified.append(False)
                 self.draw_data()
 
-                self.epoch_label.setText("Iterations so far: {}".format(self.total_epochs))
+                self.epoch_label.setText(" -   Iterations so far: {}".format(self.total_epochs))
                 self.error_label.setText("Error: {}".format(self.total_error))
+
+                self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(round(self.Weights[0], 2), round(self.Weights[1], 2)), 10))
+                self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(round(self.bias[0], 2)), 10))
 
                 return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
 
@@ -388,7 +390,8 @@ class PerceptronRule(NNDLayout):
 
         # Adjust weights and bias based on the error from this iteration
         self.Weights = self.Weights + self.error * p.T
-        self.bias = self.bias + self.error
+        if self.use_bias:
+            self.bias = self.bias + self.error
         return self.error
 
     def find_decision_boundary(self, x):
