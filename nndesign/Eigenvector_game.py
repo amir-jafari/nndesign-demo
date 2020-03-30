@@ -14,11 +14,15 @@ from get_package_path import PACKAGE_PATH
 
 class EigenvectorGame(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(EigenvectorGame, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=True)
+        super(EigenvectorGame, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Eigenvector Game", 6, "TODO",
-                          PACKAGE_PATH + "Logo/Logo_Ch_6.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Eigenvector Game", 6, "Your job is to find\nthe two eigenvectors of an\nunknown transformation.\n\n"
+                                                 "Click on the plot to draw a\nvector (in red) and see\nthe transformed vector.\n\n"
+                                                 "If their directions are\n the same or opposite,\nthe first eigenvector will\nshow up in green.\n\n"
+                                                 "Repeat to find\nthe second eigenvector.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_6.svg", None, description_coords=(535, 100, 450, 350))
 
+        self.make_plot(1, (90, 300, 370, 370))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Original Vectors", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
@@ -36,40 +40,17 @@ class EigenvectorGame(NNDLayout):
         self.axes_1.xaxis.set_label_coords(1, -0.025)
         self.axes_1.set_ylabel("$y$")
         self.axes_1.yaxis.set_label_coords(-0.025, 1)
+        self.axes_1.plot([0] * 20, np.linspace(-2, 2, 20), linestyle="dashed", linewidth=0.5, color="gray")
+        self.axes_1.plot(np.linspace(-2, 2, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
-        self.label_n_tries = QtWidgets.QLabel(self)
-        self.label_n_tries.setText("Number of Tries Left: 10")
-        self.label_n_tries.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_n_tries.setGeometry(530 * self.w_ratio, 300 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.slider_n_tries = QtWidgets.QSlider(QtCore.Qt.Vertical)
-        self.slider_n_tries.setRange(0, 10)
-        self.slider_n_tries.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_n_tries.setTickInterval(1)
-        self.slider_n_tries.setValue(10)
-        self.n_tries = 10
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(530 * self.w_ratio, 330 * self.h_ratio, 100 * self.w_ratio, 200 * self.h_ratio)
-        self.layout4.addWidget(self.slider_n_tries)
-        self.wid4.setLayout(self.layout4)
-        self.slider_n_tries.valueChanged.connect(self.freeze)
-
-        self.label_message = QtWidgets.QLabel(self)
-        self.label_message.setText("")
-        self.label_message.setFont(QtGui.QFont("Times New Roman", 18))
-        self.label_message.setGeometry(150 * self.w_ratio, 100 * self.h_ratio, 400 * self.w_ratio, 150 * self.h_ratio)
-
-        self.label_message1 = QtWidgets.QLabel(self)
-        self.label_message1.setText("")
-        self.label_message1.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_message1.setGeometry(150 * self.w_ratio, 200 * self.h_ratio, 400 * self.w_ratio, 150 * self.h_ratio)
-
-        self.button = QtWidgets.QPushButton("Restart", self)
-        self.button.setStyleSheet("font-size:13px")
-        self.button.setGeometry(self.x_chapter_button * self.w_ratio, 530 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.button.clicked.connect(self.random_transform)
+        self.make_slider("slider_n_tries", QtCore.Qt.Vertical, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
+                         (530, 430, 100, 200), self.freeze, "label_n_tries", "Number of Tries Left: 10",
+                         (530, 400, 150, 50))
+        self.make_label("label_message", "", (150, 100, 400, 150))
+        self.make_label("label_message1", "", (150, 200, 400, 150))
+        self.make_button("button", "Restart", (self.x_chapter_button, 615, self.w_chapter_button, self.h_chapter_button), self.random_transform)
         self.A, self.eig_v1, self.eig_v2 = None, None, None
         self.random_transform()
 
@@ -77,6 +58,8 @@ class EigenvectorGame(NNDLayout):
         self.slider_n_tries.setValue(self.n_tries)
 
     def random_transform(self):
+        self.label_message.setText("")
+        self.label_message1.setText("")
         self.n_tries = 10
         self.label_n_tries.setText("Number of Tries Left: 10")
         self.slider_n_tries.setValue(10)
@@ -127,23 +110,37 @@ class EigenvectorGame(NNDLayout):
                 self.draw_vector()
 
     def draw_vector(self):
-        self.axes1_v1.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
+        x_trimmed1, y_trimmed1 = self.axes1_points[0][0], self.axes1_points[0][1]
+        while abs(x_trimmed1) > 2:
+            x_trimmed1 /= 1.1
+            y_trimmed1 /= 1.1
+        self.axes1_v1.set_UVC(x_trimmed1, y_trimmed1)
         slope_v1 = self.axes1_points[0][1] / self.axes1_points[0][0]
         v_transformed = np.dot(self.A, np.array([[self.axes1_points[0][0]], [self.axes1_points[0][1]]]))
         slope_v1_t = v_transformed[1, 0] / v_transformed[0, 0]
-        self.axes1_v2.set_UVC(v_transformed[0, 0], v_transformed[1, 0])
+        x_trimmed, y_trimmed = v_transformed[0, 0], v_transformed[1, 0]
+        while abs(x_trimmed) > 2:
+            x_trimmed /= 1.1
+            y_trimmed /= 1.1
+        self.axes1_v2.set_UVC(x_trimmed, y_trimmed)
         if not self.slope1:
-            if abs(slope_v1 - slope_v1_t) < 0.1:
-                self.axes1_eig1.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
+            if 1.2 > abs(slope_v1 / slope_v1_t) > 0.8:
+                self.axes1_eig1.set_UVC(x_trimmed1, y_trimmed1)
                 self.eig1_found, self.slope1 = True, slope_v1
                 self.label_message1.setText("First eigenvector found!")
+                self.axes1_v1.set_color("black")
+            else:
+                self.axes1_v1.set_color("red")
         else:
-            if abs(slope_v1 - self.slope1) >= 0.1 and abs(slope_v1 - slope_v1_t) < 0.1:
-                self.axes1_eig2.set_UVC(self.axes1_points[0][0], self.axes1_points[0][1])
+            if (1.2 < abs(slope_v1 / self.slope1) or abs(slope_v1 / self.slope1) < 0.8) and 1.2 > abs(slope_v1 / slope_v1_t) > 0.8:
+                self.axes1_eig2.set_UVC(x_trimmed1, y_trimmed1)
                 self.eig2_found = True
                 self.clear_all()
                 self.label_message1.setText("Second eigenvector found!")
                 self.label_message.setText("You won :D. Click Restart to play again")
+                self.axes1_v1.set_color("black")
+            else:
+                self.axes1_v1.set_color("red")
         if not self.eig2_found and self.n_tries == 0:
             self.label_message.setText("You lost :(. Click Restart to try again")
         self.canvas.draw()

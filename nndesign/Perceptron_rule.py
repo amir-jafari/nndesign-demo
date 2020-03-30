@@ -27,7 +27,7 @@ class PerceptronRule(NNDLayout):
                                                 "Click [Learn] to apply the\nperceptron rule to a\nsingle vector."
                                                 "\n\nClick [Train] to apply the\nrule to all the vectors\nfor n_epochs.\n\n"
                                                 "Click [Random] to initialize \nparameters randomly.",
-                          PACKAGE_PATH + "Chapters/4/Logo_Ch_4.svg", None, description_coords=(535, 80, 450, 400))
+                          PACKAGE_PATH + "Logo/Logo_Ch_4.svg", None, description_coords=(535, 80, 450, 400))
 
         self.make_label("error_label", "Error: ---", (320, 615, 50, 100))
         self.make_label("epoch_label", " -   Iterations so far: 0", (370, 615, 150, 100))

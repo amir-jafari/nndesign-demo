@@ -37,21 +37,14 @@ class LinearTransformations(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(LinearTransformations, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Linear Transformations", 6, "TODO",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Linear Transformations", 6, "TODO - Include instructions\nwhen decide if change\nfunctionality or not",
+                          PACKAGE_PATH + "Logo/Logo_Ch_6.svg", None)
 
         self.cid1, self.cid2 = None, None
         self.cid3 = None
         self.A, self.eig_v1, self.eig_v2 = None, None, None
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(100 * self.w_ratio, 90 * self.h_ratio, 300 * self.w_ratio, 300 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
+        self.make_plot(1, (100, 90, 300, 300))
         self.vectors = []
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Original Vectors")
@@ -61,23 +54,16 @@ class LinearTransformations(NNDLayout):
         self.line_data_x, self.line_data_y = [], []
         self.line2 = None
         self.line_data_x2, self.line_data_y2 = [], []
-        self.axes_1.set_xticks([-1, -0.5, 0, 0.5])
-        self.axes_1.set_yticks([-1, -0.5, 0, 0.5])
-        self.axes_1.set_xlabel("$x$")
-        self.axes_1.xaxis.set_label_coords(1, -0.025)
-        self.axes_1.set_ylabel("$y$")
-        self.axes_1.yaxis.set_label_coords(-0.025, 1)
+        # self.axes_1.set_xticks([-1, -0.5, 0, 0.5])
+        # self.axes_1.set_yticks([-1, -0.5, 0, 0.5])
+        # self.axes_1.set_xlabel("$x$")
+        # self.axes_1.xaxis.set_label_coords(1, -0.025)
+        # self.axes_1.set_ylabel("$y$")
+        # self.axes_1.yaxis.set_label_coords(-0.025, 1)
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
-        self.figure2 = Figure()
-        self.canvas2 = FigureCanvas(self.figure2)
-        self.toolbar2 = NavigationToolbar(self.canvas2, self)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(100 * self.w_ratio, 380 * self.h_ratio, 300 * self.w_ratio, 300 * self.h_ratio)
-        self.layout2.addWidget(self.canvas2)
-        self.wid2.setLayout(self.layout2)
+        self.make_plot(2, (100, 380, 300, 300))
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_xlim(-1, 1)
         self.axes_2.set_ylim(-1, 1)
@@ -86,20 +72,18 @@ class LinearTransformations(NNDLayout):
         self.line2, = self.axes_2.plot([], linestyle="--")
         self.text_2 = self.axes_2.text(-0.7, 0, "")
         self.line_data_x2, self.line_data_y2 = [], []
-        self.axes_2.set_xticks([-1, -0.5, 0, 0.5])
-        self.axes_2.set_yticks([-1, -0.5, 0, 0.5])
-        self.axes_2.set_xlabel("$x$")
-        self.axes_2.xaxis.set_label_coords(1, -0.025)
-        self.axes_2.set_ylabel("$y$")
-        self.axes_2.yaxis.set_label_coords(-0.025, 1)
+        # self.axes_2.set_xticks([-1, -0.5, 0, 0.5])
+        # self.axes_2.set_yticks([-1, -0.5, 0, 0.5])
+        # self.axes_2.set_xlabel("$x$")
+        # self.axes_2.xaxis.set_label_coords(1, -0.025)
+        # self.axes_2.set_ylabel("$y$")
+        # self.axes_2.yaxis.set_label_coords(-0.025, 1)
+        self.axes_2.plot([0] * 20, np.linspace(-1, 1, 20), linestyle="dashed", linewidth=0.5, color="gray")
+        self.axes_2.plot(np.linspace(-1, 1, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
         self.canvas2.draw()
         self.canvas2.mpl_connect('button_press_event', self.on_mouseclick2)
 
-        self.run_button = QtWidgets.QPushButton("Clear", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 420 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
+        self.make_button("run_button", "Clear", (self.x_chapter_button, 420, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
         self.on_run()
 
@@ -114,6 +98,8 @@ class LinearTransformations(NNDLayout):
         self.line_data_x, self.line_data_y = [], []
         while self.axes_1.lines:
             self.axes_1.lines.pop()
+        self.axes_1.plot([0] * 20, np.linspace(-1, 1, 20), linestyle="dashed", linewidth=0.5, color="gray")
+        self.axes_1.plot(np.linspace(-1, 1, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
         while self.axes_1.collections:
             for collection in self.axes_1.collections:
                 collection.remove()
@@ -188,6 +174,8 @@ class LinearTransformations(NNDLayout):
             self.line_data_y2.append(event.ydata)
             while self.axes_1.lines:
                 self.axes_1.lines.pop()
+            self.axes_1.plot([0] * 20, np.linspace(-1, 1, 20), linestyle="dashed", linewidth=0.5, color="gray")
+            self.axes_1.plot(np.linspace(-1, 1, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
             self.axes_1.lines.append(self.line)
             self.axes_1.plot(self.line_data_x2, self.line_data_y2, linestyle="--", color="gray")
             self.canvas.draw()
@@ -195,7 +183,7 @@ class LinearTransformations(NNDLayout):
             self.line_data_y2.pop()
 
     def on_mouseclick2(self, event):
-        if event.xdata != None and event.xdata != None and len(self.vectors) == 4:
+        if event.xdata != None and event.xdata != None and len(self.vectors) >= 4:
             if self.axes_2.collections:
                 while len(self.axes_2.collections) > 2:
                     self.axes_2.collections[-1].remove()
