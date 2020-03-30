@@ -26,8 +26,8 @@ from Eigenvector_game import EigenvectorGame
 # ------ Chapter 7 --------
 from Supervised_Hebb import SupervisedHebb
 # ------ Chapter 8 --------
-from Tylor_series_1 import TylorSeries1
-from Tylor_series_2 import TylorSeries2
+from Taylor_series_1 import TaylorSeries1
+from Taylor_series_2 import TaylorSeries2
 from Directional_derivatives import DirectionalDerivatives
 from Quadratic_function import QuadraticFunction
 # ------ Chapter 9 --------
@@ -319,10 +319,10 @@ class MainWindowNN(NNDLayout):
     def chapter8(self, idx):
         self.comboBox3.setCurrentIndex(0)
         if idx == 1:
-            self.chapter_window1 = TylorSeries1(self.w_ratio, self.h_ratio)
+            self.chapter_window1 = TaylorSeries1(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
         elif idx == 2:
-            self.chapter_window2 = TylorSeries2(self.w_ratio, self.h_ratio)
+            self.chapter_window2 = TaylorSeries2(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
         elif idx == 3:
             self.chapter_window3 = DirectionalDerivatives(self.w_ratio, self.h_ratio)

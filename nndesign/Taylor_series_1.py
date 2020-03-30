@@ -9,13 +9,16 @@ from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
 
 
-class TylorSeries1(NNDLayout):
+class TaylorSeries1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(TylorSeries1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
+        super(TaylorSeries1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Tylor Series #1", 8, " Click ... TODO",  # TODO
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Taylor Series #1", 8, "Click on the top graph to\ncreate a Taylor series\napproximation"
+                                                " of the\ncosine function.\n\nClick on the checkboxes\nto turn various orders\n"
+                                                "of approximation on and off.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None)
 
+        self.make_plot(1, (120, 120, 270, 270))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("cos(x)", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-6, 6)
@@ -29,9 +32,11 @@ class TylorSeries1(NNDLayout):
         self.x_points = np.linspace(-6, 6)
         self.axes_1.plot(self.x_points, np.cos(self.x_points), "-")
         self.axes1_point_draw, = self.axes_1.plot([], 'mo')
+        self.axes_1.text(-3.5, 1.5, "<CLICK ON ME>")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
+        self.make_plot(2, (120, 390, 270, 270))
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("Approximation", fontdict={'fontsize': 10})
         self.f0, self.f1, self.f2, self.f3, self.f4 = None, None, None, None, None
@@ -54,73 +59,18 @@ class TylorSeries1(NNDLayout):
         self.axes_2.yaxis.set_label_coords(-0.025, 1)
         self.canvas2.draw()
 
-        self.function_cbx = QtWidgets.QCheckBox("Function")
-        self.function_cbx.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 300 * self.h_ratio,
-                                      100 * self.w_ratio, 50 * self.h_ratio)
-        self.function_cbx.stateChanged.connect(self.function_checked)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 300 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout2.addWidget(self.function_cbx)
-        self.wid2.setLayout(self.layout2)
-        self.function_cbx.setChecked(1)
-
-        self.order0_cbx = QtWidgets.QCheckBox("Order 0")
-        self.order0_cbx.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 350 * self.h_ratio,
-                                    100 * self.w_ratio, 50 * self.h_ratio)
-        self.order0_cbx.stateChanged.connect(self.order0_checked)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 350 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout3.addWidget(self.order0_cbx)
-        self.wid3.setLayout(self.layout3)
-
-        self.order1_cbx = QtWidgets.QCheckBox("Order 1")
-        self.order1_cbx.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 400 * self.h_ratio,
-                                    100 * self.w_ratio, 50 * self.h_ratio)
-        self.order1_cbx.stateChanged.connect(self.order1_checked)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 400 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout3.addWidget(self.order1_cbx)
-        self.wid3.setLayout(self.layout3)
-        self.order1_cbx.setChecked(1)
-
-        self.order2_cbx = QtWidgets.QCheckBox("Order 2")
-        self.order2_cbx.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 450 * self.h_ratio,
-                                    100 * self.w_ratio, 50 * self.h_ratio)
-        self.order2_cbx.stateChanged.connect(self.order2_checked)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 450 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout3.addWidget(self.order2_cbx)
-        self.wid3.setLayout(self.layout3)
-
-        self.order3_cbx = QtWidgets.QCheckBox("Order 3")
-        self.order3_cbx.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 500 * self.h_ratio,
-                                    100 * self.w_ratio, 50 * self.h_ratio)
-        self.order3_cbx.stateChanged.connect(self.order3_checked)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 500 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout3.addWidget(self.order3_cbx)
-        self.wid3.setLayout(self.layout3)
-
-        self.order4_cbx = QtWidgets.QCheckBox("Order 4")
-        self.order4_cbx.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 550 * self.h_ratio,
-                                    100 * self.w_ratio, 50 * self.h_ratio)
-        self.order4_cbx.stateChanged.connect(self.order4_checked)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 550 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout3.addWidget(self.order4_cbx)
-        self.wid3.setLayout(self.layout3)
+        self.make_checkbox("function_cbx", "Function", (self.x_chapter_slider_label - 20, 300, 100, 50),
+                           self.function_checked, True)
+        self.make_checkbox("order0_cbx", "Order 0", (self.x_chapter_slider_label - 20, 350, 100, 50),
+                           self.order0_checked, False)
+        self.make_checkbox("order1_cbx", "Order 1", (self.x_chapter_slider_label - 20, 400, 100, 50),
+                           self.order1_checked, True)
+        self.make_checkbox("order2_cbx", "Order 2", (self.x_chapter_slider_label - 20, 450, 100, 50),
+                           self.order2_checked, False)
+        self.make_checkbox("order3_cbx", "Order 3", (self.x_chapter_slider_label - 20, 500, 100, 50),
+                           self.order3_checked, False)
+        self.make_checkbox("order4_cbx", "Order 4", (self.x_chapter_slider_label - 20, 550, 100, 50),
+                           self.order4_checked, False)
 
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:

@@ -301,6 +301,15 @@ class NNDLayout(QMainWindow):
                            button_coords[2] * self.w_ratio, button_coords[3] * self.h_ratio)
         button.clicked.connect(f_connect)
 
+    def make_checkbox(self, checkbox_attr_name, checkbox_str, checkbox_coords, f_connect, checked):
+        setattr(self, checkbox_attr_name, QtWidgets.QCheckBox(checkbox_str))
+        checkbox = getattr(self, checkbox_attr_name)
+        checkbox.setGeometry(checkbox_coords[0] * self.w_ratio, checkbox_coords[1] * self.h_ratio,
+                             checkbox_coords[2] * self.w_ratio, checkbox_coords[3] * self.h_ratio)
+        checkbox.stateChanged.connect(f_connect)
+        self.set_layout(checkbox_coords, checkbox)
+        checkbox.setChecked(1 if checked else 0)
+
     def get_slider_value_and_update(self, slider, slider_label, value_multiplier=1, round_pos=0):
         value = slider.value() * value_multiplier
         slider_label.setText(slider_label.text()[:slider_label.text().find(":") + 2] + str(round(value, round_pos)))
