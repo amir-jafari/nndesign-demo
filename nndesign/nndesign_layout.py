@@ -324,6 +324,14 @@ class NNDLayout(QMainWindow):
         self.set_layout(checkbox_coords, checkbox)
         checkbox.setChecked(1 if checked else 0)
 
+    def make_input_box(self, input_box_attr_name, input_box_text, input_box_coords):
+        setattr(self, input_box_attr_name, QtWidgets.QLineEdit())
+        input_box = getattr(self, input_box_attr_name)
+        input_box.setText(input_box_text)
+        input_box.setGeometry(input_box_coords[0] * self.w_ratio, input_box_coords[1] * self.h_ratio,
+                              input_box_coords[2] * self.w_ratio, input_box_coords[3] * self.h_ratio)
+        self.set_layout(input_box_coords, input_box)
+
     def get_slider_value_and_update(self, slider, slider_label, value_multiplier=1, round_pos=0):
         value = slider.value() * value_multiplier
         slider_label.setText(slider_label.text()[:slider_label.text().find(":") + 2] + str(round(value, round_pos)))
