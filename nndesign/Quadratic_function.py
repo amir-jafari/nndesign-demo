@@ -39,27 +39,27 @@ class QuadraticFunction(NNDLayout):
         # self.axes_2.set_ylim(-2, 2)
         self.axes_2.view_init(5, -5)
 
-        latex_eq = self.mathTex_to_QPixmap("$F(x) = 1/2 \cdot x^T \cdot A \cdot x + d \cdot x^T + c$", 10)
-        self.latex_eq = QtWidgets.QLabel(self)
-        self.latex_eq.setPixmap(latex_eq)
-        # self.latex_w.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 420 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.latex_eq.setGeometry(50 * self.w_ratio, 350 * self.h_ratio, 500 * self.w_ratio, 200 * self.h_ratio)
+        self.paint_latex_string("latex_eq", "$F(x) = 1/2 \cdot x^T \cdot A \cdot x + d \cdot x^T + c$",
+                                10, (50, 320, 500, 200))
 
-        latex_A = self.mathTex_to_QPixmap("$A = []$", 14)
-        self.latex_A = QtWidgets.QLabel(self)
-        self.latex_A.setPixmap(latex_A)
-        # self.latex_w.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 420 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.latex_A.setGeometry(50 * self.w_ratio, 550 * self.h_ratio, 500 * self.w_ratio, 200 * self.h_ratio)
+        self.paint_latex_string("latex_A1", "$A =$", 16, (10, 415 + 30, 500, 200))
+        self.paint_latex_string("latex_A2", "$[$", 45, (80, 415 + 30, 500, 200))
+        self.paint_latex_string("latex_A3", "$]$", 45, (175, 415 + 30, 500, 200))
+        self.make_input_box("a_11", "1.5", (100, 440 + 30, 60, 100))
+        self.make_input_box("a_12", "-0.7", (150, 440 + 30, 60, 100))
+        self.make_input_box("a_21", "-0.7", (100, 490 + 30, 60, 100))
+        self.make_input_box("a_22", "1.0", (150, 490 + 30, 60, 100))
 
-        self.make_input_box("a_11", "1.5", (50, 500, 75, 100))
-        self.make_input_box("a_12", "-0.7", (120, 500, 75, 100))
-        self.make_input_box("a_21", "-0.7", (50, 570, 75, 100))
-        self.make_input_box("a_22", "1", (120, 570, 75, 100))
+        self.paint_latex_string("latex_d1", "$d =$", 16, (230, 415 + 30, 500, 200))
+        self.paint_latex_string("latex_d2", "$[$", 45, (300, 415 + 30, 500, 200))
+        self.paint_latex_string("latex_d3", "$]$", 45, (350, 415 + 30, 500, 200))
+        self.make_input_box("d_1", "0.35", (320, 440 + 30, 60, 100))
+        self.make_input_box("d_2", "0.25", (320, 490 + 30, 60, 100))
 
-        self.make_input_box("d_1", "0.35", (250, 500, 75, 100))
-        self.make_input_box("d_2", "0.25", (250, 570, 75, 100))
-
-        self.make_input_box("c", "1", (350, 530, 75, 100))
+        self.paint_latex_string("latex_c1", "$c =$", 12, (405 - 5, 415 + 30, 500, 200))
+        self.paint_latex_string("latex_c2", "$[$", 16, (460 - 5, 415 + 30, 500, 200))
+        self.paint_latex_string("latex_c3", "$]$", 16, (500 - 5, 415 + 30, 500, 200))
+        self.make_input_box("c", "1.0", (460 - 5, 465 + 30, 60, 100))
 
         self.make_button("run_button", "Update", (self.x_chapter_button, 310, self.w_chapter_button, self.h_chapter_button), self.on_run)
 

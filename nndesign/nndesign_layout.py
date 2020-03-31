@@ -224,6 +224,14 @@ class NNDLayout(QMainWindow):
 
         return qpixmap
 
+    def paint_latex_string(self, latex_label_attr_name, latex_sting, font_size, latex_coords):
+        latex_paint = self.mathTex_to_QPixmap(latex_sting, font_size)
+        setattr(self, latex_label_attr_name, QtWidgets.QLabel(self))
+        latex_label = getattr(self, latex_label_attr_name)
+        latex_label.setPixmap(latex_paint)
+        latex_label.setGeometry(latex_coords[0] * self.w_ratio, latex_coords[1] * self.h_ratio,
+                                latex_coords[2] * self.w_ratio, latex_coords[3] * self.h_ratio)
+
     def show_image(self, image_attr_name, image_path, image_coords):
         setattr(self, image_attr_name, QtWidgets.QLabel(self))
         img = getattr(self, image_attr_name)
