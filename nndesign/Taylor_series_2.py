@@ -30,76 +30,40 @@ FF = (YY - XX) ** 4 + 8 * XX * YY - XX + YY + 3
 FF[FF < 0] = 0
 FF[FF > 12] = 12
 
-class TylorSeries2(NNDLayout):
+class TaylorSeries2(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(TylorSeries2, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(TaylorSeries2, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Taylor Series", 8, " TODO",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Taylor Series #2", 8, "Click in the top-left graph to\ncreate a Taylor series\napproximation."
+                                                 "\n\nSelect the approximation\norder below.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None)
 
-        self.order, self.x, self.y = 0, None, None
-        self.comboBox1 = QtWidgets.QComboBox(self)
-        self.comboBox1.addItems(["Order 0", "Order 1", "Order 2"])
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 580 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox1)
-        self.wid2.setLayout(self.layout2)
-        self.comboBox1.currentIndexChanged.connect(self.change_approx_order)
+        self.order, self.x, self.y = 2, None, None
+        self.make_combobox(1, ["Order 0", "Order 1", "Order 2"], (self.x_chapter_usual, 250, self.w_chapter_slider, 100),
+                           self.change_approx_order)
+        self.comboBox1.setCurrentIndex(self.order)
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(20 * self.w_ratio, 120 * self.h_ratio, 230 * self.w_ratio, 230 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
-
-        self.figure2 = Figure()
-        self.canvas2 = FigureCanvas(self.figure2)
-        self.toolbar2 = NavigationToolbar(self.canvas2, self)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(270 * self.w_ratio, 120 * self.h_ratio, 230 * self.w_ratio, 230 * self.h_ratio)
-        self.layout2.addWidget(self.canvas2)
-        self.wid2.setLayout(self.layout2)
-
-        self.figure3 = Figure()
-        self.canvas3 = FigureCanvas(self.figure3)
-        self.axis1 = Axes3D(self.figure3)
-        self.toolbar = NavigationToolbar(self.canvas3, self)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(20 * self.w_ratio, 400 * self.h_ratio, 230 * self.w_ratio, 230 * self.h_ratio)
-        self.layout3.addWidget(self.canvas3)
-        self.wid3.setLayout(self.layout3)
-
-        self.figure4 = Figure()
-        self.canvas4 = FigureCanvas(self.figure4)
-        self.axis2 = Axes3D(self.figure4)
-        self.toolbar = NavigationToolbar(self.canvas4, self)
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(270 * self.w_ratio, 400 * self.h_ratio, 230 * self.w_ratio, 230 * self.h_ratio)
-        self.layout4.addWidget(self.canvas4)
-        self.wid4.setLayout(self.layout4)
+        self.make_plot(1, (20, 120, 230, 230))
+        self.make_plot(2, (270, 120, 230, 230))
+        self.make_plot(3, (20, 400, 230, 230))
+        self.make_plot(4, (270, 400, 230, 230))
 
         self.x_data, self.y_data = [], []
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.contour(X, Y, F)
+        self.axes_1.contour(X, Y, F, colors="blue")
         self.axes_1.set_title("Function", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
-        self.axes1_point, = self.axes_1.plot([], "*")
-        self.axes_1.set_xticks([-2, -1, 0, 1])
-        self.axes_1.set_yticks([-2, -1, 0, 1])
-        self.axes_1.set_xlabel("$x$")
-        self.axes_1.xaxis.set_label_coords(1, -0.025)
-        self.axes_1.set_ylabel("$y$")
-        self.axes_1.yaxis.set_label_coords(-0.025, 1)
+        self.axes1_point, = self.axes_1.plot([], "o", fillstyle="none", color="k")
+        self.axes1_point1, = self.axes_1.plot([], "o", fillstyle="none", markersize=11, color="k")
+        # self.axes_1.set_xticks([-2, -1, 0, 1])
+        # self.axes_1.set_yticks([-2, -1, 0, 1])
+        # self.axes_1.set_xlabel("$x$")
+        # self.axes_1.xaxis.set_label_coords(1, -0.025)
+        # self.axes_1.set_ylabel("$y$")
+        # self.axes_1.yaxis.set_label_coords(-0.025, 1)
+        self.axes_1.text(-1.5, 1.65, "<CLICK ON ME>")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
@@ -107,34 +71,39 @@ class TylorSeries2(NNDLayout):
         self.axes_2.set_title("Approximation", fontdict={'fontsize': 10})
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
-        self.axes_2.set_xticks([-2, -1, 0, 1])
-        self.axes_2.set_yticks([-2, -1, 0, 1])
-        self.axes_2.set_xlabel("$x$")
-        self.axes_2.xaxis.set_label_coords(1, -0.025)
-        self.axes_2.set_ylabel("$y$")
-        self.axes_2.yaxis.set_label_coords(-0.025, 1)
-        self.axes2_point, = self.axes_2.plot([], "*")
+        # self.axes_2.set_xticks([-2, -1, 0, 1])
+        # self.axes_2.set_yticks([-2, -1, 0, 1])
+        # self.axes_2.set_xlabel("$x$")
+        # self.axes_2.xaxis.set_label_coords(1, -0.025)
+        # self.axes_2.set_ylabel("$y$")
+        # self.axes_2.yaxis.set_label_coords(-0.025, 1)
+        self.axes2_point, = self.axes_2.plot([], "o", fillstyle="none", color="k")
+        self.axes2_point1, = self.axes_2.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.canvas2.draw()
 
-        self.axis1.set_title("Function", fontdict={'fontsize': 10})
+        self.axis1 = Axes3D(self.figure3)
+        # self.axis1.dist = 20
+        self.axis1.set_title("Function", fontdict={'fontsize': 10}, pad=3)
         self.axis1.plot_surface(XX, YY, FF)
-        self.axis1.set_xticks([-2, -1, 0, 1])
-        self.axis1.set_yticks([-2, -1, 0, 1])
-        self.axis1.set_xlabel("$x$")
-        self.axis1.xaxis.set_label_coords(1, -0.025)
-        self.axis1.set_ylabel("$y$")
-        self.axis1.yaxis.set_label_coords(-0.025, 1)
-        self.axis1.view_init(30, 60)
+        # self.axis1.set_xticks([-2, -1, 0, 1])
+        # self.axis1.set_yticks([-2, -1, 0, 1])
+        # self.axis1.set_xlabel("$x$")
+        # self.axis1.xaxis.set_label_coords(1, -0.025)
+        # self.axis1.set_ylabel("$y$")
+        # self.axis1.yaxis.set_label_coords(-0.025, 1)
+        self.axis1.view_init(5, -90)
+        self.axis1.autoscale()
         self.canvas3.draw()
 
-        self.axis2.set_title("Approximation", fontdict={'fontsize': 10})
-        self.axis2.set_xticks([-2, -1, 0, 1])
-        self.axis2.set_yticks([-2, -1, 0, 1])
-        self.axis2.set_xlabel("$x$")
-        self.axis2.xaxis.set_label_coords(1, -0.025)
-        self.axis2.set_ylabel("$y$")
-        self.axis2.yaxis.set_label_coords(-0.025, 1)
-        self.axis2.view_init(30, 60)
+        self.axis2 = Axes3D(self.figure4)
+        self.axis2.set_title("Approximation", fontdict={'fontsize': 10}, pad=3)
+        # self.axis2.set_xticks([-2, -1, 0, 1])
+        # self.axis2.set_yticks([-2, -1, 0, 1])
+        # self.axis2.set_xlabel("$x$")
+        # self.axis2.xaxis.set_label_coords(1, -0.025)
+        # self.axis2.set_ylabel("$y$")
+        # self.axis2.yaxis.set_label_coords(-0.025, 1)
+        self.axis2.view_init(5, -90)
         self.canvas4.draw()
 
     def on_mouseclick(self, event):
@@ -159,7 +128,9 @@ class TylorSeries2(NNDLayout):
                 return
 
             self.axes1_point.set_data([event.xdata], [event.ydata])
+            self.axes1_point1.set_data([event.xdata], [event.ydata])
             self.axes2_point.set_data([event.xdata], [event.ydata])
+            self.axes2_point1.set_data([event.xdata], [event.ydata])
             self.x, self.y = event.xdata, event.ydata
             self.draw_approx()
             self.canvas.draw()

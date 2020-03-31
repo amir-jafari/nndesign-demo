@@ -14,8 +14,8 @@ class TaylorSeries1(NNDLayout):
         super(TaylorSeries1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
         self.fill_chapter("Taylor Series #1", 8, "Click on the top graph to\ncreate a Taylor series\napproximation"
-                                                " of the\ncosine function.\n\nClick on the checkboxes\nto turn various orders\n"
-                                                "of approximation on and off.",
+                                                 " of the\ncosine function.\n\nClick on the checkboxes\nto turn various orders\n"
+                                                 "of approximation on and off.",
                           PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None)
 
         self.make_plot(1, (120, 120, 270, 270))

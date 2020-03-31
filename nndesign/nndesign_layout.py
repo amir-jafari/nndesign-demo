@@ -251,8 +251,22 @@ class NNDLayout(QMainWindow):
         if plot_number == 1:  # This  is to avoid breaking all the code where
             plot_number = ""  # I call the first plot figure instead of figure1
         setattr(self, "figure" + str(plot_number), Figure())
+        # getattr(self, "figure" + str(plot_number)).set_tight_layout(True)
+        # setattr(self, "figure" + str(plot_number), Figure(figsize=(4, 6)))
         setattr(self, "canvas" + str(plot_number), FigureCanvas(getattr(self, "figure" + str(plot_number))))
+        # getattr(self, "canvas" + str(plot_number)).resize(plot_coords[2] * 0.8, plot_coords[3] * 0.8)
+        # getattr(self, "canvas" + str(plot_number)).setParent(self)
+        # setattr(self, "toolbar" + str(plot_number), NavigationToolbar(getattr(self, "canvas" + str(plot_number)), self))
         self.set_layout(plot_coords, getattr(self, "canvas" + str(plot_number)))
+        # self.set_layout(plot_coords, getattr(self, "toolbar" + str(plot_number)))
+
+    # def make_plot_v2(self, plot_number, plot_coords=(90, 300, 370, 370)):
+    #     if plot_number == 1:  # This  is to avoid breaking all the code where
+    #         plot_number = ""  # I call the first plot figure instead of figure1
+    #     setattr(self, "canvas" + str(plot_number), Canvas(self, plot_coords[2], plot_coords[3]))
+    #     setattr(self, "axes_1", getattr(self, "canvas" + str(plot_number)).axes)
+    #     # setattr(self, "figure" + str(plot_number), getattr(self, "canvas" + str(plot_number)).fig)
+    #     # self.set_layout(plot_coords, getattr(self, "canvas" + str(plot_number)))
 
     def make_combobox(self, combobox_number, combobox_items, combobox_coords, f_connect=None, label_attr_name=None, label_str="?",
                       label_coords=None, label_font_name="Times New Roman", label_font_size=14, label_italics=False):
@@ -426,3 +440,13 @@ class NNDLayout(QMainWindow):
 
     def nndtansig(self, x):
         a = self.tansig(x)
+
+
+# class Canvas(FigureCanvas):
+#     def __init__(self, parent, width, height, dpi=100):
+#         fig = Figure(figsize=(width, height), dpi=dpi)
+#         # if plot_type == "regular":
+#         #     setattr() = fig.add_subplot(111)
+#         self.axes = fig.add_subplot(111)
+#         FigureCanvas.__init__(self, fig)
+#         self.setParent(parent)
