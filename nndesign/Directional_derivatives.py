@@ -26,7 +26,7 @@ class DirectionalDerivatives(NNDLayout):
         self.fill_chapter("Directional Derivatives", 8, "To measure a directional derivative click on the graph and move the cursor.\n\n"
                                                         "The directional derivative is taken at the point you clicked\nin the direction of the current cursor position.\n\n"
                                                         "Click again to choose a new point where you want\nto measure the directional derivative.",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", None, description_coords=(30, 400, 500, 200))
+                          PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None, description_coords=(30, 400, 500, 200))
 
         self.cid = None
 
