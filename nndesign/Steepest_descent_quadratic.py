@@ -30,7 +30,7 @@ class SteepestDescentQuadratic(NNDLayout):
 
         self.make_plot(1, (25, 100, 470, 470))
         self.axes = self.figure.add_subplot(1, 1, 1)
-        self.axes.contour(X, Y, F, levels=[0.1, 0.5, 3, 7, 13, 20, 35, 50, 80], colors="blue")
+        self.axes.contour(X, Y, F, levels=[0.1, 0.5, 3, 7, 13, 20, 35, 50, 80])
         self.axes.set_xlim(-4, 4)
         self.axes.set_ylim(-2, 2)
         self.path, = self.axes.plot([], linestyle='--', marker="o", fillstyle="none", color="k", label="Gradient Descent Path")

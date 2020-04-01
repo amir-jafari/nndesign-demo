@@ -9,7 +9,7 @@ from nndesign_layout import NNDLayout
 
 from get_package_path import PACKAGE_PATH
 
-x, y = np.linspace(-2, 0+(4/31*17), 17, endpoint=False), np.linspace(-2, 0+(4/31*17), 17, endpoint=False)
+x, y = np.linspace(-2, 0+(4/31*17), 100, endpoint=False), np.linspace(-2, 0+(4/31*17), 100, endpoint=False)
 X, Y = np.meshgrid(x, y)
 
 a, b, c = np.array([[2, 1], [1, 2]]), np.array([0, 0]), 0
@@ -20,68 +20,58 @@ F = (a[0, 0] * X ** 2 + a[0, 1] + a[1, 0] * X * Y + a[1, 1] * Y ** 2) / 2 + b[0]
 
 class ComparisonOfMethods(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(ComparisonOfMethods, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
+        super(ComparisonOfMethods, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Comparison of Methods", 9, " Click anywhere to start an\n initial guess. The gradient\n descent path will be shown"
-                                                      "\nfor both Steepest Descent\n and Conjugate Gradient",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg",
-                          show_pic=False)
+        self.fill_chapter("Comparison of Methods", 9, "Click in either graph\nto start a search point.\n\nThen watch the two\n"
+                                                      "algorithms attempt to\nfind the minima.\n\nThe two alrorithms are:\n"
+                                                      " Steepest Descent using\nline search.\n Conjugate Gradient using\nline search.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None, description_coords=(535, 120, 300, 250))
 
+        self.make_plot(1, (120, 120, 270, 270))
         self.event, self.ani_1, self.ani_2 = None, None, None
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Steepest Descent Path", fontdict={'fontsize': 10})
-        self.axes_1.contour(X, Y, F)
+        self.axes_1.contour(X, Y, F, levels=[0.5, 1, 2, 4, 6, 8])
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
-        self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.axes_1.set_yticks([-2, -1, 0, 1, 2])
+        self.path_1, = self.axes_1.plot([], linestyle='--', marker="o", fillstyle="none", color="k", label="Gradient Descent Path")
+        self.init_point_1, = self.axes_1.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.x_data_1, self.y_data_1 = [], []
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.canvas.draw()
 
+        self.make_plot(2, (120, 390, 270, 270))
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("Conjugate Gradient Path")
-        self.axes_2.contour(X, Y, F)
+        self.axes_2.contour(X, Y, F, levels=[0.5, 1, 2, 4, 6, 8])
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
-        self.path_2, = self.axes_2.plot([], linestyle='--', marker='o', label="Conjugate Gradient Path")
+        self.axes_2.set_yticks([-2, -1, 0, 1, 2])
+        self.path_2, = self.axes_2.plot([], linestyle='--', marker="o", fillstyle="none", color="k", label="Conjugate Gradient Path")
+        self.init_point_2, = self.axes_2.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.x_data_2, self.y_data_2 = [], []
         self.canvas2.mpl_connect('button_press_event', self.on_mouseclick)
         self.canvas2.draw()
 
         self.animation_speed = 500
-        self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 500 ms")
-        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
-                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_anim_speed.setRange(0, 6)
-        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(5)
-        self.wid_anim_speed = QtWidgets.QWidget(self)
-        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_anim_speed.addWidget(self.slider_anim_speed)
-        self.wid_anim_speed.setLayout(self.layout_anim_speed)
+        # self.make_slider("slider_anim_speed", QtCore.Qt.Horizontal, (0, 6), QtWidgets.QSlider.TicksBelow, 1, 2,
+        #                  (self.x_chapter_usual, 380, self.w_chapter_slider, 100), self.slide, "label_anim_speed", "Animation Delay: 200 ms")
 
-        self.slider_anim_speed.valueChanged.connect(self.slide)
-
-    def slide(self):
-        self.animation_speed = int(self.slider_anim_speed.value()) * 100
-        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
-        if self.x_data_1:
-            if self.ani_1:
-                self.ani_1.event_source.stop()
-                self.ani_2.event_source.stop()
-            self.path_1.set_data([], [])
-            self.path_2.set_data([], [])
-            self.x_data_1, self.y_data_1 = [self.x_data_1[0]], [self.y_data_1[0]]
-            self.x_data_2, self.y_data_2 = [self.x_data_2[0]], [self.y_data_2[0]]
-            self.canvas.draw()
-            self.canvas2.draw()
-            self.run_animation(self.event)
+    # def slide(self):
+    #     self.animation_speed = int(self.slider_anim_speed.value()) * 100
+    #     self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+    #     if self.x_data_1:
+    #         if self.ani_1:
+    #             self.ani_1.event_source.stop()
+    #             self.ani_2.event_source.stop()
+    #         self.path_1.set_data([], [])
+    #         self.path_2.set_data([], [])
+    #         self.x_data_1, self.y_data_1 = [self.x_data_1[0]], [self.y_data_1[0]]
+    #         self.x_data_2, self.y_data_2 = [self.x_data_2[0]], [self.y_data_2[0]]
+    #         self.canvas.draw()
+    #         self.canvas2.draw()
+    #         self.run_animation(self.event)
 
     def on_mouseclick(self, event):
         self.event = event
@@ -93,16 +83,18 @@ class ComparisonOfMethods(NNDLayout):
         self.path_2.set_data([], [])
         self.x_data_1, self.y_data_1 = [], []
         self.x_data_2, self.y_data_2 = [], []
+        self.init_point_1.set_data([event.xdata], [event.ydata])
+        self.init_point_2.set_data([event.xdata], [event.ydata])
         self.canvas.draw()
         self.canvas2.draw()
         self.run_animation(event)
 
     def animate_init_1(self):
-        self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.path_1, = self.axes_1.plot([], linestyle='--', marker="o", fillstyle="none", color="k", label="Gradient Descent Path")
         return self.path_1,
 
     def animate_init_2(self):
-        self.path_2, = self.axes_2.plot([], linestyle='--', marker='o', label="Conjugate Gradient Path")
+        self.path_2, = self.axes_2.plot([], linestyle='--', marker="o", fillstyle="none", color="k", label="Conjugate Gradient Path")
         return self.path_2,
 
     def on_animate_1(self, idx):
