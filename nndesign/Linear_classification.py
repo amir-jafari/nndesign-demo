@@ -32,23 +32,15 @@ class LinearClassification(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(LinearClassification, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Linear Classification", 10, "TODO",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Linear Classification", 10, "Edit the RED grid and\nwatch the output meter\nrespond to the"
+                                                       " new inputs.\n\nEdit the GREEN grids and\nthen click [Train] to\n"
+                                                       "study a different problem.\n\nUse GREEN patterns as\ninputs by clicking\n"
+                                                       "the arrow bottoms.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_10.svg", None, description_coords=(535, 120, 300, 250))
 
-        self.label_pattern1 = QtWidgets.QLabel(self)
-        self.label_pattern1.setText("Target = 60")
-        self.label_pattern1.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern1.setGeometry(60 * self.w_ratio, 105 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure1 = Figure()
-        self.canvas1 = FigureCanvas(self.figure1)
-        self.toolbar1 = NavigationToolbar(self.canvas1, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(15 * self.w_ratio, 130 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout1.addWidget(self.canvas1)
-        self.wid1.setLayout(self.layout1)
-        self.axis1 = self.figure1.add_axes([0, 0, 1, 1])
+        self.make_label("label_pattern1", "Target = 60", (50, 105, 150, 50))
+        self.make_plot(1, (15, 130, 130, 130))
+        self.axis1 = self.figure.add_axes([0, 0, 1, 1])
         self.pattern1 = [1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
         self.pattern11 = np.flip(np.array(self.pattern1).reshape((ncols_up, nrows_up)).T, axis=0)
         for xi in range(len(xx_up)):
@@ -60,30 +52,14 @@ class LinearClassification(NNDLayout):
                 self.axis1.add_patch(sq)
         self.axis1.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
         self.axis1.axis("off")
-        self.canvas1.draw()
-        self.canvas1.mpl_connect("button_press_event", self.on_mouseclick1)
-
-        self.button1 = QtWidgets.QPushButton("->", self)
-        self.button1.setStyleSheet("font-size:13px")
-        self.button1.setGeometry(55 * self.w_ratio, 250 * self.h_ratio,
-                                 50 * self.w_ratio, 50 * self.h_ratio)
-        self.button1.clicked.connect(self.button1_pressed)
+        self.canvas.draw()
+        self.canvas.mpl_connect("button_press_event", self.on_mouseclick1)
+        self.make_button("button1", "->", (55, 250, 50, 50), self.button1_pressed)
 
         # --
 
-        self.label_pattern2 = QtWidgets.QLabel(self)
-        self.label_pattern2.setText("Target = 0")
-        self.label_pattern2.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern2.setGeometry(170 * self.w_ratio, 105 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure2 = Figure(frameon=False)
-        self.canvas2 = FigureCanvas(self.figure2)
-        self.toolbar2 = NavigationToolbar(self.canvas2, self)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(140 * self.w_ratio, 130 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout2.addWidget(self.canvas2)
-        self.wid2.setLayout(self.layout2)
+        self.make_label("label_pattern2", "Target = 0", (180, 105, 150, 50))
+        self.make_plot(2, (140, 130, 130, 130))
         self.axis2 = self.figure2.add_axes([0, 0, 1, 1])
         self.pattern2 = [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1]
         self.pattern22 = np.flip(np.array(self.pattern2).reshape((ncols_up, nrows_up)).T, axis=0)
@@ -98,28 +74,12 @@ class LinearClassification(NNDLayout):
         self.axis2.axis("off")
         self.canvas2.draw()
         self.canvas2.mpl_connect("button_press_event", self.on_mouseclick2)
-
-        self.button2 = QtWidgets.QPushButton("->", self)
-        self.button2.setStyleSheet("font-size:13px")
-        self.button2.setGeometry((55 + 125) * self.w_ratio, 250 * self.h_ratio,
-                                 50 * self.w_ratio, 50 * self.h_ratio)
-        self.button2.clicked.connect(self.button2_pressed)
+        self.make_button("button2", "->", (55 + 125, 250, 50, 50), self.button2_pressed)
 
         # --
 
-        self.label_pattern3 = QtWidgets.QLabel(self)
-        self.label_pattern3.setText("Target = -60")
-        self.label_pattern3.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern3.setGeometry(310 * self.w_ratio, 105 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure3 = Figure()
-        self.canvas3 = FigureCanvas(self.figure3)
-        self.toolbar3 = NavigationToolbar(self.canvas3, self)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(260 * self.w_ratio, 130 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout3.addWidget(self.canvas3)
-        self.wid3.setLayout(self.layout3)
+        self.make_label("label_pattern3", "Target = -60", (290, 105, 150, 50))
+        self.make_plot(3, (260, 130, 130, 130))
         self.axis3 = self.figure3.add_axes([0, 0, 1, 1])
         self.pattern3 = [1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
         self.pattern33 = np.flip(np.array(self.pattern3).reshape((ncols_up, nrows_up)).T, axis=0)
@@ -134,24 +94,11 @@ class LinearClassification(NNDLayout):
         self.axis3.axis("off")
         self.canvas3.draw()
         self.canvas3.mpl_connect("button_press_event", self.on_mouseclick3)
-
-        self.button3 = QtWidgets.QPushButton("->", self)
-        self.button3.setStyleSheet("font-size:13px")
-        self.button3.setGeometry((55 + 125 * 2) * self.w_ratio, 250 * self.h_ratio,
-                                 50 * self.w_ratio, 50 * self.h_ratio)
-        self.button3.clicked.connect(self.button3_pressed)
+        self.make_button("button3", "->", (55 + 125 * 2, 250, 50, 50), self.button3_pressed)
 
         # ---
 
-        self.figure4 = Figure()
-        self.canvas4 = FigureCanvas(self.figure4)
-        self.toolbar4 = NavigationToolbar(self.canvas4, self)
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(15 * self.w_ratio, 300 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout4.addWidget(self.canvas4)
-        self.wid4.setLayout(self.layout4)
+        self.make_plot(4, (15, 300, 130, 130))
         self.axis4 = self.figure4.add_axes([0, 0, 1, 1])
         self.pattern4 = [0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]
         self.pattern44 = np.flip(np.array(self.pattern4).reshape((ncols_up, nrows_up)).T, axis=0)
@@ -166,24 +113,11 @@ class LinearClassification(NNDLayout):
         self.axis4.axis("off")
         self.canvas4.draw()
         self.canvas4.mpl_connect("button_press_event", self.on_mouseclick4)
-
-        self.button4 = QtWidgets.QPushButton("->", self)
-        self.button4.setStyleSheet("font-size:13px")
-        self.button4.setGeometry(55 * self.w_ratio, 420 * self.h_ratio,
-                                 50 * self.w_ratio, 50 * self.h_ratio)
-        self.button4.clicked.connect(self.button4_pressed)
+        self.make_button("button4", "->", (55, 420, 50, 50), self.button4_pressed)
 
         # ---
 
-        self.figure5 = Figure()
-        self.canvas5 = FigureCanvas(self.figure5)
-        self.toolbar5 = NavigationToolbar(self.canvas5, self)
-        self.wid5 = QtWidgets.QWidget(self)
-        self.layout5 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid5.setGeometry(140 * self.w_ratio, 300 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout5.addWidget(self.canvas5)
-        self.wid5.setLayout(self.layout5)
+        self.make_plot(5, (140, 300, 130, 130))
         self.axis5 = self.figure5.add_axes([0, 0, 1, 1])
         self.pattern5 = [1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0]
         self.pattern55 = np.flip(np.array(self.pattern5).reshape((ncols_up, nrows_up)).T, axis=0)
@@ -198,24 +132,11 @@ class LinearClassification(NNDLayout):
         self.axis5.axis("off")
         self.canvas5.draw()
         self.canvas5.mpl_connect("button_press_event", self.on_mouseclick5)
-
-        self.button5 = QtWidgets.QPushButton("->", self)
-        self.button5.setStyleSheet("font-size:13px")
-        self.button5.setGeometry((55 + 125) * self.w_ratio, 420 * self.h_ratio,
-                                 50 * self.w_ratio, 50 * self.h_ratio)
-        self.button5.clicked.connect(self.button5_pressed)
+        self.make_button("button5", "->", (55 + 125, 420, 50, 50), self.button5_pressed)
 
         # --
 
-        self.figure6 = Figure()
-        self.canvas6 = FigureCanvas(self.figure6)
-        self.toolbar6 = NavigationToolbar(self.canvas6, self)
-        self.wid6 = QtWidgets.QWidget(self)
-        self.layout6 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid6.setGeometry(260 * self.w_ratio, 300 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout6.addWidget(self.canvas6)
-        self.wid6.setLayout(self.layout6)
+        self.make_plot(6, (260, 300, 130, 130))
         self.axis6 = self.figure6.add_axes([0, 0, 1, 1])
         self.pattern6 = [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0]
         self.pattern66 = np.flip(np.array(self.pattern6).reshape((ncols_up, nrows_up)).T, axis=0)
@@ -230,28 +151,12 @@ class LinearClassification(NNDLayout):
         self.axis6.axis("off")
         self.canvas6.draw()
         self.canvas6.mpl_connect("button_press_event", self.on_mouseclick6)
-
-        self.button6 = QtWidgets.QPushButton("->", self)
-        self.button6.setStyleSheet("font-size:13px")
-        self.button6.setGeometry((55 + 125 * 2) * self.w_ratio, 420 * self.h_ratio,
-                                 50 * self.w_ratio, 50 * self.h_ratio)
-        self.button6.clicked.connect(self.button6_pressed)
+        self.make_button("button6", "->", (55 + 125 * 2, 420, 50, 50), self.button6_pressed)
 
         # --
 
-        self.label_pattern7 = QtWidgets.QLabel(self)
-        self.label_pattern7.setText("Test Input")
-        self.label_pattern7.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern7.setGeometry(420 * self.w_ratio, 275 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure7 = Figure()
-        self.canvas7 = FigureCanvas(self.figure7)
-        self.toolbar7 = NavigationToolbar(self.canvas7, self)
-        self.wid7 = QtWidgets.QWidget(self)
-        self.layout7 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid7.setGeometry(390 * self.w_ratio, 300 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout7.addWidget(self.canvas7)
-        self.wid7.setLayout(self.layout7)
+        self.make_label("label_pattern7", "Test Input", (415, 275, 150, 50))
+        self.make_plot(7, (380, 300, 130, 130))
         self.axis7 = self.figure7.add_axes([0, 0, 1, 1])
         self.pattern7 = self.pattern1[:]
         self.pattern77 = np.copy(self.pattern11)
@@ -269,15 +174,7 @@ class LinearClassification(NNDLayout):
 
         # --
 
-        self.figure8 = Figure()
-        self.canvas8 = FigureCanvas(self.figure8)
-        self.toolbar8 = NavigationToolbar(self.canvas8, self)
-        self.wid8 = QtWidgets.QWidget(self)
-        self.layout8 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid8.setGeometry(5 * self.w_ratio, 470 * self.h_ratio,
-                              270 * self.w_ratio, 200 * self.h_ratio)
-        self.layout8.addWidget(self.canvas8)
-        self.wid8.setLayout(self.layout8)
+        self.make_plot(8, (5, 470, 270, 200))
         self.axis8 = self.figure8.add_subplot(1, 1, 1)
         self.axis8.set_title("Errors")
         self.axis8.set_xlabel("Training Cycle")
@@ -286,22 +183,15 @@ class LinearClassification(NNDLayout):
         self.axis8.set_ylim(1e-5, 1e5)
         self.axis8.set_yscale("log")
         self.error_plot, = self.axis8.plot([], color="red")
+        self.figure8.set_tight_layout(True)
 
         # --
 
-        self.figure9 = Figure()
-        self.canvas9 = FigureCanvas(self.figure9)
-        self.toolbar9 = NavigationToolbar(self.canvas9, self)
-        self.wid9 = QtWidgets.QWidget(self)
-        self.layout9 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid9.setGeometry(260 * self.w_ratio, 470 * self.h_ratio,
-                              250 * self.w_ratio, 200 * self.h_ratio)
-        self.layout9.addWidget(self.canvas9)
-        self.wid9.setLayout(self.layout9)
+        self.make_plot(9, (260, 470, 250, 200))
         self.axis9 = self.figure9.add_subplot(1, 1, 1, polar=True)
         self.axis9.set_thetamin(-90)
         self.axis9.set_thetamax(90)
-        self.axis9.set_title("Test Output")
+        self.axis9.set_title("Test Output", pad=1)
         self.axis9.set_xlabel("Windrow-Hoff Metter")
         self.axis9.set_yticks([])
         self.axis9.set_theta_zero_location("N")
@@ -318,17 +208,8 @@ class LinearClassification(NNDLayout):
 
         # --
 
-        self.run_button = QtWidgets.QPushButton("Weights", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 420 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
-
-        self.run_button = QtWidgets.QPushButton("Train", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 520 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.response)
+        self.make_button("run_button", "Weights", (self.x_chapter_button, 420, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Train", (self.x_chapter_button, 520, self.w_chapter_button, self.h_chapter_button), self.response)
 
         self.response()
 
@@ -387,7 +268,7 @@ class LinearClassification(NNDLayout):
                     else:
                         sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                     self.axis1.add_patch(sq)
-            self.canvas1.draw()
+            self.canvas.draw()
 
             # self.response()
 
