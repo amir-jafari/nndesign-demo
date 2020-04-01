@@ -24,75 +24,58 @@ F[F > 12] = 12
 
 class SteepestDescent(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(SteepestDescent, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
+        super(SteepestDescent, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Steepest Descent", 9, " TODO",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Steepest Descent", 9, "Click anywhere on the\ngraph to start an initial guess."
+                                                 "\nThen the steepest descent\ntrajectory will be shown.\n\n"
+                                                 "Modify the learning rate\nby moving the slide bar.\n\n"
+                                                 "Experiment with different\ninitial guesses and\nlearning rates.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None, description_coords=(535, 120, 300, 250))
 
         self.x_data, self.y_data = [], []
         self.ani_1, self.ani_2, self.event, self.x, self.y = None, None, None, None, None
 
+        self.make_plot(1, (120, 120, 270, 270))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.contour(X, Y, F)
         self.axes_1.set_title("Function F", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
-        self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.axes_1.set_yticks([-2, -1, 0, 1, 2])
+        self.path_1, = self.axes_1.plot([], linestyle='--', marker="o", fillstyle="none", color="k",
+                                        label="Gradient Descent Path")
+        self.init_point_1, = self.axes_1.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
+        self.make_plot(2, (120, 390, 270, 270))
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("Approximation Fa", fontdict={'fontsize': 10})
-        self.path_2, = self.axes_2.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.path_2, = self.axes_2.plot([], linestyle='--', marker="o", fillstyle="none", color="k",
+                                        label="Gradient Descent Path")
+        self.init_point_2, = self.axes_2.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
+        self.axes_2.set_yticks([-2, -1, 0, 1, 2])
         self.canvas2.draw()
 
         self.lr = 0.03
-        self.label_lr = QtWidgets.QLabel(self)
-        self.label_lr.setText("lr: 0.001")
-        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 250 * self.h_ratio,
-                                  self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 6)
-        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_lr.setTickInterval(1)
-        self.slider_lr.setValue(3)
-        self.wid_lr = QtWidgets.QWidget(self)
-        self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 280 * self.h_ratio,
-                                self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_lr.addWidget(self.slider_lr)
-        self.wid_lr.setLayout(self.layout_lr)
-
-        self.animation_speed = 0
-        self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 0 ms")
-        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
-                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_anim_speed.setRange(0, 6)
-        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(0)
-        self.wid_anim_speed = QtWidgets.QWidget(self)
-        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_anim_speed.addWidget(self.slider_anim_speed)
-        self.wid_anim_speed.setLayout(self.layout_anim_speed)
-
-        self.slider_lr.valueChanged.connect(self.slide)
-        self.slider_anim_speed.valueChanged.connect(self.slide)
+        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 20), QtWidgets.QSlider.TicksBelow, 1, 6,
+                         (self.x_chapter_usual, 380, self.w_chapter_slider, 50), self.slide, "label_lr", "lr: 0.03")
+        self.make_label("label_lr1", "0.00", (self.x_chapter_usual + 15, 420, 100, 20))
+        self.make_label("label_lr2", "0.20", (self.x_chapter_usual + 145, 420, 100, 20))
+        self.animation_speed = 100
+        # self.make_slider("slider_anim_speed", QtCore.Qt.Horizontal, (0, 6), QtWidgets.QSlider.TicksBelow, 1, 2,
+        #                  (self.x_chapter_usual, 380, self.w_chapter_slider, 100), self.slide, "label_anim_speed", "Animation Delay: 200 ms")
 
     def animate_init_1(self):
-        self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.path_1, = self.axes_1.plot([], linestyle='--', marker="o", fillstyle="none", color="k",
+                                        label="Gradient Descent Path")
         return self.path_1,
 
     def animate_init_2(self):
-        self.path_2, = self.axes_2.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.path_2, = self.axes_2.plot([], linestyle='--', marker="o", fillstyle="none", color="k",
+                                        label="Gradient Descent Path")
         return self.path_2,
 
     def on_animate_1(self, idx):
@@ -106,7 +89,7 @@ class SteepestDescent(NNDLayout):
         return self.path_1,
 
     def on_animate_2(self, idx):
-        self.path_2.set_data(self.x_data, self.y_data)
+        self.path_2.set_data(self.x_data[:2], self.y_data[:2])
         return self.path_2,
 
     def on_mouseclick(self, event):
@@ -149,6 +132,8 @@ class SteepestDescent(NNDLayout):
             self.path_1.set_data([], [])
             self.path_2.set_data([], [])
             self.x_data, self.y_data = [], []
+            self.init_point_1.set_data([event.xdata], [event.ydata])
+            self.init_point_2.set_data([event.xdata], [event.ydata])
             self.canvas.draw()
             self.canvas2.draw()
             self.run_animation(event)
@@ -164,8 +149,8 @@ class SteepestDescent(NNDLayout):
     def slide(self):
         self.lr = float(self.slider_lr.value()/100)
         self.label_lr.setText("lr: " + str(self.lr))
-        self.animation_speed = int(self.slider_anim_speed.value()) * 100
-        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+        # self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.x_data:
             if self.ani_1:
                 self.ani_1.event_source.stop()
@@ -175,6 +160,8 @@ class SteepestDescent(NNDLayout):
             self.path_2.set_data([], [])
             self.x, self.y = self.x_data[0], self.y_data[0]
             self.x_data, self.y_data = [self.x_data[0]], [self.y_data[0]]
+            self.init_point_1.set_data([self.x_data[0]], [self.y_data[0]])
+            self.init_point_2.set_data([self.x_data[0]], [self.y_data[0]])
             self.canvas.draw()
             self.canvas2.draw()
             self.run_animation(self.event)
