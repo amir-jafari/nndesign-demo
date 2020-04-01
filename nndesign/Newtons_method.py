@@ -24,71 +24,68 @@ F[F > 12] = 12
 
 class NewtonsMethod(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(NewtonsMethod, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
+        super(NewtonsMethod, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Newtons Method", 9, " TODO",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Newton's Method", 9, "Click anywhere on the\ngraph to start an\ninitial guess.\n\nThen the "
+                                                "steepest descent\ntrajectory will be shown.\n\nThe bottom graph shows\nthe"
+                                                "approximation of\nfunction F at\nthe initial point.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None)
 
         self.x_data, self.y_data = [], []
         self.ani_1, self.ani_2, self.event, self.x, self.y = None, None, None, None, None
 
+        self.make_plot(1, (120, 120, 270, 270))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.text(-0.9, 1.7, ">Click me<")
         self.axes_1.contour(X, Y, F)
         self.axes_1.set_title("Function F", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
-        self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.path_1, = self.axes_1.plot([], linestyle='--', marker="o", fillstyle="none", color="k",
+                                        label="Newton's Method Path")
+        self.init_point_1, = self.axes_1.plot([], "o", fillstyle="none", markersize=11, color="k")
+        self.axes_1.set_yticks([-2, -1, 0, 1, 2])
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
+        self.make_plot(2, (120, 390, 270, 270))
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("Approximation Fa", fontdict={'fontsize': 10})
-        self.path_2, = self.axes_2.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.path_2, = self.axes_2.plot([], linestyle='--', marker="o", fillstyle="none", color="k",
+                                        label="Newton's Method Path")
+        self.init_point_2, = self.axes_2.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
+        self.axes_2.set_yticks([-2, -1, 0, 1, 2])
         self.canvas2.draw()
 
-        self.animation_speed = 500
-        self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 500 ms")
-        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
-                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_anim_speed.setRange(0, 6)
-        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(5)
-        self.wid_anim_speed = QtWidgets.QWidget(self)
-        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_anim_speed.addWidget(self.slider_anim_speed)
-        self.wid_anim_speed.setLayout(self.layout_anim_speed)
-        self.slider_anim_speed.valueChanged.connect(self.slide)
+        self.animation_speed = 100
+        # self.make_slider("slider_anim_speed", QtCore.Qt.Horizontal, (0, 6), QtWidgets.QSlider.TicksBelow, 1, 2,
+        #                  (self.x_chapter_usual, 380, self.w_chapter_slider, 100), self.slide, "label_anim_speed", "Animation Delay: 200 ms")
 
-    def slide(self):
-        self.animation_speed = int(self.slider_anim_speed.value()) * 100
-        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
-        if self.x_data:
-            if self.ani_1:
-                self.ani_1.event_source.stop()
-                self.ani_2.event_source.stop()
-            self.x_data, self.y_data = [self.x_data[0]], [self.y_data[0]]
-            self.x, self.y = self.x_data[0], self.y_data[0]
-            self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
-            self.path_2, = self.axes_2.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
-            self.canvas.draw()
-            self.canvas2.draw()
-            self.run_animation(self.event)
+    # def slide(self):
+    #     self.animation_speed = int(self.slider_anim_speed.value()) * 100
+    #     self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+    #     if self.x_data:
+    #         if self.ani_1:
+    #             self.ani_1.event_source.stop()
+    #             self.ani_2.event_source.stop()
+    #         self.x_data, self.y_data = [self.x_data[0]], [self.y_data[0]]
+    #         self.x, self.y = self.x_data[0], self.y_data[0]
+    #         self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+    #         self.path_2, = self.axes_2.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+    #         self.canvas.draw()
+    #         self.canvas2.draw()
+    #         self.run_animation(self.event)
 
     def animate_init_1(self):
-        self.path_1, = self.axes_1.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.path_1, = self.axes_1.plot([], linestyle='--', marker="o", fillstyle="none", color="k",
+                                        label="Newton's Method Path")
         return self.path_1,
 
     def animate_init_2(self):
-        self.path_2, = self.axes_2.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.path_2, = self.axes_2.plot([], linestyle='--', marker="o", fillstyle="none", color="k",
+                                        label="Newton's Method Path")
         return self.path_2,
 
     def on_animate_1(self, idx):
@@ -106,7 +103,7 @@ class NewtonsMethod(NNDLayout):
         return self.path_1,
 
     def on_animate_2(self, idx):
-        self.path_2.set_data(self.x_data, self.y_data)
+        self.path_2.set_data(self.x_data[:2], self.y_data[:2])
         return self.path_2,
 
     def on_mouseclick(self, event):
@@ -152,6 +149,8 @@ class NewtonsMethod(NNDLayout):
             self.path_1.set_data([], [])
             self.path_2.set_data([], [])
             self.x_data, self.y_data = [], []
+            self.init_point_1.set_data([event.xdata], [event.ydata])
+            self.init_point_2.set_data([event.xdata], [event.ydata])
             self.canvas.draw()
             self.canvas2.draw()
             self.run_animation(event)
