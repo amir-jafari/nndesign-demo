@@ -16,10 +16,11 @@ mingrad = 0.001
 
 class Generalization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(Generalization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(20, 200, 480, 480))
+        super(Generalization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Generalization", 11, "Click the train button to train\n the log-sig ...",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)  # TODO: Logo and Icon
+        self.fill_chapter("Generalization", 11, "Click the [Train] button\nto train the logsig-linear\nnetwork on the data points.\n\n"
+                                                "Use the slide bars to choose\nthe number of neurons and\nthe difficulty of the\ndata points.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_11.svg", None)
 
         self.S1 = 4
         self.diff = 1
@@ -35,6 +36,7 @@ class Generalization(NNDLayout):
         self.init_params()
 
         self.p = None
+        self.make_plot(1, (20, 90, 480, 480))
         self.axes = self.figure.add_subplot(111)
         self.figure.subplots_adjust(bottom=0.2, left=0.1)
         self.axes.set_xlim(-2, 2)
@@ -50,47 +52,21 @@ class Generalization(NNDLayout):
                          bbox_to_anchor=(0, -.24, 1, -.280), mode='expand')
         self.axes.set_title("Function Approximation")
 
-        self.label_s1 = QtWidgets.QLabel(self)
-        self.label_s1.setText("Number of Hidden Neurons S1: 4")
-        self.label_s1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_s1.setGeometry((self.x_chapter_slider_label - 60) * self.w_ratio, 400 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_s1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_s1.setRange(1, 9)
-        self.slider_s1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_s1.setTickInterval(1)
-        self.slider_s1.setValue(4)
+        self.make_label("label_s11", "1", (40, 550, 20, 50))
+        self.make_label("label_s12", "9", (475, 550, 20, 50))
+        self.make_label("label_s1", "Number of Hidden Neurons S1: 4", (170, 550, 200, 50))
+        self.make_label("label_diff1", "1", (40, 610, 20, 50))
+        self.make_label("label_diff2", "9", (475, 610, 20, 50))
+        self.make_label("label_diff", "Difficulty index: 1", (210, 610, 200, 50))
+        self.make_slider("slider_s1", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 4,
+                         (20, 580, 480, 50), self.slide)
+        self.make_slider("slider_diff", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 1,
+                         (20, 635, 480, 50), self.slide)
 
-        self.label_diff = QtWidgets.QLabel(self)
-        self.label_diff.setText("Difficulty index: 1")
-        self.label_diff.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_diff.setGeometry((self.x_chapter_slider_label - 10) * self.w_ratio, 470 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_diff = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_diff.setRange(1, 9)
-        self.slider_diff.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_diff.setTickInterval(1)
-        self.slider_diff.setValue(1)
+        self.make_button("run_button", "Train",
+                         (self.x_chapter_button, 310, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
         self.plot_f()
-
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 430 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.slider_s1)
-        self.wid3.setLayout(self.layout3)
-
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(self.x_chapter_usual * self.w_ratio, 500 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout4.addWidget(self.slider_diff)
-        self.wid4.setLayout(self.layout4)
-
-        self.slider_s1.valueChanged.connect(self.slide)
-        self.slider_diff.valueChanged.connect(self.slide)
-
-        self.run_button = QtWidgets.QPushButton("Train", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 600 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
 
     def slide(self):
         self.error_prev = 1000
