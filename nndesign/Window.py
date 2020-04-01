@@ -41,7 +41,7 @@ from EEG_noise_cancellation import EEGNoiseCancellation
 from Linear_classification import LinearClassification
 # ------ Chapter 11 -------
 from Function_approximation import FunctionApproximation
-from Backpropagation_calculation import BackpropagationCalculation
+# from Backpropagation_calculation import BackpropagationCalculation
 from Network_function import NetworkFunction
 from Generalization import Generalization
 # ------ Chapter 12 -------
@@ -123,7 +123,8 @@ BOOK1_CHAPTERS_DEMOS = {
     8: ["Performance Surfaces & Optimum Points", "Chapter 8 demos", "Taylor series #1", "Taylor series #2", "Directional derivatives", "Quadratic function"],
     9: ["Performance Optimization", "Chapter 9 demos", "Steepest descent for Quadratic", "Method comparison", "Newton's method", "Steepest descent"],
     10: ["Widrow - Hoff Learning", "Chapter 10 demos", "Adaptive noise cancellation", "EEG noise cancellation", "Linear classification"],
-    11: ["Backpropagation", "Chapter 11 demos", "Network Function", "Backpropagation Calculation", "Function Approximation", "Generalization"],
+    # 11: ["Backpropagation", "Chapter 11 demos", "Network Function", "Backpropagation Calculation", "Function Approximation", "Generalization"],
+    11: ["Backpropagation", "Chapter 11 demos", "Network Function", "Function Approximation", "Generalization"],
     12: ["Variations on Backpropagation", "Chapter 12 demos", "Steepest Descent #1", "Steepest Descent #2", "Momentum", "Variable Learning Rate", "CG Line Search", "Conjugate Gradient", "Marquardt Step", "Marquardt"],
     13: ["Generalization", "Chapter 13 demos", "Early Stopping", "Regularization", "Bayesian Regularization", "Early Stopping-Regularization"],
     14: ["Dynamic Networks", "Chapter 14 demos", "FIR Network", "IIR Network", "Dynamic Derivatives", "Recurrent Network Training"],
@@ -363,13 +364,13 @@ class MainWindowNN(NNDLayout):
         if idx == 1:
             self.chapter_window1 = NetworkFunction(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
+        # elif idx == 2:
+        #     self.chapter_window2 = BackpropagationCalculation(self.w_ratio, self.h_ratio)
+        #     self.chapter_window2.show()
         elif idx == 2:
-            self.chapter_window2 = BackpropagationCalculation(self.w_ratio, self.h_ratio)
-            self.chapter_window2.show()
-        elif idx == 3:
             self.chapter_window3 = FunctionApproximation(self.w_ratio, self.h_ratio)
             self.chapter_window3.show()
-        elif idx == 4:
+        elif idx == 3:
             self.chapter_window4 = Generalization(self.w_ratio, self.h_ratio)
             self.chapter_window4.show()
 

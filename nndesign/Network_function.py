@@ -14,8 +14,8 @@ class NetworkFunction(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(NetworkFunction, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Network Function", 11, " Alter the network's parameters\n by dragging the slide bars",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_info=False, show_pic=False)  # TODO: Change icons
+        self.fill_chapter("Network Function", 11, "Alter the network's parameters\n by dragging the slide bars.\n\n",
+                          PACKAGE_PATH + "Logo/Logo_Ch_11.svg", None, show_info=False)
 
         self.comboBox1 = QtWidgets.QComboBox(self)
         self.comboBox1_functions = [self.purelin, self.logsig, self.tansig]
@@ -108,9 +108,9 @@ class NetworkFunction(NNDLayout):
         self.label_w2_1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_w2_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 380 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.slider_w2_1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w2_1.setRange(-100, 100)
+        self.slider_w2_1.setRange(-20, 20)
         self.slider_w2_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w2_1.setTickInterval(10)
+        self.slider_w2_1.setTickInterval(1)
         self.slider_w2_1.setValue(10)
 
         self.wid_w2_1 = QtWidgets.QWidget(self)
@@ -124,9 +124,9 @@ class NetworkFunction(NNDLayout):
         self.label_w2_2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_w2_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 450 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.slider_w2_2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w2_2.setRange(-100, 100)
+        self.slider_w2_2.setRange(-20, 20)
         self.slider_w2_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w2_2.setTickInterval(10)
+        self.slider_w2_2.setTickInterval(1)
         self.slider_w2_2.setValue(10)
 
         self.wid_w2_2 = QtWidgets.QWidget(self)
@@ -140,9 +140,9 @@ class NetworkFunction(NNDLayout):
         self.label_b2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_b2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 520 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
         self.slider_b2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b2.setRange(-100, 100)
+        self.slider_b2.setRange(-20, 20)
         self.slider_b2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b2.setTickInterval(10)
+        self.slider_b2.setTickInterval(1)
         self.slider_b2.setValue(0)
 
         self.wid_b2 = QtWidgets.QWidget(self)
@@ -173,14 +173,14 @@ class NetworkFunction(NNDLayout):
         # a.set_xticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
         # a.set_yticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
         # a.grid(which="minor")
-        a.set_xticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
-        a.set_yticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
+        # a.set_xticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
+        # a.set_yticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
         a.plot([0]*10, np.linspace(-2, 2, 10), color="black", linestyle="--", linewidth=0.2)
         a.plot(np.linspace(-2, 2, 10), [0]*10, color="black", linestyle="--", linewidth=0.2)
-        a.set_xlabel("$p$")
-        a.xaxis.set_label_coords(1, -0.025)
-        a.set_ylabel("$a$")
-        a.yaxis.set_label_coords(-0.025, 1)
+        # a.set_xlabel("$p$")
+        # a.xaxis.set_label_coords(1, -0.025)
+        # a.set_ylabel("$a$")
+        # a.yaxis.set_label_coords(-0.025, 1)
 
         # ax.set_xticks(major_ticks)
         # ax.set_xticks(minor_ticks, minor=True)
