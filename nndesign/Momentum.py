@@ -43,23 +43,18 @@ class Momentum(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(Momentum, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Momentum", 9, " Click anywhere to start an\n initial guess. The gradient\n descent path will be shown\n"
-                                                               " Modify the learning rate\n by moving the slide bar",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)  # TODO: Change icons
+        self.fill_chapter("Momentum", 12, "\nUse the radio buttons to\nselect the network\nparameters"
+                                          " to train\nwith backpropagation.\n\nThe corresponding contour\nplot "
+                                          "is shown below.\n\nClick in the contour graph\nto start "
+                                          "the momentum\nbackprop algorithm.\n\nYou can reset the algorithm\nparameters "
+                                          "by using\nthe sliders.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", None, description_coords=(535, 110, 450, 300))
 
         self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
         self.lr, self.epochs = None, None
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(50 * self.w_ratio, 200 * self.h_ratio, 450 * self.w_ratio, 450 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
-
+        self.make_plot(1, (20, 200, 480, 480))
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data, self.y_data = [], []
@@ -73,76 +68,25 @@ class Momentum(NNDLayout):
 
         self.x, self.y = None, None
 
-        self.comboBox1 = QtWidgets.QComboBox(self)
-        self.comboBox1.addItems(["W1(1, 1), W2(1, 1)", 'W1(1, 1), b1(1)', 'b1(1), b1(2)'])
-        self.label_combo = QtWidgets.QLabel(self)
-        self.label_combo.setText("Pair of parameters")
-        self.label_combo.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_combo.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 550 * self.h_ratio,
-                                     150 * self.w_ratio, 100 * self.h_ratio)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 580 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox1)
-        self.wid2.setLayout(self.layout2)
+        self.make_combobox(1, ["W1(1, 1), W2(1, 1)", 'W1(1, 1), b1(1)', 'b1(1), b1(2)'],
+                           (525, 410, 150, 50), self.change_pair_of_params,
+                           "label_combo", "Pair of parameters", (545, 390, 150, 50))
 
         self.lr = 3.5
-        self.label_lr = QtWidgets.QLabel(self)
-        self.label_lr.setText("lr: 3.5")
-        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 250 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 200)
-        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_lr.setTickInterval(1)
-        self.slider_lr.setValue(35)
-        self.wid_lr = QtWidgets.QWidget(self)
-        self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 280 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_lr.addWidget(self.slider_lr)
-        self.wid_lr.setLayout(self.layout_lr)
+        self.make_label("label_lr1", "0.0", (self.x_chapter_usual + 10, 590, self.w_chapter_slider, 50))
+        self.make_label("label_lr2", "20.0", (self.x_chapter_usual + 150, 590, self.w_chapter_slider, 50))
+        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 200), QtWidgets.QSlider.TicksBelow, 1, 35,
+                         (self.x_chapter_usual, 560, self.w_chapter_slider, 50), self.slide, "label_lr", "lr: 3.5")
 
         self.momentum = 0.9
-        self.label_momentum = QtWidgets.QLabel(self)
-        self.label_momentum.setText("Momentum: 0.9")
-        self.label_momentum.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_momentum.setGeometry(self.x_chapter_slider_label * self.w_ratio, 350 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_momentum = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_momentum.setRange(0, 100)
-        self.slider_momentum.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_momentum.setTickInterval(1)
-        self.slider_momentum.setValue(90)
-        self.wid_momentum = QtWidgets.QWidget(self)
-        self.layout_momentum = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_momentum.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
-                                      self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_momentum.addWidget(self.slider_momentum)
-        self.wid_momentum.setLayout(self.layout_momentum)
+        self.make_label("label_momentum1", "0.0", (self.x_chapter_usual + 10, 500, self.w_chapter_slider, 50))
+        self.make_label("label_momentum2", "1.0", (self.x_chapter_usual + 150, 500, self.w_chapter_slider, 50))
+        self.make_slider("slider_momentum", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 90,
+                         (self.x_chapter_usual, 470, self.w_chapter_slider, 50), self.slide,
+                         "label_momentum", "Momentum: 0.9", (self.x_chapter_usual + 50, 440, self.w_chapter_slider, 50))
 
-        self.animation_speed = 100
-        self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 100 ms")
-        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 450 * self.h_ratio,
-                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_anim_speed.setRange(0, 6)
-        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(1)
-        self.wid_anim_speed = QtWidgets.QWidget(self)
-        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 480 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_anim_speed.addWidget(self.slider_anim_speed)
-        self.wid_anim_speed.setLayout(self.layout_anim_speed)
+        self.animation_speed = 0
 
-        self.comboBox1.currentIndexChanged.connect(self.change_pair_of_params)
-        self.slider_lr.valueChanged.connect(self.slide)
-        self.slider_momentum.valueChanged.connect(self.slide)
-        self.slider_anim_speed.valueChanged.connect(self.slide)
         self.canvas.draw()
 
         self.dW1, self.db1, self.dW2, self.db2 = 0, 0, 0, 0
@@ -165,31 +109,31 @@ class Momentum(NNDLayout):
         if self.pair_of_params == 1:
             self.axes.set_xlim(-5, 15)
             self.axes.set_ylim(-5, 15)
-            self.axes.set_xticks([-5, 0, 5, 10])
-            self.axes.set_yticks([-5, 0, 5, 10])
+            self.axes.set_xticks([-5, 0, 5, 10, 15])
+            self.axes.set_yticks([-5, 0, 5, 10, 15])
         elif self.pair_of_params == 2:
             self.axes.set_xlim(-10, 30)
             self.axes.set_ylim(-20, 10)
-            self.axes.set_xticks([-10, 0, 10, 20])
-            self.axes.set_yticks([-20, -15, -10, -5, 0, 5])
+            self.axes.set_xticks([-10, 0, 10, 20, 30])
+            self.axes.set_yticks([-20, -15, -10, -5, 0, 5, 10])
         elif self.pair_of_params == 3:
             self.axes.set_xlim(-10, 10)
             self.axes.set_ylim(-10, 10)
-            self.axes.set_xticks([-10, -5, 0, 5])
-            self.axes.set_xticks([-10, -5, 0, 5])
+            self.axes.set_xticks([-10, -5, 0, 5, 10])
+            self.axes.set_xticks([-10, -5, 0, 5, 10])
         self.axes.set_xlabel(self.pair_params[self.pair_of_params - 1][0], fontsize=8)
-        self.axes.xaxis.set_label_coords(0.95, -0.025)
+        # self.axes.xaxis.set_label_coords(0.95, -0.025)
         self.axes.set_ylabel(self.pair_params[self.pair_of_params - 1][1], fontsize=8)
-        self.axes.yaxis.set_label_coords(-0.025, 0.95)
+        # self.axes.yaxis.set_label_coords(-0.025, 0.95)
         self.canvas.draw()
 
     def slide(self):
         self.lr = float(self.slider_lr.value()/10)
         self.label_lr.setText("lr: " + str(self.lr))
         self.momentum = float(self.slider_momentum.value() / 100)
-        self.label_momentum.setText("momentum: " + str(self.momentum))
-        self.animation_speed = int(self.slider_anim_speed.value()) * 100
-        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+        self.label_momentum.setText("Momentum: " + str(self.momentum))
+        # self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.x_data:
             if self.ani:
                 self.ani.event_source.stop()

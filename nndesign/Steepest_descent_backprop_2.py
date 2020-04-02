@@ -68,6 +68,7 @@ class SteepestDescentBackprop2(NNDLayout):
                            (525, 450, 150, 50), self.change_pair_of_params,
                            "label_combo", "Pair of parameters", (545, 420, 150, 50))
 
+        self.lr = 3.5
         self.make_label("label_lr1", "0.0", (self.x_chapter_usual + 10, 580, self.w_chapter_slider, 50))
         self.make_label("label_lr2", "20.0", (self.x_chapter_usual + 150, 580, self.w_chapter_slider, 50))
         self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 200), QtWidgets.QSlider.TicksBelow, 1, 35,
