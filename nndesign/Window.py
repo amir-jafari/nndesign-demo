@@ -96,7 +96,7 @@ from Hopfield_network import HopfieldNetwork
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
 from Poslin_network_function import PoslinNetworkFunction
-# from Poslin_decision_regions import PoslinDecisionRegions
+from Poslin_decision_regions import PoslinDecisionRegions
 from Cascaded_function import CascadedFunction
 # ------ Chapter 3 --------
 from Gradient_descent import GradientDescent
@@ -609,8 +609,8 @@ class MainWindowDL(NNDLayout):
             self.chapter_window1 = PoslinNetworkFunction(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
         elif idx == 2:
-            # self.chapter_window2 = PoslinDecisionRegions(self.w_ratio, self.h_ratio)
-            # self.chapter_window2.show()
+            self.chapter_window2 = PoslinDecisionRegions(self.w_ratio, self.h_ratio)
+            self.chapter_window2.show()
             print("TODO")
         elif idx == 3:
             print("TODO")

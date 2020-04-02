@@ -40,7 +40,7 @@ class SteepestDescentBackprop1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(SteepestDescentBackprop1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Steepest Descent for Quadratic", 12, "\n\nUse the radio buttons to\nselect the network\nparameters"
+        self.fill_chapter("Steepest Descent Backprop #1", 12, "\n\nUse the radio buttons to\nselect the network\nparameters"
                                                                 " to train\nwith backpropagation.\n\nThe corresponding error\nsurface "
                                                                 "and contour are\nshown below.\n\nClick in the contour graph\nto start "
                                                                 "the steepest\ndescent algorithm.",
