@@ -10,11 +10,11 @@ from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
 
 
-class PoslinNetworkFunction(NNDLayout):
+class PoslinDecisionRegions(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(PoslinNetworkFunction, self).__init__(w_ratio, h_ratio, main_menu=2)
+        super(PoslinDecisionRegions, self).__init__(w_ratio, h_ratio, main_menu=2)
 
-        self.fill_chapter("Poslin Decision Regions", 2, "",
+        self.fill_chapter("Poslin Decision Regions", 2, "Choose transfer function\nfirst and choose weight\nand biases then.",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet_new.svg", icon_move_left=120)
 
         self.comboBox1 = QtWidgets.QComboBox(self)
