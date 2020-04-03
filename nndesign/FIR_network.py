@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-import math
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -13,114 +12,43 @@ from get_package_path import PACKAGE_PATH
 
 class FIRNetwork(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(FIRNetwork, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(15, 300, 500, 370))
+        super(FIRNetwork, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("FIR Network", 2, " TODO",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg")
+        self.fill_chapter("FIR Network", 14, "Select the input and\nfrequency to the FIR\nnetwork.\n\n"
+                                             "Use the sliders to alter\nthe network weights.",  # \n\n"
+                                             # "Click on [Random] to set\neach parameter to\a random value.\n\n"
+                                             # "Click on [Reset] to\ninitialize the parameters",
+                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", description_coords=(535, 90, 450, 200))
 
-        self.comboBox1 = QtWidgets.QComboBox(self)
+        self.make_plot(1, (15, 300, 500, 370))
+
         self.comboBox1_functions_str = ["square", 'sine']
-        self.comboBox1.addItems(self.comboBox1_functions_str)
+        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 495, self.w_chapter_slider, 100), self.change_transfer_function,
+                           "label_f", "f", (self.x_chapter_slider_label + 20, 465, 150, 100))
         self.func1 = "square"
-        self.label_f = QtWidgets.QLabel(self)
-        self.label_f.setText("f")
-        self.label_f.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_f.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 490 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 520 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox1)
-        self.wid2.setLayout(self.layout2)
 
-        self.comboBox2 = QtWidgets.QComboBox(self)
-        self.freq = 1 / 12
         self.comboBox2_divs = ["1/16", '1/14', '1/12', '1/10', '1/8']
-        self.comboBox2.addItems(self.comboBox2_divs)
-        self.comboBox2.setCurrentIndex(2)
-        self.label_div = QtWidgets.QLabel(self)
-        self.label_div.setText("frequency")
-        self.label_div.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_div.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 560 * self.h_ratio,
-                                   150 * self.w_ratio, 100 * self.h_ratio)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 590 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox2)
-        self.wid2.setLayout(self.layout2)
+        self.make_combobox(2, self.comboBox2_divs, (self.x_chapter_usual, 560, self.w_chapter_slider, 100), self.change_freq,
+                           "label_div", "frequency", (self.x_chapter_slider_label, 530, 150, 100))
+        self.freq = 1 / 12
 
-        self.comboBox3 = QtWidgets.QComboBox(self)
         self.autoscale = False
-        self.comboBox3.addItems(["No", "Yes"])
-        self.label_autoscale = QtWidgets.QLabel(self)
-        self.label_autoscale.setText("Autoscale")
-        self.label_autoscale.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_autoscale.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 420 * self.h_ratio,
-                                         150 * self.w_ratio, 100 * self.h_ratio)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 450 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox3)
-        self.wid2.setLayout(self.layout2)
+        self.make_combobox(3, ["No", "Yes"], (self.x_chapter_usual, 430, self.w_chapter_slider, 100),
+                           self.change_autoscale,
+                           "label_autoscale", "Autoscale", (self.x_chapter_slider_label, 400, 150, 100))
 
-        self.label_w0 = QtWidgets.QLabel(self)
-        self.label_w0.setText("iW(0): 0.3")
-        self.label_w0.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w0.setGeometry(self.x_chapter_slider_label * self.w_ratio, 200 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.slider_w0 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w0.setRange(-20, 20)
-        self.slider_w0.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w0.setTickInterval(1)
-        self.slider_w0.setValue(3)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 230 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.slider_w0)
-        self.wid3.setLayout(self.layout3)
-
-        self.label_w1 = QtWidgets.QLabel(self)
-        self.label_w1.setText("iW(1): 0.3")
-        self.label_w1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 270 * self.h_ratio, 150 * self.w_ratio,
-                                  100 * self.h_ratio)
-        self.slider_w1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w1.setRange(-20, 20)
-        self.slider_w1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w1.setTickInterval(1)
-        self.slider_w1.setValue(3)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 300 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.slider_w1)
-        self.wid3.setLayout(self.layout3)
-
-        self.label_w2 = QtWidgets.QLabel(self)
-        self.label_w2.setText("iW(2): 0.3")
-        self.label_w2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 340 * self.h_ratio, 150 * self.w_ratio,
-                                  100 * self.h_ratio)
-        self.slider_w2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w2.setRange(-20, 20)
-        self.slider_w2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w2.setTickInterval(1)
-        self.slider_w2.setValue(3)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 370 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.slider_w2)
-        self.wid3.setLayout(self.layout3)
-
-        self.comboBox1.currentIndexChanged.connect(self.change_transfer_function)
-        self.comboBox2.currentIndexChanged.connect(self.change_freq)
-        self.comboBox3.currentIndexChanged.connect(self.change_autoscale)
-        self.slider_w0.valueChanged.connect(self.graph)
-        self.slider_w1.valueChanged.connect(self.graph)
-        self.slider_w2.valueChanged.connect(self.graph)
+        self.make_slider("slider_w0", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 3,
+                         (self.x_chapter_usual, 260, self.w_chapter_slider, 50), self.graph,
+                         "label_w0", "iW(0): 0.3",
+                         (self.x_chapter_slider_label, 230, 150, 50))
+        self.make_slider("slider_w1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 3,
+                         (self.x_chapter_usual, 330, self.w_chapter_slider, 50), self.graph,
+                         "label_w1", "iW(1): 0.3",
+                         (self.x_chapter_slider_label, 300, 150, 50))
+        self.make_slider("slider_w2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 3,
+                         (self.x_chapter_usual, 400, self.w_chapter_slider, 50), self.graph,
+                         "label_w2", "iW(2): 0.3",
+                         (self.x_chapter_slider_label, 370, 150, 50))
 
         self.graph()
 
