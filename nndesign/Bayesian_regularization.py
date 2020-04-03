@@ -39,10 +39,16 @@ def purelin_der(n):
 
 class BayesianRegularization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(BayesianRegularization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
+        super(BayesianRegularization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Bayesian Regularization", 9, "",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Bayesian Regularization", 13, "Click [Train] to train the\nnetwork on the noisy\ndata points.\n\n"
+                                                         "Use the slide bars to choose\nthe Network Size, the\nNumber of"
+                                                         " data points,\nthe Noise Standard\nDeviation and the\nfrequency of "
+                                                         "the function.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 90, 450, 300))
+
+        self.make_plot(1, (100, 90, 300, 300))
+        self.make_plot(2, (100, 380, 300, 300))
 
         self.train_error, self.error_train = [], None
         self.test_error, self.error_test = [], None
@@ -54,7 +60,7 @@ class BayesianRegularization(NNDLayout):
         self.tt, self.t = None, None
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.set_title("Function F", fontdict={'fontsize': 10})
+        self.axes_1.set_title("Function", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-1, 1)
         self.axes_1.set_ylim(-1.5, 1.5)
         self.axes_1_blue_line, = self.axes_1.plot([], [], color="blue")
@@ -65,116 +71,55 @@ class BayesianRegularization(NNDLayout):
         self.canvas.draw()
 
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
-        self.axes_2.set_title("Approximation Fa", fontdict={'fontsize': 10})
+        self.axes_2.set_title("Performance Indexes", fontdict={'fontsize': 10})
         self.train_e, = self.axes_2.plot([], [], linestyle='-', color="blue", label="train error")
         self.test_e, = self.axes_2.plot([], [], linestyle='-', color="black", label="test error")
         self.gamma, = self.axes_2.plot([], [], linestyle='-', color="red", label="gamma")
         self.axes_2.legend()
-        self.axes_2.set_xlim(0, max_epoch)
-        self.axes_2.set_ylim(-0.1, 20)
+        self.axes_2.plot(1, 1000, marker="*")
+        self.axes_2.plot(100, 1000, marker="*")
+        self.axes_2.plot(1, 0.1, marker="*")
+        self.axes_2.plot(100, 0.1, marker="*")
+        self.axes_2.set_xscale("log")
+        self.axes_2.set_yscale("log")
+        # self.axes_2.set_xlim(1, 100)
+        # self.axes_2.set_ylim(0.1, 1000)
+        # self.axes_2.set_xticks([1, 10, 100])
+        # self.axes_2.set_yticks([0.1, 0, 10, 100, 1000])
+        while self.axes_2.lines:
+            self.axes_2.lines.pop()
+        self.figure2.set_tight_layout(True)
         self.canvas2.draw()
 
         self.nsd = 1
-        self.label_nsd = QtWidgets.QLabel(self)
-        self.label_nsd.setText("Noise standard deviation: 1")
-        self.label_nsd.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_nsd.setGeometry((self.x_chapter_slider_label - 50) * self.w_ratio, 100 * self.h_ratio,
-                                   self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_nsd = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_nsd.setRange(0, 30)
-        self.slider_nsd.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_nsd.setTickInterval(1)
-        self.slider_nsd.setValue(10)
-        self.wid_nsd = QtWidgets.QWidget(self)
-        self.layout_nsd = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_nsd.setGeometry(self.x_chapter_usual * self.w_ratio, 130 * self.h_ratio,
-                                 self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_nsd.addWidget(self.slider_nsd)
-        self.wid_nsd.setLayout(self.layout_nsd)
+        self.make_slider("slider_nsd", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
+                         (self.x_chapter_usual, 360, self.w_chapter_slider, 50), self.slide,
+                         "label_nsd", "Noise standard deviation: 1.0",
+                         (self.x_chapter_usual + 10, 330, self.w_chapter_slider, 50))
 
         self.animation_speed = 100
-        self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 100 ms")
-        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 200 * self.h_ratio,
-                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_anim_speed.setRange(0, 6)
-        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(1)
-        self.wid_anim_speed = QtWidgets.QWidget(self)
-        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 230 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_anim_speed.addWidget(self.slider_anim_speed)
-        self.wid_anim_speed.setLayout(self.layout_anim_speed)
 
         self.S1 = 20
-        self.label_S1 = QtWidgets.QLabel(self)
-        self.label_S1.setText("# Hidden Neurons: 20")
-        self.label_S1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_S1.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 300 * self.h_ratio,
-                                  self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_S1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_S1.setRange(2, 40)
-        self.slider_S1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_S1.setTickInterval(1)
-        self.slider_S1.setValue(20)
-        self.wid_S1 = QtWidgets.QWidget(self)
-        self.layout_S1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_S1.setGeometry(self.x_chapter_usual * self.w_ratio, 330 * self.h_ratio,
-                                self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_S1.addWidget(self.slider_S1)
-        self.wid_S1.setLayout(self.layout_S1)
+        self.make_slider("slider_S1", QtCore.Qt.Horizontal, (2, 40), QtWidgets.QSlider.TicksBelow, 1, 20,
+                         (self.x_chapter_usual, 430, self.w_chapter_slider, 50), self.slide,
+                         "label_S1", "# Hidden Neurons: 20",
+                         (self.x_chapter_usual + 30, 400, self.w_chapter_slider, 50))
 
         self.n_points = 21
-        self.label_n_points = QtWidgets.QLabel(self)
-        self.label_n_points.setText("# Data Points: 21")
-        self.label_n_points.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_n_points.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 400 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_n_points = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_n_points.setRange(10, 40)
-        self.slider_n_points.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_n_points.setTickInterval(1)
-        self.slider_n_points.setValue(21)
-        self.wid_n_points = QtWidgets.QWidget(self)
-        self.layout_n_points = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_n_points.setGeometry(self.x_chapter_usual * self.w_ratio, 430 * self.h_ratio,
-                                      self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_n_points.addWidget(self.slider_n_points)
-        self.wid_n_points.setLayout(self.layout_n_points)
+        self.make_slider("slider_n_points", QtCore.Qt.Horizontal, (10, 40), QtWidgets.QSlider.TicksBelow, 1, 21,
+                         (self.x_chapter_usual, 500, self.w_chapter_slider, 50), self.slide,
+                         "label_n_points", "# Data Points: 21",
+                         (self.x_chapter_usual + 40, 470, self.w_chapter_slider, 50))
 
         self.freq = 1
-        self.label_freq = QtWidgets.QLabel(self)
-        self.label_freq.setText("Frequency: 1.00")
-        self.label_freq.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_freq.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 500 * self.h_ratio,
-                                    self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_freq = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_freq.setRange(50, 400)
-        self.slider_freq.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_freq.setTickInterval(1)
-        self.slider_freq.setValue(100)
-        self.wid_freq = QtWidgets.QWidget(self)
-        self.layout_freq = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_freq.setGeometry(self.x_chapter_usual * self.w_ratio, 530 * self.h_ratio,
-                                  self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_freq.addWidget(self.slider_freq)
-        self.wid_freq.setLayout(self.layout_freq)
+        self.make_slider("slider_freq", QtCore.Qt.Horizontal, (50, 400), QtWidgets.QSlider.TicksBelow, 1, 100,
+                         (self.x_chapter_usual, 570, self.w_chapter_slider, 50), self.slide,
+                         "label_freq", "Frequency: 1.00",
+                         (self.x_chapter_usual + 50, 540, self.w_chapter_slider, 50))
 
-        self.slider_nsd.valueChanged.connect(self.slide)
-        self.slider_anim_speed.valueChanged.connect(self.slide)
-        self.slider_S1.valueChanged.connect(self.slide)
-        self.slider_n_points.valueChanged.connect(self.slide)
-        self.slider_freq.valueChanged.connect(self.slide)
         self.plot_train_test_data()
 
-        self.run_button = QtWidgets.QPushButton("Train", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 620 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
+        self.make_button("run_button", "Train", (self.x_chapter_button, 610, self.w_chapter_button, self.h_chapter_button), self.on_run)
         self.init_params()
         self.full_batch = False
 
@@ -264,8 +209,8 @@ class BayesianRegularization(NNDLayout):
         self.nsd = float(self.slider_nsd.value() / 10)
         self.label_nsd.setText("Noise standard deviation: " + str(self.nsd))
         self.plot_train_test_data()
-        self.animation_speed = int(self.slider_anim_speed.value()) * 100
-        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+        # self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         self.S1 = int(self.slider_S1.value())
         self.label_S1.setText("# Hidden Neurons: " + str(self.S1))
         self.n_points = int(self.slider_n_points.value())
@@ -280,7 +225,7 @@ class BayesianRegularization(NNDLayout):
         self.net_approx.set_data([], [])
         self.canvas.draw()
         self.canvas2.draw()
-        self.run_animation()
+        # self.run_animation()
 
     def plot_train_test_data(self):
         self.axes_1_blue_line.set_data(pp0, np.sin(2 * np.pi * pp0 * self.freq / T))
