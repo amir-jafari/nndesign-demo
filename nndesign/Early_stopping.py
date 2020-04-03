@@ -11,7 +11,7 @@ from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
 
 
-max_epoch = 100
+max_epoch = 120
 
 T = 2
 pp0 = np.linspace(-1, 1, 201)
@@ -39,10 +39,16 @@ def purelin_der(n):
 
 class EarlyStopping(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(EarlyStopping, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
+        super(EarlyStopping, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Early Stopping", 9, " TODO",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Early Stopping", 13, "Use the slider to change the\nNoise Standard Deviation of\nthe training points.\n\n"
+                                                "Click [Train] to train\non the training points.\n\nThe training and validation\n"
+                                                "performance indexes will be\npresented on the right.\n\nYou will notice that\n"
+                                                "without early stopping the\nvalidation error will increase.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 110, 450, 300))
+
+        self.make_plot(1, (100, 90, 300, 300))
+        self.make_plot(2, (100, 380, 300, 300))
 
         self.train_error, self.error_train = [], None
         self.test_error, self.error_test = [], None
@@ -53,7 +59,7 @@ class EarlyStopping(NNDLayout):
         self.tt, self.t = None, None
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.set_title("Function F", fontdict={'fontsize': 10})
+        self.axes_1.set_title("Function", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-1, 1)
         self.axes_1.set_ylim(-1.5, 1.5)
         self.axes_1.plot(pp0, np.sin(2 * np.pi * pp0 / T))
@@ -64,52 +70,33 @@ class EarlyStopping(NNDLayout):
         self.canvas.draw()
 
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
-        self.axes_2.set_title("Approximation Fa", fontdict={'fontsize': 10})
+        self.axes_2.set_title("Performance Indexes", fontdict={'fontsize': 10})
         self.train_e, = self.axes_2.plot([], [], linestyle='-', color="b", label="train error")
         self.test_e, = self.axes_2.plot([], [], linestyle='-', color="r", label="test error")
         self.axes_2.legend()
-        self.axes_2.set_xlim(0, max_epoch)
-        self.axes_2.set_ylim(-0.1, 20)
+        # self.axes_2.plot([1, 1])
+        self.axes_2.plot(1, 1000, marker="*")
+        self.axes_2.plot(100, 1000, marker="*")
+        self.axes_2.plot(1, 0.1, marker="*")
+        self.axes_2.plot(100, 0.1, marker="*")
+        self.axes_2.set_xscale("log")
+        self.axes_2.set_yscale("log")
+        # self.axes_2.set_xlim(1, 100)
+        # self.axes_2.set_ylim(0.1, 1000)
+        # self.axes_2.set_xticks([1, 10, 100])
+        # self.axes_2.set_yticks([0.1, 0, 10, 100, 1000])
+        while self.axes_2.lines:
+            self.axes_2.lines.pop()
+        self.figure2.set_tight_layout(True)
         self.canvas2.draw()
 
         self.nsd = 1
-        self.label_nsd = QtWidgets.QLabel(self)
-        self.label_nsd.setText("Noise standard deviation: 1")
-        self.label_nsd.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_nsd.setGeometry((self.x_chapter_slider_label - 50) * self.w_ratio, 250 * self.h_ratio,
-                                   self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_nsd = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_nsd.setRange(0, 30)
-        self.slider_nsd.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_nsd.setTickInterval(1)
-        self.slider_nsd.setValue(10)
-        self.wid_nsd = QtWidgets.QWidget(self)
-        self.layout_nsd = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_nsd.setGeometry(self.x_chapter_usual * self.w_ratio, 280 * self.h_ratio,
-                                 self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_nsd.addWidget(self.slider_nsd)
-        self.wid_nsd.setLayout(self.layout_nsd)
+        self.make_slider("slider_nsd", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
+                         (self.x_chapter_usual, 400, self.w_chapter_slider, 100), self.slide,
+                         "label_nsd", "Noise standard deviation: 1.0", (self.x_chapter_usual + 10, 370, self.w_chapter_slider, 100))
 
         self.animation_speed = 100
-        self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 100 ms")
-        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
-                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_anim_speed.setRange(0, 6)
-        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(1)
-        self.wid_anim_speed = QtWidgets.QWidget(self)
-        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_anim_speed.addWidget(self.slider_anim_speed)
-        self.wid_anim_speed.setLayout(self.layout_anim_speed)
 
-        self.slider_nsd.valueChanged.connect(self.slide)
-        self.slider_anim_speed.valueChanged.connect(self.slide)
         self.plot_train_test_data()
 
         self.run_button = QtWidgets.QPushButton("Train", self)
@@ -157,6 +144,7 @@ class EarlyStopping(NNDLayout):
             a, n2, n1, a1, a0 = self.forward(sample)
             nn_output.append(a)
         self.net_approx.set_data(pp0, nn_output)
+        # self.axes_2.set_yscale("log")
         return self.net_approx,
 
     def on_run(self):
@@ -182,13 +170,17 @@ class EarlyStopping(NNDLayout):
                                    interval=self.animation_speed, repeat=False, blit=True)
 
     def slide(self):
+        # if list(self.ani_1.frame_seq):  # If the animation is running
+        #     self.slider_nsd.setValue(self.nsd * 10)
+            # self.ani_1.event_source.start()
+        # else:
         self.init_params()
         np.random.seed(self.random_state)
         self.nsd = float(self.slider_nsd.value() / 10)
         self.label_nsd.setText("Noise standard deviation: " + str(self.nsd))
         self.plot_train_test_data()
-        self.animation_speed = int(self.slider_anim_speed.value()) * 100
-        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+        # self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.ani_1:
             self.ani_1.event_source.stop()
         if self.ani_2:
@@ -197,7 +189,6 @@ class EarlyStopping(NNDLayout):
         self.net_approx.set_data([], [])
         self.canvas.draw()
         self.canvas2.draw()
-        self.run_animation()
 
     def plot_train_test_data(self):
         self.tt = np.sin(2 * np.pi * pp / T) + np.random.uniform(-2, 2, pp.shape) * 0.2 * self.nsd
