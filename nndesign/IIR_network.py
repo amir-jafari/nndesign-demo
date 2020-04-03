@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-import math
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -19,7 +18,7 @@ class IIRNetwork(NNDLayout):
                                              "Use the sliders to alter\nthe network weights.",  # \n\n"
                                              # "Click on [Random] to set\neach parameter to\a random value.\n\n"
                                              # "Click on [Reset] to\ninitialize the parameters",
-                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", description_coords=(535, 90, 450, 200))
+                          PACKAGE_PATH + "Logo/Logo_Ch_14.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", description_coords=(535, 90, 450, 200))
 
         self.make_plot(1, (15, 300, 500, 370))
 
@@ -30,9 +29,9 @@ class IIRNetwork(NNDLayout):
         self.func1 = "square"
 
         self.comboBox2_divs = ["1/16", '1/14', '1/12', '1/10', '1/8']
-        self.make_combobox(2, self.comboBox2_divs, (self.x_chapter_usual, 560, self.w_chapter_slider, 100),
+        self.make_combobox(2, self.comboBox2_divs, (self.x_chapter_usual, 590, self.w_chapter_slider, 50),
                            self.change_freq,
-                           "label_div", "frequency", (self.x_chapter_slider_label, 530, 150, 100))
+                           "label_div", "frequency", (self.x_chapter_slider_label, 560, 150, 50))
         self.freq = 1 / 12
 
         self.autoscale = False
