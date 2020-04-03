@@ -43,22 +43,16 @@ class MarquardtStep(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(MarquardtStep, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Marquardt Step", 9, " Click anywhere to start an\n initial guess. The gradient\n descent path will be shown\n"
-                                                               " Modify the learning rate\n by moving the slide bar",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)  # TODO: Change icons
+        self.fill_chapter("Marquardt Step", 12, "\n\nClick on the contour plot\nto do a single step of the\n"
+                                                "Marquardt learning\nalgorithm.\n\nThe black arrow indicates\nthe "
+                                                "Gauss-Newton step.\n\nThe red arrow indicates\nthe gradient direction.\n\n"
+                                                "The blue line indicates\nthe Marquardt step as\nmu is ajusted.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", None, description_coords=(535, 90, 450, 300))
 
         self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(50 * self.w_ratio, 200 * self.h_ratio, 450 * self.w_ratio, 450 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
-
+        self.make_plot(1, (20, 200, 480, 480))
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], label="Gradient Descent Path", color="blue")
         self.x_data, self.y_data = [], []
@@ -72,20 +66,9 @@ class MarquardtStep(NNDLayout):
 
         self.x, self.y = None, None
 
-        self.comboBox1 = QtWidgets.QComboBox(self)
-        self.comboBox1.addItems(["W1(1, 1), W2(1, 1)", 'W1(1, 1), b1(1)', 'b1(1), b1(2)'])
-        self.label_combo = QtWidgets.QLabel(self)
-        self.label_combo.setText("Pair of parameters")
-        self.label_combo.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_combo.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 550 * self.h_ratio,
-                                     150 * self.w_ratio, 100 * self.h_ratio)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 580 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox1)
-        self.wid2.setLayout(self.layout2)
-        self.comboBox1.currentIndexChanged.connect(self.change_pair_of_params)
+        self.make_combobox(1, ["W1(1, 1), W2(1, 1)", 'W1(1, 1), b1(1)', 'b1(1), b1(2)'],
+                           (525, 400, 150, 50), self.change_pair_of_params,
+                           "label_combo", "Pair of parameters", (545, 380, 150, 50))
 
         self.mu = 0.0012
         self.nu = 1.2

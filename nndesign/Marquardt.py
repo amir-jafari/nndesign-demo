@@ -43,22 +43,16 @@ class Marquardt(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(Marquardt, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Marquardt", 9, " Click anywhere to start an\n initial guess. The gradient\n descent path will be shown\n"
-                                                               " Modify the learning rate\n by moving the slide bar",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)  # TODO: Change icons
+        self.fill_chapter("Marquardt", 12, "\nUse the radio buttons to\nselect the network\nparameters"
+                                           " to train\nwith backpropagation.\n\nThe corresponding contour\nplot "
+                                           "is shown below.\n\nClick in the contour graph\nto start "
+                                           "the Marquardt\nbackprop algorithm.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", None, description_coords=(535, 90, 450, 300))
 
         self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(50 * self.w_ratio, 200 * self.h_ratio, 450 * self.w_ratio, 450 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
-
+        self.make_plot(1, (20, 200, 480, 480))
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data, self.y_data = [], []
@@ -72,76 +66,25 @@ class Marquardt(NNDLayout):
 
         self.x, self.y = None, None
 
-        self.comboBox1 = QtWidgets.QComboBox(self)
-        self.comboBox1.addItems(["W1(1, 1), W2(1, 1)", 'W1(1, 1), b1(1)', 'b1(1), b1(2)'])
-        self.label_combo = QtWidgets.QLabel(self)
-        self.label_combo.setText("Pair of parameters")
-        self.label_combo.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_combo.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 550 * self.h_ratio,
-                                     150 * self.w_ratio, 100 * self.h_ratio)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 580 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox1)
-        self.wid2.setLayout(self.layout2)
+        self.make_combobox(1, ["W1(1, 1), W2(1, 1)", 'W1(1, 1), b1(1)', 'b1(1), b1(2)'],
+                           (525, 360, 150, 50), self.change_pair_of_params,
+                           "label_combo", "Pair of parameters", (545, 340, 150, 50))
 
         self.mu = 0.01
-        self.label_mu = QtWidgets.QLabel(self)
-        self.label_mu.setText("mu: 0.01")
-        self.label_mu.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_mu.setGeometry(self.x_chapter_slider_label * self.w_ratio, 250 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_mu = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_mu.setRange(1, 10)
-        self.slider_mu.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_mu.setTickInterval(1)
-        self.slider_mu.setValue(1)
-        self.wid_mu = QtWidgets.QWidget(self)
-        self.layout_mu = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_mu.setGeometry(self.x_chapter_usual * self.w_ratio, 280 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_mu.addWidget(self.slider_mu)
-        self.wid_mu.setLayout(self.layout_mu)
+        self.make_label("label_mu1", "0.01", (self.x_chapter_usual + 10, 590, self.w_chapter_slider, 50))
+        self.make_label("label_mu2", "0.10", (self.x_chapter_usual + 150, 590, self.w_chapter_slider, 50))
+        self.make_slider("slider_mu", QtCore.Qt.Horizontal, (1, 10), QtWidgets.QSlider.TicksBelow, 1, 1,
+                         (self.x_chapter_usual, 560, self.w_chapter_slider, 50), self.slide, "label_mu", "mu: 0.01")
 
-        self.nu = 0.7
-        self.label_nu = QtWidgets.QLabel(self)
-        self.label_nu.setText("Constant NU: 0.7")
-        self.label_nu.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_nu.setGeometry(self.x_chapter_slider_label * self.w_ratio, 390 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_nu = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_nu.setRange(10, 100)
-        self.slider_nu.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_nu.setTickInterval(1)
-        self.slider_nu.setValue(50)
-        self.wid_nu = QtWidgets.QWidget(self)
-        self.layout_nu = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_nu.setGeometry(self.x_chapter_usual * self.w_ratio, 420 * self.h_ratio,
-                                self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_nu.addWidget(self.slider_nu)
-        self.wid_nu.setLayout(self.layout_nu)
+        self.nu = 5
+        self.make_label("label_nu1", "1.0", (self.x_chapter_usual + 10, 500, self.w_chapter_slider, 50))
+        self.make_label("label_nu2", "10.0", (self.x_chapter_usual + 150, 500, self.w_chapter_slider, 50))
+        self.make_slider("slider_nu", QtCore.Qt.Horizontal, (10, 100), QtWidgets.QSlider.TicksBelow, 1, 50,
+                         (self.x_chapter_usual, 470, self.w_chapter_slider, 50), self.slide,
+                         "label_nu", "Constant NU: 5.0", (self.x_chapter_usual + 50, 440, self.w_chapter_slider, 50))
 
         self.animation_speed = 100
-        self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 100 ms")
-        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 460 * self.h_ratio,
-                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_anim_speed.setRange(0, 6)
-        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(1)
-        self.wid_anim_speed = QtWidgets.QWidget(self)
-        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 490 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_anim_speed.addWidget(self.slider_anim_speed)
-        self.wid_anim_speed.setLayout(self.layout_anim_speed)
 
-        self.comboBox1.currentIndexChanged.connect(self.change_pair_of_params)
-        self.slider_mu.valueChanged.connect(self.slide)
-        self.slider_nu.valueChanged.connect(self.slide)
-        self.slider_anim_speed.valueChanged.connect(self.slide)
         self.canvas.draw()
 
         self.dW1, self.db1, self.dW2, self.db2 = 0, 0, 0, 0
@@ -187,11 +130,11 @@ class Marquardt(NNDLayout):
     def slide(self):
         if self.slider_do:
             self.mu = float(self.slider_mu.value() / 100)
-            self.label_mu.setText("mu: " + str(self.mu))
+            self.label_mu.setText("mu: " + str(round(self.mu, 2)))
             self.nu = float(self.slider_nu.value() / 10)
             self.label_nu.setText("Constant NU: " + str(self.nu))
-            self.animation_speed = int(self.slider_anim_speed.value()) * 100
-            self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+            # self.animation_speed = int(self.slider_anim_speed.value()) * 100
+            # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
             if self.x_data:
                 if self.ani:
                     self.ani.event_source.stop()
@@ -213,9 +156,9 @@ class Marquardt(NNDLayout):
 
         self.mu /= self.nu
         self.slider_do = False
-        if abs(self.mu * 100) < 1000:
-            self.slider_mu.setValue(self.mu * 100)
-        self.label_mu.setText("mu: " + str(self.mu))
+        # if abs(self.mu * 100) < 1000:
+        #     self.slider_mu.setValue(self.mu * 100)
+        # self.label_mu.setText("mu: " + str(round(self.mu, 2)))
 
         self.a1 = np.kron(self.a1, np.ones((1, 1)))
         d2 = self.log_delta(self.a2)
@@ -233,10 +176,11 @@ class Marquardt(NNDLayout):
             jac = np.array([list(jac[:, 2]), list(jac[:, 3])]).T
 
         je = np.dot(jac.T, self.e.T)
-        grad = np.sqrt(np.dot(je.T, je)).item()
-        if grad < 0.000002:
-            self.slider_do = True
-            return self.path,
+        # grad = np.sqrt(np.dot(je.T, je)).item()
+        # if grad < 0.000002:
+        #     print("!")
+        #     self.slider_do = True
+        #     return self.path,
 
         jj = np.dot(jac.T, jac)
         dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
@@ -262,9 +206,9 @@ class Marquardt(NNDLayout):
 
                 self.mu *= self.nu
                 self.slider_do = False
-                if abs(self.mu * 100) < 1000:
-                    self.slider_mu.setValue(self.mu * 100)
-                self.label_mu.setText("mu: " + str(self.mu))
+                # if abs(self.mu * 100) < 1000:
+                #     self.slider_mu.setValue(self.mu * 100)
+                # self.label_mu.setText("mu: " + str(round(self.mu, 2)))
                 if self.mu > 1e10:
                     break
 
@@ -296,9 +240,10 @@ class Marquardt(NNDLayout):
             self.W1, self.b1, self.W2, self.b2 = np.copy(W1), np.copy(b1), np.copy(W2), np.copy(b2)
             self.error_prev = error
 
-        if self.error_prev <= 0.0000001:
-            self.slider_do = True
-            return self.path,
+        # if self.error_prev <= 0.0000001:
+        #     print("!!")
+        #     self.slider_do = True
+        #     return self.path,
 
         self.x_data.append(self.x)
         self.y_data.append(self.y)
@@ -307,6 +252,7 @@ class Marquardt(NNDLayout):
         return self.path,
 
     def on_mouseclick(self, event):
+        self.mu = float(self.slider_mu.value()) / 100
         self.init_params()
         self.event = event
         if self.ani:
@@ -327,7 +273,7 @@ class Marquardt(NNDLayout):
             elif self.pair_of_params == 3:
                 self.b1[0], self.b1[1] = self.x, self.y
             self.dW1, self.db1, self.dW2, self.db2 = 0, 0, 0, 0
-            self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=11,
+            self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=12,
                                      interval=self.animation_speed, repeat=False, blit=True)
 
     def init_params(self):
