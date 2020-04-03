@@ -40,20 +40,24 @@ def purelin_der(n):
 
 class Regularization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(Regularization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=True)
+        super(Regularization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Regularization", 9, " TODO",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Regularization", 13, "Click [Train] to train the\nnetwork on the noisy\ndata points.\n\n"
+                                                "Use the slide bars to choose\nthe Regularization Ratio\nand the "
+                                                "Noise Standard\nDeviation.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 90, 450, 250))
 
         self.ani, self.tt, self.clicked = None, None, False
         self.W1, self.b1, self.W2, self.b2 = None, None, None, None
         self.S1, self.random_state = 20, 42
         np.random.seed(self.random_state)
 
+        self.make_plot(1, (20, 100, 470, 470))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.set_title("Function F", fontdict={'fontsize': 10})
+        self.axes_1.set_title("Function Approxiation", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-1, 1)
         self.axes_1.set_ylim(-1.5, 1.5)
+        self.axes_1.set_yticks([-1, -0.5, 0, 0.5, 1])
         self.axes_1.plot(pp0, np.sin(2 * np.pi * pp0 / T))
         self.net_approx, = self.axes_1.plot([], linestyle="--")
         self.train_points, = self.axes_1.plot([], marker='*', label="Train", linestyle="")
@@ -61,69 +65,23 @@ class Regularization(NNDLayout):
         self.canvas.draw()
 
         self.nsd = 1
-        self.label_nsd = QtWidgets.QLabel(self)
-        self.label_nsd.setText("Noise standard deviation: 1")
-        self.label_nsd.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_nsd.setGeometry((self.x_chapter_slider_label - 50) * self.w_ratio, 250 * self.h_ratio,
-                                   self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_nsd = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_nsd.setRange(0, 30)
-        self.slider_nsd.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_nsd.setTickInterval(1)
-        self.slider_nsd.setValue(10)
-        self.wid_nsd = QtWidgets.QWidget(self)
-        self.layout_nsd = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_nsd.setGeometry(self.x_chapter_usual * self.w_ratio, 280 * self.h_ratio,
-                                 self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_nsd.addWidget(self.slider_nsd)
-        self.wid_nsd.setLayout(self.layout_nsd)
+        self.make_slider("slider_nsd", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
+                         (20, 580, 470, 50), self.slide,
+                         "label_nsd", "Noise standard deviation: 1.0",
+                         (180, 555, 200, 50))
 
         self.animation_speed = 100
-        self.label_anim_speed = QtWidgets.QLabel(self)
-        self.label_anim_speed.setText("Animation Delay: 100 ms")
-        self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
-                                          self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_anim_speed.setRange(0, 6)
-        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_anim_speed.setTickInterval(1)
-        self.slider_anim_speed.setValue(1)
-        self.wid_anim_speed = QtWidgets.QWidget(self)
-        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
-                                        self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_anim_speed.addWidget(self.slider_anim_speed)
-        self.wid_anim_speed.setLayout(self.layout_anim_speed)
 
         self.regularization_ratio = 0.25
-        self.label_rer = QtWidgets.QLabel(self)
-        self.label_rer.setText("Regularization Ratio: 0.25")
-        self.label_rer.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_rer.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 450 * self.h_ratio,
-                                   self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_rer = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_rer.setRange(0, 100)
-        self.slider_rer.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_rer.setTickInterval(1)
-        self.slider_rer.setValue(25)
-        self.wid_rer = QtWidgets.QWidget(self)
-        self.layout_rer = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_rer.setGeometry(self.x_chapter_usual * self.w_ratio, 480 * self.h_ratio,
-                                 self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_rer.addWidget(self.slider_rer)
-        self.wid_rer.setLayout(self.layout_rer)
+        self.make_slider("slider_rer", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 25,
+                         (20, 640, 470, 50), self.slide,
+                         "label_rer", "Regularization Ratio: 0.25",
+                         (200, 615, 200, 50))
 
-        self.slider_nsd.valueChanged.connect(self.slide)
-        self.slider_anim_speed.valueChanged.connect(self.slide)
-        self.slider_rer.valueChanged.connect(self.slide)
         self.plot_train_test_data()
         self.canvas.draw()
 
-        self.run_button = QtWidgets.QPushButton("Train", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 600 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
+        self.make_button("run_button", "Train", (self.x_chapter_button, 290, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
         self.init_params()
 
@@ -297,14 +255,14 @@ class Regularization(NNDLayout):
         self.nsd = float(self.slider_nsd.value() / 10)
         self.label_nsd.setText("Noise standard deviation: " + str(self.nsd))
         self.plot_train_test_data()
-        self.animation_speed = int(self.slider_anim_speed.value()) * 100
-        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+        # self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         self.regularization_ratio = int(self.slider_rer.value()) / 100
         self.label_rer.setText("Regularization Ratio: " + str(self.regularization_ratio))
         self.net_approx.set_data([], [])
         self.canvas.draw()
-        if self.clicked:
-            self.run_animation()
+        # if self.clicked:
+        #     self.run_animation()
 
     def init_params(self):
         np.random.seed(self.random_state)
