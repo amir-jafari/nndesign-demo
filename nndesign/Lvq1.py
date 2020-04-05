@@ -1,11 +1,7 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 from scipy.spatial import distance
 
@@ -20,22 +16,20 @@ W2 = np.array([[1, 1, 0, 0], [0, 0, 1, 1]])
 
 class LVQ1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(LVQ1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=False)
+        super(LVQ1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("LVQ1", 5, "",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("LVQ1", 16, "Click [Learn] to apply the\nLVQ1 rule once.\n\nClick [Train] to apply it\non all"
+                                      " the inputs.\n\nClick [Random] to get\nrandom weights.\n\nLeft-click on the plot "
+                                      "to add\na positive class.\n\nRight-click to add a\nnegative class.\n\n"
+                                      "Misclassifications are shown in red.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None, description_coords=(535, 160, 450, 250))
 
         self.alpha = 0.4
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(15 * self.w_ratio, 100 * self.h_ratio, 500 * self.w_ratio, 500 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
-        self.axes_1 = self.figure.add_subplot(1, 1, 1)
+        self.make_plot(1, (15, 100, 500, 500))
+        self.axes_1 = self.figure.add_subplot(111)
+        self.figure.subplots_adjust(bottom=0.2, left=0.1)
+        # self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_yticks([])
         self.axes_1.set_xticks([])
         self.axes_1.set_xlim(-3, 3)
@@ -43,7 +37,7 @@ class LVQ1(NNDLayout):
         self.axes_1.grid(True, linestyle='--')
         self.ani = None
 
-        self.p_point_higlight, = self.axes_1.plot([], "*")
+        self.p_point_higlight, = self.axes_1.plot([], "*", markersize=16)
         self.P = np.array([[-1.5, -2.0, 2.0, 1.5, 2.0, 2.0, -2.0, -1.5],
                            [2.0, 1.5, 2.0, 2.0, -2.0, -1.5, -2.0, -2.0]])
         self.T = np.array([[1, 1, 0, 0, 1, 1, 0, 0], [0, 0, 1, 1, 0, 0, 1, 1]])
@@ -54,66 +48,39 @@ class LVQ1(NNDLayout):
         self.W = None
         self.pos_weight, = self.axes_1.plot([], 'm+', label="Positive Weight", markersize=16)
         self.neg_weight, = self.axes_1.plot([], 'c+', label="Negative Weight", markersize=16)
+        self.axes_1.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=2,
+                           bbox_to_anchor=(0, -.28, 1, -.280), mode='expand')
         # self.axes_1.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=2, ncol=2,
         #                    bbox_to_anchor=(0, -.28, 1, -.280), mode='expand')
         # self.axes_1.legend(loc="lower center", ncol=4, bbox_to_anchor=(-3, -.28, 6, -.280))
-        self.axes_1.legend()
+        # self.axes_1.legend()
         self.init_weights()
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.cid, self.w_change = None, None
 
-        self.label_lr = QtWidgets.QLabel(self)
-        self.label_lr.setText("Learning rate: 0.4")
-        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 400, self.w_chapter_slider * self.w_ratio,
-                                  50 * self.h_ratio)
-        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 10)
-        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_lr.setTickInterval(1)
-        self.slider_lr.setValue(4)
-        self.wid_lr = QtWidgets.QWidget(self)
-        self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 430 * self.h_ratio,
-                                self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_lr.addWidget(self.slider_lr)
-        self.wid_lr.setLayout(self.layout_lr)
-        self.alpha = float(self.slider_lr.value() / 10)
-        self.slider_lr.valueChanged.connect(self.slide)
+        self.make_label("warning_label", "", (self.x_chapter_usual + 10, 400, 300, 100))
 
-        self.warning_label = QtWidgets.QLabel(self)
-        self.warning_label.setText("")
-        self.warning_label.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 610 * self.h_ratio,
-                                       300 * self.w_ratio, 100 * self.h_ratio)
+        self.make_button("learn_button", "Learn", (20, 610, self.w_chapter_button - 30, self.h_chapter_button), self.on_learn)
+        self.make_button("train_button", "Train", (200, 610, self.w_chapter_button - 30, self.h_chapter_button), self.on_run)
+        self.make_button("random_button", "Random", (360, 610, self.w_chapter_button - 30, self.h_chapter_button), self.init_weights)
 
-        self.run_button = QtWidgets.QPushButton("Train", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 500 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
-
-        self.run_button = QtWidgets.QPushButton("Random", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 530 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.init_weights)
-
-        self.undo_click_button = QtWidgets.QPushButton("Undo Last Mouse Click", self)
-        self.undo_click_button.setStyleSheet("font-size:13px")
-        self.undo_click_button.setGeometry(self.x_chapter_button * self.w_ratio, 560 * self.h_ratio,
-                                           self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.undo_click_button.clicked.connect(self.on_undo_mouseclick)
-
-        self.clear_button = QtWidgets.QPushButton("Clear Data", self)
-        self.clear_button.setStyleSheet("font-size:13px")
-        self.clear_button.setGeometry(self.x_chapter_button * self.w_ratio, 590 * self.h_ratio,
-                                      self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.clear_button.clicked.connect(self.on_clear)
+        self.make_button("undo_click_button", "Undo Last Mouse Click", (50, 640, self.w_chapter_button, self.h_chapter_button), self.on_undo_mouseclick)
+        self.make_button("clear_button", "Clear Data", (250, 640, self.w_chapter_button, self.h_chapter_button), self.on_clear)
 
     def update_plot(self, omit_idx=None):
 
         if len(self.P) == 0:
+            pos_weights_x, neg_weights_x, pos_weights_y, neg_weights_y = [], [], [], []
+            for i in range(len(self.W)):
+                if i == 0 or i == 1:
+                    pos_weights_x.append(self.W[i, 0])
+                    pos_weights_y.append(self.W[i, 1])
+                else:
+                    neg_weights_x.append(self.W[i, 0])
+                    neg_weights_y.append(self.W[i, 1])
+            self.pos_weight.set_data(pos_weights_x, pos_weights_y)
+            self.neg_weight.set_data(neg_weights_x, neg_weights_y)
             self.pos_line.set_data([], [])
             self.neg_line.set_data([], [])
             self.miss_line_pos.set_data([], [])
@@ -190,6 +157,13 @@ class LVQ1(NNDLayout):
 
     def on_animate_train(self, idx):
 
+        if idx == 0:
+            seed = np.random.randint(0, 1000)
+            np.random.seed(seed)
+            np.random.shuffle(self.P.T)
+            np.random.seed(seed)
+            np.random.shuffle(self.T.T)
+
         if idx in list(np.arange(0, 10000, 3)):
             i = np.random.randint(0, self.P.shape[1])
             self.p = self.P[:, int(idx / 3)]
@@ -225,14 +199,27 @@ class LVQ1(NNDLayout):
 
         return self.pos_line, self.neg_line, self.pos_weight, self.neg_weight, self.miss_line_pos, self.miss_line_neg, self.p_point_higlight
 
+    def on_learn(self):
+        if self.ani:
+            self.ani.event_source.stop()
+        if len(self.P) > 0:
+            self.warning_label.setText("")
+            self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=3,
+                                     interval=1000, repeat=False, blit=False)
+        else:
+            self.warning_label.setText("  Draw at least one point!")
+        self.update_plot()
+        self.canvas.draw()
+
     def on_run(self):
         if self.ani:
             self.ani.event_source.stop()
         if len(self.P) > 0:
+            self.warning_label.setText("")
             self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=3 * self.P.shape[1],
                                      interval=1000, repeat=False, blit=False)
         else:
-            self.warning_label.setText("  Please draw at least\n  one point")
+            self.warning_label.setText("  Draw at least one point!")
         self.update_plot()
         self.canvas.draw()
 
