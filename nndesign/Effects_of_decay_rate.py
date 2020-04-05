@@ -12,11 +12,14 @@ from get_package_path import PACKAGE_PATH
 
 class EffectsOfDecayRate(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(EffectsOfDecayRate, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(25, 150, 450, 450))
+        super(EffectsOfDecayRate, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Effects off Decay Rate", 2, " TODO",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Effects off Decay Rate", 15, "Use the slider bars to\nadjust learning and\ndecay rates.\n\n"
+                                                        "Click [Clear] to remove\nold responses.\n\nClick [Random] to get\n"
+                                                        "random parameters.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_15.svg", None)
 
+        self.make_plot(1, (20, 100, 470, 470))
         self.axis = self.figure.add_subplot(1, 1, 1)
         self.axis.set_xlim(0, 30)
         self.axis.set_ylim(0, 10)
@@ -27,52 +30,14 @@ class EffectsOfDecayRate(NNDLayout):
         self.axis.set_title("Hebb Learning")
         self.lines = []
 
-        self.label_lr = QtWidgets.QLabel(self)
-        self.label_lr.setText("Learning Rate: 1.00")
-        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 400 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 100)
-        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_lr.setTickInterval(1)
-        self.slider_lr.setValue(100)
+        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 100,
+                         (20, 580, 470, 50), self.graph, "label_lr", "Learning Rate: 1.00", (210, 555, 200, 50))
+        self.make_slider("slider_dr", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 10,
+                         (20, 640, 470, 50), self.graph, "label_dr", "Decay Rate: 1.00", (220, 615, 200, 50))
 
-        self.label_dr = QtWidgets.QLabel(self)
-        self.label_dr.setText("Decay Rate: 1.00")
-        self.label_dr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_dr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 470 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.slider_dr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_dr.setRange(0, 100)
-        self.slider_dr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_dr.setTickInterval(1)
-        self.slider_dr.setValue(10)
+        self.make_button("clear_button", "Clear", (self.x_chapter_button, 300, self.w_chapter_button, self.h_chapter_button), self.on_clear)
+        self.make_button("random_button", "Random", (self.x_chapter_button, 320, self.w_chapter_button, self.h_chapter_button), self.on_random)
 
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 430 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.slider_lr)
-        self.wid3.setLayout(self.layout3)
-
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(self.x_chapter_usual * self.w_ratio, 500 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout4.addWidget(self.slider_dr)
-        self.wid4.setLayout(self.layout4)
-
-        self.clear_button = QtWidgets.QPushButton("Clear", self)
-        self.clear_button.setStyleSheet("font-size:13px")
-        self.clear_button.setGeometry(self.x_chapter_button * self.w_ratio, 580 * self.h_ratio,
-                                      self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.clear_button.clicked.connect(self.on_clear)
-
-        self.random_button = QtWidgets.QPushButton("Random", self)
-        self.random_button.setStyleSheet("font-size:13px")
-        self.random_button.setGeometry(self.x_chapter_button * self.w_ratio, 630 * self.h_ratio,
-                                       self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.random_button.clicked.connect(self.on_random)
-
-        self.slider_lr.valueChanged.connect(self.graph)
-        self.slider_dr.valueChanged.connect(self.graph)
         self.do_graph = True
 
         self.graph()
