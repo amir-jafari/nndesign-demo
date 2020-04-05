@@ -67,7 +67,7 @@ class SteepestDescentBackprop1(NNDLayout):
         self.axes2 = Axes3D(self.figure2)
         self.axes2.view_init(67.88, 46.008)
         self.axes2.zaxis.set_major_formatter(FormatStrFormatter('%.0f'))
-        self.canvas2.mpl_connect("motion_notify_event", self.print_view)
+        # self.canvas2.mpl_connect("motion_notify_event", self.print_view)
         self.axes2.set_title("Sum Sq. Error", fontdict={'fontsize': 10})
         
         self.pair_of_params = 1
@@ -83,8 +83,8 @@ class SteepestDescentBackprop1(NNDLayout):
         self.animation_speed = 0
         self.canvas.draw()
 
-    def print_view(self, event):
-        print(self.axes2.elev, self.axes2.azim)
+    # def print_view(self, event):
+    #     print(self.axes2.elev, self.axes2.azim)
 
     def change_pair_of_params(self, idx):
         self.pair_of_params = idx + 1
