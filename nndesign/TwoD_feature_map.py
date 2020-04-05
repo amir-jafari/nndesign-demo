@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-import math
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -50,11 +49,14 @@ zz = zz / (np.ones((2, 1)) * np.sqrt(np.sum(zz ** 2, axis=0) + 1))
 
 class TwoDFeatureMap(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(TwoDFeatureMap, self).__init__(w_ratio, h_ratio, main_menu=1)
+        super(TwoDFeatureMap, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("One input neuron", 2, "",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("2-D Feature Map", 16, "Click [Train] to present 500\nvectors to the feature map.\n\n"
+                                                 "Several clicks are required\nto obtain a stable network.\n\n"
+                                                 "Click [Reset] to start over\nif the network develops\na twist.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None)
 
+        self.make_plot(1, (15, 100, 500, 500))
         self.axis1 = self.figure.add_subplot(1, 1, 1)
         self.axis1.set_xlim(-1, 1)
         self.axis1.set_ylim(-1, 1)
@@ -72,53 +74,22 @@ class TwoDFeatureMap(NNDLayout):
         # self.label_eq.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         # self.label_eq.setGeometry((self.x_chapter_slider_label - 30) * self.w_ratio, 350 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
 
-        self.make_label("label_presentations", "Presentations: 0", (self.x_chapter_slider_label - 40, 300, 150, 100), )
+        self.make_label("label_presentations", "Presentations: 0", (self.x_chapter_slider_label - 20, 300, 150, 100), )
 
-        self.label_lr = QtWidgets.QLabel(self)
-        self.label_lr.setText("Learning rate: 1")
-        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_lr.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 400 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 100)
-        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_lr.setTickInterval(10)
-        self.slider_lr.setValue(100)
+        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 10, 100,
+                         (15, 610, 250, 50), self.slide, "label_lr", "Learning Rate: 1.0", (90, 585, 150, 50))
         self.lr = 1
 
-        self.label_nei = QtWidgets.QLabel(self)
-        self.label_nei.setText("Neighborhood: " + str(max_dist))
-        self.label_nei.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_nei.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 470 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.slider_nei = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_nei.setRange(0, max_dist * 10)
-        self.slider_nei.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_nei.setTickInterval(1)
-        self.slider_nei.setValue(max_dist * 10)
-        self.nei = max_dist
+        self.make_slider("slider_nei", QtCore.Qt.Horizontal, (0, 90), QtWidgets.QSlider.TicksBelow, 10, 90,
+                         (265, 610, 250, 50), self.slide, "label_nei", "Neighborhood: 9.00", (335, 585, 150, 50))
+        self.nei = 9
 
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 430 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.slider_lr)
-        self.wid3.setLayout(self.layout3)
-
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(self.x_chapter_usual * self.w_ratio, 500 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout4.addWidget(self.slider_nei)
-        self.wid4.setLayout(self.layout4)
-
-        self.run_button = QtWidgets.QPushButton("Train", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 600 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run_2)
-
-        self.make_button("reset_button", "Reset", (self.x_chapter_button, 630, self.w_chapter_button, self.h_chapter_button), self.on_reset)
+        self.make_button("run_button", "Train",
+                         (self.x_chapter_button, 400, self.w_chapter_button, self.h_chapter_button), self.on_run_2)
+        self.make_button("reset_button", "Reset",
+                         (self.x_chapter_button, 430, self.w_chapter_button, self.h_chapter_button), self.on_reset)
 
         self.do_slide = True
-        self.slider_lr.valueChanged.connect(self.slide)
-        self.slider_nei.valueChanged.connect(self.slide)
 
     def on_reset(self):
         self.W = W
