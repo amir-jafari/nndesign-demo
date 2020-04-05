@@ -3,9 +3,6 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 
 
@@ -18,19 +15,14 @@ class CompetitiveLearning(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(CompetitiveLearning, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=False)
 
-        self.fill_chapter("Gram-Schmidt", 5, "",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Competitive Learning", 16, "\n\nClick on the plot to\nadd new input vectors.\n\nClick on the weight\nvectors "
+                                                      "and drag the\nmouse to move them.\n\nClick [Learn] to present\n"
+                                                      "one input.\n\nClick [Train] to present\nall inputs.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None)
 
         self.alpha = 0.4
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(15 * self.w_ratio, 100 * self.h_ratio, 500 * self.w_ratio, 500 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
+        self.make_plot(1, (15, 100, 500, 500))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         # self.axes_1.add_patch(plt.Circle((0, 0), 1.7, color='r'))
         self.axes_1.set_yticks([0])
@@ -63,42 +55,19 @@ class CompetitiveLearning(NNDLayout):
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.cid, self.w_change = None, None
 
-        self.label_lr = QtWidgets.QLabel(self)
-        self.label_lr.setText("Learning rate: 0.4")
-        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 400, self.w_chapter_slider * self.w_ratio,
-                                  50 * self.h_ratio)
-        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 10)
-        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_lr.setTickInterval(1)
-        self.slider_lr.setValue(4)
-        self.wid_lr = QtWidgets.QWidget(self)
-        self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 430 * self.h_ratio,
-                                self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_lr.addWidget(self.slider_lr)
-        self.wid_lr.setLayout(self.layout_lr)
+        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 4,
+                         (15, 610, 500, 50), self.slide, "label_lr", "Learning Rate: 0.4", (225, 585, 200, 50))
         self.alpha = float(self.slider_lr.value() / 10)
-        self.slider_lr.valueChanged.connect(self.slide)
 
-        self.run_button = QtWidgets.QPushButton("Train", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 500 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
-
-        self.run_button = QtWidgets.QPushButton("Random", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 530 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.init_weights)
+        self.make_button("run_button", "Learn", (self.x_chapter_button, 360, self.w_chapter_button, self.h_chapter_button), self.on_learn)
+        self.make_button("run_button", "Train", (self.x_chapter_button, 390, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Random", (self.x_chapter_button, 420, self.w_chapter_button, self.h_chapter_button), self.init_weights)
 
     def slide(self):
         if self.ani:
             self.ani.event_source.stop()
         self.alpha = float(self.slider_lr.value() / 10)
-        self.label_lr.setText("Learning_rate: {}".format(self.alpha))
+        self.label_lr.setText("Learning Rate: {}".format(self.alpha))
         self.update_plot()
         self.canvas.draw()
         # self.on_run()
@@ -135,10 +104,13 @@ class CompetitiveLearning(NNDLayout):
         self.p_points_3.set_data(x_3_data[:], y_3_data[:])
 
     def animate_init_train(self):
-        np.random.shuffle(self.P)
+        # np.random.shuffle(self.P.T)
+        # print(self.P)
         return self.axes1_w1, self.axes1_w2, self.axes1_w3, self.p_points_1, self.p_points_2, self.p_points_3, self.p_point_higlight, self.axes1_proj_line
 
     def on_animate_train(self, idx):
+        if idx == 0:
+            np.random.shuffle(self.P.T)
         if idx % 2 != 0:
             self.p_point_higlight.set_data([], [])
             self.axes1_proj_line.set_data([], [])
@@ -163,9 +135,21 @@ class CompetitiveLearning(NNDLayout):
         return self.axes1_w1, self.axes1_w2, self.axes1_w3, self.p_points_1, self.p_points_2, self.p_points_3, self.p_point_higlight, self.axes1_proj_line
 
     def on_run(self):
+        # np.random.shuffle(self.P.T)
+        # print(self.P)
         if self.ani:
             self.ani.event_source.stop()
         self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=2 * self.P.shape[1],
+                                 interval=500, repeat=False, blit=False)
+        self.update_plot()
+        self.canvas.draw()
+
+    def on_learn(self):
+        # np.random.shuffle(self.P.T)
+        # print(self.P)
+        if self.ani:
+            self.ani.event_source.stop()
+        self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=2,
                                  interval=500, repeat=False, blit=False)
         self.update_plot()
         self.canvas.draw()
