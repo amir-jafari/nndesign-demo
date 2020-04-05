@@ -149,10 +149,7 @@ class MainWindowNN(NNDLayout):
         """ Main Window for the Neural Network Design Book. Inherits basic layout from NNDLayout """
         super(MainWindowNN, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=1, draw_vertical=False, create_plot=False)
 
-        self.label3 = QtWidgets.QLabel(self)
-        self.label3.setText("Table of Contents")
-        self.label3.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.StyleItalic))
-        self.label3.setGeometry(self.wm - xlabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
+        self.make_label("label_3", "Table of Contents", (380, ylabel + add, wlabel, hlabel), font_size=18)
 
         self.label4 = QtWidgets.QLabel(self)
         self.label4.setText("By Hagan, Demuth, Beale, Jafari")

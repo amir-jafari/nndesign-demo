@@ -21,7 +21,7 @@ xlabel, ylabel, wlabel, hlabel, add = 30, 5, 500, 100, 20
 
 x_info, y_info, w_info, h_info = 535, 100, 450, 250
 
-wp_pic2_1 = 100; hp_pic2_1 = 80; x_pic2_1 = 550; y_pic2_1= 50; w_pic2_1= wp_pic2_1; h_pic2_1=hp_pic2_1;
+wp_pic2_1 = 120; hp_pic2_1 = 100; x_pic2_1 = 560; y_pic2_1= 30; w_pic2_1= wp_pic2_1; h_pic2_1=hp_pic2_1;
 wp_pic2_2 = 500; hp_pic2_2 = 200; x_pic2_2 = 130; y_pic2_2= 100; w_pic2_2= 500; h_pic2_2=200;
 
 # Lines
@@ -79,20 +79,14 @@ class NNDLayout(QMainWindow):
 
         self.draw_vertical = draw_vertical
         if main_menu == 1:
-            self.setWindowTitle("Neural Network Design")
-            self.make_label("label1", "Neural Network", (xlabel, ylabel + add, wlabel, hlabel), font_size=18, italics=True)
-            self.make_label("label1", "DESIGN", (xlabel + 120, ylabel + add, wlabel, hlabel), font_size=18)
+            self.setWindowTitle("Neural Network Design Demos")
+            self.make_label("label1", "Neural Network", (xlabel, ylabel, wlabel, hlabel), font_size=18, italics=True)
+            self.make_label("label2", "DESIGN", (xlabel, ylabel + add, wlabel, hlabel), font_size=18)
 
         if main_menu == 2:
-            self.setWindowTitle("Neural Network Design")
-            self.label1 = QtWidgets.QLabel(self)
-            self.label1.setText("Neural Network Design")
-            self.label1.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
-            self.label1.setGeometry(xlabel * self.w_ratio, ylabel * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
-            self.label2 = QtWidgets.QLabel(self)
-            self.label2.setText("DEEP LEARNING")
-            self.label2.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
-            self.label2.setGeometry(xlabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
+            self.setWindowTitle("Neural Network Design: Deep Learning Demos")
+            self.make_label("label1", "Neural Network", (xlabel, ylabel, wlabel, hlabel), font_size=18, italics=True)
+            self.make_label("label2", "DESIGN: DEEP LEARNING", (xlabel, ylabel + add, wlabel, hlabel), font_size=18)
 
         if create_plot:
 
