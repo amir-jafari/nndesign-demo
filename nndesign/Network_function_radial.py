@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-import math
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -12,135 +11,33 @@ from get_package_path import PACKAGE_PATH
 
 class NetworkFunctionRadial(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(NetworkFunctionRadial, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(10, 400, 500, 250))
+        super(NetworkFunctionRadial, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Network Function", 11, " Alter the network's parameters\n by dragging the slide bars",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_info=False, show_pic=False)  # TODO: Change icons
+        self.make_plot(1, (10, 400, 500, 250))
 
-        # self.label_eq = QtWidgets.QLabel(self)
-        # self.label_eq.setText("a = purelin(w2 * tansig(w1 * p + b1) + b2))")
-        # self.label_eq.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        # self.label_eq.setGeometry(180 * self.w_ratio, 270 * self.h_ratio, (self.w_chapter_slider + 100) * self.w_ratio, 50 * self.h_ratio)
+        self.fill_chapter("Network Function", 17, "Alter the network's\nparameters by dragging\nthe slide bars.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_17.svg", None, description_coords=(535, 90, 450, 160))
 
-        self.label_w1_1 = QtWidgets.QLabel(self)
-        self.label_w1_1.setText("w1_1")
-        self.label_w1_1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w1_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 120 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.slider_w1_1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w1_1.setRange(-40, 40)
-        self.slider_w1_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w1_1.setTickInterval(10)
-        self.slider_w1_1.setValue(-10)
+        self.make_slider("slider_w1_1", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, -10,
+                         (self.x_chapter_usual, 140, self.w_chapter_slider, 50), self.graph, "label_w1_1", "W1(1,1)")
 
-        self.wid_w1_1 = QtWidgets.QWidget(self)
-        self.layout_w1_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w1_1.setGeometry(self.x_chapter_usual * self.w_ratio, 140 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_w1_1.addWidget(self.slider_w1_1)
-        self.wid_w1_1.setLayout(self.layout_w1_1)
+        self.make_slider("slider_w1_2", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, 10,
+                         (self.x_chapter_usual, 200, self.w_chapter_slider, 50), self.graph, "label_w1_2", "W1(2,1)")
 
-        self.label_w1_2 = QtWidgets.QLabel(self)
-        self.label_w1_2.setText("w1_2")
-        self.label_w1_2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w1_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 170 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.slider_w1_2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w1_2.setRange(-40, 40)
-        self.slider_w1_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w1_2.setTickInterval(10)
-        self.slider_w1_2.setValue(10)
+        self.make_slider("slider_b1_1", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, 20,
+                         (self.x_chapter_usual, 270, self.w_chapter_slider, 50), self.graph, "label_b1_1", "b1(1)")
 
-        self.wid_w1_2 = QtWidgets.QWidget(self)
-        self.layout_w1_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w1_2.setGeometry(self.x_chapter_usual * self.w_ratio, 200 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_w1_2.addWidget(self.slider_w1_2)
-        self.wid_w1_2.setLayout(self.layout_w1_2)
+        self.make_slider("slider_b1_2", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, 20,
+                         (self.x_chapter_usual, 310, self.w_chapter_slider, 50), self.graph, "label_b1_2", "b1(2)")
 
-        self.label_b1_1 = QtWidgets.QLabel(self)
-        self.label_b1_1.setText("b1_1")
-        self.label_b1_1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b1_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 240 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.slider_b1_1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b1_1.setRange(-40, 40)
-        self.slider_b1_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b1_1.setTickInterval(10)
-        self.slider_b1_1.setValue(20)
+        self.make_slider("slider_w2_1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 10, 10,
+                         (self.x_chapter_usual, 410, self.w_chapter_slider, 50), self.graph, "label_w2_1", "W2(1,1)")
 
-        self.wid_b1_1 = QtWidgets.QWidget(self)
-        self.layout_b1_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_b1_1.setGeometry(self.x_chapter_usual * self.w_ratio, 270 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_b1_1.addWidget(self.slider_b1_1)
-        self.wid_b1_1.setLayout(self.layout_b1_1)
+        self.make_slider("slider_w2_2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 10, 10,
+                         (self.x_chapter_usual, 480, self.w_chapter_slider, 50), self.graph, "label_w2_2", "W2(1,2)")
 
-        self.label_b1_2 = QtWidgets.QLabel(self)
-        self.label_b1_2.setText("b1_2")
-        self.label_b1_2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b1_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 310 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.slider_b1_2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b1_2.setRange(-40, 40)
-        self.slider_b1_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b1_2.setTickInterval(10)
-        self.slider_b1_2.setValue(20)
-
-        self.wid_b1_2 = QtWidgets.QWidget(self)
-        self.layout_b1_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_b1_2.setGeometry(self.x_chapter_usual * self.w_ratio, 340 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_b1_2.addWidget(self.slider_b1_2)
-        self.wid_b1_2.setLayout(self.layout_b1_2)
-
-        self.label_w2_1 = QtWidgets.QLabel(self)
-        self.label_w2_1.setText("w2_1")
-        self.label_w2_1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w2_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 380 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.slider_w2_1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w2_1.setRange(-20, 20)
-        self.slider_w2_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w2_1.setTickInterval(10)
-        self.slider_w2_1.setValue(10)
-
-        self.wid_w2_1 = QtWidgets.QWidget(self)
-        self.layout_w2_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w2_1.setGeometry(self.x_chapter_usual * self.w_ratio, 410 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_w2_1.addWidget(self.slider_w2_1)
-        self.wid_w2_1.setLayout(self.layout_w2_1)
-
-        self.label_w2_2 = QtWidgets.QLabel(self)
-        self.label_w2_2.setText("w2_2")
-        self.label_w2_2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w2_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 450 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.slider_w2_2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w2_2.setRange(-20, 20)
-        self.slider_w2_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w2_2.setTickInterval(10)
-        self.slider_w2_2.setValue(10)
-
-        self.wid_w2_2 = QtWidgets.QWidget(self)
-        self.layout_w2_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w2_2.setGeometry(self.x_chapter_usual * self.w_ratio, 480 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_w2_2.addWidget(self.slider_w2_2)
-        self.wid_w2_2.setLayout(self.layout_w2_2)
-
-        self.label_b2 = QtWidgets.QLabel(self)
-        self.label_b2.setText("b1_2")
-        self.label_b2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 520 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.slider_b2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b2.setRange(-20, 20)
-        self.slider_b2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b2.setTickInterval(10)
-        self.slider_b2.setValue(0)
-
-        self.wid_b2 = QtWidgets.QWidget(self)
-        self.layout_b2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_b2.setGeometry(self.x_chapter_usual * self.w_ratio, 550 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_b2.addWidget(self.slider_b2)
-        self.wid_b2.setLayout(self.layout_b2)
-
-        self.slider_w1_1.valueChanged.connect(self.graph)
-        self.slider_w1_2.valueChanged.connect(self.graph)
-        self.slider_b1_1.valueChanged.connect(self.graph)
-        self.slider_b1_2.valueChanged.connect(self.graph)
-        self.slider_w2_1.valueChanged.connect(self.graph)
-        self.slider_w2_2.valueChanged.connect(self.graph)
-        self.slider_b2.valueChanged.connect(self.graph)
+        self.make_slider("slider_b2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 10, 0,
+                         (self.x_chapter_usual, 550, self.w_chapter_slider, 50), self.graph, "label_b2", "b2")
 
         self.graph()
 
@@ -155,14 +52,14 @@ class NetworkFunctionRadial(NNDLayout):
         # a.set_xticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
         # a.set_yticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
         # a.grid(which="minor")
-        a.set_xticks([-5, 0, 4])
-        a.set_yticks([0, 0.2, 0.4, 0.6, 0.8])
+        # a.set_xticks([-5, 0, 4])
+        # a.set_yticks([0, 0.2, 0.4, 0.6, 0.8])
         a.plot([0]*50, np.linspace(-5, 5, 50), color="black", linestyle="--", linewidth=0.2)
         a.plot(np.linspace(0, 1, 10), [0]*10, color="black", linestyle="--", linewidth=0.2)
-        a.set_xlabel("$p$")
-        a.xaxis.set_label_coords(1, -0.025)
-        a.set_ylabel("$a$")
-        a.yaxis.set_label_coords(-0.025, 1)
+        # a.set_xlabel("$p$")
+        # a.xaxis.set_label_coords(1, -0.025)
+        # a.set_ylabel("$a$")
+        # a.yaxis.set_label_coords(-0.025, 1)
 
         # ax.set_xticks(major_ticks)
         # ax.set_xticks(minor_ticks, minor=True)
@@ -184,12 +81,12 @@ class NetworkFunctionRadial(NNDLayout):
         weight2_2 = self.slider_w2_2.value() / 10
         bias2 = self.slider_b2.value() / 10
 
-        self.label_w1_1.setText("w1_1: " + str(weight1_1))
-        self.label_w1_2.setText("w1_2: " + str(weight1_2))
-        self.label_b1_1.setText("b1_1: " + str(bias1_1))
-        self.label_b1_2.setText("b1_2: " + str(bias1_2))
-        self.label_w2_1.setText("w2_1: " + str(weight2_1))
-        self.label_w2_2.setText("w2_2: " + str(weight2_2))
+        self.label_w1_1.setText("W1(1,1): " + str(weight1_1))
+        self.label_w1_2.setText("W1(2,1): " + str(weight1_2))
+        self.label_b1_1.setText("b1(1): " + str(bias1_1))
+        self.label_b1_2.setText("b1(2): " + str(bias1_2))
+        self.label_w2_1.setText("W2(1,1): " + str(weight2_1))
+        self.label_w2_2.setText("W2(1,2): " + str(weight2_2))
         self.label_b2.setText("b2: " + str(bias2))
 
         weight_1, bias_1 = np.array([[weight1_1, weight1_2]]), np.array([[bias1_1, bias1_2]])
