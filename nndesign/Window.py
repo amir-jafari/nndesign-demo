@@ -242,9 +242,14 @@ class MainWindowNN(NNDLayout):
 
         idx = 0
         for icon in [self.icon1, self.icon2, self.icon3, self.icon4]:
-            icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/Logo_Ch_{}.svg".format(chapter_numbers[idx])).pixmap(
-                w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, w_Logo1, h_Logo1)
+            if "13" in chapters and idx == 3:
+                icon.setPixmap(QtGui.QPixmap(PACKAGE_PATH + "Logo/Chap13Icon.png").scaled(w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio))
+            elif "14" in chapters and idx == 0:
+                icon.setPixmap(QtGui.QPixmap(PACKAGE_PATH + "Logo/Chap14Icon.png").scaled(w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio))
+            else:
+                icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/Logo_Ch_{}.svg".format(chapter_numbers[idx])).pixmap(
+                    w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, w_Logo1, h_Logo1)
             icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio)
             idx += 1
 

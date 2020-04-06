@@ -50,9 +50,10 @@ class MainWindow(NNDLayout):
         self.statusBar()
         self.main_menu = self.menuBar()
 
-        self.icon1 = QtWidgets.QLabel(self)
-        self.icon1.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/NN.svg").pixmap(w_Logom, h_Logom, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon1.setGeometry(xL_gm * self.w_ratio, yL_gm * self.h_ratio, wL_gm * self.w_ratio, hL_gm * self.h_ratio)
+        self.show_image("icon1", PACKAGE_PATH + "Logo/CorelFrontCoverE.jpg", (xL_gm, yL_gm, 243, 300))
+        # self.icon1 = QtWidgets.QLabel(self)
+        # self.icon1.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/CorelFrontCoverE.jpg").pixmap(w_Logom, h_Logom, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        # self.icon1.setGeometry(xL_gm * self.w_ratio, yL_gm * self.h_ratio, wL_gm * self.w_ratio, hL_gm * self.h_ratio)
 
         self.icon2 = QtWidgets.QLabel(self)
         self.icon2.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/DL.svg").pixmap(w_Logom1, h_Logom1, QtGui.QIcon.Normal, QtGui.QIcon.On))
