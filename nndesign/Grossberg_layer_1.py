@@ -17,8 +17,8 @@ class GrossbergLayer1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(GrossbergLayer1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Grossberg Layer 1", 2, "Use the slide bars\nto adjust the inputs, biases\nand the time constant (eps).\n\n"
-                                                  "Output n1(1) is red,\noutput n1(2) is green.\n\nClick [Clear] to remove\nold responses.",
+        self.fill_chapter("Grossberg Layer 1", 18, "Use the slide bars\nto adjust the inputs, biases\nand the time constant (eps).\n\n"
+                                                   "Output n1(1) is red,\noutput n1(2) is green.\n\nClick [Clear] to remove\nold responses.",
                           PACKAGE_PATH + "Logo/Logo_Ch_18.svg", None)
 
         self.make_plot(1, (20, 90, 480, 480))
