@@ -50,7 +50,7 @@ class MainWindow(NNDLayout):
         self.statusBar()
         self.main_menu = self.menuBar()
 
-        self.show_image("icon1", PACKAGE_PATH + "Logo/smallCover.jpeg", (xL_gm, yL_gm, 243, 300))
+        self.show_image("icon1", PACKAGE_PATH + "Logo/smallCover.jpeg", (xL_gm, yL_gm, 162, 200))
         # self.icon1 = QtWidgets.QLabel(self)
         # self.icon1.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/CorelFrontCoverE.jpg").pixmap(w_Logom, h_Logom, QtGui.QIcon.Normal, QtGui.QIcon.On))
         # self.icon1.setGeometry(xL_gm * self.w_ratio, yL_gm * self.h_ratio, wL_gm * self.w_ratio, hL_gm * self.h_ratio)
@@ -61,7 +61,7 @@ class MainWindow(NNDLayout):
         self.icon2.setGeometry(xL_gm1 * self.w_ratio, yL_gm1 * self.h_ratio, wL_gm1 * self.w_ratio, hL_gm1 * self.h_ratio)
 
         self.button1 = QtWidgets.QPushButton("Neural Network Design", self)
-        self.button1.setGeometry(self.wm - xbtnm * self.w_ratio, ybtnm * self.h_ratio, wbtnm * self.w_ratio, hbtnm * self.h_ratio)
+        self.button1.setGeometry(self.wm - xbtnm * self.w_ratio, (ybtnm + 50) * self.h_ratio, wbtnm * self.w_ratio, hbtnm * self.h_ratio)
         self.button1.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
         self.button1.clicked.connect(self.new_window1)
         self.button1.setStyleSheet("background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);")
