@@ -10,18 +10,22 @@ from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
 
 
-t = np.arange(0, 0.2, 0.01)
+t = np.arange(0, 0.2, 0.001)
 
 
 class ART1Layer1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(ART1Layer1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(25, 90, 450, 450))
+        super(ART1Layer1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("ART1 Layer 1", 2, " TODO",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("ART1 Layer 1", 19, "Adjust the inputs,\nbiases and weights.\nThen click [Update] to\n"
+                                              "see the layer respond.\n\nn1(1) is red,\nn1(2) is green.\n\n"
+                                              "Click [Clear] to\nremove old responses.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_19.svg", None)
 
         self.bp, self.bn, self.e = 1, 0, 0.1
 
+        self.make_plot(1, (10, 90, 500, 450))
+        self.figure.subplots_adjust(left=0.15, right=0.95, bottom=0.125, top=0.9)
         self.axis = self.figure.add_subplot(1, 1, 1)
         self.axis.set_xlim(0, 0.2)
         self.axis.set_ylim(-0.5, 0.5)
@@ -29,137 +33,49 @@ class ART1Layer1(NNDLayout):
         self.axis.set_xlabel("Time")
         self.axis.set_ylabel("Net inputs n1(1), n1(2)")
         self.axis.set_title("Response")
+        self.axis.set_xticks([0, 0.05, 0.1, 0.15, 0.2])
+        self.axis.plot(np.linspace(0, 0.2, 100), [0] * 100, linestyle="dashed", linewidth=0.5, color="gray")
         self.lines1, self.lines2 = [], []
 
-        self.label_input_pos = QtWidgets.QLabel(self)
-        self.label_input_pos.setText("Input p(1): 0")
-        self.label_input_pos.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_input_pos.setGeometry(self.x_chapter_slider_label * self.w_ratio, 200 * self.h_ratio,
-                                         150 * self.w_ratio, 100 * self.h_ratio)
-        self.slider_input_pos = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_input_pos.setRange(0, 1)
-        self.slider_input_pos.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_input_pos.setTickInterval(1)
-        self.slider_input_pos.setValue(0)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 230 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.slider_input_pos)
-        self.wid3.setLayout(self.layout3)
+        self.make_slider("slider_input_pos", QtCore.Qt.Horizontal, (0, 1), QtWidgets.QSlider.TicksAbove, 1, 0,
+                         (self.x_chapter_usual, 335, self.w_chapter_slider, 50), self.slide,
+                         "label_input_pos", "Input p(1): 0", (self.x_chapter_usual + 60, 335 - 25, 150, 50))
+        self.make_slider("slider_input_neg", QtCore.Qt.Horizontal, (0, 1), QtWidgets.QSlider.TicksAbove, 1, 1,
+                         (self.x_chapter_usual, 395, self.w_chapter_slider, 50), self.slide,
+                         "label_input_neg", "Input p(2): 1", (self.x_chapter_usual + 60, 395 - 25, 150, 50))
+        self.make_slider("slider_bias_pos", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksAbove, 1, 10,
+                         (self.x_chapter_usual, 460, self.w_chapter_slider, 50), self.slide,
+                         "label_bias_pos", "Bias b+: 1.00", (self.x_chapter_usual + 70, 460 - 25, 150, 50))
+        self.make_slider("slider_bias_neg", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksAbove, 1, 15,
+                         (self.x_chapter_usual, 520, self.w_chapter_slider, 50), self.slide,
+                         "label_bias_neg", "Bias b-: 1.50", (self.x_chapter_usual + 70, 520 - 25, 150, 50))
 
-        self.label_input_neg = QtWidgets.QLabel(self)
-        self.label_input_neg.setText("Input p(2): 1")
-        self.label_input_neg.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_input_neg.setGeometry(self.x_chapter_slider_label * self.w_ratio, 270 * self.h_ratio,
-                                         150 * self.w_ratio, 100 * self.h_ratio)
-        self.slider_input_neg = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_input_neg.setRange(0, 1)
-        self.slider_input_neg.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_input_neg.setTickInterval(1)
-        self.slider_input_neg.setValue(1)
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(self.x_chapter_usual * self.w_ratio, 300 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout4.addWidget(self.slider_input_neg)
-        self.wid4.setLayout(self.layout4)
+        self.paint_latex_string("latex_W21", "$W2:1 =$", 16, (30, 510, 250, 200))
+        self.paint_latex_string("latex_W22", "$[$", 45, (215, 510, 250, 200))
+        self.paint_latex_string("latex_W23", "$]$", 45, (335, 510, 250, 200))
+        self.make_input_box("w_11", "1", (235, 530, 70, 100))
+        self.make_input_box("w_12", "1", (295, 530, 70, 100))
+        self.make_input_box("w_21", "0", (235, 580, 70, 100))
+        self.make_input_box("w_22", "1", (295, 580, 70, 100))
 
-        self.label_bias_pos = QtWidgets.QLabel(self)
-        self.label_bias_pos.setText("Bias b+: 1.00")
-        self.label_bias_pos.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_bias_pos.setGeometry(self.x_chapter_slider_label * self.w_ratio, 340 * self.h_ratio,
-                                        150 * self.w_ratio, 100 * self.h_ratio)
-        self.slider_bias_pos = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_bias_pos.setRange(0, 30)
-        self.slider_bias_pos.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_bias_pos.setTickInterval(1)
-        self.slider_bias_pos.setValue(10)
-        self.wid5 = QtWidgets.QWidget(self)
-        self.layout5 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid5.setGeometry(self.x_chapter_usual * self.w_ratio, 370 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout5.addWidget(self.slider_bias_pos)
-        self.wid5.setLayout(self.layout5)
-
-        self.label_bias_neg = QtWidgets.QLabel(self)
-        self.label_bias_neg.setText("Bias b-: 1.50")
-        self.label_bias_neg.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_bias_neg.setGeometry(self.x_chapter_slider_label * self.w_ratio, 410 * self.h_ratio,
-                                        150 * self.w_ratio, 100 * self.h_ratio)
-        self.slider_bias_neg = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_bias_neg.setRange(0, 30)
-        self.slider_bias_neg.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_bias_neg.setTickInterval(1)
-        self.slider_bias_neg.setValue(15)
-        self.wid5 = QtWidgets.QWidget(self)
-        self.layout5 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid5.setGeometry(self.x_chapter_usual * self.w_ratio, 440 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout5.addWidget(self.slider_bias_neg)
-        self.wid5.setLayout(self.layout5)
-
-        self.w_11 = QtWidgets.QLineEdit()
-        self.w_11.setText("1")
-        self.w_11.setGeometry(50 * self.w_ratio, 500 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(50 * self.w_ratio, 500 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.w_11)
-        self.wid3.setLayout(self.layout3)
-
-        self.w_12 = QtWidgets.QLineEdit()
-        self.w_12.setText("1")
-        self.w_11.setGeometry(120 * self.w_ratio, 500 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(120 * self.w_ratio, 500 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.w_12)
-        self.wid3.setLayout(self.layout3)
-
-        self.w_21 = QtWidgets.QLineEdit()
-        self.w_21.setText("0")
-        self.w_21.setGeometry(50 * self.w_ratio, 570 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(50 * self.w_ratio, 570 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.w_21)
-        self.wid3.setLayout(self.layout3)
-
-        self.w_22 = QtWidgets.QLineEdit()
-        self.w_22.setText("1")
-        self.w_22.setGeometry(120 * self.w_ratio, 570 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(120 * self.w_ratio, 570 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.w_22)
-        self.wid3.setLayout(self.layout3)
-
-        self.clear_button = QtWidgets.QPushButton("Clear", self)
-        self.clear_button.setStyleSheet("font-size:13px")
-        self.clear_button.setGeometry(self.x_chapter_button * self.w_ratio, 580 * self.h_ratio,
-                                      self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.clear_button.clicked.connect(self.on_clear)
-
-        self.run_button = QtWidgets.QPushButton("Update", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 540 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.graph)
-
-        self.slider_input_pos.valueChanged.connect(self.graph)
-        self.slider_input_neg.valueChanged.connect(self.graph)
-        self.slider_bias_pos.valueChanged.connect(self.graph)
-        self.slider_bias_neg.valueChanged.connect(self.graph)
+        self.make_button("clear_button", "Clear", (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.on_clear)
+        self.make_button("random_button", "Update", (self.x_chapter_button, 605, self.w_chapter_button, self.h_chapter_button), self.graph)
 
         self.graph()
 
     def layer1(self, t, y):
-        y = np.array([[y[0]], [y[1]]])
-        y_out = np.zeros(y.shape)
-        y_out[0, 0] = (-y[0, 0] + (self.bp - y[0, 0]) * (self.p[0, 0] * self.W2[0, 1]) - (y[0, 0] + self.bn)) / 0.1
-        y_out[1, 0] = (-y[1, 0] + (self.bp - y[1, 0]) * (self.p[1, 0] * self.W2[1, 1]) - (y[1, 0] + self.bn)) / 0.1
-        return y_out
+        return [(-y[0] + (self.bp - y[0]) * (self.p[0, 0] + self.W2[0, 1]) - (y[0] + self.bn)) / 0.1,
+                (-y[1] + (self.bp - y[1]) * (self.p[1, 0] + self.W2[1, 1]) - (y[1] + self.bn)) / 0.1]
+
+    def slide(self):
+        self.pp = self.slider_input_pos.value()
+        self.pn = self.slider_input_neg.value()
+        self.label_input_pos.setText("Input p(1): " + str(self.pp))
+        self.label_input_neg.setText("Input p(2): " + str(self.pn))
+        self.bp = self.slider_bias_pos.value() / 10
+        self.bn = self.slider_bias_neg.value() / 10
+        self.label_bias_pos.setText("Bias b+: " + str(round(self.bp, 2)))
+        self.label_bias_neg.setText("Bias b-: " + str(round(self.bn, 2)))
 
     def graph(self):
         self.pp = self.slider_input_pos.value()
@@ -186,17 +102,18 @@ class ART1Layer1(NNDLayout):
                 else:
                     w22 = 0
                     self.w_22.setText("0")
-        self.W2 = np.array([[w11, w21], [w12, w22]])
+        self.W2 = np.array([[w11, w12], [w21, w22]])
         self.p = np.array([[self.pp], [self.pn]])
-        r1 = ode(self.layer1).set_integrator("zvode")
-        r1.set_initial_value(np.array([[0], [0]]), 0)
+        r1 = ode(self.layer1).set_integrator("vode")
+        r1.set_initial_value(np.array([0, 0]), 0)
         t1 = 0.2
-        dt = 0.01
+        dt = 0.001
         out_1, out_2 = [], []
         while r1.successful() and r1.t < t1:
             out = r1.integrate(r1.t + dt)
-            out_1.append(out[0, 0])
-            out_2.append(out[1, 0])
+            out_1.append(out[0].item())
+            out_2.append(out[1].item())
+        out_1[0], out_2[0] = 0, 0
         while len(self.lines1) > 1:
             self.lines1.pop(0).remove()
         while len(self.lines2) > 1:
