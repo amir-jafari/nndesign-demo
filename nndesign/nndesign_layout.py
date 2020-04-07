@@ -290,7 +290,7 @@ class NNDLayout(QMainWindow):
 
     def make_slider(self, slider_attr_name, slider_type, slider_range, slider_tick_pos, slider_tick_interval,
                     slider_value, slider_coords, f_connect=None, label_attr_name=None, label_str="?", label_coords=None,
-                    label_font_name="Times New Roman", label_font_size=14, label_italics=False):
+                    label_font_name="Times New Roman", label_font_size=14, label_italics=False):  # , update_only_when_mouse_released=False):
         setattr(self, slider_attr_name, QtWidgets.QSlider(slider_type))
         slider = getattr(self, slider_attr_name)
         slider.setRange(slider_range[0], slider_range[1])
@@ -308,6 +308,18 @@ class NNDLayout(QMainWindow):
         self.set_layout(slider_coords, slider)
         if f_connect:
             slider.valueChanged.connect(f_connect)
+        # if update_only_when_mouse_released:
+        #     self.f_connect = f_connect
+        #     self.slider_temp = slider
+        #     self.slider_temp.sliderPressed.connect(self.slider_disconnect)
+        #     self.slider_temp.sliderReleased.connect(self.slider_reconnect)
+
+    # def slider_disconnect(self):
+    #     self.slider_temp.valueChanged.disconnect()
+
+    # def slider_reconnect(self):
+    #     self.slider_temp.valueChanged.connect(self.f_connect)
+    #     self.slider_temp.valueChanged.emit(self.slider_temp.value())
 
     def make_button(self, button_attr_name, button_str, button_coords, f_connect, font_size="font-size:13px"):
         setattr(self, button_attr_name, QtWidgets.QPushButton(button_str, self))
