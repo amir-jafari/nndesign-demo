@@ -1,12 +1,8 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-import math
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 
 from nndesign_layout import NNDLayout
 
@@ -19,44 +15,47 @@ randseq = [-0.7616, -1.0287, 0.5348, -0.8102, -1.1690, 0.0419, 0.8944, 0.5460, -
 
 class OrthogonalLeastSquares(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(OrthogonalLeastSquares, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot_coords=(20, 100, 450, 300))
+        super(OrthogonalLeastSquares, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Orthogonal Least Squares", 17, " Alter the network's parameters\n by dragging the slide bars",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_info=False, show_pic=False)  # TODO: Change icons
+        self.fill_chapter("Orthogonal Least Squares", 17, "\n\nUse the slide bars to\nchoose the network or\nfunction values.\n\n"
+                                                          "Click [Add Neuron] to\nincrease the size of\nHidden Layer.\n\n"
+                                                          "The function is shown in\nblue and the network\nresponse in red.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_17.svg", None)
 
+        self.make_plot(1, (20, 100, 450, 300))
         self.make_plot(2, (20, 390, 450, 140))
+        self.figure2.set_tight_layout(True)
         self.canvas2.draw()
 
-        self.make_combobox(1, ["Yes", "No"], (self.x_chapter_usual, 620, self.w_chapter_slider, 50),
-                           self.change_auto_bias, "label_f", "Auto Bias")
+        self.make_combobox(1, ["Yes", "No"], (self.x_chapter_usual, 390, self.w_chapter_slider, 50), self.change_auto_bias,
+                           "label_f", "Auto Bias", (self.x_chapter_usual + 60, 390 - 20, 100, 50))
         self.auto_bias = True
 
-        self.make_label("label_w1_1", "Hidden Neurons", (self.x_chapter_slider_label, 120, self.w_chapter_slider, 50))
-        self.make_label("label_w1_2", "Requested: 0", (self.x_chapter_slider_label, 145, self.w_chapter_slider, 50))
-        self.make_label("label_w1_3", "Calculated: 0", (self.x_chapter_slider_label, 170, self.w_chapter_slider, 50))
+        self.make_label("label_w1_1", "Hidden Neurons:", (35, 530, self.w_chapter_slider, 50))
+        self.make_label("label_w1_2", "- Requested: 0", (45, 550, self.w_chapter_slider, 50))
+        self.make_label("label_w1_3", "- Calculated: 0", (45, 570, self.w_chapter_slider, 50))
         self.S1 = 0
 
-        self.make_slider("slider_b", QtCore.Qt.Horizontal, (10, 1000), QtWidgets.QSlider.TicksBelow, 1, 167,
-                         (self.x_chapter_usual, 270, self.w_chapter_slider, 50), self.graph, "label_b", "b: 1.67")
         self.make_slider("slider_b1_2", QtCore.Qt.Horizontal, (2, 20), QtWidgets.QSlider.TicksBelow, 1, 10,
-                         (self.x_chapter_usual, 340, self.w_chapter_slider, 50), self.graph, "label_b1_2", "Number of Points: 10",
-                         (self.x_chapter_usual + 50, 310, self.w_chapter_slider, 50))
-        self.make_slider("slider_w2_2", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 0,
-                         (self.x_chapter_usual, 480, self.w_chapter_slider, 50), self.graph, "label_w2_2", "Stdev Noise: 0.0")
-        self.make_slider("slider_b2", QtCore.Qt.Horizontal, (25, 100), QtWidgets.QSlider.TicksBelow, 1, 50,
-                         (self.x_chapter_usual, 550, self.w_chapter_slider, 50), self.graph, "label_b2", "Function Frequency: 0.50",
-                         (self.x_chapter_usual + 50, 520, self.w_chapter_slider, 50))
-        self.make_slider("slider_fp", QtCore.Qt.Horizontal, (0, 360), QtWidgets.QSlider.TicksBelow, 1, 90,
-                         (200, 570, self.w_chapter_slider, 50), self.graph, "label_fp", "Function Phase: 90")
+                         (170, 560, 150, 50), self.graph, "label_b1_2", "Number of Points: 10", (180, 530, 150, 50))
+        self.make_slider("slider_b", QtCore.Qt.Horizontal, (10, 1000), QtWidgets.QSlider.TicksBelow, 1, 100,
+                         (320, 560, 150, 50), self.graph, "label_b", "b: 1.00", (380, 530, 150, 50))
 
-        self.make_button("run_button", "Add Neuron", (200, 630, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_slider("slider_w2_2", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 0,
+                         (20, 630, 150, 50), self.graph, "label_w2_2", "Stdev Noise: 0.0", (50, 600, 150, 50))
+        self.make_slider("slider_b2", QtCore.Qt.Horizontal, (25, 100), QtWidgets.QSlider.TicksBelow, 1, 50,
+                         (170, 630, 150, 50), self.graph, "label_b2", "Function Frequency: 0.50", (175, 600, 150, 50))
+        self.make_slider("slider_fp", QtCore.Qt.Horizontal, (0, 360), QtWidgets.QSlider.TicksBelow, 1, 90,
+                         (320, 630, 150, 50), self.graph, "label_fp", "Function Phase: 90", (340, 600, 150, 50))
+
+        self.make_button("run_button", "Add Neuron", (self.x_chapter_button, 350, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
         self.graph()
 
     def on_run(self):
         self.S1 += 1
-        self.label_w1_2.setText("Requested: " + str(self.S1))
-        self.label_w1_3.setText("Calculated: " + str(self.S1 - 1))
+        self.label_w1_2.setText("- Requested: " + str(self.S1))
+        self.label_w1_3.setText("- Calculated: " + str(self.S1 - 1))
         self.graph()
 
     def graph(self):
@@ -108,13 +107,14 @@ class OrthogonalLeastSquares(NNDLayout):
         # ax.grid(which='major', alpha=0.5)
 
         if self.auto_bias:
-            bias = self.slider_b.value() / 100
+            bias = 1
             self.slider_b.setValue(bias * 100)
+            self.label_b.setText("b: 1.00")
         bias = self.get_slider_value_and_update(self.slider_b, self.label_b, 1 / 100, 2)
         n_points = self.get_slider_value_and_update(self.slider_b1_2, self.label_b1_2)
         # n_points = self.slider_b1_2.value()
-        sigma = self.get_slider_value_and_update(self.slider_w2_2, self.label_w2_2, 1 / 10)
-        freq = self.get_slider_value_and_update(self.slider_b2, self.label_b2, 1 / 100)
+        sigma = self.get_slider_value_and_update(self.slider_w2_2, self.label_w2_2, 1 / 10, 2)
+        freq = self.get_slider_value_and_update(self.slider_b2, self.label_b2, 1 / 100, 2)
         phase = self.get_slider_value_and_update(self.slider_fp, self.label_fp)
         sigma = 0
 
