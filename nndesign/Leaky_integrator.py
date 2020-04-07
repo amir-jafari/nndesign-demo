@@ -37,7 +37,7 @@ class LeakyIntegrator(NNDLayout):
                          (20, 575, 480, 50), self.graph, "label_input", "Input p: 1.00", (230, 550, 150, 50))
         self.slider_input.sliderPressed.connect(self.slider_disconnect)
         self.slider_input.sliderReleased.connect(self.slider_reconnect)
-        self.make_slider("slider_tcte", QtCore.Qt.Horizontal, (0, 50), QtWidgets.QSlider.TicksAbove, 1, 10,
+        self.make_slider("slider_tcte", QtCore.Qt.Horizontal, (1, 50), QtWidgets.QSlider.TicksAbove, 1, 10,
                          (20, 635, 480, 50), self.graph, "label_tcte", "Time Constant: 1.00", (210, 610, 150, 50))
         self.slider_tcte.sliderPressed.connect(self.slider_disconnect)
         self.slider_tcte.sliderReleased.connect(self.slider_reconnect)
