@@ -142,7 +142,7 @@ class NNDLayout(QMainWindow):
             qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, yl4 * self.h_ratio)
 
     def fill_chapter(self, title, number, description, logo_path, icon_path=None, show_info=True, icon_move_left=0,
-                     description_coords=(x_info, y_info, w_info, h_info)):
+                     description_coords=(x_info, y_info, w_info, h_info), icon_coords=(x_pic2_2, y_pic2_2, w_pic2_2, h_pic2_2)):
 
         len_ref = len("One-Input Neuron")
         len_current = len(title)
@@ -163,9 +163,11 @@ class NNDLayout(QMainWindow):
         self.icon1.setGeometry(x_pic2_1 * self.w_ratio, y_pic2_1 * self.h_ratio, w_pic2_1 * self.w_ratio, h_pic2_1 * self.h_ratio)
 
         if icon_path:
+            icon_coords = list(icon_coords)
+            icon_coords[0] -= icon_move_left * self.w_ratio
             self.icon2 = QtWidgets.QLabel(self)
             self.icon2.setPixmap(QtGui.QIcon(icon_path).pixmap(wp_pic2_2 * self.w_ratio, hp_pic2_2 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon2.setGeometry((x_pic2_2 - icon_move_left) * self.w_ratio, y_pic2_2 * self.h_ratio, w_pic2_2 * self.w_ratio, h_pic2_2 * self.h_ratio)
+            self.icon2.setGeometry(icon_coords[0] * self.w_ratio, icon_coords[1] * self.h_ratio, icon_coords[2] * self.w_ratio, icon_coords[3] * self.h_ratio)
             # w_pic2_2 = 400
             # h_pic2_2 = 200
             # self.show_image("icon2", icon_path, (x_pic2_2 - icon_move_left, y_pic2_2, w_pic2_2, h_pic2_2))
