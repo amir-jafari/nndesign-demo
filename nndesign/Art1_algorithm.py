@@ -3,9 +3,6 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 import matplotlib.patches as patches
 
 from nndesign_layout import NNDLayout
@@ -26,28 +23,19 @@ class ART1Algorithm(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(ART1Algorithm, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("ART1 Algorithm", 10, "TODO",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("ART1 Algorithm", 19, "\nClick on the green\ngrids to define patterns.\nClick on the buttons\n"
+                                                "to present them.\n\nThe ART1 network's\nprototype patterns are\nshown below.\n\n"
+                                                "Use the slider to set\nthe ART1 vigilance.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_19.svg", None)
 
         self.s2, self.s1 = 4, 25
         self.w21, self.w12 = np.ones((self.s1, self.s2)), np.zeros((self.s2, self.s1))
         for k in range(4):
             self.w12[k, :] = 2 * self.w21[:, k].T / (2 + np.sum(self.w21[:, k]) - 1)
 
-        self.label_pattern1 = QtWidgets.QLabel(self)
-        self.label_pattern1.setText("Pattern 1")
-        self.label_pattern1.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern1.setGeometry(60 * self.w_ratio, 105 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure1 = Figure()
-        self.canvas1 = FigureCanvas(self.figure1)
-        self.toolbar1 = NavigationToolbar(self.canvas1, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(15 * self.w_ratio, 130 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout1.addWidget(self.canvas1)
-        self.wid1.setLayout(self.layout1)
-        self.axis1 = self.figure1.add_axes([0, 0, 1, 1])
+        self.make_label("label_pattern1", "Pattern 1", (60, 125, 150, 50))
+        self.make_plot(1, (1, 150, 130, 130))
+        self.axis1 = self.figure.add_axes([0, 0, 1, 1])
         self.pattern1 = [0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0]
         self.pattern11 = np.flip(np.array(self.pattern1).reshape((ncols_up, nrows_up)), axis=0)
         for xi in range(len(xx_up)):
@@ -59,30 +47,15 @@ class ART1Algorithm(NNDLayout):
                 self.axis1.add_patch(sq)
         self.axis1.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
         self.axis1.axis("off")
-        self.canvas1.draw()
-        self.canvas1.mpl_connect("button_press_event", self.on_mouseclick1)
+        self.canvas.draw()
+        self.canvas.mpl_connect("button_press_event", self.on_mouseclick1)
 
-        self.button1 = QtWidgets.QPushButton("Present", self)
-        self.button1.setStyleSheet("font-size:13px")
-        self.button1.setGeometry(40 * self.w_ratio, 250 * self.h_ratio,
-                                 100 * self.w_ratio, 25 * self.h_ratio)
-        self.button1.clicked.connect(self.button1_pressed)
+        self.make_button("button1", "Present", (15, 270, 100, 25), self.button1_pressed)
 
         # --
 
-        self.label_pattern2 = QtWidgets.QLabel(self)
-        self.label_pattern2.setText("Pattern 2")
-        self.label_pattern2.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern2.setGeometry(170 * self.w_ratio, 105 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure2 = Figure(frameon=False)
-        self.canvas2 = FigureCanvas(self.figure2)
-        self.toolbar2 = NavigationToolbar(self.canvas2, self)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(140 * self.w_ratio, 130 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout2.addWidget(self.canvas2)
-        self.wid2.setLayout(self.layout2)
+        self.make_label("label_pattern2", "Pattern 2", (180, 125, 150, 50))
+        self.make_plot(2, (130, 150, 130, 130))
         self.axis2 = self.figure2.add_axes([0, 0, 1, 1])
         self.pattern2 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0]
         self.pattern22 = np.flip(np.array(self.pattern2).reshape((ncols_up, nrows_up)), axis=0)
@@ -98,27 +71,12 @@ class ART1Algorithm(NNDLayout):
         self.canvas2.draw()
         self.canvas2.mpl_connect("button_press_event", self.on_mouseclick2)
 
-        self.button2 = QtWidgets.QPushButton("Present", self)
-        self.button2.setStyleSheet("font-size:13px")
-        self.button2.setGeometry((30 + 125) * self.w_ratio, 250 * self.h_ratio,
-                                 100 * self.w_ratio, 25 * self.h_ratio)
-        self.button2.clicked.connect(self.button2_pressed)
+        self.make_button("button2", "Present", (20 + 125, 270, 100, 25), self.button2_pressed)
 
         # --
 
-        self.label_pattern3 = QtWidgets.QLabel(self)
-        self.label_pattern3.setText("Pattern 3")
-        self.label_pattern3.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern3.setGeometry(310 * self.w_ratio, 105 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure3 = Figure()
-        self.canvas3 = FigureCanvas(self.figure3)
-        self.toolbar3 = NavigationToolbar(self.canvas3, self)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(260 * self.w_ratio, 130 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout3.addWidget(self.canvas3)
-        self.wid3.setLayout(self.layout3)
+        self.make_label("label_pattern3", "Pattern 3", (300, 125, 150, 50))
+        self.make_plot(3, (260, 150, 130, 130))
         self.axis3 = self.figure3.add_axes([0, 0, 1, 1])
         self.pattern3 = [0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         self.pattern33 = np.flip(np.array(self.pattern3).reshape((ncols_up, nrows_up)), axis=0)
@@ -134,26 +92,12 @@ class ART1Algorithm(NNDLayout):
         self.canvas3.draw()
         self.canvas3.mpl_connect("button_press_event", self.on_mouseclick3)
 
-        self.button3 = QtWidgets.QPushButton("Present", self)
-        self.button3.setStyleSheet("font-size:13px")
-        self.button3.setGeometry((30 + 125 * 2) * self.w_ratio, 250 * self.h_ratio,
-                                 100 * self.w_ratio, 25 * self.h_ratio)
-        self.button3.clicked.connect(self.button3_pressed)
+        self.make_button("button3", "Present", (25 + 125 * 2, 270, 100, 25), self.button3_pressed)
 
         # ---
 
-        self.label_pattern31 = QtWidgets.QLabel(self)
-        self.label_pattern31.setText("Pattern 4")
-        self.label_pattern31.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern31.setGeometry(450 * self.w_ratio, 105 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure31 = Figure()
-        self.canvas31 = FigureCanvas(self.figure31)
-        self.toolbar31 = NavigationToolbar(self.canvas31, self)
-        self.wid31 = QtWidgets.QWidget(self)
-        self.layout31 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid31.setGeometry(390 * self.w_ratio, 130 * self.h_ratio, 130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout31.addWidget(self.canvas31)
-        self.wid31.setLayout(self.layout31)
+        self.make_label("label_pattern31", "Pattern 4", (420, 125, 150, 50))
+        self.make_plot(31, (390, 150, 130, 130))
         self.axis31 = self.figure31.add_axes([0, 0, 1, 1])
         self.pattern31 = [0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         self.pattern331 = np.flip(np.array(self.pattern31).reshape((ncols_up, nrows_up)), axis=0)
@@ -169,28 +113,44 @@ class ART1Algorithm(NNDLayout):
         self.canvas31.draw()
         self.canvas31.mpl_connect("button_press_event", self.on_mouseclick31)
 
-        self.button31 = QtWidgets.QPushButton("Present", self)
-        self.button31.setStyleSheet("font-size:13px")
-        self.button31.setGeometry((30 + 125 * 3) * self.w_ratio, 250 * self.h_ratio,
-                                  100 * self.w_ratio, 25 * self.h_ratio)
-        self.button31.clicked.connect(self.button31_pressed)
+        self.make_button("button31", "Present", (30 + 125 * 3, 270, 100, 25), self.button31_pressed)
 
         # ---
 
-        self.label_pattern4 = QtWidgets.QLabel(self)
-        self.label_pattern4.setText("Prototype 1")
-        self.label_pattern4.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern4.setGeometry(60 * self.w_ratio, 275 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure4 = Figure()
-        self.canvas4 = FigureCanvas(self.figure4)
-        self.toolbar4 = NavigationToolbar(self.canvas4, self)
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(15 * self.w_ratio, 300 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout4.addWidget(self.canvas4)
-        self.wid4.setLayout(self.layout4)
+        self.make_label("label_pattern4", "Prototype 1", (60, 335, 150, 50))
+        self.make_plot(4, (1, 360, 130, 130))
         self.axis4 = self.figure4.add_axes([0, 0, 1, 1])
+
+        # ---
+
+        self.make_label("label_pattern5", "Prototype 2", (160, 335, 150, 50))
+        self.make_plot(5, (130, 360, 130, 130))
+        self.axis5 = self.figure5.add_axes([0, 0, 1, 1])
+
+        # --
+
+        self.make_label("label_pattern6", "Prototype 3", (290, 335, 150, 50))
+        self.make_plot(6, (260, 360, 130, 130))
+        self.axis6 = self.figure6.add_axes([0, 0, 1, 1])
+
+        # --
+
+        self.make_label("label_pattern7", "Prototype 4", (420, 335, 150, 50))
+        self.make_plot(7, (390, 360, 130, 130))
+        self.axis7 = self.figure7.add_axes([0, 0, 1, 1])
+
+        # --
+
+        self.on_clear()
+
+        self.make_slider("slider_rho", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksAbove, 1, 60,
+                         (20, 560, 480, 50), self.slide, "label_rho", "Vigilance (rho): 0.6", (200, 535, 170, 50))
+        self.rho = 0.6
+
+        self.make_button("clear_button", "Clear", (self.x_chapter_button, 340, self.w_chapter_button, self.h_chapter_button), self.on_clear)
+
+    def on_clear(self):
+
         self.pattern4 = [0] * 25
         self.pattern44 = np.flip(np.array(self.pattern4).reshape((ncols_up, nrows_up)), axis=0)
         for xi in range(len(xx_up)):
@@ -204,22 +164,6 @@ class ART1Algorithm(NNDLayout):
         self.axis4.axis("off")
         self.canvas4.draw()
 
-        # ---
-
-        self.label_pattern5 = QtWidgets.QLabel(self)
-        self.label_pattern5.setText("Prototype 2")
-        self.label_pattern5.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern5.setGeometry(160 * self.w_ratio, 275 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure5 = Figure()
-        self.canvas5 = FigureCanvas(self.figure5)
-        self.toolbar5 = NavigationToolbar(self.canvas5, self)
-        self.wid5 = QtWidgets.QWidget(self)
-        self.layout5 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid5.setGeometry(140 * self.w_ratio, 300 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout5.addWidget(self.canvas5)
-        self.wid5.setLayout(self.layout5)
-        self.axis5 = self.figure5.add_axes([0, 0, 1, 1])
         self.pattern5 = [0] * 25
         self.pattern55 = np.flip(np.array(self.pattern5).reshape((ncols_up, nrows_up)), axis=0)
         for xi in range(len(xx_up)):
@@ -233,22 +177,6 @@ class ART1Algorithm(NNDLayout):
         self.axis5.axis("off")
         self.canvas5.draw()
 
-        # --
-
-        self.label_pattern6 = QtWidgets.QLabel(self)
-        self.label_pattern6.setText("Prototype 3")
-        self.label_pattern6.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern6.setGeometry(290 * self.w_ratio, 275 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure6 = Figure()
-        self.canvas6 = FigureCanvas(self.figure6)
-        self.toolbar6 = NavigationToolbar(self.canvas6, self)
-        self.wid6 = QtWidgets.QWidget(self)
-        self.layout6 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid6.setGeometry(260 * self.w_ratio, 300 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout6.addWidget(self.canvas6)
-        self.wid6.setLayout(self.layout6)
-        self.axis6 = self.figure6.add_axes([0, 0, 1, 1])
         self.pattern6 = [0] * 25
         self.pattern66 = np.flip(np.array(self.pattern6).reshape((ncols_up, nrows_up)), axis=0)
         for xi in range(len(xx_up)):
@@ -262,22 +190,6 @@ class ART1Algorithm(NNDLayout):
         self.axis6.axis("off")
         self.canvas6.draw()
 
-        # --
-
-        self.label_pattern7 = QtWidgets.QLabel(self)
-        self.label_pattern7.setText("Prototype 4")
-        self.label_pattern7.setFont(QtGui.QFont("Times New Roman", 14))
-        self.label_pattern7.setGeometry(420 * self.w_ratio, 275 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.figure7 = Figure()
-        self.canvas7 = FigureCanvas(self.figure7)
-        self.toolbar7 = NavigationToolbar(self.canvas7, self)
-        self.wid7 = QtWidgets.QWidget(self)
-        self.layout7 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid7.setGeometry(390 * self.w_ratio, 300 * self.h_ratio,
-                              130 * self.w_ratio, 130 * self.h_ratio)
-        self.layout7.addWidget(self.canvas7)
-        self.wid7.setLayout(self.layout7)
-        self.axis7 = self.figure7.add_axes([0, 0, 1, 1])
         self.pattern7 = [0] * 25
         self.pattern77 = np.flip(np.array(self.pattern7).reshape((ncols_up, nrows_up)), axis=0)
         for xi in range(len(xx_up)):
@@ -291,30 +203,9 @@ class ART1Algorithm(NNDLayout):
         self.axis7.axis("off")
         self.canvas7.draw()
 
-        # --
-
-        self.rho = 0.6
-        self.label_rho = QtWidgets.QLabel(self)
-        self.label_rho.setText("rho: 0.6")
-        self.label_rho.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_rho.setGeometry(self.x_chapter_slider_label * self.w_ratio, 470 * self.h_ratio, 150 * self.w_ratio,
-                                   100 * self.h_ratio)
-        self.slider_rho = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_rho.setRange(0, 100)
-        self.slider_rho.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_rho.setTickInterval(1)
-        self.slider_rho.setValue(60)
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(self.x_chapter_usual * self.w_ratio, 500 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout4.addWidget(self.slider_rho)
-        self.wid4.setLayout(self.layout4)
-        self.slider_rho.valueChanged.connect(self.slide)
-
     def slide(self):
         self.rho = self.slider_rho.value() / 10
-        self.label_rho.setText("rho: " + str(self.rho))
+        self.label_rho.setText("Vigilance (rho): " + str(self.rho))
 
     def change_squares(self, axis, canvas, k):
         while axis.patches:
@@ -408,7 +299,7 @@ class ART1Algorithm(NNDLayout):
                     else:
                         sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
                     self.axis1.add_patch(sq)
-            self.canvas1.draw()
+            self.canvas.draw()
 
     def on_mouseclick2(self, event):
         if event.xdata != None and event.xdata != None:
