@@ -44,13 +44,14 @@ class SteepestDescentBackprop2(NNDLayout):
                                                               "is shown below.\n\nClick in the contour graph\nto start "
                                                               "the steepest\ndescent algorithm.\n\nYou can reset the learning\nrate "
                                                               "by using the slider.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", None, description_coords=(535, 120, 450, 300))
+                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", PACKAGE_PATH + "Figures/nnd12_1.svg",
+                          icon_move_left=120, icon_coords=(130, 90, 500, 200), description_coords=(535, 120, 450, 300))
 
         self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
         self.lr, self.epochs = None, None
 
-        self.make_plot(1, (20, 200, 480, 480))
+        self.make_plot(1, (20, 280, 480, 400))
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data, self.y_data = [], []
@@ -65,14 +66,14 @@ class SteepestDescentBackprop2(NNDLayout):
         self.x, self.y = None, None
 
         self.make_combobox(1, ["W1(1, 1), W2(1, 1)", 'W1(1, 1), b1(1)', 'b1(1), b1(2)'],
-                           (525, 450, 150, 50), self.change_pair_of_params,
-                           "label_combo", "Pair of parameters", (545, 420, 150, 50))
+                           (520, 410, 175, 50), self.change_pair_of_params,
+                           "label_combo", "Pair of parameters", (545, 390, 150, 50))
 
         self.lr = 3.5
-        self.make_label("label_lr1", "0.0", (self.x_chapter_usual + 10, 580, self.w_chapter_slider, 50))
-        self.make_label("label_lr2", "20.0", (self.x_chapter_usual + 150, 580, self.w_chapter_slider, 50))
+        self.make_label("label_lr1", "0.0", (self.x_chapter_usual + 10, 510, self.w_chapter_slider, 50))
+        self.make_label("label_lr2", "20.0", (self.x_chapter_usual + 150, 510, self.w_chapter_slider, 50))
         self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 200), QtWidgets.QSlider.TicksBelow, 1, 35,
-                         (self.x_chapter_usual, 550, self.w_chapter_slider, 50), self.slide, "label_lr", "lr: 3.5")
+                         (self.x_chapter_usual, 480, self.w_chapter_slider, 50), self.slide, "label_lr", "lr: 3.5")
         self.animation_speed = 0
 
         self.canvas.draw()

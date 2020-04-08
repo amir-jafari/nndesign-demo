@@ -47,13 +47,14 @@ class ConjugateGradientLineSearch(NNDLayout):
                                                                 " to train\nwith backpropagation.\n\nThe corresponding contour\nplot "
                                                                 "is shown below.\n\nClick in the contour graph\nto start "
                                                                 "the conjugate\ngradient line search.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", None, description_coords=(535, 90, 450, 300))
+                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", PACKAGE_PATH + "Figures/nnd12_1.svg",
+                          icon_move_left=120, icon_coords=(130, 90, 500, 200), description_coords=(535, 90, 450, 300))
 
         self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
         self.lr, self.epochs = None, None
 
-        self.make_plot(1, (20, 200, 480, 480))
+        self.make_plot(1, (20, 280, 480, 400))
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], linestyle='none', marker='*', color="blue")
         self.x_data, self.y_data = [], []
@@ -70,7 +71,7 @@ class ConjugateGradientLineSearch(NNDLayout):
         self.x, self.y = None, None
 
         self.make_combobox(1, ["W1(1, 1), W2(1, 1)", 'W1(1, 1), b1(1)', 'b1(1), b1(2)'],
-                           (525, 360, 150, 50), self.change_pair_of_params,
+                           (525, 360, 175, 50), self.change_pair_of_params,
                            "label_combo", "Pair of parameters", (545, 340, 150, 50))
 
         self.canvas.draw()

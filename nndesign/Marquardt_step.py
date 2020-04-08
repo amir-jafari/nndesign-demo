@@ -1,14 +1,8 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
 from scipy.io import loadmat
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from matplotlib.animation import FuncAnimation
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
-from mpl_toolkits.mplot3d import Axes3D
 
 from nndesign_layout import NNDLayout
 
@@ -47,12 +41,13 @@ class MarquardtStep(NNDLayout):
                                                 "Marquardt learning\nalgorithm.\n\nThe black arrow indicates\nthe "
                                                 "Gauss-Newton step.\n\nThe red arrow indicates\nthe gradient direction.\n\n"
                                                 "The blue line indicates\nthe Marquardt step as\nmu is ajusted.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", None, description_coords=(535, 90, 450, 300))
+                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", PACKAGE_PATH + "Figures/nnd12_1.svg",
+                          icon_move_left=120, icon_coords=(130, 90, 500, 200), description_coords=(535, 90, 450, 300))
 
         self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
 
-        self.make_plot(1, (20, 200, 480, 480))
+        self.make_plot(1, (20, 280, 480, 400))
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], label="Gradient Descent Path", color="blue")
         self.x_data, self.y_data = [], []
@@ -67,7 +62,7 @@ class MarquardtStep(NNDLayout):
         self.x, self.y = None, None
 
         self.make_combobox(1, ["W1(1, 1), W2(1, 1)", 'W1(1, 1), b1(1)', 'b1(1), b1(2)'],
-                           (525, 400, 150, 50), self.change_pair_of_params,
+                           (525, 400, 175, 50), self.change_pair_of_params,
                            "label_combo", "Pair of parameters", (545, 380, 150, 50))
 
         self.mu = 0.0012

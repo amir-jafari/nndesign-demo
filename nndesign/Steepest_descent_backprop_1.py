@@ -41,10 +41,11 @@ class SteepestDescentBackprop1(NNDLayout):
         super(SteepestDescentBackprop1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
         self.fill_chapter("Steepest Descent Backprop #1", 12, "\n\nUse the radio buttons to\nselect the network\nparameters"
-                                                                " to train\nwith backpropagation.\n\nThe corresponding error\nsurface "
-                                                                "and contour are\nshown below.\n\nClick in the contour graph\nto start "
-                                                                "the steepest\ndescent algorithm.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", None, (535, 120, 450, 200))
+                                                              " to train\nwith backpropagation.\n\nThe corresponding error\nsurface "
+                                                              "and contour are\nshown below.\n\nClick in the contour graph\nto start "
+                                                              "the steepest\ndescent algorithm.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_12.svg", PACKAGE_PATH + "Figures/nnd12_1.svg",
+                          icon_move_left=120, icon_coords=(130, 150, 500, 200))
 
         self.W1, self.b1 = np.array([[10], [10]]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
@@ -55,8 +56,8 @@ class SteepestDescentBackprop1(NNDLayout):
         # w1_1, w1_2 = np.linspace(-5, 15, 1000).reshape(-1, 1), np.linspace(-5, 15, 1000)
         # f_1 = self.logsig(self.W2.dot(self.logsig(w1_1.dot(p) + w1_2.dot(p) + self.b1)) + self.b2)
 
-        self.make_plot(1, (260, 400, 260, 260))
-        self.make_plot(2, (10, 400, 260, 260))
+        self.make_plot(1, (255, 380, 260, 260))
+        self.make_plot(2, (5, 380, 260, 260))
 
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
@@ -77,8 +78,8 @@ class SteepestDescentBackprop1(NNDLayout):
         self.x, self.y = None, None
 
         self.make_combobox(1, ["W1(1, 1), W2(1, 1)", 'W1(1, 1), b1(1)', 'b1(1), b1(2)'],
-                           (525, 400, 150, 50), self.change_pair_of_params,
-                           "label_combo", "Pair of parameters", (545, 380, 150, 50))
+                           (520, 370, 175, 50), self.change_pair_of_params,
+                           "label_combo", "Pair of parameters", (545, 350, 150, 50))
 
         self.animation_speed = 0
         self.canvas.draw()
