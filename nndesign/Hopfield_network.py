@@ -4,9 +4,6 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
 from scipy.integrate import ode
@@ -25,33 +22,26 @@ class HopfieldNetwork(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(HopfieldNetwork, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Hopfield Network", 21, " TODO",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Hopfield Network", 21, "Click in the left graph\nto simulate the\nHopfield Network.\n\n"
+                                                  "Change the weights, biases\nand gain. Then click\n[Update] to change\n"
+                                                  "the network.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_21.svg", None)
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(20 * self.w_ratio, 120 * self.h_ratio, 230 * self.w_ratio, 230 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
-
-        self.figure2 = Figure()
-        self.canvas2 = FigureCanvas(self.figure2)
-        self.toolbar2 = NavigationToolbar(self.canvas2, self)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(270 * self.w_ratio, 120 * self.h_ratio, 230 * self.w_ratio, 230 * self.h_ratio)
-        self.layout2.addWidget(self.canvas2)
-        self.wid2.setLayout(self.layout2)
+        self.make_plot(1, (5, 90, 260, 260))
+        self.figure.subplots_adjust(left=0.175, right=0.95, bottom=0.15, top=0.9)
+        self.make_plot(2, (250, 90, 260, 260))
+        self.figure2.subplots_adjust(left=0.175, right=0.975, bottom=0.175, top=0.9)
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Lyapunov Function", fontdict={'fontsize': 10})
-        self.axes_1.set_xlabel("$a1$")
-        self.axes_1.set_ylabel("$a2$")
         self.axes_1.set_xlim(-1, 1)
         self.axes_1.set_ylim(-1, 1)
+        self.axes_1.set_xticks([-1, -0.5, 0, 0.5])
+        self.axes_1.set_yticks([-1, -0.5, 0, 0.5])
+        self.axes_1.set_xlabel("$a1$")
+        self.axes_1.xaxis.set_label_coords(1, -0.025)
+        self.axes_1.set_ylabel("$a2$")
+        self.axes_1.yaxis.set_label_coords(-0.025, 1)
         self.axes1_point, = self.axes_1.plot([], "*")
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.x_data, self.y_data = None, None
@@ -62,107 +52,43 @@ class HopfieldNetwork(NNDLayout):
 
         self.axes_2 = Axes3D(self.figure2)
         self.axes_2.set_title("Lyapunov Function", fontdict={'fontsize': 10})
+        # self.axes_2.set_xticks([-1, -0.5, 0, 0.5])
+        # self.axes_2.set_yticks([-1, -0.5, 0, 0.5])
+        # self.axes_2.set_zticks([-1, 0, 1])
         self.axes_2.set_xlabel("$a1$")
+        # self.axes_2.xaxis.set_label_coords(1, -0.025)
         self.axes_2.set_ylabel("$a2$")
+        # self.axes_2.yaxis.set_label_coords(-0.025, 1)
         self.axes_2.set_zlabel("$V(a)$")
+        # self.axes_2.zaxis.set_label_coords(-0.025, 1)
         self.axes_2.set_xlim(-1, 1)
         self.axes_2.set_ylim(-1, 1)
         # self.axes_2.set_zlim(-1, 2)
 
-        self.a_11 = QtWidgets.QLineEdit()
-        self.a_11.setText("0")
-        self.a_11.setGeometry(50 * self.w_ratio, 500 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(50 * self.w_ratio, 500 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.a_11)
-        self.wid3.setLayout(self.layout3)
+        self.paint_latex_string("latex_a1", "$W =$", 16, (80, 340, 500, 200))
+        self.paint_latex_string("latex_a2", "$[$", 45, (170, 340, 500, 200))
+        self.paint_latex_string("latex_a3", "$]$", 45, (320, 340, 500, 200))
+        self.make_input_box("a_11", "0", (200, 360, 70, 100))
+        self.make_input_box("a_12", "1", (270, 360, 70, 100))
+        self.make_input_box("a_21", "1", (200, 410, 70, 100))
+        self.make_input_box("a_22", "0", (270, 410, 70, 100))
 
-        self.a_12 = QtWidgets.QLineEdit()
-        self.a_12.setText("1")
-        self.a_11.setGeometry(120 * self.w_ratio, 500 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(120 * self.w_ratio, 500 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.a_12)
-        self.wid3.setLayout(self.layout3)
+        self.paint_latex_string("latex_b1", "$b =$", 16, (120, 490, 500, 200))
+        self.paint_latex_string("latex_b2", "$[$", 45, (210, 490, 500, 200))
+        self.paint_latex_string("latex_b3", "$]$", 45, (290, 490, 500, 200))
+        self.make_input_box("d_1", "0", (240, 510, 70, 100))
+        self.make_input_box("d_2", "0", (240, 560, 70, 100))
 
-        self.a_21 = QtWidgets.QLineEdit()
-        self.a_21.setText("1")
-        self.a_21.setGeometry(50 * self.w_ratio, 570 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(50 * self.w_ratio, 570 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.a_21)
-        self.wid3.setLayout(self.layout3)
+        self.make_slider("slider_b", QtCore.Qt.Horizontal, (0, 20), QtWidgets.QSlider.TicksAbove, 1, 14,
+                         (self.x_chapter_usual, 320, self.w_chapter_slider, 50), self.on_run,
+                         "label_b", "Finite Value Gain: 1.4", (self.x_chapter_usual + 30, 320 - 25, 150, 50))
 
-        self.a_22 = QtWidgets.QLineEdit()
-        self.a_22.setText("0")
-        self.a_22.setGeometry(120 * self.w_ratio, 570 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(120 * self.w_ratio, 570 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.a_22)
-        self.wid3.setLayout(self.layout3)
-
-        self.d_1 = QtWidgets.QLineEdit()
-        self.d_1.setText("0")
-        self.d_1.setGeometry(250 * self.w_ratio, 500 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(250 * self.w_ratio, 500 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.d_1)
-        self.wid3.setLayout(self.layout3)
-
-        self.d_2 = QtWidgets.QLineEdit()
-        self.d_2.setText("0")
-        self.d_2.setGeometry(250 * self.w_ratio, 570 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(250 * self.w_ratio, 570 * self.h_ratio, 75 * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.d_2)
-        self.wid3.setLayout(self.layout3)
-
-        self.label_b = QtWidgets.QLabel(self)
-        self.label_b.setText("Finite Value Gain: 1.4")
-        self.label_b.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b.setGeometry(self.x_chapter_slider_label * self.w_ratio, 470 * self.h_ratio, 150 * self.w_ratio,
-                                 100 * self.h_ratio)
-        self.slider_b = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b.setRange(0, 20)
-        self.slider_b.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b.setTickInterval(1)
-        self.slider_b.setValue(14)
-        self.wid4 = QtWidgets.QWidget(self)
-        self.layout4 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid4.setGeometry(self.x_chapter_usual * self.w_ratio, 500 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout4.addWidget(self.slider_b)
-        self.wid4.setLayout(self.layout4)
-        self.slider_b.valueChanged.connect(self.on_run)
-
-        self.comboBox1 = QtWidgets.QComboBox(self)
+        self.make_combobox(1, ["Finite Gain", "Infinite Gain"], (self.x_chapter_usual, 430, self.w_chapter_slider, 50),
+                           self.change_gain, "label_f", "Gain", (self.x_chapter_slider_label + 5, 410, 150, 50))
         self.finite_gain = True
         self.finite_value_gain = None
-        self.comboBox1.addItems(["Finite Gain", "Infinite Gain"])
-        self.label_f = QtWidgets.QLabel(self)
-        self.label_f.setText("Gain")
-        self.label_f.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_f.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 550 * self.h_ratio,
-                                 150 * self.w_ratio, 100 * self.h_ratio)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 580 * self.h_ratio,
-                              self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox1)
-        self.wid2.setLayout(self.layout2)
-        self.comboBox1.currentIndexChanged.connect(self.change_gain)
 
-        self.run_button = QtWidgets.QPushButton("Update", self)
-        self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 420 * self.h_ratio,
-                                    self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run_button.clicked.connect(self.on_run)
+        self.make_button("run_button", "Update", (self.x_chapter_button, 380, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
         self.on_run()
 
@@ -226,7 +152,7 @@ class HopfieldNetwork(NNDLayout):
     def update(self, W, b):
 
         finite_value_gain = self.slider_b.value() / 10
-        self.label_b.setText("b: " + str(finite_value_gain))
+        self.label_b.setText("Finite Value Gain: " + str(finite_value_gain))
         if not self.finite_gain:
             finite_value_gain = np.inf
 
