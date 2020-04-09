@@ -242,7 +242,11 @@ class MainWindowNN(NNDLayout):
 
         idx = 0
         for icon in [self.icon1, self.icon2, self.icon3, self.icon4]:
-            if "13" in chapters and idx == 3:
+            if "2" in chapters and idx == 0:
+                print(chapters, idx)
+                icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/2_1.svg".format(chapter_numbers[idx])).pixmap(
+                    w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            elif "13" in chapters and idx == 3:
                 # icon.setPixmap(QtGui.QPixmap(PACKAGE_PATH + "Logo/13.svg").scaled(w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio))
                 icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/13.svg".format(chapter_numbers[idx])).pixmap(
                     w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
