@@ -19,7 +19,9 @@ class DynamicDerivatives(NNDLayout):
                                                      "the network weights.",  # \n\n"
                                              # "Click on [Random] to set\neach parameter to\a random value.\n\n"
                                              # "Click on [Reset] to\ninitialize the parameters",
-                          PACKAGE_PATH + "Logo/Logo_Ch_14.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", description_coords=(535, 100, 450, 250))
+                          PACKAGE_PATH + "Logo/Logo_Ch_14.svg", PACKAGE_PATH + "Figures/nnd14_2.svg",
+                          icon_move_left=70, icon_coords=(130, 100, 500, 200), description_coords=(535, 100, 450, 250),
+                          icon_rescale=True)
 
         self.make_plot(1, (15, 300, 250, 200))
         self.make_plot(2, (250, 300, 250, 200))
