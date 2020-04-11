@@ -12,10 +12,10 @@ class TwoInputNeuron(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(TwoInputNeuron, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Two input neuron", 2, "Alter the input values by\nclicking and dragging the\ntriangular"
-                                                 " shaped indicators.\n\nAlter the weight and bias in\nthe same way."
+        self.fill_chapter("Two input neuron", 2, "Alter the input values by\nmoving the sliders."
+                                                 "\n\nAlter the weight and bias in\nthe same way."
                                                  " Use the menu\nto pick a transfer function.\n\nThe net input and"
-                                                 " the output\nwill respond to each change",
+                                                 " the output\nwill respond to each change.",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg")
 
         self.comboBox1_functions_str = ["purelin", "poslin", 'hardlim', 'hardlims', 'satlin', 'satlins', 'logsig',
