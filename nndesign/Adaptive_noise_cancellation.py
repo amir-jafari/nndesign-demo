@@ -5,9 +5,6 @@ import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from matplotlib.animation import FuncAnimation
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 
 from nndesign_layout import NNDLayout
 
@@ -44,84 +41,60 @@ class AdaptiveNoiseCancellation(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(AdaptiveNoiseCancellation, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Adaptive Noise Cancellation", 10, " TODO",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("Adaptive Noise Cancellation", 10, "\n\nClick on the bottom contour\nplot to change\nthe initial weights.\n\n"
+                                                             "Use the sliders to alter\nthe learning rate\nand momentum.\n\n"
+                                                             "You can choose to display\nthe original and estimated\nsignals"
+                                                             " or their difference.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_10.svg", None)
 
         self.x_data, self.y_data = [], []
         self.ani_1, self.ani_2, self.event, self.x, self.y = None, None, None, None, None
         # self.W = None
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(20 * self.w_ratio, 120 * self.h_ratio, 480 * self.w_ratio, 270 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
-
-        self.figure2 = Figure()
-        self.canvas2 = FigureCanvas(self.figure2)
-        self.toolbar2 = NavigationToolbar(self.canvas2, self)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(20 * self.w_ratio, 390 * self.h_ratio, 270 * self.w_ratio, 270 * self.h_ratio)
-        self.layout2.addWidget(self.canvas2)
-        self.wid2.setLayout(self.layout2)
+        self.make_plot(1, (20, 100, 480, 270))
+        self.figure.subplots_adjust(left=0.115, bottom=0.2, right=0.95, top=0.9)
+        self.make_plot(2, (110, 370, 300, 300))
+        self.figure2.subplots_adjust(left=0.2, bottom=0.2, right=0.95, top=0.9)
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Original (blue) and Estimated (red) Signals", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(0, 0.5)
         self.axes_1.set_ylim(-2, 2)
+        self.axes_1.set_ylabel("Amplitud")
+        self.axes_1.set_xlabel("Time")
+        self.axes_1.plot(np.linspace(0, 0.5, 100), [0] * 100, color="gray", linestyle="dashed", linewidth=0.5)
         self.signal, = self.axes_1.plot([], linestyle='--', label="Original Signal", color="blue")
         self.signal.set_data(time, signal)
         self.signal_approx, = self.axes_1.plot([], linestyle='-', label="Approx Signal", color="red")
+        self.signal_diff, = self.axes_1.plot([], linestyle='-', label="Signal Difference", color="red")
         self.canvas.draw()
 
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
-        self.axes_2.contour(X, Y, F)
+        self.axes_2.contour(X, Y, F, levels=[1, 10, 25, 50, 100, 200, 400], colors="blue")
         self.axes_2.set_title("Adaptive Weights", fontdict={'fontsize': 10})
-        self.path_2, = self.axes_2.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.path_2, = self.axes_2.plot([], linestyle='--', marker='*', label="Gradient Descent Path", color="red")
         self.w1_data, self.w2_data = [], []
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
+        self.axes_2.set_yticks([-2, -1, 0, 1, 2])
+        self.axes_2.set_xlabel("$W(1,1)$")
+        self.axes_2.set_ylabel("$W(1,2)$")
         self.canvas2.draw()
 
         self.lr = 0.2
-        self.label_lr = QtWidgets.QLabel(self)
-        self.label_lr.setText("lr: 0.2")
-        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 250 * self.h_ratio,
-                                  self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 15)
-        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_lr.setTickInterval(1)
-        self.slider_lr.setValue(2)
-        self.wid_lr = QtWidgets.QWidget(self)
-        self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 280 * self.h_ratio,
-                                self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_lr.addWidget(self.slider_lr)
-        self.wid_lr.setLayout(self.layout_lr)
+        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 15), QtWidgets.QSlider.TicksBelow, 1, 2,
+                         (self.x_chapter_slider_label - 70, 370, self.w_chapter_slider, 50), self.slide,
+                         "label_lr", "lr: 0.2")
 
         self.mc = 0
-        self.label_mc = QtWidgets.QLabel(self)
-        self.label_mc.setText("mc: 0")
-        self.label_mc.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_mc.setGeometry(self.x_chapter_slider_label * self.w_ratio, 350 * self.h_ratio,
-                                  self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.slider_mc = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_mc.setRange(0, 10)
-        self.slider_mc.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_mc.setTickInterval(1)
-        self.slider_mc.setValue(0)
-        self.wid_mc = QtWidgets.QWidget(self)
-        self.layout_mc = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_mc.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
-                                self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_mc.addWidget(self.slider_mc)
-        self.wid_mc.setLayout(self.layout_mc)
+        """self.mc = 0
+        self.make_slider("slider_mc", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 0,
+                         (self.x_chapter_slider_label - 70, 440, self.w_chapter_slider, 50), self.slide,
+                         "label_mc", "mc: 0")"""
+
+        self.make_combobox(1, ["Signals", "Difference"], (self.x_chapter_slider_label - 60, 420, self.w_chapter_button, 50),
+                           self.change_plot_type)
+        self.plot_idx = 0
 
         """self.animation_speed = 100
         self.label_anim_speed = QtWidgets.QLabel(self)
@@ -144,15 +117,43 @@ class AdaptiveNoiseCancellation(NNDLayout):
 
         self.w, self.e = None, None
         self.canvas2.mpl_connect('button_press_event', self.on_mouseclick)
-        self.slider_lr.valueChanged.connect(self.slide)
-        self.slider_mc.valueChanged.connect(self.slide)
         # self.slider_anim_speed.valueChanged.connect(self.slide)
+
+        event = matplotlib.backend_bases.MouseEvent("dummy", self.canvas2, 0, -2)
+        event.xdata, event.ydata = 0, -2
+        self.on_mouseclick(event)
+
+    def change_plot_type(self, idx):
+        self.plot_idx = idx
+        if self.ani_1:
+            self.ani_1.event_source.stop()
+        if self.ani_2:
+            self.ani_2.event_source.stop()
+        self.path_2.set_data([], [])
+        self.w1_data, self.w2_data = [self.w1_data[0]], [self.w2_data[0]]
+        self.w = np.array([self.w1_data[0], self.w2_data[0]])
+        if idx == 0:
+            self.axes_1.set_title("Original (blue) and Estimated (red) Signals", fontdict={'fontsize': 10})
+            self.signal.set_data(time, signal)
+            self.signal_diff.set_data([], [])
+            self.canvas.draw()
+            self.canvas2.draw()
+            self.run_animation()
+        elif idx == 1:
+            self.axes_1.set_title("Difference between Original and Estimated Signals", fontdict={'fontsize': 10})
+            self.signal.set_data([], [])
+            self.signal_approx.set_data([], [])
+            self.canvas.draw()
+            self.canvas2.draw()
+            self.run_animation_diff()
+        self.canvas.draw()
+        self.canvas2.draw()
 
     def slide(self):
         self.lr = float(self.slider_lr.value() / 10)
         self.label_lr.setText("lr: " + str(self.lr))
-        self.mc = float(self.slider_mc.value() / 10)
-        self.label_mc.setText("mc: " + str(self.mc))
+        # self.mc = float(self.slider_mc.value() / 10)
+        # self.label_mc.setText("mc: " + str(self.mc))
         # self.animation_speed = int(self.slider_anim_speed.value()) * 100
         # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.w1_data:
@@ -162,21 +163,30 @@ class AdaptiveNoiseCancellation(NNDLayout):
                 self.ani_1.event_source.stop()
             self.path_2.set_data([], [])
             self.signal_approx.set_data([], [])
+            self.signal_diff.set_data([], [])
             self.w1_data, self.w2_data = [self.w1_data[0]], [self.w2_data[0]]
+            self.w = np.array([self.w1_data[0], self.w2_data[0]])
             # e_temp = self.e[0]
             self.e = np.zeros((int(ts),))
             # self.e[0] = e_temp
             self.canvas.draw()
             self.canvas2.draw()
-            self.run_animation()
+            if self.plot_idx == 0:
+                self.run_animation()
+            elif self.plot_idx == 1:
+                self.run_animation_diff()
 
     def animate_init_1(self):
         self.signal_approx, = self.axes_1.plot([], linestyle='-', label="Approx Signal", color="red")
         return self.signal_approx,
 
     def animate_init_2(self):
-        self.path_2, = self.axes_2.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
+        self.path_2, = self.axes_2.plot([], linestyle='--', marker='*', label="Gradient Descent Path", color="red")
         return self.path_2,
+
+    def animate_init_3(self):
+        self.signal_diff, = self.axes_1.plot([], linestyle='-', label="Signal Difference", color="red")
+        return self.signal_diff,
 
     def on_animate_1(self, idx):
         self.signal_approx.set_data(time[:idx + 1], self.e[:idx + 1])
@@ -185,11 +195,15 @@ class AdaptiveNoiseCancellation(NNDLayout):
     def on_animate_2(self, idx):
         a = np.dot(self.w, P[:, idx])
         self.e[idx] = T[0, idx] - a
-        self.w = self.mc * self.w + (1 - self.mc) * self.lr * self.e[idx] * P[:, idx].T
+        self.w = self.w + self.mc * self.w + (1 - self.mc) * self.lr * self.e[idx] * P[:, idx].T
         self.w1_data.append(self.w[0])
         self.w2_data.append(self.w[1])
         self.path_2.set_data(self.w1_data, self.w2_data)
         return self.path_2,
+
+    def on_animate_3(self, idx):
+        self.signal_diff.set_data(time[:idx + 1], (signal - self.e).reshape(-1)[:idx + 1])
+        return self.signal_diff,
 
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:
@@ -205,12 +219,21 @@ class AdaptiveNoiseCancellation(NNDLayout):
             self.w1_data, self.w2_data = [self.w[0]], [self.w[1]]
             self.canvas.draw()
             self.canvas2.draw()
-            self.run_animation()
+            if self.plot_idx == 0:
+                self.run_animation()
+            elif self.plot_idx == 1:
+                self.run_animation_diff()
             self.canvas.draw()
             self.canvas2.draw()
 
     def run_animation(self):
         self.ani_2 = FuncAnimation(self.figure2, self.on_animate_2, init_func=self.animate_init_2, frames=int(ts),
-                                   interval=0, repeat=False, blit=True)
+                                   interval=20, repeat=False, blit=True)
         self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=int(ts),
-                                   interval=0, repeat=False, blit=True)
+                                   interval=20, repeat=False, blit=True)
+
+    def run_animation_diff(self):
+        self.ani_2 = FuncAnimation(self.figure2, self.on_animate_2, init_func=self.animate_init_2, frames=int(ts),
+                                   interval=20, repeat=False, blit=True)
+        self.ani_1 = FuncAnimation(self.figure, self.on_animate_3, init_func=self.animate_init_3, frames=int(ts),
+                                   interval=20, repeat=False, blit=True)
