@@ -42,22 +42,20 @@ class EEGNoiseCancellation(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(EEGNoiseCancellation, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("EEG Noise Cancellation", 10, " TODO",
-                          PACKAGE_PATH + "Logo/Logo_Ch_5.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)
+        self.fill_chapter("EEG Noise Cancellation", 10, "\n\n\nAn EEG signal has been\ncontaminated with noise.\n\nAn adaptive"
+                                                        " linear\nnetwork is used to\nremove the noise.\n\nUse the sliders"
+                                                        " to set\nthe learning rate and the\nnumber of delays.\n\nYou can"
+                                                        " choose to display\nthe original and estimated\nsignals or their"
+                                                        " difference.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_10.svg", None, description_coords=(535, 100, 450, 300))
 
         self.x_data, self.y_data = [], []
         self.ani, self.x, self.y = None, None, None
         self.R, self.P = None, None
         self.a, self.e = None, None
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(20 * self.w_ratio, 120 * self.h_ratio, 480 * self.w_ratio, 270 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
+        self.make_plot(1, (20, 100, 480, 270))
+        self.figure.subplots_adjust(left=0.115, bottom=0.2, right=0.95, top=0.9)
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Original (blue) and Estimated (red) Signals", fontdict={'fontsize': 10})
@@ -66,46 +64,22 @@ class EEGNoiseCancellation(NNDLayout):
         self.signal, = self.axes_1.plot([], linestyle='--', label="Original Signal", color="blue")
         self.signal.set_data(time, signal)
         self.signal_approx, = self.axes_1.plot([], linestyle='-', label="Approx Signal", color="red")
+        self.axes_1.plot(np.linspace(0, 0.5, 100), [0] * 100, color="gray", linestyle="dashed", linewidth=0.5)
+        self.signal_diff, = self.axes_1.plot([], linestyle='-', label="Signal Difference", color="red")
+        self.axes_1.set_ylabel("Amplitud")
+        self.axes_1.set_xlabel("Time")
         self.canvas.draw()
 
-        self.lr = 0.05
-        self.label_lr = QtWidgets.QLabel(self)
-        self.label_lr.setText("lr: 0.05")
-        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 250 * self.h_ratio,
-                                  self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 20)
-        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_lr.setTickInterval(1)
-        self.slider_lr.setValue(5)
-        self.wid_lr = QtWidgets.QWidget(self)
-        self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 280 * self.h_ratio,
-                                self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_lr.addWidget(self.slider_lr)
-        self.wid_lr.setLayout(self.layout_lr)
+        self.lr = 0.02
+        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 20), QtWidgets.QSlider.TicksBelow, 1, 2,
+                         (25, 410, 480, 50), self.slide, "label_lr", "lr: 0.02", (245, 380, 100, 50))
 
         self.delays = 10
-        self.label_delays = QtWidgets.QLabel(self)
-        self.label_delays.setText("Delays: 10")
-        self.label_delays.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_delays.setGeometry(self.x_chapter_slider_label * self.w_ratio, 350 * self.h_ratio,
-                                      self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_delays = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_delays.setRange(0, 20)
-        self.slider_delays.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_delays.setTickInterval(1)
-        self.slider_delays.setValue(10)
-        self.wid_delays = QtWidgets.QWidget(self)
-        self.layout_delays = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_delays.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
-                                    self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_delays.addWidget(self.slider_delays)
-        self.wid_delays.setLayout(self.layout_delays)
+        self.make_slider("slider_delays", QtCore.Qt.Horizontal, (0, 20), QtWidgets.QSlider.TicksBelow, 1, 10,
+                         (25, 500, 480, 50), self.slide, "label_delays", "Delays: 10", (235, 470, 100, 50))
 
-        self.animation_speed = 100
-        self.label_anim_speed = QtWidgets.QLabel(self)
+        self.animation_speed = 20
+        """self.label_anim_speed = QtWidgets.QLabel(self)
         self.label_anim_speed.setText("Animation Delay: 100 ms")
         self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 450 * self.h_ratio,
@@ -120,18 +94,33 @@ class EEGNoiseCancellation(NNDLayout):
         self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 480 * self.h_ratio,
                                         self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout_anim_speed.addWidget(self.slider_anim_speed)
-        self.wid_anim_speed.setLayout(self.layout_anim_speed)
+        self.wid_anim_speed.setLayout(self.layout_anim_speed)"""
 
         self.w, self.e = None, None
-        self.slider_lr.valueChanged.connect(self.slide)
-        self.slider_delays.valueChanged.connect(self.slide)
-        self.slider_anim_speed.valueChanged.connect(self.slide)
 
-        self.run = QtWidgets.QPushButton("Run", self)
-        self.run.setStyleSheet("font-size:13px")
-        self.run.setGeometry(self.x_chapter_button * self.w_ratio, 550 * self.h_ratio,
-                             self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-        self.run.clicked.connect(self.on_run)
+        self.make_combobox(1, ["Signals", "Difference"], (60, 570, self.w_chapter_button, 50), self.change_plot_type)
+        self.plot_idx = 0
+
+        self.make_button("run", "Run", (300, 580, self.w_chapter_button, 25), self.on_run)
+        self.on_run()
+
+    def change_plot_type(self, idx):
+        self.plot_idx = idx
+        if self.ani:
+            self.ani.event_source.stop()
+        if idx == 0:
+            self.axes_1.set_title("Original (blue) and Estimated (red) Signals", fontdict={'fontsize': 10})
+            self.signal.set_data(time, signal)
+            self.signal_diff.set_data([], [])
+            self.canvas.draw()
+            self.run_animation()
+        elif idx == 1:
+            self.axes_1.set_title("Difference between Original and Estimated Signals", fontdict={'fontsize': 10})
+            self.signal.set_data([], [])
+            self.signal_approx.set_data([], [])
+            self.canvas.draw()
+            self.run_animation_diff()
+        self.canvas.draw()
 
     def on_run(self):
         if self.ani:
@@ -143,13 +132,21 @@ class EEGNoiseCancellation(NNDLayout):
         self.label_lr.setText("lr: " + str(self.lr))
         self.delays = int(self.slider_delays.value())
         self.label_delays.setText("Delays: " + str(self.delays))
-        self.animation_speed = int(self.slider_anim_speed.value()) * 100
-        self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+        # self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.ani:
             self.ani.event_source.stop()
-        self.signal_approx.set_data([], [])
+        if self.plot_idx == 0:
+            self.signal.set_data(time, signal)
+            self.signal_diff.set_data([], [])
+            self.canvas.draw()
+            self.run_animation()
+        elif self.plot_idx == 1:
+            self.signal.set_data([], [])
+            self.signal_approx.set_data([], [])
+            self.canvas.draw()
+            self.run_animation_diff()
         self.canvas.draw()
-        self.run_animation()
 
     def animate_init(self):
         self.R = self.delays + 1
@@ -167,6 +164,26 @@ class EEGNoiseCancellation(NNDLayout):
         self.signal_approx.set_data(time[:idx + 1], self.e[0, :idx + 1])
         return self.signal_approx,
 
+    def animate_init_diff(self):
+        self.R = self.delays + 1
+        self.P = P[:self.R]
+        self.w = np.zeros((1, self.R))
+        self.a, self.e = np.zeros((1, 101)), np.zeros((1, 101))
+        self.signal_diff, = self.axes_1.plot([], linestyle='-', label="Signal Difference", color="red")
+        return self.signal_diff,
+
+    def on_animate_diff(self, idx):
+        p = self.P[:, idx]
+        self.a[0, idx] = np.dot(self.w, p)
+        self.e[0, idx] = T[0, idx] - self.a[0, idx]
+        self.w += self.lr * self.e[0, idx] * p.T
+        self.signal_diff.set_data(time[:idx + 1], (signal - self.e)[0, :idx + 1])
+        return self.signal_diff,
+
     def run_animation(self):
         self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=int(ts),
+                                 interval=self.animation_speed, repeat=False, blit=True)
+
+    def run_animation_diff(self):
+        self.ani = FuncAnimation(self.figure, self.on_animate_diff, init_func=self.animate_init_diff, frames=int(ts),
                                  interval=self.animation_speed, repeat=False, blit=True)
