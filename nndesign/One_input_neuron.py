@@ -16,22 +16,24 @@ class OneInputNeuron(NNDLayout):
         self.fill_chapter("One-Input Neuron", 2, "Alter the weight, bias and\ninput by dragging the\ntriangular"
                                                  " shaped indicators.\n\nPick the transfer function\nwith the f menu."
                                                  "\n\nWatch the change to the\nneuron function and its\noutput.",
-                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/SingleInputNeuron.svg")
+                          PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/SingleInputNeuron.svg",
+                          icon_move_left=-5)
 
         self.make_plot(1)
 
-        self.make_label("label_eq", "a = purelin(w * p + b)", (self.x_chapter_slider_label - 40, 340, 150, 100))
+        # self.make_label("label_eq", "a = purelin(w * p + b)", (self.x_chapter_slider_label - 40, 340, 150, 100))
 
         self.make_slider("slider_w", QtCore.Qt.Horizontal, (-30, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
-                         (self.x_chapter_usual, 430, self.w_chapter_slider, 50), self.graph, "label_w", "w: 1.0")
+                         (self.x_chapter_usual, 340, self.w_chapter_slider, 50), self.graph, "label_w", "w: 1.0")
         self.make_slider("slider_b", QtCore.Qt.Horizontal, (-30, 30), QtWidgets.QSlider.TicksBelow, 1, 0,
-                         (self.x_chapter_usual, 500, self.w_chapter_slider, 50), self.graph, "label_b", "b: 0.0")
+                         (self.x_chapter_usual, 410, self.w_chapter_slider, 50), self.graph, "label_b", "b: 0.0")
 
         self.comboBox1_functions_str = ["purelin", "poslin", 'hardlim', 'hardlims', 'satlin', 'satlins', 'logsig', 'tansig']
-        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 580, self.w_chapter_slider, 50),
+        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 470, self.w_chapter_slider, 50),
                            self.change_transfer_function, "label_f", "f", label_italics=True)
         self.comboBox1_functions = [self.purelin, self.poslin, self.hardlim, self.hardlims, self.satlin, self.satlins, self.logsig, self.tansig]
         self.func1 = self.purelin
+        self.func_idx = 0
 
         self.graph()
 
@@ -64,6 +66,7 @@ class OneInputNeuron(NNDLayout):
         out = func(np.dot(weight, p) + bias)
 
         a.plot(p, out, markersize=3, color="red")
+        a.set_title("$a = {}(w \cdot p + b)$".format(self.comboBox1_functions_str[self.func_idx]))
         # Setting limits so that the point moves instead of the plot.
         # a.set_xlim(-4, 4)
         # a.set_ylim(-2, 2)
@@ -75,5 +78,6 @@ class OneInputNeuron(NNDLayout):
 
     def change_transfer_function(self, idx):
         self.func1 = self.comboBox1_functions[idx]
-        self.label_eq.setText("a = {}(w * p + b)".format(self.comboBox1_functions_str[idx]))
+        self.func_idx = idx
+        # self.label_eq.setText("a = {}(w * p + b)".format(self.comboBox1_functions_str[idx]))
         self.graph()
