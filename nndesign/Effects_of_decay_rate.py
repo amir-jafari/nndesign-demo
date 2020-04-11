@@ -30,13 +30,13 @@ class EffectsOfDecayRate(NNDLayout):
         self.axis.set_title("Hebb Learning")
         self.lines = []
 
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 100,
+        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
                          (20, 580, 470, 50), self.graph, "label_lr", "Learning Rate: 1.00", (210, 555, 200, 50))
-        self.make_slider("slider_dr", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_dr", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
                          (20, 640, 470, 50), self.graph, "label_dr", "Decay Rate: 1.00", (220, 615, 200, 50))
 
-        self.make_button("clear_button", "Clear", (self.x_chapter_button, 300, self.w_chapter_button, self.h_chapter_button), self.on_clear)
-        self.make_button("random_button", "Random", (self.x_chapter_button, 320, self.w_chapter_button, self.h_chapter_button), self.on_random)
+        self.make_button("clear_button", "Clear", (self.x_chapter_button, 320, self.w_chapter_button, self.h_chapter_button), self.on_clear)
+        self.make_button("random_button", "Random", (self.x_chapter_button, 350, self.w_chapter_button, self.h_chapter_button), self.on_random)
 
         self.do_graph = True
 
@@ -44,8 +44,8 @@ class EffectsOfDecayRate(NNDLayout):
 
     def graph(self):
         if self.do_graph:
-            lr = self.slider_lr.value() / 100
-            dr = self.slider_dr.value() / 100
+            lr = self.slider_lr.value() / 10
+            dr = self.slider_dr.value() / 10
             self.label_lr.setText("Learning Rate: " + str(round(lr, 2)))
             self.label_dr.setText("Decay Rate: " + str(round(dr, 2)))
             w = 0
