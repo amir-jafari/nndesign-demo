@@ -13,7 +13,8 @@ class ReciprocalBasis(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(ReciprocalBasis, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Reciprocal Basis", 5, "Click on the plot to\ndefine the basis and the\nvector to be expanded."
+        self.fill_chapter("Reciprocal Basis", 5, "\nClick on the plot to\ndefine the basis {v1, v2}\nand the vector x to be\nexpanded"
+                                                 " in terms\nof {v1, v2}."
                                                  "\n\nClick [Expand] to expand\na new vector.\n\nClick [Start] to\ndefine a new basis.",
                           PACKAGE_PATH + "Logo/Logo_Ch_5.svg", None)
 
@@ -28,7 +29,7 @@ class ReciprocalBasis(NNDLayout):
         self.canvas.draw()
         self.canvas2.draw()
 
-        self.make_label("label_explanation", "", (530, 300, 150, 200))
+        self.make_label("label_explanation", "", (530, 315, 160, 200))
         self.make_label("label_warning", "", (510, 500, 150, 100))
 
         self.remove_vector = True
@@ -168,12 +169,12 @@ class ReciprocalBasis(NNDLayout):
                 if self.axes1_points:
                     self.axes1_points.pop()
         else:
-            explanation = " Your vector x is:\n\n  x = {} * s1 + {} * s2".format(round(self.axes1_points[2][0], 2), round(self.axes1_points[2][1], 2))
+            explanation = " Your vector x is:\n\n x = {} * s1 + {} * s2".format(round(self.axes1_points[2][0], 2), round(self.axes1_points[2][1], 2))
             b = np.array([[self.axes1_points[0][0], self.axes1_points[1][0]],
                           [self.axes1_points[0][1], self.axes1_points[1][1]]])
             x = np.array([[self.axes1_points[2][0]], [self.axes1_points[2][1]]])
             xv = np.dot(np.linalg.inv(b), x)
-            explanation += "\n\n The expansion for x in\nterms of v1 and v2 is:\n\n  x = {} * v1 + {} * v2".format(round(xv[0, 0], 2), round(xv[1, 0], 2))
+            explanation += "\n\n The expansion for x in\n terms of v1 and v2 is:\n\n x = {} * v1 + {} * v2".format(round(xv[0, 0], 2), round(xv[1, 0], 2))
             self.label_explanation.setText(explanation)
             # self.axes2_line1.set_data([0, xv[0, 0] * self.axes1_points[0][0]], [0, xv[0, 0] * self.axes1_points[0][1]])
             # self.axes2_line2.set_data([xv[0, 0] * self.axes1_points[0][0], self.axes1_points[2][0]],
