@@ -18,12 +18,13 @@ class RecurrentNetworkTraining(NNDLayout):
         self.fill_chapter("Recurrent Network Training", 14, "Show the change in\nweight values due to\nthe training of a\n"
                                                             "recurrent network.\n\nClick on the contour plot\nto select the initial\n"
                                                             "weight values.\n\nThe weights will be\nupdated and the network\n"
-                                                            "output will be shown at\nthe upper left figure",
+                                                            "output will be shown at\nthe upper left figure.",
                           PACKAGE_PATH + "Logo/Logo_Ch_14.svg", PACKAGE_PATH + "Figures/nnd14_2.svg",
                           icon_move_left=70, icon_coords=(130, 100, 500, 200), description_coords=(535, 125, 450, 250),
                           icon_rescale=True)
 
         self.make_plot(1, (10, 300, 250, 200))
+        self.figure.subplots_adjust(left=0.15, bottom=0.15)
         self.make_plot(2, (245, 300, 270, 380))
         self.make_plot(3, (10, 480, 250, 200))
 
