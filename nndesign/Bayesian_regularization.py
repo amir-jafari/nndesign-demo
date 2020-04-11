@@ -55,8 +55,8 @@ class BayesianRegularization(NNDLayout):
         self.gamma_list = []
         self.ani_1, self.ani_2, self.ani_3 = None, None, None
         self.W1, self.b1, self.W2, self.b2 = None, None, None, None
-        self.random_state = 42
-        np.random.seed(self.random_state)
+        # self.random_state = 42
+        # np.random.seed(self.random_state)
         self.tt, self.t = None, None
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
@@ -205,7 +205,7 @@ class BayesianRegularization(NNDLayout):
 
     def slide(self):
         self.init_params()
-        np.random.seed(self.random_state)
+        # np.random.seed(self.random_state)
         self.nsd = float(self.slider_nsd.value() / 10)
         self.label_nsd.setText("Noise standard deviation: " + str(self.nsd))
         self.plot_train_test_data()
@@ -236,11 +236,37 @@ class BayesianRegularization(NNDLayout):
         # self.test_points.set_data(p, self.t)
 
     def init_params(self):
-        np.random.seed(self.random_state)
-        self.W1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
-        self.b1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
+        # np.random.seed(self.random_state)
+        # self.W1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
+        # self.b1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
+        pr = np.array([np.min(p), np.max(p)])
+        r = 1
+        magw = 0.7 * self.S1 ** (1 / r)
+        w = magw * self.nnnormr(2 * np.random.uniform(-0.5, 0.5, (self.S1, r)) - 1)
+        if self.S1 == 1:
+            b = 0
+        else:
+            # b = magw*linspace(-1,1,s)'.*sign(w(:,1))
+            b = magw * np.linspace(-1, 1, self.S1).T * np.sign(w[:, 0])
+        x = 2 / (pr[1] - pr[0])
+        y = 1 - pr[1] * x
+        xp = x.T
+        self.b1 = np.dot(w, y) + b.reshape(-1, 1)
+        # w = w.*xp(ones(1,s),:)
+        self.W1 = w * xp
+
         self.W2 = np.random.uniform(-0.5, 0.5, (1, self.S1))
         self.b2 = np.random.uniform(-0.5, 0.5, (1, 1))
+
+    @staticmethod
+    def nnnormr(m):
+        _, mc = m.shape
+        if mc == 1:
+            return m / np.abs(m)
+        else:
+            # return sqrt(ones./(sum((m.*m)')))'*ones(1,mc).*m
+            # return np.sqrt(np.ones())
+            print("!")
 
     def forward(self, sample):
         a0 = sample.reshape(-1, 1)

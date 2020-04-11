@@ -95,7 +95,7 @@ class EarlyStopping(NNDLayout):
                          (self.x_chapter_usual, 400, self.w_chapter_slider, 100), self.slide,
                          "label_nsd", "Noise standard deviation: 1.0", (self.x_chapter_usual + 10, 370, self.w_chapter_slider, 100))
 
-        self.animation_speed = 0
+        self.animation_speed = 100
 
         self.plot_train_test_data()
 

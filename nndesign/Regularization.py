@@ -70,7 +70,7 @@ class Regularization(NNDLayout):
                          "label_nsd", "Noise standard deviation: 1.0",
                          (180, 555, 200, 50))
 
-        self.animation_speed = 100
+        self.animation_speed = 0
 
         self.regularization_ratio = 0.25
         self.make_slider("slider_rer", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 25,
@@ -251,7 +251,7 @@ class Regularization(NNDLayout):
     def slide(self):
         if self.ani:
             self.ani.event_source.stop()
-        np.random.seed(self.random_state)
+        # np.random.seed(self.random_state)
         self.nsd = float(self.slider_nsd.value() / 10)
         self.label_nsd.setText("Noise standard deviation: " + str(self.nsd))
         self.plot_train_test_data()
