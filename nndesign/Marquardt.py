@@ -75,7 +75,8 @@ class Marquardt(NNDLayout):
         self.make_label("label_mu1", "0.01", (self.x_chapter_usual + 10, 590, self.w_chapter_slider, 50))
         self.make_label("label_mu2", "0.10", (self.x_chapter_usual + 150, 590, self.w_chapter_slider, 50))
         self.make_slider("slider_mu", QtCore.Qt.Horizontal, (1, 10), QtWidgets.QSlider.TicksBelow, 1, 1,
-                         (self.x_chapter_usual, 560, self.w_chapter_slider, 50), self.slide, "label_mu", "mu: 0.01")
+                         (self.x_chapter_usual, 560, self.w_chapter_slider, 50), self.slide,
+                         "label_mu", "Initial Mu: 0.01", (self.x_chapter_usual + 50, 530, self.w_chapter_slider, 50))
 
         self.nu = 5
         self.make_label("label_nu1", "1.0", (self.x_chapter_usual + 10, 500, self.w_chapter_slider, 50))
@@ -131,7 +132,7 @@ class Marquardt(NNDLayout):
     def slide(self):
         if self.slider_do:
             self.mu = float(self.slider_mu.value() / 100)
-            self.label_mu.setText("mu: " + str(round(self.mu, 2)))
+            self.label_mu.setText("Initial Mu: " + str(round(self.mu, 2)))
             self.nu = float(self.slider_nu.value() / 10)
             self.label_nu.setText("Constant NU: " + str(self.nu))
             # self.animation_speed = int(self.slider_anim_speed.value()) * 100
