@@ -43,7 +43,7 @@ class ConjugateGradientLineSearch(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(ConjugateGradientLineSearch, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Conjugate Gradient Line Search", 12, "\nUse the radio buttons to\nselect the network\nparameters"
+        self.fill_chapter("Conjugate Gradient Line Search", 12, "\nUse the pop up menu below\nto select the network\nparameters"
                                                                 " to train\nwith backpropagation.\n\nThe corresponding contour\nplot "
                                                                 "is shown below.\n\nClick in the contour graph\nto start "
                                                                 "the conjugate\ngradient line search.",
