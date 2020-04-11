@@ -94,10 +94,10 @@ class HopfieldNetwork(NNDLayout):
 
     def hop(self, t, y):
         a = 2 / np.pi * np.arctan(self.finite_value_gain * np.pi * y * 0.5)
-        return -y + np.dot(self.W, a) + self.b
+        return -y + np.dot(self.W, a) + self.b.reshape(-1)
 
     def hopi(self, t, y):
-        return (0.5 * np.dot(self.W, y.reshape(-1, 1)) + self.b).reshape(-1)
+        return 0.5 * np.dot(self.W, y) + self.b.reshape(-1)
 
     def animate_init(self):
         self.path.set_data(self.x_data, self.y_data)
@@ -107,23 +107,31 @@ class HopfieldNetwork(NNDLayout):
         self.b = np.array([[float(self.d_1.text())], [float(self.d_2.text())]])
         if self.finite_gain:
             self.r = ode(self.hop).set_integrator("zvode")
-            n0 = np.array([2 * np.tan(np.pi * x / 2) / self.finite_value_gain / np.pi,
-                           2 * np.tan(np.pi * y / 2) / self.finite_value_gain / np.pi])
+            n0 = np.array([[2 * np.tan(np.pi * self.x / 2) / self.finite_value_gain / np.pi],
+                           [2 * np.tan(np.pi * self.y / 2) / self.finite_value_gain / np.pi]])
             self.r.set_initial_value(n0, 0)
             t1 = 10
             dt = 0.1
+            n = np.zeros((101, 2))
+            count = 0
             while self.r.successful() and self.r.t < t1:
                 N = self.r.integrate(self.r.t + dt)
-            a = 2 * np.arctan(self.finite_value_gain * np.pi * N / 2) / np.pi
+                n[count, :] = N.reshape(-1)
+                count += 1
+            a = 2 * np.arctan(self.finite_value_gain * np.pi * n / 2) / np.pi
         else:
             self.r = ode(self.hopi).set_integrator("zvode")
             n0 = np.array([[self.x], [self.y]])
             self.r.set_initial_value(n0, 0)
             t1 = 10
             dt = 0.1
+            n = np.zeros((101, 2))
+            count = 0
             while self.r.successful() and self.r.t < t1:
                 N = self.r.integrate(self.r.t + dt)
-            a = N * (N < 1) * 1 + (N >= 1) * 1
+                n[count, :] = N.reshape(-1)
+                count += 1
+            a = n * (n < 1) * 1 + (n >= 1) * 1
         self.a = a * (a > -1) * 1 - (a <= -1) * 1
         return self.path,
 
@@ -138,7 +146,7 @@ class HopfieldNetwork(NNDLayout):
             self.x_data, self.y_data = [event.xdata], [event.ydata]
             self.x, self.y = event.xdata, event.ydata
             self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=100,
-                                     interval=100, repeat=False, blit=True)
+                                     interval=20, repeat=False, blit=True)
 
     def change_gain(self, idx):
         self.finite_gain = idx == 0
@@ -167,7 +175,10 @@ class HopfieldNetwork(NNDLayout):
                         temp2 = -np.inf
                     else:
                         temp2 = np.log(np.clip(temp1, 0.001, 100))
+                        # temp2 = np.log(temp1)
                     F[i, j] = F[i, j] - 4 / (finite_value_gain * np.pi ** 2) * temp2
+        # F[0, -1] = 22.6143
+        # F[-1, :] = np.array(list(F[0, :].reshape(-1))[::-1])
 
         # Removes stuff
         while self.axes_1.collections:
@@ -193,6 +204,6 @@ class HopfieldNetwork(NNDLayout):
         XX, YY = np.meshgrid(xx, yy)
         F = F[indxx, :]
         F = F[:, indyy]
-        self.axes_2.plot_surface(XX, YY, F, color="blue")
+        self.axes_2.plot_surface(XX, YY, F, color="cyan")
         self.canvas.draw()
         self.canvas2.draw()
