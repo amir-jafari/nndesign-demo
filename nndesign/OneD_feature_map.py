@@ -61,6 +61,8 @@ class OneDFeatureMap(NNDLayout):
         self.axis1.set_xlim(-1, 1)
         self.axis1.set_ylim(-1, 1)
         self.axis1.plot(zz[0, :], zz[1, :])
+        self.axis1.set_xticks([])
+        self.axis1.set_yticks([])
         self.lines = []
         self.lines_anim = []
         self.canvas.draw()

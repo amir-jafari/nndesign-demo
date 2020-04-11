@@ -38,7 +38,7 @@ class CompetitiveLearning(NNDLayout):
         self.p_points_1, = self.axes_1.plot([], ".", color="r")
         self.p_points_2, = self.axes_1.plot([], ".", color="g")
         self.p_points_3, = self.axes_1.plot([], ".", color="black")
-        self.p_point_higlight, = self.axes_1.plot([], "*", color="blue")
+        self.p_point_higlight, = self.axes_1.plot([], "*", color="blue", markersize=12)
         self.P = None
 
         self.W_1 = [np.sqrt(0.5), np.sqrt(0.5)]
@@ -76,8 +76,11 @@ class CompetitiveLearning(NNDLayout):
         if self.ani:
             self.ani.event_source.stop()
         self.W_1 = [np.random.uniform(-1, 1), np.random.uniform(-1, 1)]
+        self.W_1 /= np.linalg.norm(self.W_1)
         self.W_2 = [np.random.uniform(-1, 1), np.random.uniform(-1, 1)]
+        self.W_2 /= np.linalg.norm(self.W_2)
         self.W_3 = [np.random.uniform(-1, 1), np.random.uniform(-1, 1)]
+        self.W_3 /= np.linalg.norm(self.W_3)
         self.update_plot()
         self.canvas.draw()
 
@@ -104,13 +107,9 @@ class CompetitiveLearning(NNDLayout):
         self.p_points_3.set_data(x_3_data[:], y_3_data[:])
 
     def animate_init_train(self):
-        # np.random.shuffle(self.P.T)
-        # print(self.P)
         return self.axes1_w1, self.axes1_w2, self.axes1_w3, self.p_points_1, self.p_points_2, self.p_points_3, self.p_point_higlight, self.axes1_proj_line
 
     def on_animate_train(self, idx):
-        if idx == 0:
-            np.random.shuffle(self.P.T)
         if idx % 2 != 0:
             self.p_point_higlight.set_data([], [])
             self.axes1_proj_line.set_data([], [])
@@ -118,6 +117,7 @@ class CompetitiveLearning(NNDLayout):
         else:
             idx = int(idx / 2)
             p = self.P[:, idx]
+            print(p)
             a = self.compet(np.dot(self.W, p[..., None]), axis=0)
             self.p_point_higlight.set_data([self.P[0, idx]], [self.P[1, idx]])
             if np.argmax(a) == 0:
@@ -135,8 +135,12 @@ class CompetitiveLearning(NNDLayout):
         return self.axes1_w1, self.axes1_w2, self.axes1_w3, self.p_points_1, self.p_points_2, self.p_points_3, self.p_point_higlight, self.axes1_proj_line
 
     def on_run(self):
-        # np.random.shuffle(self.P.T)
-        # print(self.P)
+        seed = np.random.randint(1, 1000)
+        np.random.seed(seed)
+        np.random.shuffle(self.p_x)
+        np.random.seed(seed)
+        np.random.shuffle(self.p_y)
+        self.update_plot()
         if self.ani:
             self.ani.event_source.stop()
         self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=2 * self.P.shape[1],
@@ -145,8 +149,11 @@ class CompetitiveLearning(NNDLayout):
         self.canvas.draw()
 
     def on_learn(self):
-        # np.random.shuffle(self.P.T)
-        # print(self.P)
+        seed = np.random.randint(1, 1000)
+        np.random.seed(seed)
+        np.random.shuffle(self.p_x)
+        np.random.seed(seed)
+        np.random.shuffle(self.p_y)
         if self.ani:
             self.ani.event_source.stop()
         self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=2,
