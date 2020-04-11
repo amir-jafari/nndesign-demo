@@ -14,44 +14,51 @@ class DynamicDerivatives(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(DynamicDerivatives, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Dynamic Derivatives", 14, "Show the meaning of\ndynamic derivatives.\n\nSelect the input and"
+        self.fill_chapter("Dynamic Derivatives", 14, "\n\nOriginal responses - black\ndots.\n"
+                                                     "Incremental responses - blue\ncrosses.\n"
+                                                     "Total derivatives - blue\ndiamonds.\nStatic derivatives"
+                                                     "- black\nsquares.\n\nSelect the input and"
                                                      "\nfrequency to the IIR\nnetwork.\n\nUse the sliders to alter\n"
                                                      "the network weights.",  # \n\n"
                                              # "Click on [Random] to set\neach parameter to\a random value.\n\n"
                                              # "Click on [Reset] to\ninitialize the parameters",
                           PACKAGE_PATH + "Logo/Logo_Ch_14.svg", PACKAGE_PATH + "Figures/nnd14_2.svg",
-                          icon_move_left=70, icon_coords=(130, 100, 500, 200), description_coords=(535, 100, 450, 250),
+                          icon_move_left=70, icon_coords=(130, 100, 500, 200), description_coords=(535, 100, 450, 300),
                           icon_rescale=True)
 
         self.make_plot(1, (15, 300, 250, 200))
+        self.figure.subplots_adjust(left=0.15, bottom=0.2)
         self.make_plot(2, (250, 300, 250, 200))
+        self.figure2.subplots_adjust(left=0.15, bottom=0.2)
         self.make_plot(3, (15, 480, 250, 200))
+        self.figure3.subplots_adjust(left=0.15, bottom=0.2)
         self.make_plot(4, (250, 480, 250, 200))
+        self.figure4.subplots_adjust(left=0.15, bottom=0.2)
 
         self.comboBox1_functions_str = ["square", 'sine']
-        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 495, self.w_chapter_slider, 100),
+        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 515, self.w_chapter_slider, 100),
                            self.change_transfer_function,
-                           "label_f", "f", (self.x_chapter_slider_label + 20, 465, 150, 100))
+                           "label_f", "f", (self.x_chapter_slider_label + 20, 495, 150, 100))
         self.func1 = "square"
 
         self.comboBox2_divs = ["1/16", '1/14', '1/12', '1/10', '1/8']
-        self.make_combobox(2, self.comboBox2_divs, (self.x_chapter_usual, 590, self.w_chapter_slider, 50),
+        self.make_combobox(2, self.comboBox2_divs, (self.x_chapter_usual, 600, self.w_chapter_slider, 50),
                            self.change_freq,
-                           "label_div", "frequency", (self.x_chapter_slider_label, 560, 150, 50))
+                           "label_div", "frequency", (self.x_chapter_slider_label, 580, 150, 50))
         self.freq = 1 / 12
 
         self.make_slider("slider_w0", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 5,
-                         (self.x_chapter_usual, 330, self.w_chapter_slider, 50), self.graph, "label_w0", "iW(0): 0.5")
+                         (self.x_chapter_usual, 420, self.w_chapter_slider, 50), self.graph, "label_w0", "iW(0): 0.5")
 
         self.make_slider("slider_w1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, -5,
-                         (self.x_chapter_usual, 400, self.w_chapter_slider, 50), self.graph, "label_w1", "lW(1): -0.5")
+                         (self.x_chapter_usual, 490, self.w_chapter_slider, 50), self.graph, "label_w1", "lW(1): -0.5")
 
-        self.graph()
+        self.comboBox2.setCurrentIndex(2)
 
     def graph(self):
 
-        a4 = self.figure.add_subplot(1, 1, 1)
-        a = self.figure2.add_subplot(1, 1, 1)
+        a = self.figure.add_subplot(1, 1, 1)
+        a4 = self.figure2.add_subplot(1, 1, 1)
         a2 = self.figure3.add_subplot(1, 1, 1)
         a3 = self.figure4.add_subplot(1, 1, 1)
         a.clear()  # Clear the plot
@@ -64,8 +71,8 @@ class DynamicDerivatives(NNDLayout):
         a4.set_xlim(0, 25)
         a4.set_title("Incremental Response iw + 0.1", fontsize=10)
         a.set_title("Incremental Response lw + 0.1", fontsize=10)
-        a3.set_title("Derivative with respect to iw", fontsize=10)
-        a2.set_title("Derivative with respect to lw", fontsize=10)
+        a3.set_title("Derivative with respect to lw", fontsize=10)
+        a2.set_title("Derivative with respect to iw", fontsize=10)
         # if not self.autoscale:
         #     a.set_xlim(0, 25)
         #     a.set_ylim(-6, 6)
@@ -112,14 +119,13 @@ class DynamicDerivatives(NNDLayout):
         zi = np.array([a0])
         A = lfilter(num, den, p, zi=zi)
         # a.scatter(t, p, color="white", marker="o", edgecolor="red")
-        a.scatter(t1, [a0] + list(A[0]), color="blue", marker="x")
+        a.scatter(t1, [a0] + list(A[0]), color="black", marker=".", s=[1] * len(t1))
         lw111 = weight_1
         iw11 = weight_0 + 0.1
         num = np.array([iw11])
         den = np.array([1, lw111])
         a1 = lfilter(num, den, p, zi=zi)
-        a.scatter(t1, [a0] + list(a1[0]), color="blue", marker=".", s=[1] * len(t1))
-
+        a.scatter(t1, [a0] + list(a1[0]), color="blue", marker="x")
         da_diw_0 = 0
         da_diw = lfilter(np.array([1]), den, p, zi=np.array([da_diw_0]))
         a2.scatter(t1, [da_diw_0] + list(da_diw[0]), color="white", marker="D", edgecolor="blue")
@@ -131,13 +137,13 @@ class DynamicDerivatives(NNDLayout):
         a3.scatter(t1, [da_dlw_0] + list(da_dlw[0]), color="white", marker="D", edgecolor="blue")
         a3.scatter(t, ad, color="white", marker="s", edgecolor="black", s=[8]*len(t))
 
-        a4.scatter(t1, [a0] + list(A[0]), color="blue", marker="x")
+        a4.scatter(t1, [a0] + list(A[0]), color="black", marker=".", s=[1] * len(t1))
         lw111 = weight_1 + .1
         iw11 = weight_0
         num = np.array([iw11])
         den = np.array([1, lw111])
         a1 = lfilter(num, den, p, zi=zi)
-        a4.scatter(t1, [a0] + list(a1[0]), color="blue", marker=".", s=[1] * len(t1))
+        a4.scatter(t1, [a0] + list(a1[0]), color="blue", marker="x")
 
         # Setting limits so that the point moves instead of the plot.
         # a.set_xlim(-4, 4)
