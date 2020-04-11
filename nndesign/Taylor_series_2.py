@@ -1,12 +1,7 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
-
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 
 from nndesign_layout import NNDLayout
@@ -34,12 +29,13 @@ class TaylorSeries2(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(TaylorSeries2, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Taylor Series #2", 8, "Click in the top-left graph to\ncreate a Taylor series\napproximation."
-                                                 "\n\nSelect the approximation\norder below.",
+        self.fill_chapter("Taylor Series #2", 8, "\nClick in the top-left graph to\ncreate a Taylor series\napproximation."
+                                                 "\n\nYou can rotate the 3D plots\nby clicking and dragging\n"
+                                                 "in the plot window.\n\nSelect the approximation\norder below.",
                           PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None)
 
         self.order, self.x, self.y = 2, None, None
-        self.make_combobox(1, ["Order 0", "Order 1", "Order 2"], (self.x_chapter_usual, 250, self.w_chapter_slider, 100),
+        self.make_combobox(1, ["Order 0", "Order 1", "Order 2"], (self.x_chapter_usual, 300, self.w_chapter_slider, 100),
                            self.change_approx_order)
         self.comboBox1.setCurrentIndex(self.order)
 
@@ -51,7 +47,7 @@ class TaylorSeries2(NNDLayout):
         self.x_data, self.y_data = [], []
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.contour(X, Y, F, colors="blue")
+        self.axes_1.contour(X, Y, F, colors='blue')
         self.axes_1.set_title("Function", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
@@ -162,7 +158,7 @@ class TaylorSeries2(NNDLayout):
             Fa += gradient[0, 0] * dX + gradient[1, 0] * dY + Fo
         Fa[Fa < 0] = 0
         Fa[Fa > 12] = 12
-        self.axes_2.contour(X, Y, Fa)
+        self.axes_2.contour(X, Y, Fa, colors="blue")
         self.canvas2.draw()
 
         # Removes surface from fourth plot
@@ -180,5 +176,5 @@ class TaylorSeries2(NNDLayout):
             Fa += gradient[0, 0] * dXX + gradient[1, 0] * dYY + Fo
         Fa[Fa < 0] = 0
         Fa[Fa > 12] = 12
-        self.axis2.plot_surface(XX, YY, Fa, color="blue")
+        self.axis2.plot_surface(XX, YY, Fa, color='#1f77b4')
         self.canvas4.draw()

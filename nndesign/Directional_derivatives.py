@@ -41,18 +41,18 @@ class DirectionalDerivatives(NNDLayout):
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
         self.make_slider("slider_dirder", QtCore.Qt.Vertical, (-60, 60), QtWidgets.QSlider.NoTicks, 1, 0,
-                         (self.x_chapter_usual + 70, 120, self.w_chapter_slider, 310), self.freeze,
-                         "label_dirder", "Directional Derivative", (self.x_chapter_slider_label - 40, 400, 200, 100))
+                         (self.x_chapter_usual + 70, 150, self.w_chapter_slider, 310), self.freeze,
+                         "label_dirder", "Directional Derivative", (self.x_chapter_slider_label - 40, 430, 200, 100))
         self.dir_der = 0
         for i in range(5):
-            self.make_label("scale_{}".format(i), str(6 - i * 3) + "  -", (self.x_chapter_slider_label - 15, 125 + 62 * i, 50, 50))
+            self.make_label("scale_{}".format(i), str(6 - i * 3) + "  -", (self.x_chapter_slider_label - 15, 155 + 62 * i, 50, 50))
 
     def freeze(self):
         self.slider_dirder.setValue(self.dir_der * 10)
 
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:
-            self.label_dirder.setGeometry((self.x_chapter_slider_label - 60) * self.w_ratio, 400 * self.h_ratio,
+            self.label_dirder.setGeometry((self.x_chapter_slider_label - 60) * self.w_ratio, 430 * self.h_ratio,
                                           200 * self.w_ratio, 100 * self.h_ratio)
             self.point.set_data([event.xdata], [event.ydata])
             self.line_data_x, self.line_data_y = [event.xdata], [event.ydata]

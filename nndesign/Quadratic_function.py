@@ -19,9 +19,10 @@ class QuadraticFunction(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(QuadraticFunction, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Taylor Series", 8, "Change the values of the\nHessian matrix A, the\nvector d, and the constant c.\n"
+        self.fill_chapter("Taylor Series", 8, "\n\nChange the values of the\nHessian matrix A, the\nvector d, and the constant c.\n"
                                               "Then click [Update] to see\nthe new function.\n\nNote that the Hessian matrix\n"
-                                              "will always be symmetric.",
+                                              "will always be symmetric.\n\nYou can rotate the 3D plots\nby clicking and dragging\n"
+                                              "in the plot window.",
                           PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None)
 
         self.make_plot(1, (20, 120, 230, 230))
@@ -61,7 +62,7 @@ class QuadraticFunction(NNDLayout):
         self.paint_latex_string("latex_c3", "$]$", 16, (500 - 5, 415 + 30, 500, 200))
         self.make_input_box("c", "1.0", (460 - 5, 465 + 30, 60, 100))
 
-        self.make_button("run_button", "Update", (self.x_chapter_button, 310, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Update", (self.x_chapter_button, 350, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
         self.on_run()
 
