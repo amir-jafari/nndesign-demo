@@ -11,88 +11,125 @@ from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
 
 
-p1, p2 = np.arange(-5, 5, 0.01), np.arange(-5, 5, 0.01)
+p1, p2 = np.arange(-5, 5, 0.05), np.arange(-5, 5, 0.05)
 pp1, pp2 = np.meshgrid(p1, p2)
 
 
 class PatternClassification(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(PatternClassification, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=True)
+        super(PatternClassification, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("RBF Pattern Classification", 17, "Alter the network's\nparameters by dragging\nthe slide bars.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_17.svg", None, description_coords=(535, 90, 450, 160))
+        self.fill_chapter("RBF Pattern Classification", 17, "\nAlter the network's\nparameters by dragging\nthe slide bars.\n\n"
+                                                            "Click on [Random]/[Reset]\nto set each parameter\nto a random/original value.\n\n"
+                                                            "You can rotate the 3D plots\nby clicking and dragging\n"
+                                                            "in the plot window.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_17.svg", PACKAGE_PATH + "Figures/nnd17_1.svg",
+                          icon_move_left=120, icon_coords=(130, 150, 500, 200), description_coords=(535, 90, 450, 300))
 
         # self.label_eq = QtWidgets.QLabel(self)
         # self.label_eq.setText("a = purelin(w2 * tansig(w1 * p + b1) + b2))")
         # self.label_eq.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         # self.label_eq.setGeometry(180 * self.w_ratio, 270 * self.h_ratio, (self.w_chapter_slider + 100) * self.w_ratio, 50 * self.h_ratio)
 
-        self.make_plot(1, (120, 120, 270, 270))
-        self.make_plot(2, (120, 390, 270, 270))
+        self.make_plot(1, (5, 400, 260, 260))
+        self.make_plot(2, (255, 400, 260, 260))
+        self.figure2.subplots_adjust(left=0.15, bottom=0.175, right=0.95)
 
-        self.make_slider("slider_w1_1", QtCore.Qt.Horizontal, (-4, 4), QtWidgets.QSlider.TicksBelow, 1, -1,
-                         (self.x_chapter_usual, 140, self.w_chapter_slider, 50), self.graph, "label_w1_1", "W1(1,1)")
-        self.make_slider("slider_w1_2", QtCore.Qt.Horizontal, (-4, 4), QtWidgets.QSlider.TicksBelow, 1, 1,
-                         (self.x_chapter_usual, 200, self.w_chapter_slider, 50), self.graph, "label_w1_2", "W1(2,1)")
-        self.make_slider("slider_b1_1", QtCore.Qt.Horizontal, (-2, 2), QtWidgets.QSlider.TicksBelow, 1, 2,
-                         (self.x_chapter_usual, 270, self.w_chapter_slider, 50), self.graph, "label_b1_1", "b1(1)")
-        self.make_slider("slider_b1_2", QtCore.Qt.Horizontal, (-2, 2), QtWidgets.QSlider.TicksBelow, 1, 2,
-                         (self.x_chapter_usual, 310, self.w_chapter_slider, 50), self.graph, "label_b1_2", "b1(2)")
-        self.make_slider("slider_w2_1", QtCore.Qt.Horizontal, (-2, 2), QtWidgets.QSlider.TicksBelow, 1, 2,
-                         (self.x_chapter_usual, 410, self.w_chapter_slider, 50), self.graph, "label_w2_1", "W2(1,1)")
-        self.make_slider("slider_w2_2", QtCore.Qt.Horizontal, (-2, 2), QtWidgets.QSlider.TicksBelow, 1, 2,
-                         (self.x_chapter_usual, 480, self.w_chapter_slider, 50), self.graph, "label_w2_2", "W2(1,2)")
-        self.make_slider("slider_b2", QtCore.Qt.Horizontal, (-2, 2), QtWidgets.QSlider.TicksBelow, 1, -2,
-                         (self.x_chapter_usual, 550, self.w_chapter_slider, 50), self.graph, "label_b2", "b2")
+        self.make_slider("slider_w1_1", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, 10,
+                         (10, 115, 150, 50), self.graph, "label_w1_1", "W1(1,1)", (50, 115 - 25, 100, 50))
+        self.slider_w1_1.sliderPressed.connect(self.slider_disconnect)
+        self.slider_w1_1.sliderReleased.connect(self.slider_reconnect)
 
-        self.labelw1_12 = QtWidgets.QLabel(self)
-        self.labelw1_12.setText("w1_12")
-        self.labelw1_12.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.labelw1_12.setGeometry(self.x_chapter_slider_label * self.w_ratio, 590 * self.h_ratio,
-                                  self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.sliderw1_12 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        # self.sliderw1_12.setRange(-40, 40)
-        self.sliderw1_12.setRange(-4, 4)
-        self.sliderw1_12.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        # self.sliderw1_12.setTickInterval(10)
-        # self.sliderw1_12.setValue(10)
-        self.sliderw1_12.setTickInterval(1)
-        self.sliderw1_12.setValue(1)
+        self.make_slider("slider_w1_2", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, -10,
+                         (10, 360, 150, 50), self.graph, "label_w1_2", "W1(2,1)", (50, 360 - 25, 100, 50))
+        self.slider_w1_2.sliderPressed.connect(self.slider_disconnect)
+        self.slider_w1_2.sliderReleased.connect(self.slider_reconnect)
 
-        self.widw1_12 = QtWidgets.QWidget(self)
-        self.layoutw1_12 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.widw1_12.setGeometry(self.x_chapter_usual * self.w_ratio, 620 * self.h_ratio,
-                                self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layoutw1_12.addWidget(self.sliderw1_12)
-        self.widw1_12.setLayout(self.layoutw1_12)
+        self.make_slider("slider_b1_1", QtCore.Qt.Horizontal, (-10, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
+                         (170, 115, 150, 50), self.graph, "label_b1_1", "b1(1):", (210, 115 - 25, 100, 50))
+        self.slider_b1_1.sliderPressed.connect(self.slider_disconnect)
+        self.slider_b1_1.sliderReleased.connect(self.slider_reconnect)
 
-        self.labelw1_22 = QtWidgets.QLabel(self)
-        self.labelw1_22.setText("w1_22")
-        self.labelw1_22.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.labelw1_22.setGeometry(450 * self.w_ratio, 300 * self.h_ratio,
-                                    self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.sliderw1_22 = QtWidgets.QSlider(QtCore.Qt.Vertical)
-        # self.sliderw1_22.setRange(-40, 40)
-        self.sliderw1_22.setRange(-4, 4)
-        self.sliderw1_22.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        # self.sliderw1_22.setTickInterval(10)
-        # self.sliderw1_22.setValue(-10)
-        self.sliderw1_22.setTickInterval(1)
-        self.sliderw1_22.setValue(-1)
+        self.make_slider("slider_b1_2", QtCore.Qt.Horizontal, (-10, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
+                         (170, 360, 150, 50), self.graph, "label_b1_2", "b1(2):", (210, 360 - 25, 100, 50))
+        self.slider_b1_2.sliderPressed.connect(self.slider_disconnect)
+        self.slider_b1_2.sliderReleased.connect(self.slider_reconnect)
 
-        self.widw1_22 = QtWidgets.QWidget(self)
-        self.layoutw1_22 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.widw1_22.setGeometry(450 * self.w_ratio, 370 * self.h_ratio,
-                                  self.w_chapter_slider * self.w_ratio, 200 * self.h_ratio)
-        self.layoutw1_22.addWidget(self.sliderw1_22)
-        self.widw1_22.setLayout(self.layoutw1_22)
+        self.make_slider("slider_w2_1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 20,
+                         (330, 115, 150, 50), self.graph, "label_w2_1", "W2(1,1):", (370, 115 - 25, 100, 50))
+        self.slider_w2_1.sliderPressed.connect(self.slider_disconnect)
+        self.slider_w2_1.sliderReleased.connect(self.slider_reconnect)
 
-        self.sliderw1_12.valueChanged.connect(self.graph)
-        self.sliderw1_22.valueChanged.connect(self.graph)
+        self.make_slider("slider_w2_2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 20,
+                         (330, 360, 150, 50), self.graph, "label_w2_2", "W2(1,2):", (370, 360 - 25, 100, 50))
+        self.slider_w2_2.sliderPressed.connect(self.slider_disconnect)
+        self.slider_w2_2.sliderReleased.connect(self.slider_reconnect)
 
+        self.make_slider("slider_b2", QtCore.Qt.Horizontal, (-10, 10), QtWidgets.QSlider.TicksBelow, 1, -10,
+                         (self.x_chapter_usual, 380, self.w_chapter_slider, 50), self.graph, "label_b2", "b2: -1.0")
+        self.slider_b2.sliderPressed.connect(self.slider_disconnect)
+        self.slider_b2.sliderReleased.connect(self.slider_reconnect)
+
+        self.make_slider("slider_w1_12", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, -10,
+                         (self.x_chapter_usual, 450, self.w_chapter_slider, 50), self.graph, "label_w1_12", "W1(1,2): 1")
+        self.slider_w1_12.sliderPressed.connect(self.slider_disconnect)
+        self.slider_w1_12.sliderReleased.connect(self.slider_reconnect)
+
+        self.make_slider("slider_w1_22", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, 10,
+                         (self.x_chapter_usual, 520, self.w_chapter_slider, 50), self.graph, "label_w1_22", "W1(2,2): 1")
+        self.slider_w1_22.sliderPressed.connect(self.slider_disconnect)
+        self.slider_w1_22.sliderReleased.connect(self.slider_reconnect)
+
+        self.make_button("random_button", "Random", (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.on_random)
+        self.make_button("random_button", "Reset", (self.x_chapter_button, 610, self.w_chapter_button, self.h_chapter_button), self.on_reset)
+
+        self.do_graph = True
         self.graph()
+        self.do_graph = False
+
+    def slider_disconnect(self):
+        self.sender().valueChanged.disconnect()
+
+    def slider_reconnect(self):
+        self.do_graph = True
+        self.sender().valueChanged.connect(self.graph)
+        self.sender().valueChanged.emit(self.sender().value())
+        self.do_graph = False
+
+    def on_random(self):
+        self.do_graph = False
+        self.slider_w1_1.setValue(np.random.uniform(-40, 40))
+        self.slider_w1_2.setValue(np.random.uniform(-40, 40))
+        self.slider_w1_12.setValue(np.random.uniform(-40, 40))
+        self.slider_w1_22.setValue(np.random.uniform(-40, 40))
+        self.slider_b1_1.setValue(np.random.uniform(-10, 10))
+        self.slider_b1_2.setValue(np.random.uniform(-10, 10))
+        self.slider_w2_1.setValue(np.random.uniform(-20, 20))
+        self.slider_w2_2.setValue(np.random.uniform(-20, 20))
+        self.slider_b2.setValue(np.random.uniform(-10, 10))
+        self.do_graph = True
+        self.graph()
+        self.do_graph = False
+
+    def on_reset(self):
+        self.do_graph = False
+        self.slider_w1_1.setValue(10)
+        self.slider_w1_2.setValue(-10)
+        self.slider_w1_12.setValue(-10)
+        self.slider_w1_22.setValue(10)
+        self.slider_b1_1.setValue(10)
+        self.slider_b1_2.setValue(10)
+        self.slider_w2_1.setValue(20)
+        self.slider_w2_2.setValue(20)
+        self.slider_b2.setValue(-20)
+        self.do_graph = True
+        self.graph()
+        self.do_graph = False
 
     def graph(self):
+
+        if not self.do_graph:
+            return
 
         a = Axes3D(self.figure)
         a.clear()
@@ -103,15 +140,15 @@ class PatternClassification(NNDLayout):
         a.set_ylabel("$p2$")
         a.set_zlabel("$a$")
 
-        weight1_1 = self.slider_w1_1.value()  # / 10
-        weight1_2 = self.slider_w1_2.value()  # / 10
-        bias1_1 = self.slider_b1_1.value() / 2  # / 10
-        bias1_2 = self.slider_b1_2.value() / 2  # / 10
-        weight2_1 = self.slider_w2_1.value()  # / 10
-        weight2_2 = self.slider_w2_2.value()  # / 10
-        bias2 = self.slider_b2.value() / 2  # / 10
-        weight1_12 = self.sliderw1_12.value()  # / 10
-        weight1_22 = self.sliderw1_22.value()  # / 10
+        weight1_1 = self.slider_w1_1.value() / 10
+        weight1_2 = self.slider_w1_2.value() / 10
+        bias1_1 = self.slider_b1_1.value() / 10
+        bias1_2 = self.slider_b1_2.value() / 10
+        weight2_1 = self.slider_w2_1.value() / 10
+        weight2_2 = self.slider_w2_2.value() / 10
+        bias2 = self.slider_b2.value() / 10
+        weight1_12 = self.slider_w1_12.value() / 10
+        weight1_22 = self.slider_w1_22.value() / 10
 
         self.label_w1_1.setText("W1(1,1): " + str(weight1_1))
         self.label_w1_2.setText("W1(2,1): " + str(weight1_2))
@@ -120,8 +157,8 @@ class PatternClassification(NNDLayout):
         self.label_w2_1.setText("W2(1,1): " + str(weight2_1))
         self.label_w2_2.setText("W2(1,2): " + str(weight2_2))
         self.label_b2.setText("b2: " + str(bias2))
-        self.labelw1_12.setText("w1_12: " + str(weight1_12))
-        self.labelw1_22.setText("w1_22: " + str(weight1_22))
+        self.label_w1_12.setText("W1(1,2): " + str(weight1_12))
+        self.label_w1_22.setText("W1(2,2): " + str(weight1_22))
 
         weight_1, bias_1 = np.array([[weight1_1, weight1_2]]), np.array([[bias1_1, bias1_2]])
         weight_2, bias_2 = np.array([[weight2_1], [weight2_2]]), np.array([[bias2]])
@@ -137,6 +174,8 @@ class PatternClassification(NNDLayout):
         a.set_xticks([-5, 0, 5])
         a.set_yticks([-5, 0, 5])
         a.set_zticks([-2, -1, 0, 1])
+        a.set_xlabel("$p1$")
+        a.set_ylabel("$p2$")
         self.canvas.draw()
 
         b = self.figure2.add_subplot(1, 1, 1)
@@ -169,4 +208,6 @@ class PatternClassification(NNDLayout):
         if col_start and not col_end:
             col_end = len(out_gray)"""
         b.contourf(pp1, pp2, out_gray, cmap=plt.cm.Paired, alpha=0.6)
+        b.set_xlabel("$p1$")
+        b.set_ylabel("$p2$")
         self.canvas2.draw()
