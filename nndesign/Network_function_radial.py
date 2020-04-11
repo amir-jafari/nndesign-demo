@@ -15,29 +15,33 @@ class NetworkFunctionRadial(NNDLayout):
 
         self.make_plot(1, (10, 400, 500, 250))
 
-        self.fill_chapter("Network Function", 17, "Alter the network's\nparameters by dragging\nthe slide bars.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_17.svg", None, description_coords=(535, 90, 450, 160))
+        self.fill_chapter("Network Function", 17, "Alter the network's\nparameters by dragging\nthe slide bars.\n\n"
+                                                  "Click on [Random] to\nset each parameter\nto a random value.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_17.svg", PACKAGE_PATH + "Figures/nnd17_1.svg",
+                          icon_move_left=120, icon_coords=(130, 150, 500, 200), description_coords=(535, 120, 450, 160))
 
         self.make_slider("slider_w1_1", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, -10,
-                         (self.x_chapter_usual, 140, self.w_chapter_slider, 50), self.graph, "label_w1_1", "W1(1,1)")
+                         (10, 115, 150, 50), self.graph, "label_w1_1", "W1(1,1)", (50, 115 - 25, 100, 50))
 
         self.make_slider("slider_w1_2", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, 10,
-                         (self.x_chapter_usual, 200, self.w_chapter_slider, 50), self.graph, "label_w1_2", "W1(2,1)")
+                         (10, 360, 150, 50), self.graph, "label_w1_2", "W1(2,1)", (50, 360 - 25, 100, 50))
 
         self.make_slider("slider_b1_1", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, 20,
-                         (self.x_chapter_usual, 270, self.w_chapter_slider, 50), self.graph, "label_b1_1", "b1(1)")
+                         (170, 115, 150, 50), self.graph, "label_b1_1", "b1(1):", (210, 115 - 25, 100, 50))
 
         self.make_slider("slider_b1_2", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, 20,
-                         (self.x_chapter_usual, 310, self.w_chapter_slider, 50), self.graph, "label_b1_2", "b1(2)")
+                         (170, 360, 150, 50), self.graph, "label_b1_2", "b1(2):", (210, 360 - 25, 100, 50))
 
         self.make_slider("slider_w2_1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 10, 10,
-                         (self.x_chapter_usual, 410, self.w_chapter_slider, 50), self.graph, "label_w2_1", "W2(1,1)")
+                         (330, 115, 150, 50), self.graph, "label_w2_1", "W2(1,1):", (370, 115 - 25, 100, 50))
 
         self.make_slider("slider_w2_2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 10, 10,
-                         (self.x_chapter_usual, 480, self.w_chapter_slider, 50), self.graph, "label_w2_2", "W2(1,2)")
+                         (330, 360, 150, 50), self.graph, "label_w2_2", "W2(1,2):", (370, 360 - 25, 100, 50))
 
         self.make_slider("slider_b2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 10, 0,
-                         (self.x_chapter_usual, 550, self.w_chapter_slider, 50), self.graph, "label_b2", "b2")
+                         (self.x_chapter_usual, 290, self.w_chapter_slider, 50), self.graph, "label_b2", "b2: 0.0")
+
+        self.make_button("random_button", "Random", (self.x_chapter_button, 350, self.w_chapter_button, self.h_chapter_button), self.on_random)
 
         self.graph()
 
@@ -106,3 +110,13 @@ class NetworkFunctionRadial(NNDLayout):
         # a.axhline(y=0, color='k')
         # a.axvline(x=0, color='k')
         self.canvas.draw()
+
+    def on_random(self):
+        self.slider_w1_1.setValue(np.random.uniform(-40, 40))
+        self.slider_w1_2.setValue(np.random.uniform(-40, 40))
+        self.slider_b1_1.setValue(np.random.uniform(-40, 40))
+        self.slider_b1_2.setValue(np.random.uniform(-40, 40))
+        self.slider_w2_1.setValue(np.random.uniform(-20, 20))
+        self.slider_w2_2.setValue(np.random.uniform(-20, 20))
+        self.slider_b2.setValue(np.random.uniform(-20, 20))
+        self.graph()
