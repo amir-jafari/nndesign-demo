@@ -25,27 +25,12 @@ class MainWindow(NNDLayout):
         """ Window that shows the main menu, to choose between the two books """
         super(MainWindow, self).__init__(w_ratio, h_ratio, chapter_window=False, draw_vertical=False, create_plot=False)
 
-        self.setWindowTitle("Neural Network Design")
+        self.setWindowTitle("Neural Network Design Demos")
 
-        self.label1 = QtWidgets.QLabel(self)
-        self.label1.setText("Neural Network Design")
-        self.label1.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
-        self.label1.setGeometry(xlabel * self.w_ratio, ylabel * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
-
-        self.label2 = QtWidgets.QLabel(self)
-        self.label2.setText("Deep Learning")
-        self.label2.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.Bold))
-        self.label2.setGeometry(xlabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
-
-        self.label3 = QtWidgets.QLabel(self)
-        self.label3.setText("Table of Contents")
-        self.label3.setFont(QtGui.QFont("Times New Roman", 14, QtGui.QFont.StyleItalic))
-        self.label3.setGeometry(self.wm - xtabel * self.w_ratio, (ylabel + add) * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
-
-        self.label4 = QtWidgets.QLabel(self)
-        self.label4.setText("By Hagan, Jafari")
-        self.label4.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
-        self.label4.setGeometry(self.wm - xautor * self.w_ratio, yautor * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
+        self.make_label("label1", "Neural Network Design", (xlabel, ylabel, wlabel, hlabel))
+        self.make_label("label2", "Deep Learning", (xlabel, ylabel + add, wlabel, hlabel))
+        self.make_label("label3", "Table of Contents", (self.wm - xtabel, ylabel + add, wlabel, hlabel))
+        self.make_label("label4", "By Hagan, Jafari", (self.wm - xautor, yautor, wlabel, hlabel))
 
         self.statusBar()
         self.main_menu = self.menuBar()
@@ -55,23 +40,31 @@ class MainWindow(NNDLayout):
         # self.icon1.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/CorelFrontCoverE.jpg").pixmap(w_Logom, h_Logom, QtGui.QIcon.Normal, QtGui.QIcon.On))
         # self.icon1.setGeometry(xL_gm * self.w_ratio, yL_gm * self.h_ratio, wL_gm * self.w_ratio, hL_gm * self.h_ratio)
 
-        self.icon2 = QtWidgets.QLabel(self)
+        self.show_image("icon2", PACKAGE_PATH + "Logo/Figure.jpg", (xL_gm, yL_gm1, 162, 200))
+
+        """self.icon2 = QtWidgets.QLabel(self)
         self.icon2.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/DL.svg").pixmap(w_Logom1, h_Logom1, QtGui.QIcon.Normal, QtGui.QIcon.On))
         # self.icon2 = self.icon2.scaled(32, 32, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.icon2.setGeometry(xL_gm1 * self.w_ratio, yL_gm1 * self.h_ratio, wL_gm1 * self.w_ratio, hL_gm1 * self.h_ratio)
+        self.icon2.setGeometry(xL_gm1 * self.w_ratio, yL_gm1 * self.h_ratio, wL_gm1 * self.w_ratio, hL_gm1 * self.h_ratio)"""
+
+        # self.make_button("button1", "Neural Network Design", (self.wm - xbtnm, ybtnm + 50, wbtnm, hbtnm), self.new_window1,
+        #                  "background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);"
+        #                  "\nfont-size:{}px".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
 
         self.button1 = QtWidgets.QPushButton("Neural Network Design", self)
         self.button1.setGeometry(self.wm - xbtnm * self.w_ratio, (ybtnm + 50) * self.h_ratio, wbtnm * self.w_ratio, hbtnm * self.h_ratio)
         self.button1.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
         self.button1.clicked.connect(self.new_window1)
-        self.button1.setStyleSheet("background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);")
+        self.button1.setStyleSheet("background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);"
+                                   "\nfont-size:{}px".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
         self.button1_win = None
 
         self.button2 = QtWidgets.QPushButton("Neural Network Design : Deep Learning", self)
         self.button2.setGeometry(self.wm - xbtnm * self.w_ratio, ybtnm1 * self.h_ratio, wbtnm * self.w_ratio, hbtnm * self.h_ratio)
         self.button2.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
         self.button2.clicked.connect(self.new_window2)
-        self.button2.setStyleSheet("background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);")
+        self.button2.setStyleSheet("background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);"
+                                   "\nfont-size:{}px".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
         self.button2_win = None
 
     def new_window1(self):

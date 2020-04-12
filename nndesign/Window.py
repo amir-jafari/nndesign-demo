@@ -150,11 +150,7 @@ class MainWindowNN(NNDLayout):
         super(MainWindowNN, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=1, draw_vertical=False, create_plot=False)
 
         self.make_label("label_3", "Table of Contents", (380, ylabel + add, wlabel, hlabel), font_size=18)
-
-        self.label4 = QtWidgets.QLabel(self)
-        self.label4.setText("By Hagan, Demuth, Beale, Jafari")
-        self.label4.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
-        self.label4.setGeometry(self.wm - xautor * self.w_ratio, yautor * self.h_ratio, wlabel * self.w_ratio, hlabel * self.h_ratio)
+        self.make_label("label4", "By Hagan, Demuth, Beale, Jafari", (self.wm - xautor, yautor, wlabel, hlabel))
 
         # ---- Chapter icons and dropdown menus ----
 
@@ -167,6 +163,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox1.setGeometry(self.wm - xcm1 * self.w_ratio, ycm1 * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box1 = QtWidgets.QLabel(self)
         self.label_box1.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box1.setFont(QtGui.QFont("Times New Roman", 14 * (self.w_ratio + self.h_ratio) / 2))
 
         self.icon2 = QtWidgets.QLabel(self)
         self.comboBox2 = QtWidgets.QComboBox(self)
@@ -174,6 +171,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox2.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box2 = QtWidgets.QLabel(self)
         self.label_box2.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box2.setFont(QtGui.QFont("Times New Roman", 14 * (self.w_ratio + self.h_ratio) / 2))
 
         self.icon3 = QtWidgets.QLabel(self)
         self.comboBox3 = QtWidgets.QComboBox(self)
@@ -181,6 +179,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox3.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + 2 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box3 = QtWidgets.QLabel(self)
         self.label_box3.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + 2 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box3.setFont(QtGui.QFont("Times New Roman", 14 * (self.w_ratio + self.h_ratio) / 2))
 
         self.icon4 = QtWidgets.QLabel(self)
         self.comboBox4 = QtWidgets.QComboBox(self)
@@ -188,6 +187,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox4.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + 3 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box4 = QtWidgets.QLabel(self)
         self.label_box4.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + 3 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box4.setFont(QtGui.QFont("Times New Roman", 14 * (self.w_ratio + self.h_ratio) / 2))
 
         self.show_chapters()
 
@@ -259,7 +259,7 @@ class MainWindowNN(NNDLayout):
                     w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
                 # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, w_Logo1, h_Logo1)"""
             icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/book_logos/{}.svg".format(chapter_numbers[idx])).pixmap(
-                w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio)
             idx += 1
 

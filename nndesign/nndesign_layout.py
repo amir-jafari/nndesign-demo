@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QMainWindow
 
 import warnings
 import numpy as np
+import matplotlib
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
@@ -70,6 +71,11 @@ class NNDLayout(QMainWindow):
             self.wm, self.hm = WM_MAC_MAIN * w_ratio, HM_MAC_MAIN * h_ratio
         self.setFixedSize(self.wm, self.hm)
         self.center()
+
+        size_scaled = int(10 * (self.w_ratio + self.h_ratio) / 2)
+        matplotlib.rcParams.update({'font.size': size_scaled, 'axes.titlesize': size_scaled, 'axes.labelsize': size_scaled,
+                                    'xtick.labelsize': size_scaled, 'ytick.labelsize': size_scaled,
+                                    'legend.fontsize': size_scaled, 'figure.titlesize': size_scaled})
 
         self.x_chapter_usual, self.w_chapter_button, self.h_chapter_button = 520, 170, 30
         self.x_chapter_button = 525
@@ -258,7 +264,7 @@ class NNDLayout(QMainWindow):
         setattr(self, label_attr_name, QtWidgets.QLabel(self))
         label = getattr(self, label_attr_name)
         label.setText(label_str)
-        label.setFont(QtGui.QFont(font_name, font_size, italic=italics))
+        label.setFont(QtGui.QFont(font_name, font_size * (self.w_ratio + self.h_ratio) / 2, italic=italics))
         label.setGeometry(label_coords[0] * self.w_ratio, label_coords[1] * self.h_ratio,
                           label_coords[2] * self.w_ratio, label_coords[3] * self.h_ratio)
 
@@ -287,9 +293,17 @@ class NNDLayout(QMainWindow):
                       label_coords=None, label_font_name="Times New Roman", label_font_size=14, label_italics=False):
         setattr(self, "comboBox" + str(combobox_number), QtWidgets.QComboBox(self))
         combobox = getattr(self, "comboBox" + str(combobox_number))
-        combobox.addItems(combobox_items)
+        # combobox.setSizeAdjustPolicy(0)
         combobox.setGeometry(combobox_coords[0] * self.w_ratio, combobox_coords[1] * self.h_ratio,
                              combobox_coords[2] * self.w_ratio, combobox_coords[3] * self.h_ratio)
+        combobox.setFixedSize(combobox_coords[2] * self.w_ratio, combobox_coords[3] * self.h_ratio)
+        font = QtGui.QFont()
+        font.setPointSize(int(12 * (self.w_ratio + self.h_ratio) / 2))
+        combobox.setFont(font)
+        # combobox.DropDownHeight = combobox_coords[3] * self.h_ratio
+        combobox.setStyleSheet("QListView::item {height:" + str(int(combobox_coords[3] * self.h_ratio)) + "px;}")
+        combobox.addItems(combobox_items)
+        # combobox.setView(QtWidgets.QListView())
         if label_attr_name:
             if not label_coords:
                 label_coords = (combobox_coords[0] + 80, combobox_coords[1] - 20, combobox_coords[2], combobox_coords[3])
@@ -334,10 +348,10 @@ class NNDLayout(QMainWindow):
     #     self.slider_temp.valueChanged.connect(self.f_connect)
     #     self.slider_temp.valueChanged.emit(self.slider_temp.value())
 
-    def make_button(self, button_attr_name, button_str, button_coords, f_connect, font_size="font-size:13px"):
+    def make_button(self, button_attr_name, button_str, button_coords, f_connect, style_sheet="font-size:13px"):
         setattr(self, button_attr_name, QtWidgets.QPushButton(button_str, self))
         button = getattr(self, button_attr_name)
-        button.setStyleSheet(font_size)
+        button.setStyleSheet(style_sheet.replace("13", str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
         button.setGeometry(button_coords[0] * self.w_ratio, button_coords[1] * self.h_ratio,
                            button_coords[2] * self.w_ratio, button_coords[3] * self.h_ratio)
         button.clicked.connect(f_connect)

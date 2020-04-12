@@ -1,4 +1,3 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -25,7 +24,7 @@ class GramSchmidt(NNDLayout):
         self.make_plot(2, (120, 390, 270, 270))
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.set_title("Original Vectors", fontdict={'fontsize': 10})
+        self.axes_1.set_title("Original Vectors")
         self.axes_1.set_xlim(-1.2, 1.2)
         self.axes_1.set_ylim(-1.2, 1.2)
         self.axes1_points = []
@@ -48,7 +47,7 @@ class GramSchmidt(NNDLayout):
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
-        self.axes_2.set_title("Orthogonalized Vectors", fontdict={'fontsize': 10})
+        self.axes_2.set_title("Orthogonalized Vectors")
         self.axes_2.set_xlim(-1.2, 1.2)
         self.axes_2.set_ylim(-1.2, 1.2)
         self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
