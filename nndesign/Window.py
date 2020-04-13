@@ -57,6 +57,7 @@ from Marquardt import Marquardt
 from Early_stopping import EarlyStopping
 from Regularization import Regularization
 from Bayesian_regularization import BayesianRegularization
+from Early_stoppping_regularization import EarlyStoppingRegularization
 # ------ Chapter 14 -------
 from FIR_network import FIRNetwork
 from IIR_network import IIRNetwork
@@ -424,8 +425,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 3:
             self.chapter_window3 = BayesianRegularization(self.w_ratio, self.h_ratio)
             self.chapter_window3.show()
-        else:
-            print("TODO")
+        elif idx == 4:
+            self.chapter_window4 = EarlyStoppingRegularization(self.w_ratio, self.h_ratio)
+            self.chapter_window4.show()
 
     def chapter14(self, idx):
         if idx == 1:
