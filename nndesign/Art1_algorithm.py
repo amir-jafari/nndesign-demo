@@ -204,7 +204,7 @@ class ART1Algorithm(NNDLayout):
         self.canvas7.draw()
 
     def slide(self):
-        self.rho = self.slider_rho.value() / 10
+        self.rho = self.slider_rho.value() / 100
         self.label_rho.setText("Vigilance (rho): " + str(self.rho))
 
     def change_squares(self, axis, canvas, k):
@@ -221,17 +221,11 @@ class ART1Algorithm(NNDLayout):
 
     def change_prototype(self, button_id):
 
-        P = 1 - np.array([self.pattern1, self.pattern2, self.pattern3, self.pattern31]).T
+        P = 1 - np.array([list(self.pattern11.T.reshape(-1))[::-1], list(self.pattern22.T.reshape(-1))[::-1],
+                          list(self.pattern33.T.reshape(-1))[::-1], list(self.pattern331.T.reshape(-1))[::-1]]).T
         ind_x = []
         while True:
-            if button_id == 1:
-                p = np.array([0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1])
-            elif button_id == 2:
-                p = np.array([1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0])
-            elif button_id == 3:
-                p = np.array([1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0])
-            else:
-                p = P[:, button_id]
+            p = P[:, button_id]
             a1 = p
 
             n1 = np.dot(self.w12, a1)
