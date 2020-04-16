@@ -96,7 +96,7 @@ class IIRNetwork(NNDLayout):
         A = lfilter(num, den, p, zi=zi)
 
         a.scatter(t, p, color="white", marker="o", edgecolor="red")
-        a.scatter(t1, [a0] + list(A[0]), color="blue", marker=".", s=[3]*len(t1))
+        a.scatter(t1, [a0] + list(A[0]), color="blue", marker=".", s=[6]*len(t1))
         # Setting limits so that the point moves instead of the plot.
         # a.set_xlim(-4, 4)
         # a.set_ylim(-2, 2)
