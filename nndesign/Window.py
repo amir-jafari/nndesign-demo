@@ -172,7 +172,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox2.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box2 = QtWidgets.QLabel(self)
         self.label_box2.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
-        self.label_box2.setFont(QtGui.QFont("Times New Roman", 14 * (self.w_ratio + self.h_ratio) / 2))
+        self.label_box2.setFont(QtGui.QFont("Times New Roman", 14))
 
         self.icon3 = QtWidgets.QLabel(self)
         self.comboBox3 = QtWidgets.QComboBox(self)
@@ -180,7 +180,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox3.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + 2 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box3 = QtWidgets.QLabel(self)
         self.label_box3.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + 2 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
-        self.label_box3.setFont(QtGui.QFont("Times New Roman", 14 * (self.w_ratio + self.h_ratio) / 2))
+        self.label_box3.setFont(QtGui.QFont("Times New Roman", 14))
 
         self.icon4 = QtWidgets.QLabel(self)
         self.comboBox4 = QtWidgets.QComboBox(self)
@@ -188,7 +188,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox4.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + 3 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box4 = QtWidgets.QLabel(self)
         self.label_box4.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + 3 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
-        self.label_box4.setFont(QtGui.QFont("Times New Roman", 14 * (self.w_ratio + self.h_ratio) / 2))
+        self.label_box4.setFont(QtGui.QFont("Times New Roman", 14))
 
         self.show_chapters()
 
