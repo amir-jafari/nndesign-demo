@@ -164,7 +164,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox1.setGeometry(self.wm - xcm1 * self.w_ratio, ycm1 * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box1 = QtWidgets.QLabel(self)
         self.label_box1.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
-        self.label_box1.setFont(QtGui.QFont("Times New Roman"))  # , 14 * (self.w_ratio + self.h_ratio) / 2))
+        self.label_box1.setFont(QtGui.QFont("Times New Roman", 14))  # , 14 * (self.w_ratio + self.h_ratio) / 2))
 
         self.icon2 = QtWidgets.QLabel(self)
         self.comboBox2 = QtWidgets.QComboBox(self)
