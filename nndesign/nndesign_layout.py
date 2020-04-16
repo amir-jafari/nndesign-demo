@@ -352,7 +352,7 @@ class NNDLayout(QMainWindow):
     def make_button(self, button_attr_name, button_str, button_coords, f_connect, style_sheet="font-size:13px"):
         setattr(self, button_attr_name, QtWidgets.QPushButton(button_str, self))
         button = getattr(self, button_attr_name)
-        # button.setStyleSheet(style_sheet.replace("13", str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
+        button.setStyleSheet(style_sheet.replace("13", str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
         button.setGeometry(button_coords[0] * self.w_ratio, button_coords[1] * self.h_ratio,
                            button_coords[2] * self.w_ratio, button_coords[3] * self.h_ratio)
         button.clicked.connect(f_connect)
