@@ -297,12 +297,12 @@ class NNDLayout(QMainWindow):
         # combobox.setSizeAdjustPolicy(0)
         combobox.setGeometry(combobox_coords[0] * self.w_ratio, combobox_coords[1] * self.h_ratio,
                              combobox_coords[2] * self.w_ratio, combobox_coords[3] * self.h_ratio)
-        combobox.setFixedSize(combobox_coords[2] * self.w_ratio, combobox_coords[3] * self.h_ratio)
-        font = QtGui.QFont()
-        font.setPointSize(int(12 * (self.w_ratio + self.h_ratio) / 2))
-        combobox.setFont(font)
+        # combobox.setFixedSize(combobox_coords[2] * self.w_ratio, combobox_coords[3] * self.h_ratio)
+        # font = QtGui.QFont()
+        # font.setPointSize(int(12 * (self.w_ratio + self.h_ratio) / 2))
+        # combobox.setFont(font)
         # combobox.DropDownHeight = combobox_coords[3] * self.h_ratio
-        combobox.setStyleSheet("QListView::item {height:" + str(int(combobox_coords[3] * self.h_ratio)) + "px;}")
+        # combobox.setStyleSheet("QListView::item {height:" + str(int(combobox_coords[3] * self.h_ratio)) + "px;}")
         combobox.addItems(combobox_items)
         # combobox.setView(QtWidgets.QListView())
         if label_attr_name:
