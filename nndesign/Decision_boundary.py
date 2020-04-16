@@ -165,7 +165,7 @@ class DecisionBoundaries(NNDLayout):
         from numpy.linalg import lstsq
         x_coords, y_coords = zip(*[self.point_1, self.point_2])
         A = vstack([x_coords, ones(len(x_coords))]).T
-        m, c = lstsq(A, y_coords)[0]
+        m, c = lstsq(A, y_coords, rcond=None)[0]
         # print("Line Solution is y = {m}x + {c}".format(m=m, c=c))
         if str(self.prev_x_diff)[0] != str(self.current_x_diff)[0]:
             if str(self.prev_y_diff)[0] != str(self.current_y_diff)[0]:
