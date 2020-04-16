@@ -264,7 +264,8 @@ class NNDLayout(QMainWindow):
         setattr(self, label_attr_name, QtWidgets.QLabel(self))
         label = getattr(self, label_attr_name)
         label.setText(label_str)
-        label.setFont(QtGui.QFont(font_name, font_size * (self.w_ratio + self.h_ratio) / 2, italic=italics))
+        label.setFont(QtGui.QFont(font_name, font_size, italic=italics))
+        # label.setFont(QtGui.QFont(font_name, font_size * (self.w_ratio + self.h_ratio) / 2, italic=italics))
         label.setGeometry(label_coords[0] * self.w_ratio, label_coords[1] * self.h_ratio,
                           label_coords[2] * self.w_ratio, label_coords[3] * self.h_ratio)
 
