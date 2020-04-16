@@ -80,13 +80,13 @@ class PerceptronRule(NNDLayout):
         # Add event handler for a mouseclick in the plot
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
-        self.make_combobox(1, ["1", "10", "100", "1000"], (self.x_chapter_usual, 530, self.w_chapter_slider, 50),
+        self.make_combobox(1, ["1", "10", "100", "1000"], (self.x_chapter_usual, 560, self.w_chapter_slider, 50),
                            label_attr_name="whatever", label_str="Epochs to Run",
-                           label_coords=(self.x_chapter_usual + 30, 530 - 20, self.w_chapter_slider, 50))
+                           label_coords=(self.x_chapter_usual + 30, 560 - 20, self.w_chapter_slider, 50))
 
-        self.make_combobox(2, ["Yes", "No"], (self.x_chapter_usual, 580, self.w_chapter_slider, 50),
+        self.make_combobox(2, ["Yes", "No"], (self.x_chapter_usual, 605, self.w_chapter_slider, 50),
                            label_attr_name="whatever", label_str="Use Bias",
-                           label_coords=(self.x_chapter_usual + 30, 580 - 20, self.w_chapter_slider, 50))
+                           label_coords=(self.x_chapter_usual + 30, 605 - 20, self.w_chapter_slider, 50))
         self.use_bias = self.comboBox2.currentText() == "Yes"
 
         self.make_button("run_button", "Train",
