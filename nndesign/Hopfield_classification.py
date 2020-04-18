@@ -34,35 +34,46 @@ class HopfieldClassification(NNDLayout):
         self.axis.scatter(orange[0], orange[1], orange[2], color='orange')
         self.axis.scatter(apple[0], apple[1], apple[2], color='yellow')
         self.line1, self.line2, self.line3 = None, None, None
+        self.axis.view_init(10, 110)
         self.canvas.draw()
 
         self.p, self.a1, self.a2, self.fruit, self.label = None, None, None, None, None
 
-        self.make_label("label_w", "", (530, 300, 150, 25))
-        self.make_label("label_b", "", (530, 330, 150, 25))
-        self.make_label("label_p", "", (530, 360, 150, 25))
-        self.make_label("label_a_11", "", (530, 390, 150, 25))
-        self.make_label("label_a_12", "", (530, 420, 150, 25))
-        self.make_label("label_a_21", "", (530, 450, 150, 25))
-        self.make_label("label_a_22", "", (530, 480, 150, 25))
-        self.make_label("label_fruit", "", (530, 510, 150, 25))
+        self.make_label("label_w", "W = [.2 0 0; 0 1.2 0; 0 0 .2]", (530, 320, 170, 25))
+        self.make_label("label_b", "b = [0.9; 0; -0.9]", (530, 350, 150, 25))
+        self.make_label("label_p", "", (530, 380, 150, 25))
+        self.make_label("label_a_11", "", (530, 410, 150, 25))
+        self.make_label("label_a_12", "", (530, 440, 150, 25))
+        self.make_label("label_fruit", "", (530, 470, 150, 25))
 
+        self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
-        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon3.setGeometry(15 * self.w_ratio, 500 * self.h_ratio, 500 * self.w_ratio, 150 * self.h_ratio)
+        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
+        self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
 
         self.make_button("run_button", "Go", (self.x_chapter_button, 570, self.w_chapter_button, self.h_chapter_button), self.on_run)
+
+    def paintEvent(self, event):
+        super(HopfieldClassification, self).paintEvent(event)
+        painter = QtGui.QPainter(self.icon3.pixmap())
+        painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
+        painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), self.text_shape)
+        painter.drawText(QtCore.QPoint(245 * self.w_ratio, 28 * self.h_ratio), self.text_texture)
+        painter.drawText(QtCore.QPoint(410 * self.w_ratio, 28 * self.h_ratio), self.text_weight)
 
     def on_run(self):
         self.timer = QtCore.QTimer()
         self.idx = 0
+        self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
+        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         self.timer.timeout.connect(self.update_label)
-        self.timer.start(1000)
+        self.timer.start(800)
 
     def update_label(self):
         if self.idx == 0:
-            self.label_w.setText(""); self.label_b.setText(""); self.label_p.setText("")
-            self.label_a_11.setText(""); self.label_a_12.setText(""); self.label_a_21.setText(""); self.label_a_22.setText("")
+            self.label_p.setText("")
+            self.label_a_11.setText(""); self.label_a_12.setText("")
             self.label_fruit.setText("")
             self.p = np.round(np.random.uniform(-1, 1, (1, 3)), 2)
             # self.p = np.array([[0.6, 0.98, -0.4]])
@@ -78,49 +89,46 @@ class HopfieldClassification(NNDLayout):
                 self.line3.pop().remove()
                 self.canvas.draw()
         if self.idx == 1:
-            self.label_w.setText("w = [0.2 0 0; 0 1.2 0; 0 0 0.2]")
-            self.label_b.setText("b = [0.9; 0; -0.9]")
             if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_2.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_2.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_7.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_7.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         elif self.idx == 2:
             if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         elif self.idx == 3:
-            self.label_p.setText("p = [{} {} {}]".format(self.p[0, 0], self.p[0, 1], self.p[0, 2]))
+            self.text_shape, self.text_texture, self.text_weight = str(self.p[0, 0]), str(self.p[0, 1]), str(self.p[0, 2])
+            if self.label == 1:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            else:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        elif self.idx == 4:
             self.line1 = self.axis.plot3D([self.p[0, 0]] * 10, np.linspace(-1, 1, 10), [self.p[0, 2]] * 10, color="g")
             self.line2 = self.axis.plot3D([self.p[0, 0]] * 10, [self.p[0, 1]] * 10, np.linspace(-1, 1, 10), color="g")
             self.line3 = self.axis.plot3D(np.linspace(-1, 1, 10), [self.p[0, 1]] * 10, [self.p[0, 2]] * 10, color="g")
             self.canvas.draw()
-        elif self.idx == 4:
-            self.label_a_11.setText("a1 = satlins(W * p + b)")
         elif self.idx == 5:
-            self.label_a_12.setText("a1 = [{} {} {}]".format(self.a1[0, 0], self.a1[1, 0], self.a1[2, 0]))
+            self.label_p.setText("p = [{} {} {}]".format(self.p[0, 0], self.p[0, 1], self.p[0, 2]))
         elif self.idx == 6:
-            self.label_a_21.setText("a2 = satlins(W * a1 + b)")
+            self.label_a_11.setText("a1 = satlins(W * p + b)")
+            if self.label == 1:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_4.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            else:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_9.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         elif self.idx == 7:
-            self.label_a_22.setText("a2 = [{} {} {}]".format(self.a2[0, 0], self.a2[1, 0], self.a2[2, 0]))
+            self.label_a_12.setText("a1 = [{} {} {}]".format(self.a1[0, 0], self.a1[1, 0], self.a1[2, 0]))
+            if self.label == 1:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            else:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_10.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         elif self.idx == 8:
             self.label_fruit.setText("Fruit = {}".format(self.fruit))
-        elif self.idx == 9:
             if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_4.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_6.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_9.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        elif self.idx == 10:
-            if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_5.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_10.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        elif self.idx == 11:
-            if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_6.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_11.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        else:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_11.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             pass
         self.idx += 1
 

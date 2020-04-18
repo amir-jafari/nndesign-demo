@@ -115,7 +115,7 @@ xbtn1, ybtn1, wbtn1, hbtn1, add2 = 10, 635, 60, 30, 65
 w_Logo1, h_Logo1, xL_g1, yL_g1, add_l = 100, 80, 100, 110, 140
 
 BOOK1_CHAPTERS_DEMOS = {
-    2: ["Neuron Model & Network Architecture:", "Chapter 2 demos", "One-input Neuron", "Two-input Neuron"],
+    2: ["Neuron Model & Network Architecture", "Chapter 2 demos", "One-input Neuron", "Two-input Neuron"],
     3: ["An Illustrative Example", "Chapter 3 demos", "Perceptron classification", "Hamming classification", "Hopfield classification"],
     4: ["Perceptron Learning Rule", "Chapter 4 demos", "Decision boundaries", "Perceptron rule"],
     5: ["Signal & weight Vector Spaces", "Chapter 5 demos", "Gram schmidt", "Reciprocal basis"],
