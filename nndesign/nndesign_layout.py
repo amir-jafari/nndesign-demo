@@ -12,6 +12,7 @@ import math
 # rc('text', usetex=True)
 
 from get_package_path import PACKAGE_PATH
+from nndesign_settings import OS_NAME
 
 WM_MAC_MAIN, HM_MAC_MAIN = 1280 - 750, 800 - 120  # For my Mac
 WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 580, 800 - 120  # For my Mac - original size
@@ -60,6 +61,8 @@ class NNDLayout(QMainWindow):
                  create_two_plots=False, print_mouse_coords=False):
 
         super(NNDLayout, self).__init__()
+
+        self.running_on_windows = OS_NAME == "nt"
 
         self.print_mouse_coords = print_mouse_coords
         self.setMouseTracking(print_mouse_coords)
@@ -158,7 +161,7 @@ class NNDLayout(QMainWindow):
         len_ref = len("One-Input Neuron")
         len_current = len(title)
         self.make_label("label3", title, (xl2 - 135 - (len_current - len_ref) * 5.5, ylabel + add, wlabel, hlabel), font_size=18)
-        self.make_label("label4", "Chapter {}".format(number), (x_chapter, 630, 150, 50), font_size=14)
+        self.make_label("label4", "Chapter {}".format(number), (x_chapter, 630, 150, 50), font_size=16)
 
         if show_info:
             # paragraphs = description.split("<p>")
@@ -214,7 +217,7 @@ class NNDLayout(QMainWindow):
         ax = fig.add_axes([0, 0, 1, 1])
         ax.axis('off')
         ax.patch.set_facecolor('none')
-        t = ax.text(0, 0, mathTex, ha='left', va='bottom', fontsize=fs)
+        t = ax.text(0, 0, mathTex, ha='left', va='bottom', fontsize=int(fs * (self.w_ratio + self.h_ratio) / 2))
 
         # ---- fit figure size to text artist ----
 
@@ -264,8 +267,10 @@ class NNDLayout(QMainWindow):
         setattr(self, label_attr_name, QtWidgets.QLabel(self))
         label = getattr(self, label_attr_name)
         label.setText(label_str)
-        label.setFont(QtGui.QFont(font_name, font_size, italic=italics))
-        # label.setFont(QtGui.QFont(font_name, font_size * (self.w_ratio + self.h_ratio) / 2, italic=italics))
+        if self.running_on_windows:
+            label.setFont(QtGui.QFont(font_name, int(font_size * 0.9), italic=italics))
+        else:
+            label.setFont(QtGui.QFont(font_name, int(font_size * (self.w_ratio + self.h_ratio) / 2), italic=italics))
         label.setGeometry(label_coords[0] * self.w_ratio, label_coords[1] * self.h_ratio,
                           label_coords[2] * self.w_ratio, label_coords[3] * self.h_ratio)
 
@@ -297,13 +302,16 @@ class NNDLayout(QMainWindow):
         # combobox.setSizeAdjustPolicy(0)
         combobox.setGeometry(combobox_coords[0] * self.w_ratio, combobox_coords[1] * self.h_ratio,
                              combobox_coords[2] * self.w_ratio, combobox_coords[3] * self.h_ratio)
-        # combobox.setFixedSize(combobox_coords[2] * self.w_ratio, combobox_coords[3] * self.h_ratio)
+        # combobox.setFixedSize((combobox_coords[2] - 10) * self.w_ratio, (combobox_coords[3] + 50) * self.h_ratio)
+        # I'm able to adjust the font of the combobox in the right way, but I'm not able to increase the height of the combobox,
+        # so I'm just going to increase the font when it's clicked instead - # TODO
         # font = QtGui.QFont()
-        # font.setPointSize(int(12 * (self.w_ratio + self.h_ratio) / 2))
+        # font.setPointSize(int(13 * (self.w_ratio + self.h_ratio) / 2))
         # combobox.setFont(font)
         # combobox.DropDownHeight = combobox_coords[3] * self.h_ratio
         # combobox.setStyleSheet("QListView::item {height:" + str(int(combobox_coords[3] * self.h_ratio)) + "px;}")
         combobox.addItems(combobox_items)
+        # combobox.setStyleSheet("QLineEdit::item {font-size:" + str(int(18 * (self.w_ratio + self.h_ratio) / 2)) + "px;}")
         # combobox.setView(QtWidgets.QListView())
         if label_attr_name:
             if not label_coords:
@@ -362,6 +370,10 @@ class NNDLayout(QMainWindow):
         checkbox = getattr(self, checkbox_attr_name)
         checkbox.setGeometry(checkbox_coords[0] * self.w_ratio, checkbox_coords[1] * self.h_ratio,
                              checkbox_coords[2] * self.w_ratio, checkbox_coords[3] * self.h_ratio)
+        if self.running_on_windows:
+            checkbox.setStyleSheet("font-size: {}px".format(int(12 * 0.9)))
+        else:
+            checkbox.setStyleSheet("font-size: {}px".format(int(12 * (self.w_ratio + self.h_ratio) / 2)))
         checkbox.stateChanged.connect(f_connect)
         self.set_layout(checkbox_coords, checkbox)
         checkbox.setChecked(1 if checked else 0)
@@ -370,9 +382,16 @@ class NNDLayout(QMainWindow):
         setattr(self, input_box_attr_name, QtWidgets.QLineEdit())
         input_box = getattr(self, input_box_attr_name)
         input_box.setText(input_box_text)
-        input_box.setGeometry(input_box_coords[0] * self.w_ratio, input_box_coords[1] * self.h_ratio,
-                              input_box_coords[2] * self.w_ratio, input_box_coords[3] * self.h_ratio)
-        self.set_layout(input_box_coords, input_box)
+        # font = input_box.font()
+        # font.setPointSize(int(20 * (self.w_ratio + self.h_ratio) / 2))
+        # input_box.setFont(font)
+        if self.running_on_windows:
+            input_box.setStyleSheet("font: {}px".format(int(12 * 0.9)))
+        else:
+            input_box.setStyleSheet("font: {}px".format(int(12 * (self.w_ratio + self.h_ratio) / 2)))
+        input_box.setGeometry(input_box_coords[0] * self.w_ratio * 1.1, input_box_coords[1] * self.h_ratio,
+                              input_box_coords[2], input_box_coords[3] * self.h_ratio)
+        self.set_layout((input_box_coords[0] * 1.01, input_box_coords[1], input_box_coords[2] * 0.9, input_box_coords[3]), input_box)
 
     def get_slider_value_and_update(self, slider, slider_label, value_multiplier=1, round_pos=0):
         value = slider.value() * value_multiplier

@@ -42,13 +42,13 @@ class Generalization(NNDLayout):
         self.axes.set_xlim(-2, 2)
         self.axes.set_ylim(0, 2)
         self.axes.tick_params(labelsize=8)
-        self.axes.set_xlabel("Input", fontsize=10)
+        self.axes.set_xlabel("Input", fontsize=int(10 * (self.w_ratio + self.h_ratio) / 2))
         self.axes.xaxis.set_label_coords(0.5, 0.1)
-        self.axes.set_ylabel("Target", fontsize=10)
+        self.axes.set_ylabel("Target", fontsize=int(10 * (self.w_ratio + self.h_ratio) / 2))
         self.axes.yaxis.set_label_coords(0.05, 0.5)
         self.data_to_approx, = self.axes.plot([], "r+", label="Function to Approximate")
         self.net_approx, = self.axes.plot([], label="Network Approximation")
-        self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=3,
+        self.axes.legend(loc='lower center', fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2), framealpha=0.9, numpoints=1, ncol=3,
                          bbox_to_anchor=(0, -.24, 1, -.280), mode='expand')
         self.axes.set_title("Function Approximation")
 

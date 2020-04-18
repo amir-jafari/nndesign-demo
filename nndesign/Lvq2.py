@@ -21,8 +21,8 @@ class LVQ2(NNDLayout):
         self.fill_chapter("LVQ2", 16, "Click [Learn] to apply the\nLVQ2 rule once.\n\nClick [Train] to apply it\non all"
                                       " the inputs.\n\nClick [Random] to get\nrandom weights.\n\nLeft-click on the plot "
                                       "to add\na positive class.\n\nRight-click to add a\nnegative class.\n\n"
-                                      "Misclassifications are shown in red.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None, description_coords=(535, 160, 450, 250))
+                                      "Misclassifications are\nshown in red.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None, description_coords=(535, 160, 450, 270))
 
         self.alpha = 0.4
 

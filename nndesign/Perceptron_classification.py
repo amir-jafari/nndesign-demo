@@ -48,7 +48,7 @@ class PerceptronClassification(NNDLayout):
 
         self.icon3 = QtWidgets.QLabel(self)
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1.svg").pixmap(500 * self.w_ratio, 150 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon3.setGeometry(15 * self.w_ratio, 500 * self.h_ratio, 500 * self.w_ratio, 150 * self.h_ratio)
+        self.icon3.setGeometry(75 * self.w_ratio, 500 * self.h_ratio, 500 * self.w_ratio, 150 * self.h_ratio)
 
         """from PIL import Image
         # import svgutils.compose as sc

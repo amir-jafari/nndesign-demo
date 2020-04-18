@@ -10,7 +10,7 @@ from get_package_path import PACKAGE_PATH
 # -------------------------------------------------------------------------------------------------------------
 xlabel, ylabel, wlabel, hlabel, add = 30, 5, 500, 100, 20
 xtabel, ytlabel = 120, 25
-xautor, yautor = 100, 580
+xautor, yautor = 395, 580
 
 w_Logom = 200; h_Logom = 100; xL_gm = 50; yL_gm= 140; wL_gm= 300; hL_gm = h_Logom;
 w_Logom1 = 200; h_Logom1 = 100; xL_gm1 = 20; yL_gm1= 450; wL_gm1= 300; hL_gm1=h_Logom1;
@@ -23,14 +23,15 @@ ybtnm1 = 470
 class MainWindow(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         """ Window that shows the main menu, to choose between the two books """
-        super(MainWindow, self).__init__(w_ratio, h_ratio, chapter_window=False, draw_vertical=False, create_plot=False)
+        super(MainWindow, self).__init__(w_ratio, h_ratio, chapter_window=False,
+                                         draw_vertical=False, create_plot=False)
 
         self.setWindowTitle("Neural Network Design Demos")
 
         self.make_label("label1", "Neural Network Design", (xlabel, ylabel, wlabel, hlabel))
         self.make_label("label2", "Deep Learning", (xlabel, ylabel + add, wlabel, hlabel))
         self.make_label("label3", "Table of Contents", (self.wm - xtabel, ylabel + add, wlabel, hlabel))
-        self.make_label("label4", "By Hagan, Jafari", (self.wm - xautor, yautor, wlabel, hlabel))
+        self.make_label("label4", "By Hagan, Jafari, Uría", (xautor, yautor, wlabel, hlabel))
 
         self.statusBar()
         self.main_menu = self.menuBar()

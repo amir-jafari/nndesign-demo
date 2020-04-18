@@ -72,7 +72,7 @@ class PerceptronRule(NNDLayout):
         self.highlight_data, = self.axes.plot([], "*", markersize=16)
         self.highlight_data_miss, = self.axes.plot([], "*", markersize=16, color="red")
         self.decision, = self.axes.plot([], 'r-', label="Decision Boundary")
-        self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=2,
+        self.axes.legend(loc='lower center', fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2), framealpha=0.9, numpoints=1, ncol=2,
                          bbox_to_anchor=(0, -.28, 1, -.280), mode='expand')
         # self.axes.legend(loc='lower left', fontsize=8, numpoints=1, ncol=3, bbox_to_anchor=(-0.1, -.24, 1.1, -.280))
         self.axes.set_title("Single Neuron Perceptron")

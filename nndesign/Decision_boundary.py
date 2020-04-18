@@ -64,7 +64,7 @@ class DecisionBoundaries(NNDLayout):
         self.point_1_draw, = self.axes.plot([], '*', markersize=12)
         self.point_2_draw, = self.axes.plot([], '*', markersize=12)
         self.weight_vector = self.axes.quiver([0], [0], [1], [-1], units="xy", scale=1, label="Weight vector")
-        self.axes.legend(loc='lower center', fontsize=8, framealpha=0.9, numpoints=1, ncol=2,
+        self.axes.legend(loc='lower center', fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2), framealpha=0.9, numpoints=1, ncol=2,
                          bbox_to_anchor=(0, -.28, 1, -.280), mode='expand')
         self.axes.set_title("Single Neuron Perceptron")
         self.point_1_draw.set_data([self.point_1[0]], [self.point_1[1]])

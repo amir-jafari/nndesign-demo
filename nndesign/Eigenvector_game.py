@@ -46,7 +46,7 @@ class EigenvectorGame(NNDLayout):
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
         self.make_slider("slider_n_tries", QtCore.Qt.Vertical, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
-                         (530, 430, 100, 200), self.freeze, "label_n_tries", "Number of Tries Left: 10",
+                         (530, 430, 100, 180), self.freeze, "label_n_tries", "Number of Tries Left: 10",
                          (530, 400, 150, 50))
         self.make_label("label_message", "", (150, 100, 400, 150))
         self.make_label("label_message1", "", (150, 200, 400, 150))

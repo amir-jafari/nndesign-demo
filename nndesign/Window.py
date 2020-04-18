@@ -106,7 +106,7 @@ from Gradient_descent_stochastic import GradientDescentStochastic
 
 # -------------------------------------------------------------------------------------------------------------
 xlabel, ylabel, wlabel, hlabel, add = 120, 5, 500, 100, 20
-xautor, yautor = 180, 600
+xautor, yautor = 395, 600
 
 xcm1, ycm1, wcm1, hcm1, add1, subt = 340, 140, 250, 20, 140, 20
 xcm2 = 333
@@ -151,7 +151,13 @@ class MainWindowNN(NNDLayout):
         super(MainWindowNN, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=1, draw_vertical=False, create_plot=False)
 
         self.make_label("label_3", "Table of Contents", (380, ylabel + add, wlabel, hlabel), font_size=18)
-        self.make_label("label4", "By Hagan, Demuth, Beale, Jafari", (self.wm - xautor, yautor, wlabel, hlabel))
+        self.make_label("label4", "By Hagan, Jafari, Uría", (xautor, yautor, wlabel, hlabel))
+
+        font_size = 14
+        if self.running_on_windows:
+            font_size = int(font_size * 0.8)
+        else:
+            font_size = int(font_size * (self.w_ratio + self.h_ratio) / 2)
 
         # ---- Chapter icons and dropdown menus ----
 
@@ -164,7 +170,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox1.setGeometry(self.wm - xcm1 * self.w_ratio, ycm1 * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box1 = QtWidgets.QLabel(self)
         self.label_box1.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
-        self.label_box1.setFont(QtGui.QFont("Times New Roman", 14))  # , 14 * (self.w_ratio + self.h_ratio) / 2))
+        self.label_box1.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.icon2 = QtWidgets.QLabel(self)
         self.comboBox2 = QtWidgets.QComboBox(self)
@@ -172,7 +178,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox2.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box2 = QtWidgets.QLabel(self)
         self.label_box2.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
-        self.label_box2.setFont(QtGui.QFont("Times New Roman", 14))
+        self.label_box2.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.icon3 = QtWidgets.QLabel(self)
         self.comboBox3 = QtWidgets.QComboBox(self)
@@ -180,7 +186,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox3.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + 2 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box3 = QtWidgets.QLabel(self)
         self.label_box3.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + 2 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
-        self.label_box3.setFont(QtGui.QFont("Times New Roman", 14))
+        self.label_box3.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.icon4 = QtWidgets.QLabel(self)
         self.comboBox4 = QtWidgets.QComboBox(self)
@@ -188,7 +194,7 @@ class MainWindowNN(NNDLayout):
         self.comboBox4.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + 3 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box4 = QtWidgets.QLabel(self)
         self.label_box4.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + 3 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
-        self.label_box4.setFont(QtGui.QFont("Times New Roman", 14))
+        self.label_box4.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.show_chapters()
 
