@@ -7,66 +7,63 @@ from Window import MainWindowNN, MainWindowDL
 from get_package_path import PACKAGE_PATH
 
 
-# -------------------------------------------------------------------------------------------------------------
-xlabel, ylabel, wlabel, hlabel, add = 30, 5, 500, 100, 20
-xtabel, ytlabel = 120, 25
-xautor, yautor = 395, 580
-
-w_Logom = 200; h_Logom = 100; xL_gm = 50; yL_gm= 140; wL_gm= 300; hL_gm = h_Logom;
-w_Logom1 = 200; h_Logom1 = 100; xL_gm1 = 20; yL_gm1= 450; wL_gm1= 300; hL_gm1=h_Logom1;
-
-xbtnm, ybtnm, wbtnm, hbtnm = 250, 160, 230, 50
-ybtnm1 = 470
-# -------------------------------------------------------------------------------------------------------------
-
-
 class MainWindow(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         """ Window that shows the main menu, to choose between the two books """
-        super(MainWindow, self).__init__(w_ratio, h_ratio, chapter_window=False,
-                                         draw_vertical=False, create_plot=False)
+        super(MainWindow, self).__init__(w_ratio, h_ratio, chapter_window=False, draw_vertical=False, create_plot=False)
 
-        self.setWindowTitle("Neural Network Design Demos")
+        # Coordinates (in px)
+        x_title, y_title, w_title, h_title, add_x, add_y = 30, 5, 500, 100, 250, 20
+        x_left, y_img, w, h_img, x_right = 20, 110, 230, 284, 20 + 260
+        y_button, h_button = 415, 50
+        y_text, h_text = 450, 100
+        x_authors, y_authors, w_authors, h_authors = 385, 650, 150, 20
 
-        self.make_label("label1", "Neural Network Design", (xlabel, ylabel, wlabel, hlabel))
-        self.make_label("label2", "Deep Learning", (xlabel, ylabel + add, wlabel, hlabel))
-        self.make_label("label3", "Table of Contents", (self.wm - xtabel, ylabel + add, wlabel, hlabel))
-        self.make_label("label4", "By Hagan, Jafari, Uría", (xautor, yautor, wlabel, hlabel))
+        self.setWindowTitle("Neural Network Design & Deep Learning Demos")
 
-        self.statusBar()
-        self.main_menu = self.menuBar()
+        self.make_label("label1", "Neural Network", (x_title, y_title, w_title, h_title), font_size=18, italics=True)
+        self.make_label("label2", "DESIGN", (x_title, y_title + add_y, w_title, h_title), font_size=18)
 
-        self.show_image("icon1", PACKAGE_PATH + "Logo/Figure.jpg", (xL_gm, yL_gm, 162, 200))
-        # self.icon1 = QtWidgets.QLabel(self)
-        # self.icon1.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/CorelFrontCoverE.jpg").pixmap(w_Logom, h_Logom, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        # self.icon1.setGeometry(xL_gm * self.w_ratio, yL_gm * self.h_ratio, wL_gm * self.w_ratio, hL_gm * self.h_ratio)
+        self.make_label("label3", "Neural Network", (x_title + add_x, y_title, w_title, h_title), font_size=18, italics=True)
+        self.make_label("label4", "DESIGN: DEEP LEARNING", (x_title + add_x, y_title + add_y, w_title, h_title), font_size=18)
 
-        self.show_image("icon2", PACKAGE_PATH + "Logo/Figure.jpg", (xL_gm, yL_gm1, 162, 200))
+        self.make_label("label5", "By Hagan, Jafari, Uría", (x_authors, y_authors, w_authors, h_authors))
 
-        """self.icon2 = QtWidgets.QLabel(self)
-        self.icon2.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/DL.svg").pixmap(w_Logom1, h_Logom1, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        # self.icon2 = self.icon2.scaled(32, 32, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.icon2.setGeometry(xL_gm1 * self.w_ratio, yL_gm1 * self.h_ratio, wL_gm1 * self.w_ratio, hL_gm1 * self.h_ratio)"""
+        # self.statusBar()
+        # self.main_menu = self.menuBar()
 
-        # self.make_button("button1", "Neural Network Design", (self.wm - xbtnm, ybtnm + 50, wbtnm, hbtnm), self.new_window1,
-        #                  "background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);"
-        #                  "\nfont-size:{}px".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
+        self.show_image("icon1", PACKAGE_PATH + "Logo/Figure.jpg", (x_left, y_img, w, h_img))
+
+        self.show_image("icon2", PACKAGE_PATH + "Logo/Figure.jpg", (x_right, y_img, w, h_img))
+
+        # Not sure why this doesn't work
+        # self.make_button(
+        #     "button1", "Neural Network Design", (20, 4150, 230, 50), self.new_window1,
+        #     "background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);\nfont-size:{}px".format(
+        #         str(int(13 * (self.w_ratio + self.h_ratio) / 2))
+        #     )
+        # )
+        # self.button1.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
 
         self.button1 = QtWidgets.QPushButton("Neural Network Design", self)
-        self.button1.setGeometry(self.wm - xbtnm * self.w_ratio, (ybtnm + 50) * self.h_ratio, wbtnm * self.w_ratio, hbtnm * self.h_ratio)
+        self.button1.setGeometry(x_left * self.w_ratio, y_button * self.h_ratio, w * self.w_ratio, h_button * self.h_ratio)
         self.button1.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
         self.button1.clicked.connect(self.new_window1)
         self.button1.setStyleSheet("background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);"
                                    "\nfont-size:{}px".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
         self.button1_win = None
 
-        self.button2 = QtWidgets.QPushButton("Neural Network Design : Deep Learning", self)
-        self.button2.setGeometry(self.wm - xbtnm * self.w_ratio, ybtnm1 * self.h_ratio, wbtnm * self.w_ratio, hbtnm * self.h_ratio)
+        self.button2 = QtWidgets.QPushButton("Neural Network Design: Deep Learning", self)
+        self.button2.setGeometry(x_right * self.w_ratio, y_button * self.h_ratio, w * self.w_ratio, h_button * self.h_ratio)
         self.button2.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
         self.button2.clicked.connect(self.new_window2)
         self.button2.setStyleSheet("background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);"
                                    "\nfont-size:{}px".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
         self.button2_win = None
+
+        self.make_label("book1_info", "Some text here, fill this up with something\nbla bla bla", (x_left, y_text, w, h_text))
+
+        self.make_label("book2_info", "Some text here, fill this up with something\nbla bla bla", (x_right, y_text, w, h_text))
 
     def new_window1(self):
         self.button1_win = MainWindowNN(self.w_ratio, self.h_ratio)
