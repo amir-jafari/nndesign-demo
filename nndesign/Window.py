@@ -68,6 +68,7 @@ from Unsupervised_hebb import UnsupervisedHebb
 from Effects_of_decay_rate import EffectsOfDecayRate
 from Hebb_with_decay import HebbWithDecay
 from Graphical_instar import GraphicalInstar
+from Outstar import OutStar
 # ------ Chapter 16 -------
 from Competitive_classification import CompetitiveClassification
 from Competitive_learning import CompetitiveLearning
@@ -466,8 +467,9 @@ class MainWindowNN(NNDLayout):
         elif idx == 4:
             self.chapter_window4 = GraphicalInstar(self.w_ratio, self.h_ratio)
             self.chapter_window4.show()
-        else:
-            print("TODO")
+        elif idx == 5:
+            self.chapter_window5 = OutStar(self.w_ratio, self.h_ratio)
+            self.chapter_window5.show()
 
     def chapter16(self, idx):
         self.comboBox3.setCurrentIndex(0)
