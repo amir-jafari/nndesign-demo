@@ -64,6 +64,7 @@ from IIR_network import IIRNetwork
 from Dynamic_derivatives import DynamicDerivatives
 from Recurrent_network_training import RecurrentNetworkTraining
 # ------ Chapter 15 -------
+from Unsupervised_hebb import UnsupervisedHebb
 from Effects_of_decay_rate import EffectsOfDecayRate
 from Graphical_instar import GraphicalInstar
 # ------ Chapter 16 -------
@@ -452,6 +453,9 @@ class MainWindowNN(NNDLayout):
 
     def chapter15(self, idx):
         self.comboBox2.setCurrentIndex(0)
+        if idx == 1:
+            self.chapter_window1 = UnsupervisedHebb(self.w_ratio, self.h_ratio)
+            self.chapter_window1.show()
         if idx == 2:
             self.chapter_window2 = EffectsOfDecayRate(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
