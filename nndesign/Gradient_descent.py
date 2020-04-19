@@ -3,8 +3,6 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 
 from nndesign_layout import NNDLayout
@@ -16,53 +14,21 @@ class GradientDescent(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(GradientDescent, self).__init__(w_ratio, h_ratio, main_menu=2, create_plot=False)
 
-        self.fill_chapter("Gradient Descent", 3, "",
+        self.fill_chapter("Gradient Descent", 3, "Some text",
                           PACKAGE_PATH + "Chapters/3_D/Logo_Ch_3.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet_new.svg", icon_move_left=120)
 
         self.data = []
 
-        self.figure1 = Figure()
-        self.canvas1 = FigureCanvas(self.figure1)
+        self.make_plot(1, (15, 300, 255, 370))
+        self.make_plot(2, (260, 300, 255, 370))
 
-        self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
         self.axis = Axes3D(self.figure)
         # self.axis.mouse_init
 
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(15 * self.w_ratio, 300 * self.h_ratio, 255 * self.w_ratio, 370 * self.h_ratio)
-        self.layout1.addWidget(self.canvas)
-        self.wid1.setLayout(self.layout1)
-
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(260 * self.w_ratio, 300 * self.h_ratio, 255 * self.w_ratio, 370 * self.h_ratio)
-        self.layout2.addWidget(self.canvas1)
-        self.wid2.setLayout(self.layout2)
-
-        self.label_lr = QtWidgets.QLabel(self)
-        self.label_lr.setText("Learning rate: 0.01")
-        self.label_lr.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_lr.setGeometry(self.x_chapter_slider_label * self.w_ratio, 400, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.slider_lr = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_lr.setRange(0, 30)
-        self.slider_lr.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_lr.setTickInterval(1)
-        self.slider_lr.setValue(1)
-        self.wid_lr = QtWidgets.QWidget(self)
-        self.layout_lr = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_lr.setGeometry(self.x_chapter_usual * self.w_ratio, 430 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout_lr.addWidget(self.slider_lr)
-        self.wid_lr.setLayout(self.layout_lr)
+        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 1,
+                         (self.x_chapter_usual, 430, self.w_chapter_slider, 50), self.slider, "label_lr",
+                         "Learning rate: 0.01", (self.x_chapter_usual + 20, 430 - 25, self.w_chapter_slider, 50))
         self.lr = float(self.slider_lr.value() / 100)
-
-        # self.run_button = QtWidgets.QPushButton("Start", self)
-        # self.run_button.setStyleSheet("font-size:13px")
-        # self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 460 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
-
-        self.slider_lr.valueChanged.connect(self.slider)
-        # self.run_button.clicked.connect(self.graph)
 
         self.graph()
 
@@ -77,14 +43,14 @@ class GradientDescent(NNDLayout):
             self.data.append((event.xdata, event.ydata))
             self.a1.plot(np.array([self.data[-1][0]]), np.array([self.data[-1][1]]), 'bo')
             self.graph()
-            self.canvas1.draw()
+            self.canvas2.draw()
 
     def graph(self):
 
         aa = self.axis
         aa.clear()  # Clear the plot
 
-        self.a1 = self.figure1.add_subplot(111)
+        self.a1 = self.figure2.add_subplot(111)
         self.a1.clear()  # Clear the plot
 
         hh = np.array([[-1, 2, 0, - 1], [2, - 1, - 1, 0]])
@@ -154,5 +120,5 @@ class GradientDescent(NNDLayout):
         aa.grid(True, which='both')
 
         self.canvas.draw()
-        self.canvas1.draw()
-        self.canvas1.mpl_connect('button_press_event', self.on_mouseclick)
+        self.canvas2.draw()
+        self.canvas2.mpl_connect('button_press_event', self.on_mouseclick)
