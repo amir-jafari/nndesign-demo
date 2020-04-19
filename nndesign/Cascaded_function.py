@@ -13,54 +13,25 @@ from get_package_path import PACKAGE_PATH
 
 class CascadedFunction(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(CascadedFunction, self).__init__(w_ratio, h_ratio, main_menu=2)
+        super(CascadedFunction, self).__init__(w_ratio, h_ratio, main_menu=2, create_plot=False)
 
-        self.fill_chapter("Cascaded Function", 2, "",
+        self.fill_chapter("Cascaded Function", 2, "Some text",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/2f_1_1.svg", icon_move_left=120)
 
-        self.comboBox1 = QtWidgets.QComboBox(self)
+        self.make_plot(1, (90, 300, 370, 370))
+
         self.comboBox1_functions = [self.Poslin, self.LogSig]
-        self.comboBox1.addItems(["ReLU", 'LogSig'])
-        self.comboBox1.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 410 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
+        self.make_combobox(1, ["ReLU", 'LogSig'], (self.x_chapter_usual, 420, self.w_chapter_slider, 50),
+                           self.change_transfer_function, "label_f", "f")
         self.func = self.Poslin
-        self.label_f = QtWidgets.QLabel(self)
-        self.label_f.setText("f")
-        self.label_f.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_f.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 400 * self.h_ratio, 150 * self.w_ratio, 50 * self.h_ratio)
-        self.wid1 = QtWidgets.QWidget(self)
-        self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid1.setGeometry(self.x_chapter_usual * self.w_ratio, 420 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout1.addWidget(self.comboBox1)
-        self.wid1.setLayout(self.layout1)
 
-        self.comboBox2 = QtWidgets.QComboBox(self)
-        self.comboBox2.addItems(["Two", 'Three', "Four"])
+        self.make_combobox(2, ["Two", 'Three', "Four"], (self.x_chapter_usual, 480, self.w_chapter_slider, 50),
+                           self.combo_bbox2, "label_iter", "Number of iterations",
+                           (self.x_chapter_slider_label - 40, 460, self.w_chapter_slider, 50))
         self.func1 = self.two
-        self.comboBox2.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 480 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.label_iter = QtWidgets.QLabel(self)
-        self.label_iter.setText("Number of iterations")
-        self.label_iter.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_iter.setGeometry((self.x_chapter_slider_label - 20) * self.w_ratio, 470 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 490 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 50 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox2)
-        self.wid2.setLayout(self.layout2)
 
-        self.sliderval = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.sliderval.setRange(0, 50)
-        self.sliderval.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.sliderval.setTickInterval(1)
-        self.sliderval.setValue(0)
-        self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid3.setGeometry(self.x_chapter_usual * self.w_ratio, 530 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout3.addWidget(self.sliderval)
-        self.wid3.setLayout(self.layout3)
-
-        self.comboBox1.currentIndexChanged.connect(self.change_transfer_function)
-        self.comboBox2.currentIndexChanged.connect(self.combo_bbox2)
-        self.sliderval.valueChanged.connect(self.graph)
+        self.make_slider("sliderval", QtCore.Qt.Horizontal, (0, 50), QtWidgets.QSlider.TicksBelow, 1, 0,
+                         (self.x_chapter_usual, 530, self.w_chapter_slider, 50), self.graph)
 
         self.graph()
 

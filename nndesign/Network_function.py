@@ -279,15 +279,3 @@ class NetworkFunction(NNDLayout):
         self.slider_w2_2.setValue(np.random.uniform(-20, 20))
         self.slider_b2.setValue(np.random.uniform(-20, 20))
         self.graph()
-
-    @staticmethod
-    def purelin(x):
-        return x
-
-    @staticmethod
-    def logsig(x):
-        return 1 / (1 + math.e ** (-x))
-
-    @staticmethod
-    def tansig(x):
-        return 2 / (1 + math.e ** (-2 * x)) - 1
