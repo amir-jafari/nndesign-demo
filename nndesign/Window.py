@@ -66,6 +66,7 @@ from Recurrent_network_training import RecurrentNetworkTraining
 # ------ Chapter 15 -------
 from Unsupervised_hebb import UnsupervisedHebb
 from Effects_of_decay_rate import EffectsOfDecayRate
+from Hebb_with_decay import HebbWithDecay
 from Graphical_instar import GraphicalInstar
 # ------ Chapter 16 -------
 from Competitive_classification import CompetitiveClassification
@@ -456,9 +457,12 @@ class MainWindowNN(NNDLayout):
         if idx == 1:
             self.chapter_window1 = UnsupervisedHebb(self.w_ratio, self.h_ratio)
             self.chapter_window1.show()
-        if idx == 2:
+        elif idx == 2:
             self.chapter_window2 = EffectsOfDecayRate(self.w_ratio, self.h_ratio)
             self.chapter_window2.show()
+        elif idx == 3:
+            self.chapter_window3 = HebbWithDecay(self.w_ratio, self.h_ratio)
+            self.chapter_window3.show()
         elif idx == 4:
             self.chapter_window4 = GraphicalInstar(self.w_ratio, self.h_ratio)
             self.chapter_window4.show()

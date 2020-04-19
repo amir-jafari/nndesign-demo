@@ -5,13 +5,13 @@ from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
 
 
-class UnsupervisedHebb(NNDLayout):
+class HebbWithDecay(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(UnsupervisedHebb, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(HebbWithDecay, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
 
-        self.fill_chapter("Unsupervised Hebb", 15, "\n\nClick [Fruit] to send a fruit\ndown the belt to be\nrecognized.\n\n"
-                                                   "Click [Update] to\napply the Hebb rule.\n\nWhen the lower weight is\n"
-                                                   ">0.5, the network will\nrecognize bananas with\nthe first scanner off.",
+        self.fill_chapter("Hebb with Decay", 15, "\n\nClick [Fruit] to send a fruit\ndown the belt to be\nrecognized.\n\n"
+                                                 "Click [Update] to\napply the Hebb rule.\n\nBecause of weight\n"
+                                                 "decay, the weight will\nnever exceed a\nvalue of 2.0.",
                           PACKAGE_PATH + "Logo/Logo_Ch_15.svg", None)
 
         self.p, self.a, self.label, self.fruit = None, None, None, None
@@ -47,7 +47,7 @@ class UnsupervisedHebb(NNDLayout):
         self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
 
     def paintEvent(self, event):
-        super(UnsupervisedHebb, self).paintEvent(event)
+        super(HebbWithDecay, self).paintEvent(event)
 
         painter = QtGui.QPainter(self.icon3.pixmap())
         pen = QtGui.QPen(QtCore.Qt.white if self.first_scanner_on else QtCore.Qt.red, 2)
@@ -79,7 +79,7 @@ class UnsupervisedHebb(NNDLayout):
     def on_run(self):
         if self.update:
             try:
-                self.W2 += 0.2 * self.banana
+                self.W2 = self.W2 + 0.2 * self.banana - 0.1 * self.W2
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
                 self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
                 self.update = False
