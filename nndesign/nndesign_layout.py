@@ -57,8 +57,9 @@ x_chapter = 560 * 1.5542857143"""
 
 class NNDLayout(QMainWindow):
     def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True,
-                 create_plot=True, create_plot_coords=(90, 300, 370, 370),
-                 create_two_plots=False, print_mouse_coords=False):
+                 create_plot=None, print_mouse_coords=False):
+
+        # TODO: create_plot has been removed, but is still in each individual demo --> take it out
 
         super(NNDLayout, self).__init__()
 
@@ -97,38 +98,6 @@ class NNDLayout(QMainWindow):
             self.setWindowTitle("Neural Network Design: Deep Learning Demos")
             self.make_label("label1", "Neural Network", (xlabel, ylabel, wlabel, hlabel), font_size=18, italics=True)
             self.make_label("label2", "DESIGN: DEEP LEARNING", (xlabel, ylabel + add, wlabel, hlabel), font_size=18)
-
-        if create_plot:
-
-            self.figure = Figure()
-            self.canvas = FigureCanvas(self.figure)
-            self.toolbar = NavigationToolbar(self.canvas, self)
-            self.wid1 = QtWidgets.QWidget(self)
-            self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-            self.wid1.setGeometry(create_plot_coords[0] * self.w_ratio, create_plot_coords[1] * self.h_ratio,
-                                  create_plot_coords[2] * self.w_ratio, create_plot_coords[3] * self.h_ratio)
-            self.layout1.addWidget(self.canvas)
-            self.wid1.setLayout(self.layout1)
-
-        elif create_two_plots:
-
-            self.figure = Figure()
-            self.canvas = FigureCanvas(self.figure)
-            self.toolbar = NavigationToolbar(self.canvas, self)
-            self.wid1 = QtWidgets.QWidget(self)
-            self.layout1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-            self.wid1.setGeometry(120 * self.w_ratio, 120 * self.h_ratio, 270 * self.w_ratio, 270 * self.h_ratio)
-            self.layout1.addWidget(self.canvas)
-            self.wid1.setLayout(self.layout1)
-
-            self.figure2 = Figure()
-            self.canvas2 = FigureCanvas(self.figure2)
-            self.toolbar2 = NavigationToolbar(self.canvas2, self)
-            self.wid2 = QtWidgets.QWidget(self)
-            self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-            self.wid2.setGeometry(120 * self.w_ratio, 390 * self.h_ratio, 270 * self.w_ratio, 270 * self.h_ratio)
-            self.layout2.addWidget(self.canvas2)
-            self.wid2.setLayout(self.layout2)
 
     def paintEvent(self, e):
         qp = QtGui.QPainter()

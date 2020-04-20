@@ -45,6 +45,10 @@ class MainWindow(NNDLayout):
         # )
         # self.button1.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
 
+        self.make_label("book1_info", "Some text here, fill this up with something\nbla bla bla", (x_left, y_text, w, h_text))
+
+        self.make_label("book2_info", "Some text here, fill this up with something\nbla bla bla", (x_right, y_text, w, h_text))
+
         self.button1 = QtWidgets.QPushButton("Neural Network Design", self)
         self.button1.setGeometry(x_left * self.w_ratio, y_button * self.h_ratio, w * self.w_ratio, h_button * self.h_ratio)
         self.button1.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
@@ -60,10 +64,6 @@ class MainWindow(NNDLayout):
         self.button2.setStyleSheet("background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);"
                                    "\nfont-size:{}px".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
         self.button2_win = None
-
-        self.make_label("book1_info", "Some text here, fill this up with something\nbla bla bla", (x_left, y_text, w, h_text))
-
-        self.make_label("book2_info", "Some text here, fill this up with something\nbla bla bla", (x_right, y_text, w, h_text))
 
     def new_window1(self):
         self.button1_win = MainWindowNN(self.w_ratio, self.h_ratio)
