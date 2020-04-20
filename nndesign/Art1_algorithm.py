@@ -21,7 +21,7 @@ yy_up = np.arange(0, nrows_up, (hei_up + inbetween_up))
 
 class ART1Algorithm(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(ART1Algorithm, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(ART1Algorithm, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("ART1 Algorithm", 19, "\nClick on the green\ngrids to define patterns.\nClick on the buttons\n"
                                                 "to present them.\n\nThe ART1 network's\nprototype patterns are\nshown below.\n\n"

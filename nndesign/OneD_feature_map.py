@@ -49,7 +49,7 @@ zz = zz / (np.ones((2, 1)) * np.sqrt(np.sum(zz ** 2, axis=0) + 1))
 
 class OneDFeatureMap(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(OneDFeatureMap, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(OneDFeatureMap, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("1-D Feature Map", 16, "Click [Train] to present 500\nvectors to the feature map.\n\n"
                                                  "Several clicks are required\nto obtain a stable network.\n\n"

@@ -15,7 +15,7 @@ t = np.arange(0, 0.2, 0.001)
 
 class ART1Layer1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(ART1Layer1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(ART1Layer1, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("ART1 Layer 1", 19, "Adjust the inputs,\nbiases and weights.\nThen click [Update] to\n"
                                               "see the layer respond.\n\nn1(1) is red,\nn1(2) is green.\n\n"

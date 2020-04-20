@@ -41,7 +41,7 @@ T = logsigmoid(np.dot(W2, A1) + b2)
 
 class Marquardt(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(Marquardt, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(Marquardt, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Marquardt", 12, "\nUUse the pop up menu below\nto select the network\nparameters"
                                            " to train\nwith backpropagation.\n\nThe corresponding contour\nplot "

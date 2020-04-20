@@ -15,7 +15,7 @@ randseq = [-0.7616, -1.0287, 0.5348, -0.8102, -1.1690, 0.0419, 0.8944, 0.5460, -
 
 class LinearLeastSquares(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(LinearLeastSquares, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(LinearLeastSquares, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Linear Least Squares", 17, "\n\nBasis functions are\nspaced evenly.\n\nYou can change the first\n"
                                                       "center location and\nthe bias. The automatic\nbias will produce\n"

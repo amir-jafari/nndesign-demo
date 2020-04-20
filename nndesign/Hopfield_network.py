@@ -20,7 +20,7 @@ X, Y = np.meshgrid(x, y)
 
 class HopfieldNetwork(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(HopfieldNetwork, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(HopfieldNetwork, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Hopfield Network", 21, "Click in the left graph\nto simulate the\nHopfield Network.\n\n"
                                                   "Change the weights, biases\nand gain. Then click\n[Update] to change\n"

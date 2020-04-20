@@ -40,7 +40,7 @@ def purelin_der(n):
 
 class Regularization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(Regularization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(Regularization, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Regularization", 13, "Click [Train] to train the\nnetwork on the noisy\ndata points.\n\n"
                                                 "Use the slide bars to choose\nthe Regularization Ratio\nand the "

@@ -17,7 +17,7 @@ X, Y = np.meshgrid(x, y)
 
 class QuadraticFunction(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(QuadraticFunction, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(QuadraticFunction, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Taylor Series", 8, "\n\nChange the values of the\nHessian matrix A, the\nvector d, and the constant c.\n"
                                               "Then click [Update] to see\nthe new function.\n\nNote that the Hessian matrix\n"

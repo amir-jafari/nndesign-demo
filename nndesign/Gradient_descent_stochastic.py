@@ -12,7 +12,7 @@ from get_package_path import PACKAGE_PATH
 
 class GradientDescentStochastic(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(GradientDescentStochastic, self).__init__(w_ratio, h_ratio, main_menu=2, create_plot=False)
+        super(GradientDescentStochastic, self).__init__(w_ratio, h_ratio, main_menu=2)
 
         self.fill_chapter("Gradient Descent Stochastic", 3, "Some text",
                           PACKAGE_PATH + "Chapters/3_D/Logo_Ch_3.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet_new.svg", icon_move_left=120)

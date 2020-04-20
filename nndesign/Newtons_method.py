@@ -24,7 +24,7 @@ F[F > 12] = 12
 
 class NewtonsMethod(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(NewtonsMethod, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(NewtonsMethod, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Newton's Method", 9, "Click anywhere on the\ngraph to start an\ninitial guess.\n\nThen the "
                                                 "steepest descent\ntrajectory will be shown.\n\nThe bottom graph shows\nthe"

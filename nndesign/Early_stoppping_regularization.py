@@ -27,7 +27,7 @@ max_epoch = 100
 
 class EarlyStoppingRegularization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(EarlyStoppingRegularization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(EarlyStoppingRegularization, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Early Stopping/Regularization", 13, "Click on the epoch slider\nto see the steepest\ndescent trajectory.\n\n"
                                                                "Click on the ro slider\nto see the minimum of\nthe regularized"

@@ -39,7 +39,7 @@ F = (A[0, 0] * X ** 2 + (A[0, 1] + A[1, 0]) * X * Y + A[1, 1] * Y ** 2) / 2 + d[
 
 class AdaptiveNoiseCancellation(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(AdaptiveNoiseCancellation, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(AdaptiveNoiseCancellation, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Adaptive Noise Cancellation", 10, "\n\nClick on the bottom contour\nplot to change\nthe initial weights.\n\n"
                                                              "Use the sliders to alter\nthe learning rate\nand momentum.\n\n"

@@ -12,7 +12,7 @@ from get_package_path import PACKAGE_PATH
 
 class GraphicalInstar(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(GraphicalInstar, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(GraphicalInstar, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Graphical Instar", 15, "Click on the top graph\nto change the green\nweight vector.\n\n"
                                                   "Click on the bottom graph\nto change the red\ninput vector.\n\n"

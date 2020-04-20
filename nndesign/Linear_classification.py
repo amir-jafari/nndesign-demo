@@ -30,7 +30,7 @@ yy_up = np.arange(0, nrows_up, (hei_up + inbetween_up))
 
 class LinearClassification(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(LinearClassification, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(LinearClassification, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Linear Classification", 10, "Edit the RED grid and\nwatch the output meter\nrespond to the"
                                                        " new inputs.\n\nEdit the GREEN grids and\nthen click [Train] to\n"

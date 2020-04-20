@@ -8,7 +8,7 @@ from get_package_path import PACKAGE_PATH
 
 class HopfieldClassification(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(HopfieldClassification, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(HopfieldClassification, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Hopfield Classification", 3, "Click [Go] to send a fruit\ndown the belt to be\nclassified"
                           " by a Hopfield\nnetwork.\n\nThe calculations for the\nHopfield network will\nappear below.",

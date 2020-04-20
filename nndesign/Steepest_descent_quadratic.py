@@ -20,7 +20,7 @@ F = (a[0, 0] * X ** 2 + a[0, 1] + a[1, 0] * X * Y + a[1, 1] * Y ** 2) / 2 + b[0]
 
 class SteepestDescentQuadratic(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(SteepestDescentQuadratic, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(SteepestDescentQuadratic, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Steepest Descent for Quadratic", 9, "Click anywhere on the\ngraph to start an initial guess."
                                                                "\nThen the steepest descent\ntrajectory will be shown.\n\n"

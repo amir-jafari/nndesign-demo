@@ -13,7 +13,7 @@ from get_package_path import PACKAGE_PATH
 
 class CascadedFunction(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(CascadedFunction, self).__init__(w_ratio, h_ratio, main_menu=2, create_plot=False)
+        super(CascadedFunction, self).__init__(w_ratio, h_ratio, main_menu=2)
 
         self.fill_chapter("Cascaded Function", 2, "Some text",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/2f_1_1.svg", icon_move_left=120)

@@ -11,7 +11,7 @@ from get_package_path import PACKAGE_PATH
 
 class TaylorSeries1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(TaylorSeries1, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(TaylorSeries1, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Taylor Series #1", 8, "Click on the top graph to\ncreate a Taylor series\napproximation"
                                                  " of the\ncosine function.\n\nClick on the checkboxes\nto turn various orders\n"

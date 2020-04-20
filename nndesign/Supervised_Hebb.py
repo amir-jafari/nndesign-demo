@@ -20,7 +20,7 @@ yy_up = np.arange(0, nrows_up, (hei_up + inbetween_up))
 
 class SupervisedHebb(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(SupervisedHebb, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(SupervisedHebb, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Supervised Hebb", 7, "Click on the green grids\nto define target patterns.\n\n"
                                                 "Click on the gray grid\nto define a test pattern.\n\n"

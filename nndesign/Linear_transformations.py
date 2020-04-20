@@ -35,7 +35,7 @@ from get_package_path import PACKAGE_PATH
 
 class LinearTransformations(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(LinearTransformations, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(LinearTransformations, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Linear Transformations", 6, "TODO - Include instructions\nwhen decide if change\nfunctionality or not",
                           PACKAGE_PATH + "Logo/Logo_Ch_6.svg", None)

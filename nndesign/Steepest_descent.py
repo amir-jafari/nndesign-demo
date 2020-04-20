@@ -24,7 +24,7 @@ F[F > 12] = 12
 
 class SteepestDescent(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(SteepestDescent, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(SteepestDescent, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Steepest Descent", 9, "Click anywhere on the\ngraph to start an initial guess."
                                                  "\nThen the steepest descent\ntrajectory will be shown.\n\n"

@@ -20,7 +20,7 @@ F = (a[0, 0] * X ** 2 + a[0, 1] + a[1, 0] * X * Y + a[1, 1] * Y ** 2) / 2 + b[0]
 
 class ComparisonOfMethods(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(ComparisonOfMethods, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(ComparisonOfMethods, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Comparison of Methods", 9, "Click in either graph\nto start a search point.\n\nThen watch the two\n"
                                                       "algorithms attempt to\nfind the minima.\n\nThe two alrorithms are:\n"

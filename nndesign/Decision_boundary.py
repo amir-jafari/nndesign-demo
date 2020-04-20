@@ -21,7 +21,7 @@ def hardlim(n):
 
 class DecisionBoundaries(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(DecisionBoundaries, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(DecisionBoundaries, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Decision Boundaries", 4, "Move the perceptron\ndecision boundary by\ndragging the stars.\n\nTry to divide the points so\nthat "
                                                     "none of them are red.\n\nLeft-click on the plot to add\na positive class.\n\nRight-click to add a\nnegative class.\n\n"

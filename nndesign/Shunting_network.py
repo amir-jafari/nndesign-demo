@@ -16,7 +16,7 @@ t = np.arange(0, 5.01, 0.01)
 
 class ShuntingNetwork(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(ShuntingNetwork, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(ShuntingNetwork, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Shunting Network", 18, "Use the slide bars\nto adjust the inputs, biases\nand the time constant (eps).\n\n"
                                                   "Click [Clear] to remove\nold responses.",

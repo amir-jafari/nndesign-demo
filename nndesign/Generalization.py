@@ -16,7 +16,7 @@ mingrad = 0.001
 
 class Generalization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(Generalization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(Generalization, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Generalization", 11, "Click the [Train] button\nto train the logsig-linear\nnetwork on the data points.\n\n"
                                                 "Use the slide bars to choose\nthe number of neurons and\nthe difficulty of the\ndata points.",

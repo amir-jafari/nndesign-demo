@@ -12,7 +12,7 @@ from get_package_path import PACKAGE_PATH
 
 class PoslinNetworkFunction(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(PoslinNetworkFunction, self).__init__(w_ratio, h_ratio, main_menu=2, create_plot=False)
+        super(PoslinNetworkFunction, self).__init__(w_ratio, h_ratio, main_menu=2)
 
         self.fill_chapter("Poslin Network Function", 2, "Some text", PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg",
                           PACKAGE_PATH + "Chapters/2_D/poslinNet_new.svg", icon_move_left=120, icon_coords=(130, 160, 500, 200))

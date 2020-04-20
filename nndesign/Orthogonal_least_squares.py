@@ -15,7 +15,7 @@ randseq = [-0.7616, -1.0287, 0.5348, -0.8102, -1.1690, 0.0419, 0.8944, 0.5460, -
 
 class OrthogonalLeastSquares(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(OrthogonalLeastSquares, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(OrthogonalLeastSquares, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Orthogonal Least Squares", 17, "\n\nUse the slide bars to\nchoose the network or\nfunction values.\n\n"
                                                           "Click [Add Neuron] to\nincrease the size of\nHidden Layer.\n\n"
@@ -50,7 +50,7 @@ class OrthogonalLeastSquares(NNDLayout):
 
         self.make_button("run_button", "Add Neuron", (self.x_chapter_button, 350, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
-        self.graph()
+        self.graph(plot_red=False)
 
     def on_run(self):
         self.S1 += 1
@@ -58,7 +58,7 @@ class OrthogonalLeastSquares(NNDLayout):
         self.label_w1_3.setText("- Calculated: " + str(self.S1 - 1))
         self.graph()
 
-    def graph(self):
+    def graph(self, plot_red=True):
 
         axis = self.figure.add_subplot(1, 1, 1)
         axis.clear()  # Clear the plot
@@ -167,7 +167,8 @@ class OrthogonalLeastSquares(NNDLayout):
         for i in range(len(temp)):
             axis.plot(p2, temp[i], linestyle="--", color="black", linewidth=0.5)
         axis.plot(p2, t_exact, color="blue", linewidth=2)
-        axis.plot(p2, a22.reshape(-1), color="red", linewidth=1)
+        if plot_red:
+            axis.plot(p2, a22.reshape(-1), color="red", linewidth=1)
         if S1 == 0:
             axis2.plot(p2, [a12] * len(p2), color="black")
         else:
@@ -184,20 +185,24 @@ class OrthogonalLeastSquares(NNDLayout):
     @staticmethod
     def rb_ols(p, t, c, b, n):
 
+        p = p.reshape(-1, 1)
+        c = c.reshape(-1, 1)
+        b = b.reshape(-1, 1)
+        t = t.reshape(-1, 1)
         q = len(p)
         nc = len(c)
         o = np.zeros((nc + 1, 1))
         h = np.zeros((nc + 1, 1))
         rr = np.eye(nc + 1)
-        indexT = range(nc + 1)
+        indexT = list(range(nc + 1))
         if n > nc + 1:
             n = nc + 1
         bindex = []
-        sst = np.dot(t.T, t)
+        sst = np.dot(t.T, t).item()
 
         temp = np.dot(p.reshape(-1, 1), np.ones((1, nc))) - np.dot(np.ones((q, 1)), c.T.reshape(1, -1))
         btot = np.dot(np.ones((q, 1)), b.T.reshape(1, -1))
-        uo = np.exp(-temp * btot ** 2)
+        uo = np.exp(-(temp * btot) ** 2)
         uo = np.hstack((uo, np.ones((q, 1))))
         u = uo
         m = u
@@ -210,60 +215,65 @@ class OrthogonalLeastSquares(NNDLayout):
         of = o1
         hf = [h[ind1]]
 
-        mf = m[:, ind1]
+        mf = m[:, ind1].reshape(-1, 1)
         ssmf = np.dot(mf.T, mf)
-        u = u[:, :ind1]
+        u = np.delete(u, ind1, 1)
         if indexT[ind1] == nc:
             bindex = 1
             indf = []
         else:
             indf = indexT[ind1]
-        indexT = indexT[:ind1]
-        m = u
+        indexT.pop(ind1)
+        m = np.copy(u)
 
         for k in range(2, n + 1):
-            o = np.zeros((nc + 2 - k - 1, 1))
-            h = np.zeros((nc + 2 - k - 1, 1))
-            r = np.zeros((k - 1, k - 1, k - 1))
-            for i in range(q - k):
-                for j in range(k - 2):
+            o = np.zeros((nc + 2 - k, 1))
+            h = np.zeros((nc + 2 - k, 1))
+            r = np.zeros((q - k + 1, k, k))
+            for i in range(q - k + 1):
+                for j in range(k - 1):
                     if type(ssmf) == np.float64:
-                        r[i, j, k - 1] = np.dot(mf[j], u[:, i]) / ssmf
+                        try:
+                            r[i, j, k - 1] = np.dot(mf, u[:, i]) / ssmf
+                            print(mf.shape, u[:, i].shape)
+                        except ValueError:
+                            print("!")
+                        m[:, i] = m[:, i] - r[i, j, k - 1] * mf[j]
                     else:
                         r[i, j, k - 1] = np.dot(mf[:, j].T, u[:, i]) / ssmf[j]
-                    m[:, i] = m[:, i] - r[i, j, k - 1] * mf[:, j]
+                        m[:, i] = m[:, i] - r[i, j, k - 1] * mf[:, j]
                 ssm = m[:, i].T.dot(m[:, i])
                 h[i] = m[:, i].T.dot(t) / ssm
                 o[i] = h[i] ** 2 * ssm / sst
             o1, ind1 = np.max(o), np.argmax(o)
-            mf = np.hstack((mf, m[:, ind1]))
+            mf = np.vstack((mf, m[:, ind1].reshape(-1, 1)))
             if type(ssmf) == np.float64:
                 ssmf = m[:, ind1].T.dot(m[:, ind1])
             else:
                 ssmf[k - 1] = m[:, ind1].T.dot(m[:, ind1])
             of = np.hstack((of, o1))
-            u = u[:, :ind1]
-            hf.append(h[ind1])
-            for j in range(k - 2):
+            u = np.delete(u, ind1, 1)
+            hf.append(h[ind1].item())
+            for j in range(k - 1):
                 rr[j, k - 1] = r[ind1, j, k - 1]
             if indexT[ind1] == nc + 1:
                 bindex = k - 1
             else:
                 indf = np.hstack((indf, indexT[ind1]))
-            indexT = indexT[:ind1]
-            m = u
+            indexT.pop(ind1)
+            m = np.copy(u)
 
         nn = len(hf)
         xx = np.zeros((nn, 1))
         xx[nn - 1] = hf[nn - 1]
         for i in list(range(nn - 1))[::-1]:
             xx[i] = hf[i]
-            for j in range(i, nn)[::-1]:
+            for j in list(range(i + 1, nn))[::-1]:
                 xx[i] = xx[i] - rr[i, j] * xx[j]
 
-        if indf:
-            w1 = c[np.int(np.array(indf))]
-            b1 = b[np.int(np.array(indf))]
+        if len(indf) != 0:
+            w1 = c[indf.astype(np.int)]
+            b1 = b[indf.astype(np.int)]
         else:
             w1, b1 = [], []
         if bindex:
@@ -272,13 +282,13 @@ class OrthogonalLeastSquares(NNDLayout):
             else:
                 w2 = xx[bindex: nn].T
             b2 = xx[0, bindex - 1]
-            indf = int(np.hstack((np.hstack((indf[:bindex - 1], nc + 1)), indf[bindex:])).item())
-            if indf:
-                uu = uo[:, np.int(np.array(indf)) - 1]
-            else:
-                uu = uo[:, []]
+            # indf = int(np.hstack((np.hstack((indf[:bindex - 1], nc + 1)), indf[bindex:])).item()) - 1
+            # if indf:
+            #     uu = uo[:, np.int(np.array(indf)) - 1]
+            # else:
+            #     uu = uo[:, []]
         else:
             b2 = 0
             w2 = xx.T
-            uu = uo[:, np.int(indf)]
+            # uu = uo[:, np.int(indf)]
         return w1, b1, w2, b2, mf, of, indf

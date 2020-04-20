@@ -13,7 +13,7 @@ from get_package_path import PACKAGE_PATH
 
 class CompetitiveLearning(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(CompetitiveLearning, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False, create_two_plots=False)
+        super(CompetitiveLearning, self).__init__(w_ratio, h_ratio, main_menu=1, create_two_plots=False)
 
         self.fill_chapter("Competitive Learning", 16, "\n\nClick on the plot to\nadd new input vectors.\n\nClick on the weight\nvectors "
                                                       "and drag the\nmouse to move them.\n\nClick [Learn] to present\n"

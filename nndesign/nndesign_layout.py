@@ -56,10 +56,7 @@ x_chapter = 560 * 1.5542857143"""
 
 
 class NNDLayout(QMainWindow):
-    def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True,
-                 create_plot=None, print_mouse_coords=False):
-
-        # TODO: create_plot has been removed, but is still in each individual demo --> take it out
+    def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True, print_mouse_coords=False):
 
         super(NNDLayout, self).__init__()
 

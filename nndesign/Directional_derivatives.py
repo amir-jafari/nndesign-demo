@@ -21,7 +21,7 @@ F = (a[0, 0] * X1 ** 2 + (a[0, 1] + a[1, 0]) * X1 * X2 + a[1, 1] * X2 ** 2) / 2 
 
 class DirectionalDerivatives(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(DirectionalDerivatives, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(DirectionalDerivatives, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Directional Derivatives", 8, "To measure a directional derivative click on the graph and move the cursor.\n\n"
                                                         "The directional derivative is taken at the point you clicked\nin the direction of the current cursor position.\n\n"

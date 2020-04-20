@@ -14,7 +14,7 @@ t = np.arange(0, 2, 0.01)
 
 class AdaptiveWeights(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(AdaptiveWeights, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(AdaptiveWeights, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Adaptive Weights", 18, "\n\n\nEdit the two input\nvectors and click\n[Update] to see the\nnetwork "
                                                   "learn them.\n\nW2(1,1) - solid red\nW2(1,2) - broken red\nW2(2,1) -"

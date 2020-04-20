@@ -15,7 +15,7 @@ mingrad = 0.0001
 
 class FunctionApproximation(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(FunctionApproximation, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(FunctionApproximation, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Function Approximation", 11, "Click the [Train] button\nto train the logsig-linear\nnetwork on the\nblue function.\n\n"
                                                         "Use the slide bars to choose\nthe number of neurons and\nthe difficulty of the\nblue function.",

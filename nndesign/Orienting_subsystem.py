@@ -15,7 +15,7 @@ t = np.arange(0, 0.201, 0.001)
 
 class OrientingSubsystem(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(OrientingSubsystem, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(OrientingSubsystem, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Orienting Subsystem", 19, "Adjust the inputs\nand constants.\nThen click [Update] to\n"
                                                      "see the system respond.\n\nClick [Clear] to\nremove old responses.",

@@ -15,7 +15,7 @@ t = np.arange(0, 0.51, 0.01)
 
 class GrossbergLayer2(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(GrossbergLayer2, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(GrossbergLayer2, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Grossberg Layer 2", 18, "Use the slide bars\nto adjust the inputs, biases\nand the time constant (eps).\n\n"
                                                    "Output n2(1) is red,\noutput n2(2) is green.\n\nClick [Clear] to remove\nold responses.",

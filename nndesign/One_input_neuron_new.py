@@ -11,7 +11,7 @@ from get_package_path import PACKAGE_PATH
 
 class OneInputNeuron(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(OneInputNeuron, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(OneInputNeuron, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("One-Input Neuron", 2, "Alter the weight, bias and\ninput by dragging the\ntriangular"
                                                  " shaped indicators.<p>Pick the transfer function\nwith the f menu."

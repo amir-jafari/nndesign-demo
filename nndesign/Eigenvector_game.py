@@ -14,7 +14,7 @@ from get_package_path import PACKAGE_PATH
 
 class EigenvectorGame(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(EigenvectorGame, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(EigenvectorGame, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Eigenvector Game", 6, "Your job is to find\nthe two eigenvectors of an\nunknown transformation.\n\n"
                                                  "Click on the plot to draw a\nvector (in red) and see\nthe transformed vector.\n\n"

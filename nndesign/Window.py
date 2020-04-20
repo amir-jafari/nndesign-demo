@@ -151,7 +151,7 @@ BOOK2_CHAPTERS_DEMOS = {
 class MainWindowNN(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         """ Main Window for the Neural Network Design Book. Inherits basic layout from NNDLayout """
-        super(MainWindowNN, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=1, draw_vertical=False, create_plot=False)
+        super(MainWindowNN, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=1, draw_vertical=False)
 
         self.make_label("label_3", "Table of Contents", (380, ylabel + add, wlabel, hlabel), font_size=18)
         self.make_label("label4", "By Hagan, Jafari, Uría", (xautor, yautor, wlabel, hlabel))
@@ -534,7 +534,7 @@ class MainWindowNN(NNDLayout):
 class MainWindowDL(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         """ Main Window for the Neural Network Design - Deep Learning Book. Inherits basic layout from NNDLayout """
-        super(MainWindowDL, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=2, draw_vertical=False, create_plot=False)
+        super(MainWindowDL, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=2, draw_vertical=False)
 
         self.make_label("label_3", "Table of Contents", (380, ylabel + add, wlabel, hlabel), font_size=18)
         self.make_label("label4", "By Hagan, Jafari, Uría", (xautor, yautor, wlabel, hlabel))

@@ -10,7 +10,7 @@ from get_package_path import PACKAGE_PATH
 class MainWindow(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         """ Window that shows the main menu, to choose between the two books """
-        super(MainWindow, self).__init__(w_ratio, h_ratio, chapter_window=False, draw_vertical=False, create_plot=False)
+        super(MainWindow, self).__init__(w_ratio, h_ratio, chapter_window=False, draw_vertical=False)
 
         # Coordinates (in px)
         x_title, y_title, w_title, h_title, add_x, add_y = 30, 5, 500, 100, 250, 20

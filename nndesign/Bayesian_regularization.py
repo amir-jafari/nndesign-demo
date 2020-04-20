@@ -39,7 +39,7 @@ def purelin_der(n):
 
 class BayesianRegularization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(BayesianRegularization, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(BayesianRegularization, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Bayesian Regularization", 13, "Click [Train] to train the\nnetwork on the noisy\ndata points.\n\n"
                                                          "Use the slide bars to choose\nthe Network Size, the\nNumber of"

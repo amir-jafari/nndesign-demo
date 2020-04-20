@@ -12,7 +12,7 @@ from get_package_path import PACKAGE_PATH
 
 class EffectsOfDecayRate(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
-        super(EffectsOfDecayRate, self).__init__(w_ratio, h_ratio, main_menu=1, create_plot=False)
+        super(EffectsOfDecayRate, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Effects off Decay Rate", 15, "Use the slider bars to\nadjust learning and\ndecay rates.\n\n"
                                                         "Click [Clear] to remove\nold responses.\n\nClick [Random] to get\n"
