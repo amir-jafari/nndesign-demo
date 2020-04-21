@@ -1,9 +1,10 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-import math
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+from mpl_toolkits.mplot3d import Axes3D
+import ast
 
 from nndesign_layout import NNDLayout
 
@@ -14,239 +15,115 @@ class PoslinDecisionRegions(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(PoslinDecisionRegions, self).__init__(w_ratio, h_ratio, main_menu=2)
 
-        self.fill_chapter("Poslin Decision Regions", 2, "Choose transfer function\nfirst and choose weight\nand biases then.",
+        self.fill_chapter("Poslin Decision Regions", 2, "Some text",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet2D_1.svg", icon_move_left=120)
 
-        self.make_plot(1, (10, 410, 500, 280))
+        self.make_plot(1, (10, 300, 250, 250))
+        self.make_plot(2, (260, 300, 250, 250))
+        self.axis = Axes3D(self.figure)
 
-        self.comboBox1 = QtWidgets.QComboBox(self)
-        self.comboBox1_functions = [self.poslin, self.purelin, self.hardlim, self.hardlims, self.satlin, self.satlins, self.logsig, self.tansig]
-        self.comboBox1.addItems(["Poslin", "Purelin", 'Hardlim', 'Hardlims', 'Satlin', 'Satlins', 'LogSig', 'TanSig'])
-        self.comboBox1.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 580 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
+        self.make_label("label_w1", "W1: [[1, 1], [-1, -1], [-1, 1], [1, -1]]", (35, 535, 200, 50))
+        self.make_button("button_w1", "Change W1", (25, 570, 220, self.h_chapter_button), self.change_w1)
+        self.w1 = np.array([[1, 1], [-1, - 1], [-1, 1], [1, - 1]])
+
+        self.make_label("label_w2", "W2: [[-1], [-1], [-1], [-1]]", (320, 535, 150, 50))
+        self.make_button("button_w2", "Change W2", (315, 570, 150, self.h_chapter_button), self.change_w2)
+        self.w2 = np.array([[-1], [-1], [-1], [-1]])
+
+        self.make_label("label_b1", "b1: [[-1], [3], [1], [1]]", (75, 600, 150, 50))
+        self.make_button("button_b1", "Change b1", (60, 635, 150, self.h_chapter_button), self.change_b1)
+        self.b1 = np.array([[-1], [3], [1], [1]])
+
+        self.make_label("label_b2", "b2: [5]", (370, 600, 100, 50))
+        self.make_button("button_b2", "Change b2", (340, 635, 100, self.h_chapter_button), self.change_b2)
+        self.b2 = np.array([5])
+
+        self.combobox_funcs = [self.poslin, self.hardlim, self.hardlims, self.purelin, self.satlin, self.satlins, self.logsig, self.tansig]
+        self.combobox_funcs_str = ["poslin", "hardlim", "hardlims", "purelin", "satlin", "satlins", "logsig", "tansig"]
+        self.make_combobox(1, self.combobox_funcs_str, (self.x_chapter_usual, 540, self.w_chapter_slider, 50), self.change_transfer_f, "label_f", "f")
         self.func1 = self.poslin
-        self.label_f = QtWidgets.QLabel(self)
-        self.label_f.setText("f")
-        self.label_f.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_f.setGeometry((self.x_chapter_slider_label + 10) * self.w_ratio, 570 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(self.x_chapter_usual * self.w_ratio, 590 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout2.addWidget(self.comboBox1)
-        self.wid2.setLayout(self.layout2)
-
-        self.label_w1_1 = QtWidgets.QLabel(self)
-        self.label_w1_1.setText("w1_1")
-        self.label_w1_1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w1_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 100, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_w1_1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w1_1.setRange(-1, 1)
-        self.slider_w1_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w1_1.setTickInterval(1)
-        self.slider_w1_1.setValue(1)
-
-        self.wid_w1_1 = QtWidgets.QWidget(self)
-        self.layout_w1_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w1_1.setGeometry(self.x_chapter_usual * self.w_ratio, 130 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_w1_1.addWidget(self.slider_w1_1)
-        self.wid_w1_1.setLayout(self.layout_w1_1)
-
-        self.label_w1_2 = QtWidgets.QLabel(self)
-        self.label_w1_2.setText("w1_2")
-        self.label_w1_2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w1_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 170, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_w1_2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w1_2.setRange(-3, 3)
-        self.slider_w1_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w1_2.setTickInterval(1)
-        self.slider_w1_2.setValue(2)
-
-        self.wid_w1_2 = QtWidgets.QWidget(self)
-        self.layout_w1_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w1_2.setGeometry(self.x_chapter_usual * self.w_ratio, 200 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_w1_2.addWidget(self.slider_w1_2)
-        self.wid_w1_2.setLayout(self.layout_w1_2)
-
-        self.label_b1_1 = QtWidgets.QLabel(self)
-        self.label_b1_1.setText("b1_1")
-        self.label_b1_1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b1_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 240 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_b1_1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b1_1.setRange(-2, 2)
-        self.slider_b1_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b1_1.setTickInterval(1)
-        self.slider_b1_1.setValue(0)
-
-        self.wid_b1_1 = QtWidgets.QWidget(self)
-        self.layout_b1_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_b1_1.setGeometry(self.x_chapter_usual * self.w_ratio, 270 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_b1_1.addWidget(self.slider_b1_1)
-        self.wid_b1_1.setLayout(self.layout_b1_1)
-
-        self.label_b1_2 = QtWidgets.QLabel(self)
-        self.label_b1_2.setText("b1_2")
-        self.label_b1_2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b1_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 310 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_b1_2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b1_2.setRange(-1, 1)
-        self.slider_b1_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b1_2.setTickInterval(1)
-        self.slider_b1_2.setValue(-1)
-
-        self.wid_b1_2 = QtWidgets.QWidget(self)
-        self.layout_b1_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_b1_2.setGeometry(self.x_chapter_usual * self.w_ratio, 340 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_b1_2.addWidget(self.slider_b1_2)
-        self.wid_b1_2.setLayout(self.layout_b1_2)
-
-        self.label_w2_1 = QtWidgets.QLabel(self)
-        self.label_w2_1.setText("w2_1")
-        self.label_w2_1.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w2_1.setGeometry(self.x_chapter_slider_label * self.w_ratio, 380 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_w2_1 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w2_1.setRange(-5, 5)
-        self.slider_w2_1.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w2_1.setTickInterval(1)
-        self.slider_w2_1.setValue(-1)
-
-        self.wid_w2_1 = QtWidgets.QWidget(self)
-        self.layout_w2_1 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w2_1.setGeometry(self.x_chapter_usual * self.w_ratio, 410 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_w2_1.addWidget(self.slider_w2_1)
-        self.wid_w2_1.setLayout(self.layout_w2_1)
-
-        self.label_w2_2 = QtWidgets.QLabel(self)
-        self.label_w2_2.setText("w2_2")
-        self.label_w2_2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_w2_2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 450 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_w2_2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_w2_2.setRange(-3, 3)
-        self.slider_w2_2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_w2_2.setTickInterval(1)
-        self.slider_w2_2.setValue(2)
-
-        self.wid_w2_2 = QtWidgets.QWidget(self)
-        self.layout_w2_2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_w2_2.setGeometry(self.x_chapter_usual * self.w_ratio, 480 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_w2_2.addWidget(self.slider_w2_2)
-        self.wid_w2_2.setLayout(self.layout_w2_2)
-
-        self.label_b2 = QtWidgets.QLabel(self)
-        self.label_b2.setText("b1_2")
-        self.label_b2.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
-        self.label_b2.setGeometry(self.x_chapter_slider_label * self.w_ratio, 520 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_b2 = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider_b2.setRange(-2, 2)
-        self.slider_b2.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.slider_b2.setTickInterval(1)
-        self.slider_b2.setValue(0)
-
-        self.wid_b2 = QtWidgets.QWidget(self)
-        self.layout_b2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid_b2.setGeometry(self.x_chapter_usual * self.w_ratio, 550 * self.h_ratio, self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.layout_b2.addWidget(self.slider_b2)
-        self.wid_b2.setLayout(self.layout_b2)
-
-        self.comboBox1.currentIndexChanged.connect(self.change_transfer_function)
-        self.slider_w1_1.valueChanged.connect(self.graph)
-        self.slider_w1_2.valueChanged.connect(self.graph)
-        self.slider_b1_1.valueChanged.connect(self.graph)
-        self.slider_b1_2.valueChanged.connect(self.graph)
-        self.slider_w2_1.valueChanged.connect(self.graph)
-        self.slider_w2_2.valueChanged.connect(self.graph)
-        self.slider_b2.valueChanged.connect(self.graph)
 
         self.graph()
+
+    def change_transfer_f(self, idx):
+        self.func1 = self.combobox_funcs[idx]
+        self.graph()
+
+    def change_w1(self):
+        weight1, ok = QtWidgets.QInputDialog.getText(self, 'Change Weight', 'Change W1:')
+        if ok:
+            try:
+                w1 = ast.literal_eval(weight1)
+            except:
+                print("Please enter value in the following format: [[a11,a12], [a21,a22]]")
+                return
+            self.label_w1.setText("W1: " + str(w1))
+            self.w1 = np.array(w1)
+            self.graph()
+
+    def change_w2(self):
+        weight2, ok = QtWidgets.QInputDialog.getText(self, 'Change Weight', 'Change W2:')
+        if ok:
+            try:
+                w2 = ast.literal_eval(weight2)
+            except:
+                print("Please enter value in the following format: [[a11,a12], [a21,a22]]")
+                return
+            self.label_w2.setText("W2: " + str(w2))
+            self.w2 = np.array(w2)
+            self.graph()
+
+    def change_b1(self):
+        bias1, ok = QtWidgets.QInputDialog.getText(self, 'Change Bias', 'Change b1:')
+        if ok:
+            try:
+                b1 = ast.literal_eval(bias1)
+            except:
+                print("Please enter value in the following format: [[a11,a12], [a21,a22]]")
+                return
+            self.label_b1.setText("b1: " + str(b1))
+            self.b1 = b1
+            self.graph()
+
+    def change_b2(self):
+        bias2, ok = QtWidgets.QInputDialog.getText(self, 'Change Bias', 'Change b 2:')
+        if ok:
+            try:
+                b2 = ast.literal_eval(bias2)
+            except:
+                print("Please enter value in the following format: [[a11,a12], [a21,a22]]")
+                return
+            self.label_b2.setText("b2: " + str(b2))
+            self.b2 = b2
+            self.graph()
 
     def graph(self):
 
-        a = self.figure.add_subplot(1, 1, 1)
-        a.clear()  # Clear the plot
+        ax = self.axis
+        ax.clear()
+        ax1 = self.figure2.add_subplot(111)
+        ax1.clear()
 
-        weight1_1 = self.slider_w1_1.value()
-        weight1_2 = self.slider_w1_2.value()
-        bias1_1 = self.slider_b1_1.value()
-        bias1_2 = self.slider_b1_2.value()
-        weight2_1 = self.slider_w2_1.value()
-        weight2_2 = self.slider_w2_2.value()
-        bias2 = self.slider_b2.value()
+        p1 = np.linspace(-1, 3, 41)
+        p2 = np.linspace(-1, 3, 41)
+        P1, P2 = np.meshgrid(p1, p2)
+        n1, n2 = P1.shape
+        nump = n1 * n2
+        pp1 = np.reshape(P1, nump, order='F')
+        pp2 = np.reshape(P2, nump, order='F')
+        p = np.concatenate((pp1.reshape(-1, 1).T, pp2.reshape(-1, 1).T), axis=0)
+        func = np.vectorize(self.func1, otypes=[np.float])
 
-        self.label_w1_1.setText("w1_1: " + str(weight1_1))
-        self.label_w1_2.setText("w1_2: " + str(weight1_2))
-        self.label_b1_1.setText("b1_1: " + str(bias1_1))
-        self.label_b1_2.setText("b1_2: " + str(bias1_2))
-        self.label_w2_1.setText("w2_1: " + str(weight2_1))
-        self.label_w2_2.setText("w2_2: " + str(weight2_2))
-        self.label_b2.setText("b2: " + str(bias2))
+        a1 = np.dot(self.w2.T, func(np.dot(self.w1, p) + np.dot(self.b1, np.ones((1, nump))))) + np.dot(self.b2, np.ones((1, nump)))
+        aa = np.reshape(a1, (n1, n2), order='F')
+        z11 = 0 * aa
 
-        weight_1, bias_1 = np.array([[weight1_1, weight1_2]]), np.array([[bias1_1, bias1_2]])
-        weight_2, bias_2 = np.array([[weight2_1], [weight2_2]]), np.array([[bias2]])
+        ax.plot_surface(P1, P2, aa)
+        ax.plot_wireframe(P1, P2, z11, rcount=10, ccount=10)
 
-        p = np.arange(-4, 4, 0.1)
-        func = np.vectorize(self.func1)
-        out = np.dot(func(np.dot(p.reshape(-1, 1), weight_1) + bias_1), weight_2) + bias_2
+        ax1.contourf(P1, P2, aa, [0, 1000])
 
-        a.plot(p, out.reshape(-1), markersize=3, color="red")
-        # Setting limits so that the point moves instead of the plot.
-        # a.set_xlim(-2, 2)
-        # a.set_ylim(-2, 2)
-        # add grid and axes
-        a.grid(True, which='both')
-        a.axhline(y=0, color='k')
-        a.axvline(x=0, color='k')
+        ax.grid(True, which='both')
+
         self.canvas.draw()
-
-    def change_transfer_function(self, idx):
-        self.func1 = self.comboBox1_functions[idx]
-        self.graph()
-
-    @staticmethod
-    def hardlim(x):
-        if x < 0:
-            return 0
-        else:
-            return 1
-
-    @staticmethod
-    def hardlims(x):
-        if x < 0:
-            return -1
-        else:
-            return 1
-
-    @staticmethod
-    def poslin(x):
-        if x < 0:
-            return 0
-        else:
-            return x
-
-    @staticmethod
-    def purelin(x):
-        return x
-
-    @staticmethod
-    def satlin(x):
-        if x < 0:
-            return 0
-        elif x < 1:
-            return x
-        else:
-            return 1
-
-    @staticmethod
-    def satlins(x):
-        if x < -1:
-            return 0
-        elif x < 1:
-            return x
-        else:
-            return 1
-
-    @staticmethod
-    def logsig(x):
-        return 1 / (1 + math.e ** (-x))
-
-    @staticmethod
-    def tansig(x):
-        return 2 / (1 + math.e ** (-2 * x)) - 1
+        self.canvas2.draw()

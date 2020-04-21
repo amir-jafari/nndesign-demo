@@ -52,7 +52,7 @@ class EarlyStopping(NNDLayout):
 
         self.train_error, self.error_train = [], None
         self.test_error, self.error_test = [], None
-        self.ani_1, self.ani_2, self.ani_3 = None, None, None
+        self.ani_1, self.ani_2 = None, None
         self.W1, self.b1, self.W2, self.b2 = None, None, None, None
         self.S1, self.random_state = 20, 42
         np.random.seed(self.random_state)
@@ -103,8 +103,28 @@ class EarlyStopping(NNDLayout):
         self.run_button.setStyleSheet("font-size:13px")
         self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 500 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.run_button.clicked.connect(self.on_run)
+
+        self.make_button("pause_button", "Pause", (self.x_chapter_button, 530, self.w_chapter_button, self.h_chapter_button), self.on_stop)
+        self.pause = True
+
         self.init_params()
         self.full_batch = False
+
+    def on_stop(self):
+        if self.pause:
+            if self.ani_1:
+                self.ani_1.event_source.stop()
+            if self.ani_2:
+                self.ani_2.event_source.stop()
+            self.pause_button.setText("Unpause")
+            self.pause = False
+        else:
+            if self.ani_1:
+                self.ani_1.event_source.start()
+            if self.ani_2:
+                self.ani_2.event_source.start()
+            self.pause_button.setText("Pause")
+            self.pause = True
 
     def animate_init_1(self):
         self.error_goal_reached = False
@@ -148,6 +168,8 @@ class EarlyStopping(NNDLayout):
         return self.net_approx,
 
     def on_run(self):
+        self.pause_button.setText("Pause")
+        self.pause = True
         self.init_params()
         if self.ani_1:
             self.ani_1.event_source.stop()

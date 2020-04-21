@@ -63,10 +63,31 @@ class Generalization(NNDLayout):
         self.make_slider("slider_diff", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 1,
                          (20, 635, 480, 50), self.slide)
 
+        self.make_slider("slider_delay", QtCore.Qt.Horizontal, (0, 50), QtWidgets.QSlider.TicksAbove, 1, 2,
+                         (self.x_chapter_usual, 390, self.w_chapter_slider, 50), self.slide, "label_delay", "Animation Delay: 20",
+                         (self.x_chapter_usual + 20, 390 - 25, self.w_chapter_slider, 50))
+        self.anim_delay = 20
+
         self.make_button("run_button", "Train",
                          (self.x_chapter_button, 310, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
+        self.make_button("pause_button", "Pause",
+                         (self.x_chapter_button, 340, self.w_chapter_button, self.h_chapter_button), self.on_stop)
+        self.pause = True
+
         self.plot_f()
+
+    def on_stop(self):
+        if self.pause:
+            if self.ani:
+                self.ani.event_source.stop()
+            self.pause_button.setText("Unpause")
+            self.pause = False
+        else:
+            if self.ani:
+                self.ani.event_source.start()
+            self.pause_button.setText("Pause")
+            self.pause = True
 
     def slide(self):
         self.error_prev = 1000
@@ -82,6 +103,8 @@ class Generalization(NNDLayout):
         self.label_s1.setText("Number of Hidden Neurons S1: {}".format(self.S1))
         self.label_diff.setText("Difficulty Index: {}".format(self.diff))
         self.f_to_approx = lambda p: 1 + np.sin(np.pi * p * self.diff / 5)
+        self.anim_delay = self.slider_delay.value() * 10
+        self.label_delay.setText("Animation Delay: " + str(self.anim_delay))
         self.net_approx.set_data([], [])
         self.plot_f()
 
@@ -112,11 +135,13 @@ class Generalization(NNDLayout):
 
     # https://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/
     def on_run(self):
+        self.pause_button.setText("Pause")
+        self.pause = True
         if self.ani:
             self.ani.event_source.stop()
         n_epochs = 100
         self.ani = FuncAnimation(self.figure, self.on_animate_v2, init_func=self.animate_init_v2, frames=n_epochs,
-                                 interval=20, repeat=False, blit=True)
+                                 interval=self.anim_delay, repeat=False, blit=True)
 
     def animate_init(self):
         self.net_approx.set_data([], [])
@@ -153,6 +178,7 @@ class Generalization(NNDLayout):
         return self.net_approx,
 
     def animate_init_v2(self):
+        np.random.seed(5)
         self.init_params()
         self.error_goal_reached = False
         self.p = self.p.reshape(1, -1)
