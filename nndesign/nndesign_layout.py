@@ -207,7 +207,9 @@ class NNDLayout(QMainWindow):
         return qpixmap
 
     def paint_latex_string(self, latex_label_attr_name, latex_sting, font_size, latex_coords):
-        latex_paint = self.mathTex_to_QPixmap(latex_sting, font_size)
+        if self.running_on_windows:
+            font_size *= 2
+        latex_paint = self.mathTex_to_QPixmap(latex_sting, int(font_size * (self.w_ratio + self.h_ratio) / 2))
         setattr(self, latex_label_attr_name, QtWidgets.QLabel(self))
         latex_label = getattr(self, latex_label_attr_name)
         latex_label.setPixmap(latex_paint)
@@ -234,7 +236,7 @@ class NNDLayout(QMainWindow):
         label = getattr(self, label_attr_name)
         label.setText(label_str)
         if self.running_on_windows:
-            label.setFont(QtGui.QFont(font_name, int(font_size * 0.9), italic=italics))
+            label.setFont(QtGui.QFont(font_name, int(font_size * 0.78 * (self.w_ratio + self.h_ratio) / 2), italic=italics))
         else:
             label.setFont(QtGui.QFont(font_name, int(font_size * (self.w_ratio + self.h_ratio) / 2), italic=italics))
         label.setGeometry(label_coords[0] * self.w_ratio, label_coords[1] * self.h_ratio,
