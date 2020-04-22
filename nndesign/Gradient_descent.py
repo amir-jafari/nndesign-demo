@@ -54,12 +54,12 @@ class GradientDescent(NNDLayout):
         self.a1.clear()  # Clear the plot
 
         hh = np.array([[-1, 2, 0, - 1], [2, - 1, - 1, 0]])
-        t = np.array( [-1, -1, 1, 1]).reshape(-1,1)
-        jj = np.dot(hh , np.transpose(hh))
-        jt = np.dot(hh , t)
+        t = np.array([-1, -1, 1, 1]).reshape(-1, 1)
+        jj = np.dot(hh, np.transpose(hh))
+        jt = np.dot(hh, t)
         a = 2 * jj
         b = -2 * jt
-        c = np.dot(np.transpose(t),t)
+        c = np.dot(np.transpose(t), t)
         tt = np.arange(0.01, 1, 0.01) * 2 * np.pi
         circ_x1 = np.sin(tt) * .01 * (3 / 2)
         circ_y1 = np.cos(tt) * .01 * (3 / 2)
@@ -67,7 +67,7 @@ class GradientDescent(NNDLayout):
         circ_y2 = np.cos(tt) * .02 * (3 / 2)
         x10 = np.array([-1])
         x20 = np.array([-2.95])
-        y = np.linspace(-3,0,61)
+        y = np.linspace(-3, 0, 61)
         x = y
         X1, X2 = np.meshgrid(x, y)
         F = (a[0, 0] * np.power(X1, 2) + (a[0, 1] + a[1, 0]) * (X1 * X2) + a[1, 1] * np.power(X2, 2)) / 2 + b[0] * X1 + b[1] * X2 + c
@@ -87,11 +87,11 @@ class GradientDescent(NNDLayout):
         for i in range(max_epoch):
             Lx1 = x1
             Lx2 = x2
-            select = np.random.randint(4)
-            p = hh[:, select].reshape(-1,1)
-            e = t[select] - np.dot(np.array([x1.flatten(), x2.flatten()]).reshape(1, 2), p).flatten()
-            grad = 2 * e * p
-            grad1 = np.dot(a,np.array([x1.flatten(), x2.flatten()]).reshape(2, 1))+b
+            grad = 0
+            for select in range(4):
+                p = hh[:, select].reshape(-1, 1)
+                e = t[select] - np.dot(np.array([x1.flatten(), x2.flatten()]).reshape(1, 2), p).flatten()
+                grad += 2 * e * p
 
             dx1 = self.lr * grad[0]
             dx2 = self.lr * grad[1]
