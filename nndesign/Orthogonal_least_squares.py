@@ -27,8 +27,8 @@ class OrthogonalLeastSquares(NNDLayout):
         self.figure2.set_tight_layout(True)
         self.canvas2.draw()
 
-        self.make_combobox(1, ["Yes", "No"], (self.x_chapter_usual, 390, self.w_chapter_slider, 50), self.change_auto_bias,
-                           "label_f", "Auto Bias", (self.x_chapter_usual + 60, 390 - 20, 100, 50))
+        self.make_combobox(1, ["Yes", "No"], (self.x_chapter_usual, 420, self.w_chapter_slider, 50), self.change_auto_bias,
+                           "label_f", "Auto Bias", (self.x_chapter_usual + 60, 420 - 20, 100, 50))
         self.auto_bias = True
 
         self.make_label("label_w1_1", "Hidden Neurons:", (35, 530, self.w_chapter_slider, 50))
@@ -50,7 +50,15 @@ class OrthogonalLeastSquares(NNDLayout):
 
         self.make_button("run_button", "Add Neuron", (self.x_chapter_button, 350, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
+        self.make_button("reset_button", "Reset", (self.x_chapter_button, 380, self.w_chapter_button, self.h_chapter_button), self.on_reset)
+
         self.graph(plot_red=False)
+
+    def on_reset(self):
+        self.S1 = 0
+        self.label_w1_2.setText("- Requested: 0")
+        self.label_w1_3.setText("- Calculated: 0")
+        self.graph()
 
     def on_run(self):
         self.S1 += 1
@@ -116,7 +124,6 @@ class OrthogonalLeastSquares(NNDLayout):
         sigma = self.get_slider_value_and_update(self.slider_w2_2, self.label_w2_2, 1 / 10, 2)
         freq = self.get_slider_value_and_update(self.slider_b2, self.label_b2, 1 / 100, 2)
         phase = self.get_slider_value_and_update(self.slider_fp, self.label_fp)
-        sigma = 0
 
         d1 = (2 - -2) / (n_points - 1)
         p = np.arange(-2, 2 + 0.0001, d1)
@@ -161,7 +168,7 @@ class OrthogonalLeastSquares(NNDLayout):
         if S1 == 0:
             temp = b2 * np.ones((1, Q2))
         else:
-            temp = np.vstack((np.dot(W2.T, np.ones((1, Q2)) * a12), b2 * np.ones((1, Q2))))
+            temp = np.vstack((np.dot(W2.T, np.ones((1, Q2))) * a12, b2 * np.ones((1, Q2))))
 
         axis.scatter(p, t, color="white", edgecolor="black")
         for i in range(len(temp)):
@@ -233,24 +240,23 @@ class OrthogonalLeastSquares(NNDLayout):
             for i in range(q - k + 1):
                 for j in range(k - 1):
                     if type(ssmf) == np.float64:
-                        try:
-                            r[i, j, k - 1] = np.dot(mf, u[:, i]) / ssmf
-                            print(mf.shape, u[:, i].shape)
-                        except ValueError:
-                            print("!")
+                        r[i, j, k - 1] = np.dot(mf, u[:, i]) / ssmf
                         m[:, i] = m[:, i] - r[i, j, k - 1] * mf[j]
                     else:
-                        r[i, j, k - 1] = np.dot(mf[:, j].T, u[:, i]) / ssmf[j]
+                        r[i, j, k - 1] = np.dot(mf[:, j].reshape(1, -1), u[:, i][..., None]) / ssmf[0, j]
                         m[:, i] = m[:, i] - r[i, j, k - 1] * mf[:, j]
                 ssm = m[:, i].T.dot(m[:, i])
                 h[i] = m[:, i].T.dot(t) / ssm
                 o[i] = h[i] ** 2 * ssm / sst
             o1, ind1 = np.max(o), np.argmax(o)
-            mf = np.vstack((mf, m[:, ind1].reshape(-1, 1)))
+            mf = np.hstack((mf, m[:, ind1].reshape(-1, 1)))
             if type(ssmf) == np.float64:
                 ssmf = m[:, ind1].T.dot(m[:, ind1])
             else:
-                ssmf[k - 1] = m[:, ind1].T.dot(m[:, ind1])
+                try:
+                    ssmf = np.vstack((ssmf.T, m[:, ind1].T.dot(m[:, ind1]))).T
+                except:
+                    print("!")
             of = np.hstack((of, o1))
             u = np.delete(u, ind1, 1)
             hf.append(h[ind1].item())
