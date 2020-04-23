@@ -56,7 +56,8 @@ x_chapter = 560 * 1.5542857143"""
 
 
 class NNDLayout(QMainWindow):
-    def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True, print_mouse_coords=False):
+    def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True, print_mouse_coords=False,
+                 fixed_size=False):
 
         super(NNDLayout, self).__init__()
 
@@ -70,8 +71,10 @@ class NNDLayout(QMainWindow):
             self.wm, self.hm = WM_MAC_CHAPTER * w_ratio, HM_MAC_CHAPTER * h_ratio
         else:
             self.wm, self.hm = WM_MAC_MAIN * w_ratio, HM_MAC_MAIN * h_ratio
-        # self.setFixedSize(self.wm, self.hm)
-        self.setFixedSize(WM_MAC_CHAPTER, HM_MAC_CHAPTER)
+        if fixed_size:
+            self.setFixedSize(WM_MAC_CHAPTER, HM_MAC_CHAPTER)
+        else:
+            self.setFixedSize(self.wm, self.hm)
         self.center()
 
         size_scaled = int(10 * (self.w_ratio + self.h_ratio) / 2)
