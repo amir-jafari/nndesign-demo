@@ -52,29 +52,55 @@ class UnsupervisedHebb(NNDLayout):
         painter = QtGui.QPainter(self.icon3.pixmap())
         pen = QtGui.QPen(QtCore.Qt.white if self.first_scanner_on else QtCore.Qt.red, 2)
         painter.setPen(pen)
-        painter.drawLine(170 * self.w_ratio, 80 * self.h_ratio, 185 * self.w_ratio, 95 * self.h_ratio)
-        painter.drawLine(170 * self.w_ratio, 95 * self.h_ratio, 185 * self.w_ratio, 80 * self.h_ratio)
+        if self.running_on_windows:
+            painter.drawLine(170 * self.w_ratio, 80 * self.h_ratio, 185 * self.w_ratio, 95 * self.h_ratio)
+            painter.drawLine(170 * self.w_ratio, 95 * self.h_ratio, 185 * self.w_ratio, 80 * self.h_ratio)
+        else:
+            painter.drawLine(170 * self.h_ratio, 80 * self.h_ratio, 185 * self.h_ratio, 95 * self.h_ratio)
+            painter.drawLine(170 * self.h_ratio, 95 * self.h_ratio, 185 * self.h_ratio, 80 * self.h_ratio)
         pen = QtGui.QPen(QtCore.Qt.black, 1)
         painter.setPen(pen)
-        painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
-        painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), "Active" if self.first_scanner_on else "Inactive")
+        if self.running_on_windows:
+            painter.setFont(QtGui.QFont("times", 12 * (self.h_ratio + self.h_ratio) / 2))
+            painter.drawText(QtCore.QPoint(100 * self.h_ratio, 28 * self.h_ratio), "Active" if self.first_scanner_on else "Inactive")
+        else:
+            painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
+            painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), "Active" if self.first_scanner_on else "Inactive")
 
         painter = QtGui.QPainter(self.icon4.pixmap())
-        painter.setFont(QtGui.QFont("times", 11 * (self.w_ratio + self.h_ratio) / 2))
-        painter.drawText(QtCore.QPoint(120 * self.w_ratio, 58 * self.h_ratio), "1")
-        painter.drawText(QtCore.QPoint(47 * self.w_ratio, 58 * self.h_ratio), str(self.banana_shape))
-        painter.drawText(QtCore.QPoint(115 * self.w_ratio, 155 * self.h_ratio), str(round(self.W2, 1)))
-        painter.drawText(QtCore.QPoint(47 * self.w_ratio, 155 * self.h_ratio), str(self.banana_smell))
-        painter.drawText(QtCore.QPoint(212 * self.w_ratio, 140 * self.h_ratio), "-0.5")
-        painter.drawText(QtCore.QPoint(219 * self.w_ratio, 180 * self.h_ratio), "1")
+        if self.running_on_windows:
+            painter.setFont(QtGui.QFont("times", 11 * (self.h_ratio + self.h_ratio) / 2))
+            painter.drawText(QtCore.QPoint(120 * self.h_ratio, 58 * self.h_ratio), "1")
+            painter.drawText(QtCore.QPoint(47 * self.h_ratio, 58 * self.h_ratio), str(self.banana_shape))
+            painter.drawText(QtCore.QPoint(115 * self.h_ratio, 155 * self.h_ratio), str(round(self.W2, 1)))
+            painter.drawText(QtCore.QPoint(47 * self.h_ratio, 155 * self.h_ratio), str(self.banana_smell))
+            painter.drawText(QtCore.QPoint(212 * self.h_ratio, 140 * self.h_ratio), "-0.5")
+            painter.drawText(QtCore.QPoint(219 * self.h_ratio, 180 * self.h_ratio), "1")
+        else:
+            painter.setFont(QtGui.QFont("times", 11 * (self.w_ratio + self.h_ratio) / 2))
+            painter.drawText(QtCore.QPoint(120 * self.w_ratio, 58 * self.h_ratio), "1")
+            painter.drawText(QtCore.QPoint(47 * self.w_ratio, 58 * self.h_ratio), str(self.banana_shape))
+            painter.drawText(QtCore.QPoint(115 * self.w_ratio, 155 * self.h_ratio), str(round(self.W2, 1)))
+            painter.drawText(QtCore.QPoint(47 * self.w_ratio, 155 * self.h_ratio), str(self.banana_smell))
+            painter.drawText(QtCore.QPoint(212 * self.w_ratio, 140 * self.h_ratio), "-0.5")
+            painter.drawText(QtCore.QPoint(219 * self.w_ratio, 180 * self.h_ratio), "1")
         try:
-            painter.drawText(QtCore.QPoint(268 * self.w_ratio, 100 * self.h_ratio), str(round(self.n, 1)))
+            if self.running_on_windows:
+                painter.drawText(QtCore.QPoint(268 * self.h_ratio, 100 * self.h_ratio), str(round(self.n, 1)))
+            else:
+                painter.drawText(QtCore.QPoint(268 * self.w_ratio, 100 * self.h_ratio), str(round(self.n, 1)))
         except Exception as e:
             if str(e) == "type str doesn't define __round__ method":
-                painter.drawText(QtCore.QPoint(268 * self.w_ratio, 100 * self.h_ratio), str(self.n))
+                if self.running_on_windows:
+                    painter.drawText(QtCore.QPoint(268 * self.h_ratio, 100 * self.h_ratio), str(self.n))
+                else:
+                    painter.drawText(QtCore.QPoint(268 * self.w_ratio, 100 * self.h_ratio), str(self.n))
             else:
                 raise e
-        painter.drawText(QtCore.QPoint(405 * self.w_ratio, 100 * self.h_ratio), str(self.banana))
+        if self.running_on_windows:
+            painter.drawText(QtCore.QPoint(405 * self.h_ratio, 100 * self.h_ratio), str(self.banana))
+        else:
+            painter.drawText(QtCore.QPoint(405 * self.w_ratio, 100 * self.h_ratio), str(self.banana))
 
     def on_run(self):
         if self.update:
