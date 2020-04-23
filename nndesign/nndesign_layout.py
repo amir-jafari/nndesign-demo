@@ -223,8 +223,12 @@ class NNDLayout(QMainWindow):
         setattr(self, latex_label_attr_name, QtWidgets.QLabel(self))
         latex_label = getattr(self, latex_label_attr_name)
         latex_label.setPixmap(latex_paint)
-        latex_label.setGeometry(latex_coords[0] * self.w_ratio, latex_coords[1] * self.h_ratio,
-                                latex_coords[2] * self.w_ratio, latex_coords[3] * self.h_ratio)
+        if self.running_o_windows:
+            latex_label.setGeometry(latex_coords[0] * self.h_ratio, latex_coords[1] * self.h_ratio,
+                                    latex_coords[2] * self.h_ratio, latex_coords[3] * self.h_ratio)
+        else:
+            latex_label.setGeometry(latex_coords[0] * self.w_ratio, latex_coords[1] * self.h_ratio,
+                                    latex_coords[2] * self.w_ratio, latex_coords[3] * self.h_ratio)
 
     def show_image(self, image_attr_name, image_path, image_coords):
         setattr(self, image_attr_name, QtWidgets.QLabel(self))
