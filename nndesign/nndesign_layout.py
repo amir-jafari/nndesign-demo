@@ -217,9 +217,9 @@ class NNDLayout(QMainWindow):
         if self.running_on_windows:
             font_size *= 2
         if self.running_on_windows:
-            latex_paint = self.mathTex_to_QPixmap(latex_sting, int(font_size * (self.h_ratio + self.h_ratio) / 2))
+            latex_paint = self.mathTex_to_QPixmap(latex_sting, font_size)
         else:
-            latex_paint = self.mathTex_to_QPixmap(latex_sting, int(font_size * (self.w_ratio + self.h_ratio) / 2))
+            latex_paint = self.mathTex_to_QPixmap(latex_sting, font_size)
         setattr(self, latex_label_attr_name, QtWidgets.QLabel(self))
         latex_label = getattr(self, latex_label_attr_name)
         latex_label.setPixmap(latex_paint)
