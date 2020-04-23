@@ -57,7 +57,7 @@ x_chapter = 560 * 1.5542857143"""
 
 class NNDLayout(QMainWindow):
     def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True, print_mouse_coords=False,
-                 fixed_size=False):
+                 fixed_size=False, do_not_scale=False):
 
         super(NNDLayout, self).__init__()
 
@@ -66,7 +66,10 @@ class NNDLayout(QMainWindow):
         self.print_mouse_coords = print_mouse_coords
         self.setMouseTracking(print_mouse_coords)
 
-        self.w_ratio, self.h_ratio = w_ratio, h_ratio
+        if do_not_scale:
+            self.w_ratio, self.h_ratio = 1, 1
+        else:
+            self.w_ratio, self.h_ratio = w_ratio, h_ratio
         if chapter_window:
             self.wm, self.hm = WM_MAC_CHAPTER * w_ratio, HM_MAC_CHAPTER * h_ratio
         else:
