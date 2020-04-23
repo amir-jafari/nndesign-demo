@@ -20,6 +20,7 @@ class UnsupervisedHebb(NNDLayout):
 
         self.figure2_w, self.figure2_h = 475, 350
         self.icon4 = QtWidgets.QLabel(self)
+        self.h_ratio, self.w_ratio = 1, 1
         if self.running_on_windows:
             self.icon4.setPixmap(
                 QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.h_ratio,

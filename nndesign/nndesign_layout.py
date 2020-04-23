@@ -70,7 +70,8 @@ class NNDLayout(QMainWindow):
             self.wm, self.hm = WM_MAC_CHAPTER * w_ratio, HM_MAC_CHAPTER * h_ratio
         else:
             self.wm, self.hm = WM_MAC_MAIN * w_ratio, HM_MAC_MAIN * h_ratio
-        self.setFixedSize(self.wm, self.hm)
+        # self.setFixedSize(self.wm, self.hm)
+        self.setFixedSize(WM_MAC_CHAPTER, HM_MAC_CHAPTER)
         self.center()
 
         size_scaled = int(10 * (self.w_ratio + self.h_ratio) / 2)
