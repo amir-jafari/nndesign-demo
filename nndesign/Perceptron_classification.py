@@ -49,13 +49,13 @@ class PerceptronClassification(NNDLayout):
 
         self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
-        if self.running_on_windows:
-            print(self.w_ratio, self.h_ratio)
-            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w, self.figure_h, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon3.setGeometry(28, 485, self.figure_w,self.figure_h)
-        else:
-            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
+        # if self.running_on_windows:
+        #     print(self.w_ratio, self.h_ratio)
+        #     self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w, self.figure_h, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        #     self.icon3.setGeometry(28, 485, self.figure_w, self.figure_h)
+        # else:
+        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
 
         """from PIL import Image
@@ -82,7 +82,7 @@ class PerceptronClassification(NNDLayout):
         painter = QtGui.QPainter(self.icon3.pixmap())
         if self.running_on_windows:
             painter.setFont(QtGui.QFont("times", 12))
-            painter.drawText(QtCore.QPoint(100, 28 ), self.text_shape)
+            painter.drawText(QtCore.QPoint(100, 28), self.text_shape)
             painter.drawText(QtCore.QPoint(245, 28), self.text_texture)
             painter.drawText(QtCore.QPoint(410, 28), self.text_weight)
         else:
