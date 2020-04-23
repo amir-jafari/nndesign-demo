@@ -64,7 +64,8 @@ from IIR_network import IIRNetwork
 from Dynamic_derivatives import DynamicDerivatives
 from Recurrent_network_training import RecurrentNetworkTraining
 # ------ Chapter 15 -------
-from Unsupervised_hebb import UnsupervisedHebb
+# from Unsupervised_hebb import UnsupervisedHebb
+from Unsupervised_hebb_v2 import UnsupervisedHebb
 from Effects_of_decay_rate import EffectsOfDecayRate
 from Hebb_with_decay import HebbWithDecay
 from Graphical_instar import GraphicalInstar
@@ -81,6 +82,7 @@ from Network_function_radial import NetworkFunctionRadial
 from Pattern_classification import PatternClassification
 from Linear_least_squares import LinearLeastSquares
 from Orthogonal_least_squares import OrthogonalLeastSquares
+from Nonlinear_optimization import NonlinearOptimization
 # ------ Chapter 18 -------
 from Leaky_integrator import LeakyIntegrator
 from Shunting_network import ShuntingNetwork
@@ -485,7 +487,8 @@ class MainWindowNN(NNDLayout):
             self.chapter17_window4 = OrthogonalLeastSquares(self.w_ratio, self.h_ratio)
             self.chapter17_window4.show()
         else:
-            print("TODO")
+            self.chapter17_window5 = NonlinearOptimization(self.w_ratio, self.h_ratio)
+            self.chapter17_window5.show()
 
     def chapter18(self, idx):
         self.comboBox1.setCurrentIndex(0)
