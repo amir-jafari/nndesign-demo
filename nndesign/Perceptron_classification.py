@@ -54,8 +54,12 @@ class PerceptronClassification(NNDLayout):
         #     self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w, self.figure_h, QtGui.QIcon.Normal, QtGui.QIcon.On))
         #     self.icon3.setGeometry(28, 485, self.figure_w, self.figure_h)
         # else:
-        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
+        if self.running_on_windows:
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setGeometry(28 * self.h_ratio, 485 * self.h_ratio, self.figure_w * self.h_ratio, self.figure_h * self.h_ratio)
+        else:
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
 
         """from PIL import Image
@@ -80,10 +84,16 @@ class PerceptronClassification(NNDLayout):
     def paintEvent(self, event):
         super(PerceptronClassification, self).paintEvent(event)
         painter = QtGui.QPainter(self.icon3.pixmap())
-        painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
-        painter.drawText(QtCore.QPoint(100 * self.h_ratio, 28 * self.h_ratio), self.text_shape)
-        painter.drawText(QtCore.QPoint(245 * self.h_ratio, 28 * self.h_ratio), self.text_texture)
-        painter.drawText(QtCore.QPoint(410 * self.h_ratio, 28 * self.h_ratio), self.text_weight)
+        if self.running_on_windows:
+            painter.setFont(QtGui.QFont("times", 12 * (self.h_ratio + self.h_ratio) / 2))
+            painter.drawText(QtCore.QPoint(100 * self.h_ratio, 28 * self.h_ratio), self.text_shape)
+            painter.drawText(QtCore.QPoint(245 * self.h_ratio, 28 * self.h_ratio), self.text_texture)
+            painter.drawText(QtCore.QPoint(410 * self.h_ratio, 28 * self.h_ratio), self.text_weight)
+        else:
+            painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
+            painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), self.text_shape)
+            painter.drawText(QtCore.QPoint(245 * self.w_ratio, 28 * self.h_ratio), self.text_texture)
+            painter.drawText(QtCore.QPoint(410 * self.w_ratio, 28 * self.h_ratio), self.text_weight)
 
     def on_run(self):
         self.timer = QtCore.QTimer()
