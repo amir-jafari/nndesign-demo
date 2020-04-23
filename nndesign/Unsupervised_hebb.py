@@ -20,13 +20,31 @@ class UnsupervisedHebb(NNDLayout):
 
         self.figure2_w, self.figure2_h = 475, 350
         self.icon4 = QtWidgets.QLabel(self)
-        self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon4.setGeometry(28 * self.w_ratio, 100 * self.h_ratio, self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio)
+        if self.running_on_windows:
+            self.icon4.setPixmap(
+                QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.h_ratio,
+                                                                           self.figure2_h * self.h_ratio,
+                                                                           QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon4.setGeometry(28 * self.h_ratio, 100 * self.h_ratio, self.figure2_w * self.h_ratio,
+                                   self.figure2_h * self.h_ratio)
+
+        else:
+            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon4.setGeometry(28 * self.w_ratio, 100 * self.h_ratio, self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio)
 
         self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
-        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon3.setGeometry(28 * self.w_ratio, 420 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
+        if self.running_on_windows:
+            self.icon3.setPixmap(
+                QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.h_ratio,
+                                                                           self.figure_h * self.h_ratio,
+                                                                           QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setGeometry(28 * self.h_ratio, 420 * self.h_ratio, self.figure_w * self.h_ratio,
+                                   self.figure_h * self.h_ratio)
+
+        else:
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setGeometry(28 * self.w_ratio, 420 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
 
         self.W2, self.W1, self.b, self.n = 0.0, 1, -0.5, "  ?"
         self.banana_shape, self.banana_smell, self.banana = "?", "?", "?"
