@@ -1,12 +1,9 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtSvg
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 
 from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
-
 
 
 class UnsupervisedHebb(NNDLayout):
@@ -24,7 +21,6 @@ class UnsupervisedHebb(NNDLayout):
 
         self.figure2_w, self.figure2_h = 475, 200
         self.icon4 = QtWidgets.QLabel(self)
-        self.h_ratio, self.w_ratio = 1, 1
         """self.icon4.setPixmap(
             QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.h_ratio,
                                                                        self.figure2_h * self.h_ratio,
@@ -32,9 +28,6 @@ class UnsupervisedHebb(NNDLayout):
         self.icon4.setGeometry(28 * self.h_ratio, 100 * self.h_ratio, self.figure2_w * self.h_ratio,
                                self.figure2_h * self.h_ratio)"""
         self.make_plot(1, (28, 170, self.figure2_w, self.figure2_h))
-        # self.figure = plt.imshow(plt.imread(PACKAGE_PATH + "Figures/nnd15dfig.png"))
-        # self.canvas = FigureCanvas(self.figure)
-        # self.set_layout((28, 100, self.figure2_w, self.figure2_h), self.canvas)
         self.figure.subplots_adjust(top=1, bottom=0, left=0, right=1)
         self.axis1 = self.figure.add_subplot(1, 1, 1)
         self.axis1.set_axis_off()
