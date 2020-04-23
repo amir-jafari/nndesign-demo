@@ -223,7 +223,7 @@ class NNDLayout(QMainWindow):
         setattr(self, latex_label_attr_name, QtWidgets.QLabel(self))
         latex_label = getattr(self, latex_label_attr_name)
         latex_label.setPixmap(latex_paint)
-        if self.running_o_windows:
+        if self.running_on_windows:
             latex_label.setGeometry(latex_coords[0] * self.h_ratio, latex_coords[1] * self.h_ratio,
                                     latex_coords[2] * self.h_ratio, latex_coords[3] * self.h_ratio)
         else:
