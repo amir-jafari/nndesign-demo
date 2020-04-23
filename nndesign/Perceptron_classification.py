@@ -80,16 +80,10 @@ class PerceptronClassification(NNDLayout):
     def paintEvent(self, event):
         super(PerceptronClassification, self).paintEvent(event)
         painter = QtGui.QPainter(self.icon3.pixmap())
-        if self.running_on_windows:
-            painter.setFont(QtGui.QFont("times", 12))
-            painter.drawText(QtCore.QPoint(100, 28), self.text_shape)
-            painter.drawText(QtCore.QPoint(245, 28), self.text_texture)
-            painter.drawText(QtCore.QPoint(410, 28), self.text_weight)
-        else:
-            painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
-            painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), self.text_shape)
-            painter.drawText(QtCore.QPoint(245 * self.w_ratio, 28 * self.h_ratio), self.text_texture)
-            painter.drawText(QtCore.QPoint(410 * self.w_ratio, 28 * self.h_ratio), self.text_weight)
+        painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
+        painter.drawText(QtCore.QPoint(100 * self.h_ratio, 28 * self.h_ratio), self.text_shape)
+        painter.drawText(QtCore.QPoint(245 * self.h_ratio, 28 * self.h_ratio), self.text_texture)
+        painter.drawText(QtCore.QPoint(410 * self.h_ratio, 28 * self.h_ratio), self.text_weight)
 
     def on_run(self):
         self.timer = QtCore.QTimer()
