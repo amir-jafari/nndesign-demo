@@ -9,18 +9,15 @@ from nndesign_layout import NNDLayout
 
 from get_package_path import PACKAGE_PATH
 
-mu_initial = 0.01
-mingrad = 0.001
-
 
 class NonlinearOptimization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(NonlinearOptimization, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Nonlinear Optimization", 17, "\n\nUse the slide bars to\nchoose the number of\nneurons in the"
+        self.fill_chapter("Nonlinear Optimization", 17, "\n\n\nUse the slide bars to\nchoose the number of\nneurons in the"
                                                         " hidden\nlayer and the difficulty\nof the function.\n\nSelect a Weight"
                                                         "\nInizialization method.\n\nClick [Train] to train the\nRadial-basis network\n"
-                                                        "on the function at the left.",
+                                                        "(orange function) on the\nblue function.",
                           PACKAGE_PATH + "Logo/Logo_Ch_17.svg", None)
 
         self.make_plot(1, (25, 100, 470, 320))
@@ -28,7 +25,7 @@ class NonlinearOptimization(NNDLayout):
 
         self.error_goal_reached = False
         self.error_prev = 1000
-        self.ani = None
+        self.ani, self.ani2 = None, None
 
         self.S1 = 4
         self.diff = 1
@@ -46,7 +43,6 @@ class NonlinearOptimization(NNDLayout):
         self.axis.set_ylabel("Target")
         self.data_to_approx, = self.axis.plot([], label="Function to Approximate")
         self.net_approx, = self.axis.plot([], label="Network Approximation")
-        self.plot_f()
 
         self.figure2.set_tight_layout(True)
         self.axis2 = self.figure2.add_subplot(1, 1, 1)
@@ -58,58 +54,69 @@ class NonlinearOptimization(NNDLayout):
         self.axis2.set_ylabel("$a^1$")
         self.axis2.yaxis.set_label_coords(-0.025, 1)
 
-        self.make_label("label_s11", "1", (40, 550, 20, 50))
+        # self.lines = []
+        self.lines_anim, self.lines_anim_2 = [], []
+
+        self.make_label("label_s11", "2", (40, 550, 20, 50))
         self.make_label("label_s12", "9", (475, 550, 20, 50))
         self.make_label("label_s1", "Number of Hidden Neurons S1: 4", (170, 550, 200, 50))
         self.make_label("label_diff1", "1", (40, 610, 20, 50))
         self.make_label("label_diff2", "9", (475, 610, 20, 50))
         self.make_label("label_diff", "Difficulty index: 1", (210, 610, 200, 50))
-        self.make_slider("slider_s1", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 4, (20, 580, 480, 50), self.slide)
+        self.make_slider("slider_s1", QtCore.Qt.Horizontal, (2, 9), QtWidgets.QSlider.TicksAbove, 1, 4, (20, 580, 480, 50), self.slide)
         self.make_slider("slider_diff", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 1, (20, 635, 480, 50), self.slide)
 
-        self.make_button("run_button", "Train", (self.x_chapter_button, 360, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Train", (self.x_chapter_button, 370, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
-        self.make_combobox(1, ["Initialization Method", "Linear Least Squares", "Orthogonal Least Squares", "Random Weights"],
-                           (self.x_chapter_button, 420, self.w_chapter_button, 50), self.change_init,
-                           "label_init_method", "Initialization Method", (self.x_chapter_button + 30, 420 - 20, self.w_chapter_button, 50))
+        self.make_combobox(1, ["Lin. Least Squares", "Orth. Least Squares", "Random Weights"],
+                           (self.x_chapter_button - 10, 425, self.w_chapter_button + 10, 50), self.change_init,
+                           "label_init_method", "Initialization Method", (self.x_chapter_button + 10, 425 - 20, self.w_chapter_button, 50))
 
-        self.idx = 0
+        self.change_init(0)
 
     def plot_f(self):
         self.data_to_approx.set_data(self.p, 1 + np.sin(np.pi * self.p * self.diff / 4))
-        self.canvas.draw()
 
     def change_init(self, idx):
         if self.ani:
             self.ani.event_source.stop()
+        if self.ani2:
+            self.ani2.event_source.stop()
         self.idx = idx
         self.init_params()
 
     def init_params(self):
-        if self.idx == 1:
+        if self.idx == 0:
             n_points = self.S1
             d1 = (2 - -2) / (n_points - 1)
             p = np.arange(-2, 2 + 0.0001, d1)
             t = 1 + np.sin(np.pi * p * self.diff / 4)
             self.W1, self.b1, self.W2, self.b2 = self.rb_ls(p, t, self.S1)
-        elif self.idx == 2:
+        elif self.idx == 1:
             n_points = self.S1
             d1 = (2 - -2) / (n_points - 1)
             p = np.arange(-2, 2 + 0.0001, d1)
             t = 1 + np.sin(np.pi * p * self.diff / 4)
             self.W1, self.b1, self.W2, self.b2, _, _, _ = self.rb_ols(p, t, np.copy(p), np.ones(p.shape), self.S1)
-        elif self.idx == 3:
+        elif self.idx == 2:
             self.W1 = 2 * np.random.uniform(0, 1, (self.S1, 1)) - 0.5
             self.b1 = 2 * np.random.uniform(0, 1, (self.S1, 1)) - 0.5
             self.W2 = 2 * np.random.uniform(0, 1, (1, self.S1)) - 0.5
             self.b2 = 2 * np.random.uniform(0, 0, (1, 1)) - 0.5
-        self.graph(plot_red=False)
+        if len(self.W1) < self.S1:
+            self.W1 = np.vstack((self.W1, np.zeros((1, self.S1 - len(self.W1)))))
+            self.b1 = np.vstack((self.b1, np.zeros((1, self.S1 - len(self.b1)))))
+            self.W2 = np.hstack((self.W2, np.zeros((1, self.S1 - self.W2.shape[1]))))
+        self.W1_i, self.b1_i, self.W2_i, self.b2_i = self.W1, self.b1, self.W2, self.b2
+        self.graph()
 
     def slide(self):
         self.error_goal_reached = False
         self.error_prev = 1000
         if self.ani:
             self.ani.event_source.stop()
+        if self.ani2:
+            self.ani2.event_source.stop()
         slider_s1 = self.slider_s1.value()
         if self.S1 != slider_s1:
             self.S1 = slider_s1
@@ -121,30 +128,41 @@ class NonlinearOptimization(NNDLayout):
         self.label_s1.setText("Number of Hidden Neurons S1: {}".format(self.S1))
         self.label_diff.setText("Difficulty Index: {}".format(self.diff))
         self.f_to_approx = lambda p: 1 + np.sin(np.pi * p * self.diff / 4)
-        self.net_approx.set_data([], [])
-        self.graph(plot_red=False)
 
     def on_run(self):
         if self.ani:
             self.ani.event_source.stop()
-        n_epochs = 50000
-        self.ani = FuncAnimation(self.figure, self.on_animate_v2, init_func=self.animate_init_v2, frames=n_epochs,
-                                 interval=20, repeat=False, blit=True)
+        if self.ani2:
+            self.ani2.event_source.stop()
+        n_epochs = 200
+        self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=n_epochs,
+                                 interval=0, repeat=False, blit=False)
+        self.ani2 = FuncAnimation(self.figure2, self.on_animate_2, init_func=self.animate_init_2, frames=n_epochs,
+                                  interval=0, repeat=False, blit=False)
+        self.canvas.draw()
+        self.canvas2.draw()
 
-    def animate_init_v2(self):
-        self.init_params()
+    def animate_init(self):
+        self.W1, self.b1, self.W2, self.b2 = self.W1_i, self.b1_i, self.W2_i, self.b2_i
+        self.graph()
         self.error_goal_reached = False
         # self.p2 = self.p
         # self.Q2 = len(self.p)
-        self.p2 = self.p2.reshape(1, -1)
+        # p2 = np.arange(-2, 2.01, 0.4 / self.diff)
+        self.p_ = self.p
+        self.Q2 = len(self.p)
+        self.p2 = np.repeat(self.p.reshape(1, -1), self.S1, 0)
         # A1 = exp(-(abs(pp2-W1*ones(1,Q2)).*(B1*ones(1,Q2))).^2);
         # %A2 = W2*A1+B2*ones(1,Q);
         # A2 = W2*A1 + B2*ones(1,Q2);
         self.a1 = np.exp(-np.abs(self.p2 - self.W1.dot(np.ones((1, self.Q2))) * (self.b1.dot(np.ones((1, self.Q2))))) ** 2)
         self.a2 = self.W2.dot(self.a1) + self.b2.dot(np.ones((1, self.Q2)))
-        self.e = self.f_to_approx(self.p2) - self.a2
+        # self.t = self.f_to_approx(self.p)
+        self.t = 1 + np.sin(np.pi * self.p * self.diff / 4)
+        self.e = self.t - self.a2
         self.error_prev = np.dot(self.e, self.e.T).item()
-        self.mu = mu_initial
+        self.mu = 0.01
+        self.mingrad = 0.001
         self.RS = self.S1 * 1
         self.RS1 = self.RS + 1
         self.RSS = self.RS + self.S1
@@ -154,9 +172,9 @@ class NonlinearOptimization(NNDLayout):
         self.RSS4 = self.RSS2 + 1
         self.ii = np.eye(self.RSS4)
         self.net_approx.set_data([], [])
-        return self.net_approx,
+        # return self.net_approx,
 
-    def on_animate_v2(self, idx):
+    def on_animate(self, idx):
         """ Marqdt version """
 
         self.mu /= 10
@@ -176,10 +194,11 @@ class NonlinearOptimization(NNDLayout):
         jac = np.hstack((jac, d2.T))
         je = np.dot(jac.T, self.e.T)
 
-        grad = np.sqrt(np.dot(je.T, je)).item()
-        if grad < mingrad:
-            self.net_approx.set_data(self.p2.reshape(-1), self.a2.reshape(-1))
-            return self.net_approx,
+        # grad = np.sqrt(np.dot(je.T, je)).item()
+        # if grad < self.mingrad:
+        #     self.net_approx.set_data(self.p_.reshape(-1), self.a2.reshape(-1))
+        #     return
+            # return self.net_approx,
 
         jj = np.dot(jac.T, jac)
         # Can't get this operation to produce the exact same results as MATLAB...
@@ -191,7 +210,7 @@ class NonlinearOptimization(NNDLayout):
 
         self.a1 = np.exp(-np.abs(self.p2 - (self.W1 + dW1).dot(np.ones((1, self.Q2))) * ((self.b1 + db1).dot(np.ones((1, self.Q2))))) ** 2)
         self.a2 = (self.W2 + dW2).dot(self.a1) + (self.b2 + db2).dot(np.ones((1, self.Q2)))
-        self.e = self.f_to_approx(self.p2) - self.a2
+        self.e = self.t - self.a2
         error = np.dot(self.e, self.e.T).item()
 
         while error >= self.error_prev:
@@ -210,7 +229,7 @@ class NonlinearOptimization(NNDLayout):
 
                 self.a1 = np.exp(-np.abs(self.p2 - (self.W1 + dW1).dot(np.ones((1, self.Q2))) * ((self.b1 + db1).dot(np.ones((1, self.Q2))))) ** 2)
                 self.a2 = (self.W2 + dW2).dot(self.a1) + (self.b2 + db2).dot(np.ones((1, self.Q2)))
-                self.e = self.f_to_approx(self.p2) - self.a2
+                self.e = self.t - self.a2
                 error = np.dot(self.e, self.e.T).item()
 
             except Exception as e:
@@ -227,19 +246,36 @@ class NonlinearOptimization(NNDLayout):
             self.b2 += db2.item()
             self.error_prev = error
 
+        pp = np.repeat(self.p_.reshape(1, -1), self.S1, 0)
+        n12 = np.abs(pp - np.dot(self.W1, np.ones((1, self.Q2)))) * np.dot(self.b1, np.ones((1, self.Q2)))
+        a12 = np.exp(-n12 ** 2)
+        a22 = np.dot(self.W2, a12) + self.b2
+        temp = np.vstack((np.dot(self.W2.T, np.ones((1, self.Q2))) * a12, self.b2 * np.ones((1, self.Q2))))
+        for i in range(len(temp)):
+            self.lines_anim[i].set_data(self.p_, temp[i])
+        for i in range(len(a12)):
+            self.lines_anim_2[i].set_data(self.p_, a12[i])
+
         if self.error_prev <= 0.005:
             if self.error_goal_reached:
                 print("Error goal reached!")
                 self.error_goal_reached = None
-            self.net_approx.set_data(self.p2.reshape(-1), self.a2.reshape(-1))
-            return self.net_approx,
+            self.net_approx.set_data(self.p_.reshape(-1), self.a2.reshape(-1))
+            return
+            # return self.net_approx,
 
-        self.net_approx.set_data(self.p2.reshape(-1), self.a2.reshape(-1))
-        return self.net_approx,
+        self.net_approx.set_data(self.p_.reshape(-1), self.a2.reshape(-1))
+        # return self.net_approx,
 
-    def graph(self, plot_red=True):
+    def animate_init_2(self):
+        return
 
-        self.axis.clear()
+    def on_animate_2(self, idx):
+        return
+
+    def graph(self):
+
+        """self.axis.clear()
         self.axis2.clear()
 
         self.axis.set_xlim(-2, 2)
@@ -259,11 +295,15 @@ class NonlinearOptimization(NNDLayout):
         self.axis2.set_yticks([0, 0.5])
         self.axis2.set_xlabel("Input")
         self.axis2.set_ylabel("$a^1$")
-        self.axis2.yaxis.set_label_coords(-0.025, 1)
+        self.axis2.yaxis.set_label_coords(-0.025, 1)"""
 
         W1, b1, W2, b2 = self.W1, self.b1, self.W2, self.b2
         S1 = self.S1
-        n_points = S1
+        n_points = self.S1
+        # if n_points > 1:
+        #     d1 = (2 - -2) / (n_points - 1)
+        # else:
+        #     d1 = (2 - -2) / (S1 - 1)
         d1 = (2 - -2) / (n_points - 1)
         p = np.arange(-2, 2 + 0.0001, d1)
         t = 1 + np.sin(np.pi * p * self.diff / 4)
@@ -289,18 +329,29 @@ class NonlinearOptimization(NNDLayout):
 
         temp = np.vstack((np.dot(W2.T, np.ones((1, Q2))) * a12, b2 * np.ones((1, Q2))))
 
-        # self.axis.scatter(p, t, color="white", edgecolor="black")
-        for i in range(len(temp)):
-            self.axis.plot(p2, temp[i], linestyle="--", color="black", linewidth=0.5)
-        # self.axis.plot(p2, t_exact, color="blue", linewidth=2)
-        if plot_red:
-            self.axis.plot(p2, a22.reshape(-1), color="red", linewidth=1)
-        if S1 == 0:
-            self.axis2.plot(p2, [a12] * len(p2), color="black")
-        else:
-            for i in range(len(a12)):
-                self.axis2.plot(p2, a12[i], color="black")
+        """if self.lines:
+            for line in self.lines:
+                line.pop(0).remove()
+            self.lines = []
+            
+         for i in range(len(temp)):
+            self.lines.append(self.axis.plot(p2, temp[i], linestyle="--", color="black", linewidth=0.5))
+        for i in range(len(a12)):
+            self.lines.append(self.axis2.plot(p2, a12[i], color="black"))"""
 
+        while self.lines_anim:
+            self.lines_anim.pop().remove()
+        for i in range(len(temp)):
+            self.lines_anim.append(self.axis.plot([], linestyle="--", color="black", linewidth=0.5)[0])
+            self.lines_anim[i].set_data(p2, temp[i])
+
+        while self.lines_anim_2:
+            self.lines_anim_2.pop().remove()
+        for i in range(len(a12)):
+            self.lines_anim_2.append(self.axis2.plot([], color="black")[0])
+            self.lines_anim_2[i].set_data(p2, a12[i])
+
+        self.plot_f()
         self.net_approx.set_data(p2.reshape(-1), a22.reshape(-1))
 
         self.canvas.draw()
@@ -430,4 +481,4 @@ class NonlinearOptimization(NNDLayout):
             b2 = 0
             w2 = xx.T
             # uu = uo[:, np.int(indf)]
-        return w1, b1, w2, b2, mf, of, indf
+        return w1, b1, w2, np.array(b2).astype(np.float), mf, of, indf
