@@ -486,7 +486,7 @@ class MainWindowNN(NNDLayout):
         elif idx == 4:
             self.chapter17_window4 = OrthogonalLeastSquares(self.w_ratio, self.h_ratio)
             self.chapter17_window4.show()
-        else:
+        elif idx == 5:
             self.chapter17_window5 = NonlinearOptimization(self.w_ratio, self.h_ratio)
             self.chapter17_window5.show()
 
