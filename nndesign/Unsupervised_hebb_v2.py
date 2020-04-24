@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtSvg
 import numpy as np
 import matplotlib.pyplot as plt
+import svgutils.compose as sc
 
 from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
@@ -20,20 +21,30 @@ class UnsupervisedHebb(NNDLayout):
         self.timer = None
 
         self.figure2_w, self.figure2_h = 475, 200
+        # self.make_plot(1, (28, 170, self.figure2_w, self.figure2_h))
+        # self.figure.subplots_adjust(top=1, bottom=0, left=0, right=1)
+        # self.axis1 = self.figure.add_subplot(1, 1, 1)
+        # self.axis1.set_axis_off()
+        # self.axis1.imshow(plt.imread(PACKAGE_PATH + "Figures/nnd15dfig.png"))
+        # self.axis1.text(72, 55, "H")
+        fig, ax = plt.subplots(1, figsize=(4, 4))
+        # fig.subplots_adjust(top=1, bottom=0, left=0, right=1)
+        # ax.text(72, 55, "H")
+        ax.plot(np.sin(np.linspace(0, 2. * np.pi)), np.cos(np.linspace(0, 2. * np.pi)), 'k--', lw=2.)
+        # ax.set_axis_off()
+        fig.savefig('temp.svg', transparent=True)
+        a = sc.Figure("8cm", "8cm",
+                  sc.Panel(sc.SVG(PACKAGE_PATH + "Figures/nnd15dfig.svg").scale(0.405).move(36, 29)),
+                  sc.Panel(sc.SVG("temp.svg"))
+                  )
+        a.save("tempp.svg")
         self.icon4 = QtWidgets.QLabel(self)
-        """self.icon4.setPixmap(
-            QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.h_ratio,
+        self.icon4.setPixmap(
+            QtGui.QIcon("tempp.svg").pixmap(self.figure2_w * self.h_ratio,
                                                                        self.figure2_h * self.h_ratio,
                                                                        QtGui.QIcon.Normal, QtGui.QIcon.On))
         self.icon4.setGeometry(28 * self.h_ratio, 100 * self.h_ratio, self.figure2_w * self.h_ratio,
-                               self.figure2_h * self.h_ratio)"""
-        self.make_plot(1, (28, 170, self.figure2_w, self.figure2_h))
-        self.figure.subplots_adjust(top=1, bottom=0, left=0, right=1)
-        self.axis1 = self.figure.add_subplot(1, 1, 1)
-        self.axis1.set_axis_off()
-        self.axis1.imshow(plt.imread(PACKAGE_PATH + "Figures/nnd15dfig.png"))
-        self.axis1.text(72, 55, "H")
-        self.canvas.draw()
+                               self.figure2_h * self.h_ratio)
 
         self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
@@ -65,7 +76,7 @@ class UnsupervisedHebb(NNDLayout):
         self.first_scanner_on = self.checkbox_scanner.isChecked()
         self.banana_shape, self.banana_smell, self.banana, self.n = "?", "?", "?", "  ?"
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        # self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
 
     def paintEvent(self, event):
         super(UnsupervisedHebb, self).paintEvent(event)

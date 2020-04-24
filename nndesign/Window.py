@@ -65,7 +65,8 @@ from Dynamic_derivatives import DynamicDerivatives
 from Recurrent_network_training import RecurrentNetworkTraining
 # ------ Chapter 15 -------
 # from Unsupervised_hebb import UnsupervisedHebb
-from Unsupervised_hebb_v2 import UnsupervisedHebb
+# from Unsupervised_hebb_v2 import UnsupervisedHebb
+from Unsupervised_hebb_v3 import UnsupervisedHebb
 from Effects_of_decay_rate import EffectsOfDecayRate
 from Hebb_with_decay import HebbWithDecay
 from Graphical_instar import GraphicalInstar
