@@ -1,7 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtSvg
 import numpy as np
 import matplotlib.pyplot as plt
-import svgutils.compose as sc
 
 from nndesign_layout import NNDLayout
 from get_package_path import PACKAGE_PATH
@@ -20,33 +19,84 @@ class UnsupervisedHebb(NNDLayout):
         self.n_temp, self.banana_temp = None, None
         self.timer = None
 
+        self.W2, self.W1, self.b, self.n = 0.0, 1, -0.5, "?"
+        self.banana_shape, self.banana_smell, self.banana = "?", "?", "?"
+
         self.figure2_w, self.figure2_h = 475, 200
         self.make_plot(1, (28, 170, self.figure2_w, self.figure2_h))
         self.figure.subplots_adjust(top=1, bottom=0, left=0, right=1)
         self.axis1 = self.figure.add_subplot(1, 1, 1)
         self.axis1.set_axis_off()
-        # self.axis1.imshow(plt.imread(PACKAGE_PATH + "Figures/nnd15dfig.png"))
-        # self.axis1.text(72, 55, "H")
 
+        # Upper left
         rectangle = plt.Rectangle((12, 65), 8, 16, fill=False)
         self.axis1.add_patch(rectangle)
         self.axis1.text(12, 85, "Inputs", fontsize=int(8*(self.w_ratio + self.h_ratio) / 2))
         self.axis1.text(0, 67, "Banana\nShape?", fontsize=int(8*(self.w_ratio + self.h_ratio) / 2))
-        self.axis1.text(15, 70, "H", fontsize=int(8*(self.w_ratio + self.h_ratio) / 2))
+        self.banana_shape_text = self.axis1.text(15, 70, "", fontsize=int(8*(self.w_ratio + self.h_ratio) / 2))
+
+        # Lower left
+        rectangle = plt.Rectangle((12, 10), 8, 16, fill=False)
+        self.axis1.add_patch(rectangle)
+        self.axis1.text(0, 12, "Banana\nSmell?", fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+        self.banana_smell_text = self.axis1.text(15, 15, "", fontsize=int(8*(self.w_ratio + self.h_ratio) / 2))
+
+        # Upper mid 1
+        rectangle = plt.Rectangle((30, 65), 8, 16, fill=False)
+        self.axis1.add_patch(rectangle)
+        self.axis1.text(28, 85, "Weights", fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+        self.w1_text = self.axis1.text(33, 70, str(self.W1), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+
+        # Lower mid 1
+        rectangle = plt.Rectangle((30, 10), 8, 16, fill=False)
+        self.axis1.add_patch(rectangle)
+        self.w2_text = self.axis1.text(33, 15, str(self.W2), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+
+        # Horizontal connecting lines
+        self.axis1.plot(np.arange(20.5, 30, 0.1), [73] * len(np.arange(20.5, 30, 0.1)), color="k")
+        self.axis1.plot(np.arange(20.5, 30, 0.1), [18] * len(np.arange(20.5, 30, 0.1)), color="k")
+
+        # Mid 2
+        rectangle = plt.Rectangle((48, 37.5), 8, 16, fill=False)
+        self.axis1.add_patch(rectangle)
+        self.axis1.text(51, 37.5 + 5, "$\sum$", fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+        self.axis1.plot([38.2, 48], [73, 45], color="k")
+        self.axis1.plot([38.2, 48], [18, 45], color="k")
+        self.axis1.plot([52, 52], [36.5, 28], color="k")
+        rectangle = plt.Rectangle((48, 12), 8, 16, fill=False)
+        self.axis1.plot([52, 52], [11.9, 7], color="k")
+        self.axis1.add_patch(rectangle)
+        self.b_text = self.axis1.text(49, 18, str(self.b), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+        self.axis1.text(51.2, 0, "1", fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+        self.axis1.plot([56.1, 61], [45, 45], color="k")
+
+        # Mid 3
+        rectangle = plt.Rectangle((61, 37.5), 8, 16, fill=False)
+        self.axis1.add_patch(rectangle)
+        self.axis1.plot([69.2, 73.5], [45, 45], color="k")
+        self.n_text = self.axis1.text(62, 37.5 + 5, "", fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+
+        # Mid 4
+        rectangle = plt.Rectangle((73.5, 37.5), 8, 16, fill=False)
+        self.axis1.add_patch(rectangle)
+        self.axis1.quiver(81.6, 45.5, 11.8, 0, width=0.005, scale=1, scale_units='xy')
+        self.axis1.plot([75.5, 77.5], [40, 40], color="black")
+        self.axis1.plot([77.5, 79.5], [40, 40], color="gray", linestyle="dashed", linewidth=0.1)
+        self.axis1.plot([77.5, 79.5], [49, 49], color="black")
+        self.axis1.plot([77.5, 77.5], [40, 49], color="black")
+
+        # Right
+        rectangle = plt.Rectangle((93, 37.5), 8, 16, fill=False)
+        self.axis1.add_patch(rectangle)
+        self.axis1.text(91, 56, "Banana?", fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+        self.a_text = self.axis1.text(96, 37.5 + 5, "", fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+
         # In order to set the scale (100, 100)
         line, = self.axis1.plot([0] * 100, range(100))
         line.remove()
         line, = self.axis1.plot(range(100), [0] * 100)
         line.remove()
         self.canvas.draw()
-
-        """self.icon4 = QtWidgets.QLabel(self)
-        self.icon4.setPixmap(
-            QtGui.QIcon("tempp.svg").pixmap(self.figure2_w * self.h_ratio,
-                                                                       self.figure2_h * self.h_ratio,
-                                                                       QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon4.setGeometry(28 * self.h_ratio, 100 * self.h_ratio, self.figure2_w * self.h_ratio,
-                               self.figure2_h * self.h_ratio)"""
 
         self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
@@ -62,9 +112,6 @@ class UnsupervisedHebb(NNDLayout):
             self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             self.icon3.setGeometry(28 * self.w_ratio, 420 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
 
-        self.W2, self.W1, self.b, self.n = 0.0, 1, -0.5, "  ?"
-        self.banana_shape, self.banana_smell, self.banana = "?", "?", "?"
-
         self.first_scanner_on = True
         self.make_checkbox("checkbox_scanner", "First Scanner", (self.x_chapter_button, 360, self.w_chapter_button, self.h_chapter_button),
                            self.checkbox_checked,  self.first_scanner_on)
@@ -78,7 +125,6 @@ class UnsupervisedHebb(NNDLayout):
         self.first_scanner_on = self.checkbox_scanner.isChecked()
         self.banana_shape, self.banana_smell, self.banana, self.n = "?", "?", "?", "  ?"
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        # self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
 
     def paintEvent(self, event):
         super(UnsupervisedHebb, self).paintEvent(event)
@@ -101,47 +147,37 @@ class UnsupervisedHebb(NNDLayout):
             painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
             painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), "Active" if self.first_scanner_on else "Inactive")
 
-        """painter = QtGui.QPainter(self.icon4.pixmap())
-        if self.running_on_windows:
-            painter.setFont(QtGui.QFont("times", 11 * (self.h_ratio + self.h_ratio) / 2))
-            painter.drawText(QtCore.QPoint(120 * self.h_ratio, 58 * self.h_ratio), "1")
-            painter.drawText(QtCore.QPoint(47 * self.h_ratio, 58 * self.h_ratio), str(self.banana_shape))
-            painter.drawText(QtCore.QPoint(115 * self.h_ratio, 155 * self.h_ratio), str(round(self.W2, 1)))
-            painter.drawText(QtCore.QPoint(47 * self.h_ratio, 155 * self.h_ratio), str(self.banana_smell))
-            painter.drawText(QtCore.QPoint(212 * self.h_ratio, 140 * self.h_ratio), "-0.5")
-            painter.drawText(QtCore.QPoint(219 * self.h_ratio, 180 * self.h_ratio), "1")
+        self.banana_shape_text.remove()
+        self.banana_shape_text = self.axis1.text(15, 70, str(self.banana_shape), fontsize=int(8*(self.w_ratio + self.h_ratio) / 2))
+
+        self.banana_smell_text.remove()
+        self.banana_smell_text = self.axis1.text(15, 15, str(self.banana_smell), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+
+        self.w1_text.remove()
+        self.w1_text = self.axis1.text(33, 70, str(round(self.W1, 1)), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+
+        self.w2_text.remove()
+        self.w2_text = self.axis1.text(32.5 if self.W2 > 0 else 32, 15, str(round(self.W2, 1)), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+
+        self.b_text.remove()
+        self.b_text = self.axis1.text(49, 18, str(round(self.b, 1)), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+
+        self.n_text.remove()
+        if type(self.n) == str:
+            self.n_text = self.axis1.text(63, 37.5 + 5, self.n, fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
         else:
-            painter.setFont(QtGui.QFont("times", 11 * (self.w_ratio + self.h_ratio) / 2))
-            painter.drawText(QtCore.QPoint(120 * self.w_ratio, 58 * self.h_ratio), "1")
-            painter.drawText(QtCore.QPoint(47 * self.w_ratio, 58 * self.h_ratio), str(self.banana_shape))
-            painter.drawText(QtCore.QPoint(115 * self.w_ratio, 155 * self.h_ratio), str(round(self.W2, 1)))
-            painter.drawText(QtCore.QPoint(47 * self.w_ratio, 155 * self.h_ratio), str(self.banana_smell))
-            painter.drawText(QtCore.QPoint(212 * self.w_ratio, 140 * self.h_ratio), "-0.5")
-            painter.drawText(QtCore.QPoint(219 * self.w_ratio, 180 * self.h_ratio), "1")
-        try:
-            if self.running_on_windows:
-                painter.drawText(QtCore.QPoint(268 * self.h_ratio, 100 * self.h_ratio), str(round(self.n, 1)))
-            else:
-                painter.drawText(QtCore.QPoint(268 * self.w_ratio, 100 * self.h_ratio), str(round(self.n, 1)))
-        except Exception as e:
-            if str(e) == "type str doesn't define __round__ method":
-                if self.running_on_windows:
-                    painter.drawText(QtCore.QPoint(268 * self.h_ratio, 100 * self.h_ratio), str(self.n))
-                else:
-                    painter.drawText(QtCore.QPoint(268 * self.w_ratio, 100 * self.h_ratio), str(self.n))
-            else:
-                raise e
-        if self.running_on_windows:
-            painter.drawText(QtCore.QPoint(405 * self.h_ratio, 100 * self.h_ratio), str(self.banana))
-        else:
-            painter.drawText(QtCore.QPoint(405 * self.w_ratio, 100 * self.h_ratio), str(self.banana))"""
+            self.n_text = self.axis1.text(62 if self.n < 0 else 62.5, 37.5 + 5, str(round(self.n, 1)), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+
+        self.a_text.remove()
+        self.a_text = self.axis1.text(96, 37.5 + 5, str(self.banana), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+
+        self.canvas.draw()
 
     def on_run(self):
         if self.update:
             try:
                 self.W2 += 0.2 * self.banana
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-                self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
                 self.update = False
                 self.run_button.setText("Fruit")
             except Exception as e:
@@ -154,7 +190,6 @@ class UnsupervisedHebb(NNDLayout):
             self.idx = 0
             self.banana_shape, self.banana_smell, self.banana, self.n = "?", "?", "?", "  ?"
             self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             self.timer.timeout.connect(self.update_label)
             self.timer.start(900)
 
@@ -194,7 +229,6 @@ class UnsupervisedHebb(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_6.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         elif self.idx == 4:
             if self.fruit == "banana":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_10.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -210,7 +244,6 @@ class UnsupervisedHebb(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_9.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         elif self.idx == 6:
             if self.fruit == "banana":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_13.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -226,7 +259,6 @@ class UnsupervisedHebb(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_12.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_11.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         elif self.idx == 8:
             self.banana = self.banana_temp
             if self.fruit == "banana":
@@ -235,7 +267,6 @@ class UnsupervisedHebb(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_15.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_14.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         elif self.idx == 9:
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_19.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
