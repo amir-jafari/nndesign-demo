@@ -148,16 +148,20 @@ class NonlinearOptimization(NNDLayout):
         # self.p2 = self.p
         # self.Q2 = len(self.p)
         # p2 = np.arange(-2, 2.01, 0.4 / self.diff)
-        self.p_ = self.p
-        self.Q2 = len(self.p)
-        self.p2 = np.repeat(self.p.reshape(1, -1), self.S1, 0)
+        # self.p_ = self.p
+        self.p_ = np.arange(-2, 2 + 0.1 / self.diff, 0.1 / self.diff)
+        # self.Q2 = len(self.p)
+        self.Q2 = len(self.p_)
+        # self.p2 = np.repeat(self.p.reshape(1, -1), self.S1, 0)
+        self.p2 = np.repeat(self.p_.reshape(1, -1), self.S1, 0)
         # A1 = exp(-(abs(pp2-W1*ones(1,Q2)).*(B1*ones(1,Q2))).^2);
         # %A2 = W2*A1+B2*ones(1,Q);
         # A2 = W2*A1 + B2*ones(1,Q2);
-        self.a1 = np.exp(-np.abs(self.p2 - self.W1.dot(np.ones((1, self.Q2))) * (self.b1.dot(np.ones((1, self.Q2))))) ** 2)
+        self.a1 = np.exp(-(np.abs(self.p2 - self.W1.dot(np.ones((1, self.Q2)))) * (self.b1.dot(np.ones((1, self.Q2))))) ** 2)
         self.a2 = self.W2.dot(self.a1) + self.b2.dot(np.ones((1, self.Q2)))
         # self.t = self.f_to_approx(self.p)
-        self.t = 1 + np.sin(np.pi * self.p * self.diff / 4)
+        # self.t = 1 + np.sin(np.pi * self.p * self.diff / 4)
+        self.t = 1 + np.sin(np.pi * self.p_ * self.diff / 4)
         self.e = self.t - self.a2
         self.error_prev = np.dot(self.e, self.e.T).item()
         self.mu = 0.01
@@ -196,18 +200,22 @@ class NonlinearOptimization(NNDLayout):
         # grad = np.sqrt(np.dot(je.T, je)).item()
         # if grad < self.mingrad:
         #     self.net_approx.set_data(self.p_.reshape(-1), self.a2.reshape(-1))
+        #     self.ani.event_source.stop()
+        #     self.ani2.event_source.stop()
         #     return
             # return self.net_approx,
 
         jj = np.dot(jac.T, jac)
-        # Can't get this operation to produce the exact same results as MATLAB...
-        dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+        try:
+            dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+        except:
+            return
         dW1 = dw[:self.RS]
         db1 = dw[self.RS:self.RSS]
         dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
         db2 = dw[self.RSS2].reshape(1, 1)
 
-        self.a1 = np.exp(-np.abs(self.p2 - (self.W1 + dW1).dot(np.ones((1, self.Q2))) * ((self.b1 + db1).dot(np.ones((1, self.Q2))))) ** 2)
+        self.a1 = np.exp(-(np.abs(self.p2 - (self.W1 + dW1).dot(np.ones((1, self.Q2)))) * ((self.b1 + db1).dot(np.ones((1, self.Q2))))) ** 2)
         self.a2 = (self.W2 + dW2).dot(self.a1) + (self.b2 + db2).dot(np.ones((1, self.Q2)))
         self.e = self.t - self.a2
         error = np.dot(self.e, self.e.T).item()
@@ -226,7 +234,7 @@ class NonlinearOptimization(NNDLayout):
                 dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
                 db2 = dw[self.RSS2].reshape(1, 1)
 
-                self.a1 = np.exp(-np.abs(self.p2 - (self.W1 + dW1).dot(np.ones((1, self.Q2))) * ((self.b1 + db1).dot(np.ones((1, self.Q2))))) ** 2)
+                self.a1 = np.exp(-(np.abs(self.p2 - (self.W1 + dW1).dot(np.ones((1, self.Q2)))) * ((self.b1 + db1).dot(np.ones((1, self.Q2))))) ** 2)
                 self.a2 = (self.W2 + dW2).dot(self.a1) + (self.b2 + db2).dot(np.ones((1, self.Q2)))
                 self.e = self.t - self.a2
                 error = np.dot(self.e, self.e.T).item()
@@ -260,6 +268,8 @@ class NonlinearOptimization(NNDLayout):
                 print("Error goal reached!")
                 self.error_goal_reached = None
             self.net_approx.set_data(self.p_.reshape(-1), self.a2.reshape(-1))
+            self.ani.event_source.stop()
+            self.ani2.event_source.stop()
             return
             # return self.net_approx,
 
