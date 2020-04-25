@@ -5,7 +5,6 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from mpl_toolkits.mplot3d import Axes3D
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 
@@ -24,6 +23,7 @@ XX, YY = np.meshgrid(xs, ys)
 FF = (YY - XX) ** 4 + 8 * XX * YY - XX + YY + 3
 FF[FF < 0] = 0
 FF[FF > 12] = 12
+
 
 class TaylorSeries2(NNDLayout):
     def __init__(self, w_ratio, h_ratio):

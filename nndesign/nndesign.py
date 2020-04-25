@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QApplication
 
 from nndesign.nndesign_layout import NNDLayout
 from nndesign.Window import MainWindowNN, MainWindowDL
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 

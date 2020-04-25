@@ -1,4 +1,3 @@
-from PyQt5 import QtWidgets
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -6,8 +5,8 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from mpl_toolkits.mplot3d import Axes3D
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
+
 
 x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
               0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])

@@ -1,12 +1,12 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
+
 
 x1_lim = [-4, 4]
 x2_lim = [-2, 2]
@@ -18,6 +18,7 @@ x1 = np.arange(x1_lim[0], x1_lim[1] + 0.2, (x1_lim[1] - x1_lim[0]) / 30)
 x2 = np.arange(x2_lim[0], x2_lim[1] + 0.2, (x2_lim[1] - x2_lim[0]) / 30)
 X1, X2 = np.meshgrid(x1, x2)
 F = (a[0, 0] * X1 ** 2 + (a[0, 1] + a[1, 0]) * X1 * X2 + a[1, 1] * X2 ** 2) / 2 + b[0, 0] * X1 + b[1, 0] * X2 + c
+
 
 class DirectionalDerivatives(NNDLayout):
     def __init__(self, w_ratio, h_ratio):

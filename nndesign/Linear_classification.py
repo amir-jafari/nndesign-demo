@@ -1,21 +1,11 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
-import math
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 import matplotlib.patches as patches
-import matplotlib.collections as coll
-from matplotlib import cm
-from matplotlib.colors import ListedColormap
-import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 

@@ -1,13 +1,10 @@
-# https://stackoverflow.com/questions/28001655/draggable-line-with-draggable-points
-
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets
 import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 

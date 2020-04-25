@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore, QtSvg
+from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
 import matplotlib.pyplot as plt
 

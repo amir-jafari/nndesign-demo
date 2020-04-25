@@ -1,8 +1,5 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtSvg
 import numpy as np
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 
 from nndesign.nndesign_layout import NNDLayout

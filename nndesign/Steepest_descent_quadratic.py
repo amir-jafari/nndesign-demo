@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -6,8 +6,8 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from matplotlib.animation import FuncAnimation
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
+
 
 x, y = np.linspace(-4, 0+(0.2*22), 200, endpoint=False), np.linspace(-2, 0+(4/31*17), 200, endpoint=False)
 X, Y = np.meshgrid(x, y)

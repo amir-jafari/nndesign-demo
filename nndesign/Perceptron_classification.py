@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore, QtSvg
+from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 

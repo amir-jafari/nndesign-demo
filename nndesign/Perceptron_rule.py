@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets
 import random
 import numpy as np
 import warnings
@@ -7,7 +7,6 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from matplotlib.animation import FuncAnimation
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 

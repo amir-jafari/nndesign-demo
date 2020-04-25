@@ -1,5 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
-
+from PyQt5 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -7,7 +6,6 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from matplotlib.animation import FuncAnimation
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 
@@ -21,6 +19,7 @@ max_epoch = 50
 F = (Y - X) ** 4 + 8 * X * Y - X + Y + 3
 F[F < 0] = 0
 F[F > 12] = 12
+
 
 class SteepestDescent(NNDLayout):
     def __init__(self, w_ratio, h_ratio):

@@ -7,7 +7,6 @@ from mpl_toolkits.mplot3d import Axes3D
 import ast
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 

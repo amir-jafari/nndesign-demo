@@ -5,7 +5,6 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from scipy.integrate import ode
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 

@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -6,7 +6,6 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from scipy.signal import lfilter
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 

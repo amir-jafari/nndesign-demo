@@ -1,5 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
-
+from PyQt5 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -7,7 +6,6 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from matplotlib.animation import FuncAnimation
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 
@@ -20,22 +18,6 @@ tt0 = np.sin(2 * np.pi * pp0 / T)
 pp = np.linspace(-0.95, 0.95, 20)
 p = np.linspace(-1, 1, 21)
 P = np.linspace(-1, 1, 100)
-
-
-def logsigmoid(n):
-    return 1 / (1 + np.exp(-n))
-
-
-def logsigmoid_der(n):
-    return (1 - 1 / (1 + np.exp(-n))) * 1 / (1 + np.exp(-n))
-
-
-def purelin(n):
-    return n
-
-
-def purelin_der(n):
-    return np.array([1]).reshape(n.shape)
 
 
 class Regularization(NNDLayout):
@@ -99,11 +81,11 @@ class Regularization(NNDLayout):
             # Hidden Layer's Net Input
             n1 = np.dot(self.W1, a0) + self.b1
             #  Hidden Layer's Transformation
-            a1 = logsigmoid(n1)
+            a1 = self.logsigmoid(n1)
             # Output Layer's Net Input
             n2 = np.dot(self.W2, a1) + self.b2
             # Output Layer's Transformation
-            a = purelin(n2)  # (a2 = a)
+            a = self.purelin(n2)  # (a2 = a)
             nn_output.append(a)
 
             # Back-propagates the sensitivities
@@ -111,10 +93,10 @@ class Regularization(NNDLayout):
             e = target - a
             # error = np.append(error, e)
             # Output Layer
-            F2_der = np.diag(purelin_der(n2).reshape(-1))
+            F2_der = np.diag(self.purelin_der(n2).reshape(-1))
             s = -2 * np.dot(F2_der, e)  # (s2 = s)
             # Hidden Layer
-            F1_der = np.diag(logsigmoid_der(n1).reshape(-1))
+            F1_der = np.diag(self.logsigmoid_der(n1).reshape(-1))
             s1 = np.dot(F1_der, np.dot(self.W2.T, s))
 
             # Updates the weights and biases

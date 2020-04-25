@@ -8,7 +8,6 @@ from matplotlib.ticker import FormatStrFormatter
 from mpl_toolkits.mplot3d import Axes3D
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 
@@ -26,6 +25,7 @@ def purelin(n):
 
 def purelin_der(n):
     return np.array([1]).reshape(n.shape)
+
 
 W1 = np.array([[10], [10]])
 b1 = np.array([[-5], [5]])
