@@ -8,9 +8,9 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
 from scipy.integrate import ode
 
-from nndesign_layout import NNDLayout
+from nndesign.nndesign_layout import NNDLayout
 
-from get_package_path import PACKAGE_PATH
+from nndesign.get_package_path import PACKAGE_PATH
 
 
 x = np.arange(-1, 1.0001, 0.05)

@@ -5,8 +5,8 @@ from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 
-from nndesign_layout import NNDLayout
-from get_package_path import PACKAGE_PATH
+from nndesign.nndesign_layout import NNDLayout
+from nndesign.get_package_path import PACKAGE_PATH
 
 
 class CompetitiveClassification(NNDLayout):

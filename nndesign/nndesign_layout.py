@@ -10,8 +10,8 @@ import math
 # from matplotlib import rc
 # rc('text', usetex=True)
 
-from get_package_path import PACKAGE_PATH
-from nndesign_settings import OS_NAME
+from nndesign.get_package_path import PACKAGE_PATH
+from nndesign.nndesign_settings import OS_NAME
 
 WM_MAC_MAIN, HM_MAC_MAIN = 1280 - 750, 800 - 120  # For my Mac
 WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 580, 800 - 120  # For my Mac - original size

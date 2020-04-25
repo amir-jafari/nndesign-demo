@@ -4,9 +4,9 @@ import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-from nndesign_layout import NNDLayout
+from nndesign.nndesign_layout import NNDLayout
 
-from get_package_path import PACKAGE_PATH
+from nndesign.get_package_path import PACKAGE_PATH
 
 
 randseq = [-0.7616, -1.0287, 0.5348, -0.8102, -1.1690, 0.0419, 0.8944, 0.5460, -0.9345, 0.0754,

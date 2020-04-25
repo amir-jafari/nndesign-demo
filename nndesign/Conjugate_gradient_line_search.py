@@ -4,9 +4,9 @@ import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-from nndesign_layout import NNDLayout
+from nndesign.nndesign_layout import NNDLayout
 
-from get_package_path import PACKAGE_PATH
+from nndesign.get_package_path import PACKAGE_PATH
 
 
 def logsigmoid(n):
@@ -91,7 +91,7 @@ class ConjugateGradientLineSearch(NNDLayout):
         while self.axes.collections:
             for collection in self.axes.collections:
                 collection.remove()
-        f_data = loadmat("nndbp{}.mat".format(self.pair_of_params))
+        f_data = loadmat(PACKAGE_PATH + "Data/nndbp{}.mat".format(self.pair_of_params))
         x1, y1 = np.meshgrid(f_data["x1"], f_data["y1"])
         self.axes.contour(x1, y1, f_data["E1"], list(f_data["levels"].reshape(-1)))
         if self.pair_of_params == 1:

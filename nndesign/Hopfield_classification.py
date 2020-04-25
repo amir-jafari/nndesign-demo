@@ -2,8 +2,8 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
-from nndesign_layout import NNDLayout
-from get_package_path import PACKAGE_PATH
+from nndesign.nndesign_layout import NNDLayout
+from nndesign.get_package_path import PACKAGE_PATH
 
 
 class HopfieldClassification(NNDLayout):

@@ -6,9 +6,9 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
-from nndesign_layout import NNDLayout
+from nndesign.nndesign_layout import NNDLayout
 
-from get_package_path import PACKAGE_PATH
+from nndesign.get_package_path import PACKAGE_PATH
 
 
 p1, p2 = np.arange(-5, 5, 0.05), np.arange(-5, 5, 0.05)

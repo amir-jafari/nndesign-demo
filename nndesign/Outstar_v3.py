@@ -2,8 +2,8 @@ from PyQt5 import QtWidgets, QtGui, QtCore, QtSvg
 import numpy as np
 import matplotlib.pyplot as plt
 
-from nndesign_layout import NNDLayout
-from get_package_path import PACKAGE_PATH
+from nndesign.nndesign_layout import NNDLayout
+from nndesign.get_package_path import PACKAGE_PATH
 
 
 class OutStar(NNDLayout):

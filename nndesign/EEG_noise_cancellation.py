@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore
 
 import numpy as np
 from scipy.io import loadmat
@@ -6,20 +6,17 @@ import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from matplotlib.animation import FuncAnimation
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 
-from nndesign_layout import NNDLayout
+from nndesign.nndesign_layout import NNDLayout
 
-from get_package_path import PACKAGE_PATH
+from nndesign.get_package_path import PACKAGE_PATH
 
 
 N, f, max_t = 3.33, 60, 0.5
 s = N * f
 ts = s * max_t + 1
 A1, A2, theta1, theta2, k = 1, 0.75, np.pi/2, np.pi/2.5, 0.00001
-signal = k * loadmat("eegdata.mat")["eegdata"][:, :int(ts) + 1]
+signal = k * loadmat(PACKAGE_PATH + "Data/eegdata.mat")["eegdata"][:, :int(ts) + 1]
 i = np.arange(ts).reshape(1, -1)
 noise1, noise2 = 1.2 * np.sin(2 * np.pi * (i - 1) / N), 0.6 * np.sin(4 * np.pi * (i - 1) / N)
 noise = noise1 + noise2

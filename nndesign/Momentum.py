@@ -10,9 +10,9 @@ from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 
-from nndesign_layout import NNDLayout
+from nndesign.nndesign_layout import NNDLayout
 
-from get_package_path import PACKAGE_PATH
+from nndesign.get_package_path import PACKAGE_PATH
 
 
 def logsigmoid(n):
@@ -104,7 +104,7 @@ class Momentum(NNDLayout):
         while self.axes.collections:
             for collection in self.axes.collections:
                 collection.remove()
-        f_data = loadmat("nndbp{}.mat".format(self.pair_of_params))
+        f_data = loadmat(PACKAGE_PATH + "Data/nndbp{}.mat".format(self.pair_of_params))
         x1, y1 = np.meshgrid(f_data["x1"], f_data["y1"])
         self.axes.contour(x1, y1, f_data["E1"], list(f_data["levels"].reshape(-1)))
         if self.pair_of_params == 1:

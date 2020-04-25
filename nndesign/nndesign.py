@@ -1,10 +1,10 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication
 
-from nndesign_layout import NNDLayout
-from Window import MainWindowNN, MainWindowDL
+from nndesign.nndesign_layout import NNDLayout
+from nndesign.Window import MainWindowNN, MainWindowDL
 
-from get_package_path import PACKAGE_PATH
+from nndesign.get_package_path import PACKAGE_PATH
 
 
 class MainWindow(NNDLayout):
@@ -75,13 +75,18 @@ class MainWindow(NNDLayout):
         self.button2_win.show()
 
 
-import sys
-app = QApplication(sys.argv)
-dimensions = QtWidgets.QDesktopWidget().screenGeometry(-1)
-W_SCREEN, H_SCREEN = dimensions.width(), dimensions.height()
-# W_SCREEN, H_SCREEN = 1900, 850  # To check how it would look on a bigger screen
-# W_SCREEN, H_SCREEN = 1500, 700  # To check how it would look on a bigger screen
-W_RATIO, H_RATIO = W_SCREEN / 1280, H_SCREEN / 800
-win = MainWindow(W_RATIO, H_RATIO)
-win.show()
-sys.exit(app.exec_())
+def nndtoc():
+    import sys
+    app = QApplication(sys.argv)
+    dimensions = QtWidgets.QDesktopWidget().screenGeometry(-1)
+    W_SCREEN, H_SCREEN = dimensions.width(), dimensions.height()
+    # W_SCREEN, H_SCREEN = 1900, 850  # To check how it would look on a bigger screen
+    # W_SCREEN, H_SCREEN = 1500, 700  # To check how it would look on a bigger screen
+    W_RATIO, H_RATIO = W_SCREEN / 1280, H_SCREEN / 800
+    win = MainWindow(W_RATIO, H_RATIO)
+    win.show()
+    sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    nndtoc()

@@ -1,3 +1,3 @@
-from .nndesign import (
+from nndesign.nndesign import (
   nndtoc,
 )
