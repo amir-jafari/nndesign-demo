@@ -14,23 +14,30 @@ class CascadedFunction(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(CascadedFunction, self).__init__(w_ratio, h_ratio, main_menu=2)
 
-        self.fill_chapter("Cascaded Function", 2, "Some text",
+        self.fill_chapter("Cascaded Function", 2, "\nExperiment with the hidden\nfunction and number of layers\n"
+                                                  "using the dropdown menus\nbelow.\n\nSet the number of iterations\n"
+                                                  "to 0 in order to start\nthe animation, or control it\nmanually by moving"
+                                                  "\nthe slider.",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/2f_1_1.svg", icon_move_left=120)
 
         self.make_plot(1, (90, 300, 370, 370))
 
         self.comboBox1_functions = [self.Poslin, self.LogSig]
-        self.make_combobox(1, ["ReLU", 'LogSig'], (self.x_chapter_usual, 420, self.w_chapter_slider, 50),
+        self.make_combobox(1, ["ReLU", 'LogSig'], (self.x_chapter_usual, 330, self.w_chapter_slider, 50),
                            self.change_transfer_function, "label_f", "f")
         self.func = self.Poslin
 
-        self.make_combobox(2, ["Two", 'Three', "Four"], (self.x_chapter_usual, 480, self.w_chapter_slider, 50),
-                           self.combo_bbox2, "label_iter", "Number of iterations",
-                           (self.x_chapter_slider_label - 40, 460, self.w_chapter_slider, 50))
+        self.make_combobox(2, ["Two", 'Three', "Four"], (self.x_chapter_usual, 390, self.w_chapter_slider, 50),
+                           self.combo_bbox2, "label_iter", "Number of layers",
+                           (self.x_chapter_slider_label - 40, 370, self.w_chapter_slider, 50))
         self.func1 = self.two
 
-        self.make_slider("sliderval", QtCore.Qt.Horizontal, (0, 50), QtWidgets.QSlider.TicksBelow, 1, 0,
-                         (self.x_chapter_usual, 530, self.w_chapter_slider, 50), self.graph)
+        self.make_slider("sliderval", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 0,
+                         (self.x_chapter_usual, 460, self.w_chapter_slider, 50), self.slide, "label_iter",
+                         "Number of iterations: 0", (self.x_chapter_usual + 20, 460 - 25, 150, 50))
+        self.last_idx = 0
+        self.do_graph = True
+        self.ani = None
 
         self.graph()
 
@@ -46,6 +53,15 @@ class CascadedFunction(NNDLayout):
         if idx == 2:
             self.func1 = self.four
             self.icon2.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Chapters/2_D/4f_1.svg").pixmap(500 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.graph()
+
+    def slide(self):
+        if self.do_graph and self.ani:
+            self.ani.event_source.stop()
+            self.do_graph = True
+        self.last_idx = self.sliderval.value()
+        self.label_iter.setText("Number of iterations: {}".format(self.last_idx))
+        if self.do_graph:
             self.graph()
 
     def graph(self):
@@ -65,12 +81,11 @@ class CascadedFunction(NNDLayout):
         else:
             self.aaa = np.linspace(0.01, 0.99, 300)
 
-        self.last_idx = 0
         self.plot_1, = a.plot([], 'ko-')
 
         a.axhline(y=0, color='k')
         a.axvline(x=0, color='k')
-        if self.sliderval.value() == 0:
+        if self.last_idx == 0:
             self.ani = FuncAnimation(self.figure, self.on_animate, frames=len(self.aaa), interval=50, repeat=False)
             self.canvas.draw()
         else:
@@ -79,7 +94,7 @@ class CascadedFunction(NNDLayout):
                 xx, yy = self.getxx(self.aaa[i], self.func1())
                 a.plot(xx[-1], yy[-1], 'ro')
 
-            xx, yy = self.getxx(float((self.sliderval.value()) / 50), self.func1())
+            xx, yy = self.getxx((self.last_idx / 100), self.func1())
             a.plot(xx, yy, 'ko-')
 
             self.canvas.draw()
@@ -90,7 +105,11 @@ class CascadedFunction(NNDLayout):
             self.last_idx += 1
             self.plot_1.set_data(xx, yy)
             self.figure.add_subplot(111).plot(xx[-1], yy[-1], 'ro')
-            self.canvas.draw()
+            self.label_iter.setText("Number of iterations: {}".format(self.last_idx))
+            self.do_graph = False
+            self.sliderval.setValue(self.last_idx)
+            self.do_graph = True
+            # self.canvas.draw()
 
     def getxx(self, p, nr):
         xx = np.array([])

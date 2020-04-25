@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication
 
 from nndesign.nndesign_layout import NNDLayout
@@ -15,7 +15,7 @@ class MainWindow(NNDLayout):
         x_title, y_title, w_title, h_title, add_x, add_y = 30, 5, 500, 100, 250, 20
         x_left, y_img, w, h_img, x_right = 20, 110, 230, 284, 20 + 260
         y_button, h_button = 415, 50
-        y_text, h_text = 450, 100
+        y_text, h_text = 440, 200
         x_authors, y_authors, w_authors, h_authors = 385, 650, 150, 20
 
         self.setWindowTitle("Neural Network Design & Deep Learning Demos")
@@ -44,9 +44,14 @@ class MainWindow(NNDLayout):
         # )
         # self.button1.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
 
-        self.make_label("book1_info", "Some text here, fill this up with something\nbla bla bla", (x_left, y_text, w, h_text))
+        self.make_label("book1_info", "Click on the button above to access the\ndemonstrations for the Neural Network\n"
+                                      "Design book.\n\nEach demo is linked to a chapter section\nof the book. You can "
+                                      "find more info at", (x_left, y_text, w, h_text))
+        self.make_label("book1_link", '<a href="https://hagan.okstate.edu/nnd.html">https://hagan.okstate.edu/nnd.html/</a>', (x_left, y_text + 145, w, 30))
+        self.book1_link.linkActivated.connect(self.link_1)
 
-        self.make_label("book2_info", "Some text here, fill this up with something\nbla bla bla", (x_right, y_text, w, h_text))
+        self.make_label("book2_info", "Click on the button above to access the\ndemonstrations for the Neural Network\n"
+                                      "Design: Deep Learning book.\n\n... TODO ...\n...", (x_right, y_text, w, h_text))
 
         self.button1 = QtWidgets.QPushButton("Neural Network Design", self)
         self.button1.setGeometry(x_left * self.w_ratio, y_button * self.h_ratio, w * self.w_ratio, h_button * self.h_ratio)
@@ -68,8 +73,11 @@ class MainWindow(NNDLayout):
         self.button1_win = MainWindowNN(self.w_ratio, self.h_ratio)
         self.button1_win.show()
 
+    @staticmethod
+    def link_1(link_str):
+        QtGui.QDesktopServices.openUrl(QtCore.QUrl(link_str))
+
     def new_window2(self):
-        # print("TODO")  # TODO
         self.button2_win = MainWindowDL(self.w_ratio, self.h_ratio)
         self.button2_win.show()
 
