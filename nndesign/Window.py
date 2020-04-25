@@ -68,9 +68,11 @@ from Recurrent_network_training import RecurrentNetworkTraining
 # from Unsupervised_hebb_v2 import UnsupervisedHebb
 from Unsupervised_hebb_v3 import UnsupervisedHebb
 from Effects_of_decay_rate import EffectsOfDecayRate
-from Hebb_with_decay import HebbWithDecay
+# from Hebb_with_decay import HebbWithDecay
+from Hebb_with_decay_v3 import HebbWithDecay
 from Graphical_instar import GraphicalInstar
-from Outstar import OutStar
+# from Outstar import OutStar
+from Outstar_v3 import OutStar
 # ------ Chapter 16 -------
 from Competitive_classification import CompetitiveClassification
 from Competitive_learning import CompetitiveLearning
