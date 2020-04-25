@@ -53,26 +53,13 @@ class CompetitiveClassification(NNDLayout):
 
         self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
-        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
+        if self.running_on_windows:
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setGeometry(28 * self.h_ratio, 485 * self.h_ratio, self.figure_w * self.h_ratio, self.figure_h * self.h_ratio)
+        else:
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
-
-        """from PIL import Image
-        # import svgutils.compose as sc
-        img = Image.open(PACKAGE_PATH + "Figures/nnd3d1.eps")
-        img.load()
-        self.figure2 = Figure()
-        self.canvas2 = FigureCanvas(self.figure2)
-        self.toolbar = NavigationToolbar(self.canvas2, self)
-        self.wid2 = QtWidgets.QWidget(self)
-        self.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
-        self.wid2.setGeometry(15 * self.w_ratio, 500 * self.h_ratio, 500 * self.w_ratio, 150 * self.h_ratio)
-        self.layout2.addWidget(self.canvas2)
-        self.wid2.setLayout(self.layout2)
-
-        self.axes2 = self.figure2.add_subplot(1, 1, 1)
-        self.axes2.imshow(np.array(img))
-        self.canvas2.draw()"""
 
         self.run_button = QtWidgets.QPushButton("Go", self)
         self.run_button.setStyleSheet("font-size:13px")
@@ -82,10 +69,14 @@ class CompetitiveClassification(NNDLayout):
     def paintEvent(self, event):
         super(CompetitiveClassification, self).paintEvent(event)
         painter = QtGui.QPainter(self.icon3.pixmap())
-        painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
-        painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), self.text_shape)
-        painter.drawText(QtCore.QPoint(245 * self.w_ratio, 28 * self.h_ratio), self.text_texture)
-        painter.drawText(QtCore.QPoint(410 * self.w_ratio, 28 * self.h_ratio), self.text_weight)
+        if self.running_on_windows:
+            w_ratio, h_ratio = self.h_ratio, self.h_ratio
+        else:
+            w_ratio, h_ratio = self.w_ratio, self.h_ratio
+        painter.setFont(QtGui.QFont("times", 12 * (w_ratio + h_ratio) / 2))
+        painter.drawText(QtCore.QPoint(100 * w_ratio, 28 * h_ratio), self.text_shape)
+        painter.drawText(QtCore.QPoint(245 * w_ratio, 28 * h_ratio), self.text_texture)
+        painter.drawText(QtCore.QPoint(410 * w_ratio, 28 * h_ratio), self.text_weight)
 
     def on_run(self):
         self.timer = QtCore.QTimer()

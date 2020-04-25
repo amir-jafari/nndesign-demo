@@ -51,8 +51,12 @@ class HammingClassification(NNDLayout):
 
         self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
-        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
+        if self.running_on_windows:
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setGeometry(28 * self.h_ratio, 485 * self.h_ratio, self.figure_w * self.h_ratio, self.figure_h * self.h_ratio)
+        else:
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
 
         self.make_button("run_button", "Go", (self.x_chapter_button, 570, self.w_chapter_button, self.h_chapter_button), self.on_run)
@@ -60,10 +64,14 @@ class HammingClassification(NNDLayout):
     def paintEvent(self, event):
         super(HammingClassification, self).paintEvent(event)
         painter = QtGui.QPainter(self.icon3.pixmap())
-        painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
-        painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), self.text_shape)
-        painter.drawText(QtCore.QPoint(245 * self.w_ratio, 28 * self.h_ratio), self.text_texture)
-        painter.drawText(QtCore.QPoint(410 * self.w_ratio, 28 * self.h_ratio), self.text_weight)
+        if self.running_on_windows:
+            w_ratio, h_ratio = self.h_ratio, self.h_ratio
+        else:
+            w_ratio, h_ratio = self.w_ratio, self.h_ratio
+        painter.setFont(QtGui.QFont("times", 12 * (w_ratio + h_ratio) / 2))
+        painter.drawText(QtCore.QPoint(100 * w_ratio, 28 * h_ratio), self.text_shape)
+        painter.drawText(QtCore.QPoint(245 * w_ratio, 28 * h_ratio), self.text_texture)
+        painter.drawText(QtCore.QPoint(410 * w_ratio, 28 * h_ratio), self.text_weight)
 
     def on_run(self):
         self.timer = QtCore.QTimer()
