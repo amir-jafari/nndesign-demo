@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -7,7 +7,6 @@ from mpl_toolkits.mplot3d import Axes3D
 import ast
 
 from nndesign.nndesign_layout import NNDLayout
-
 from nndesign.get_package_path import PACKAGE_PATH
 
 
@@ -15,8 +14,11 @@ class PoslinDecisionRegions(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(PoslinDecisionRegions, self).__init__(w_ratio, h_ratio, main_menu=2)
 
-        self.fill_chapter("Poslin Decision Regions", 2, "Some text",
-                          PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet2D_1.svg", icon_move_left=120)
+        self.fill_chapter("Poslin Decision Regions", 2, "\nAlter the network's\nparameters by clicking\nthe "
+                                                        "buttons and\nmodifying the input text.\n\n"
+                                                        "Choose the output transfer\nfunction f below.",
+                          PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet2D_1.svg",
+                          icon_move_left=120, description_coords=(535, 100, 450, 200))
 
         self.make_plot(1, (10, 300, 250, 250))
         self.make_plot(2, (260, 300, 250, 250))
@@ -40,7 +42,7 @@ class PoslinDecisionRegions(NNDLayout):
 
         self.combobox_funcs = [self.poslin, self.hardlim, self.hardlims, self.purelin, self.satlin, self.satlins, self.logsig, self.tansig]
         self.combobox_funcs_str = ["poslin", "hardlim", "hardlims", "purelin", "satlin", "satlins", "logsig", "tansig"]
-        self.make_combobox(1, self.combobox_funcs_str, (self.x_chapter_usual, 540, self.w_chapter_slider, 50), self.change_transfer_f, "label_f", "f")
+        self.make_combobox(1, self.combobox_funcs_str, (self.x_chapter_usual, 290, self.w_chapter_slider, 50), self.change_transfer_f, "label_f", "f")
         self.func1 = self.poslin
 
         self.graph()
@@ -50,7 +52,7 @@ class PoslinDecisionRegions(NNDLayout):
         self.graph()
 
     def change_w1(self):
-        weight1, ok = QtWidgets.QInputDialog.getText(self, 'Change Weight', 'Change W1:')
+        weight1, ok = QtWidgets.QInputDialog.getText(self, 'Change Weight', 'Change W1:', QtWidgets.QLineEdit.Normal, str(self.w1.tolist()))
         if ok:
             try:
                 w1 = ast.literal_eval(weight1)
@@ -62,7 +64,7 @@ class PoslinDecisionRegions(NNDLayout):
             self.graph()
 
     def change_w2(self):
-        weight2, ok = QtWidgets.QInputDialog.getText(self, 'Change Weight', 'Change W2:')
+        weight2, ok = QtWidgets.QInputDialog.getText(self, 'Change Weight', 'Change W2:', QtWidgets.QLineEdit.Normal, str(self.w2.tolist()))
         if ok:
             try:
                 w2 = ast.literal_eval(weight2)
@@ -74,7 +76,7 @@ class PoslinDecisionRegions(NNDLayout):
             self.graph()
 
     def change_b1(self):
-        bias1, ok = QtWidgets.QInputDialog.getText(self, 'Change Bias', 'Change b1:')
+        bias1, ok = QtWidgets.QInputDialog.getText(self, 'Change Bias', 'Change b1:', QtWidgets.QLineEdit.Normal, str(self.b1.tolist()))
         if ok:
             try:
                 b1 = ast.literal_eval(bias1)
@@ -86,7 +88,7 @@ class PoslinDecisionRegions(NNDLayout):
             self.graph()
 
     def change_b2(self):
-        bias2, ok = QtWidgets.QInputDialog.getText(self, 'Change Bias', 'Change b 2:')
+        bias2, ok = QtWidgets.QInputDialog.getText(self, 'Change Bias', 'Change b2:', QtWidgets.QLineEdit.Normal, str(self.b2.tolist()))
         if ok:
             try:
                 b2 = ast.literal_eval(bias2)

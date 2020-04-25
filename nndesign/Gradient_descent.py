@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -14,8 +14,12 @@ class GradientDescent(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(GradientDescent, self).__init__(w_ratio, h_ratio, main_menu=2)
 
-        self.fill_chapter("Gradient Descent", 3, "Some text",
-                          PACKAGE_PATH + "Chapters/3_D/Logo_Ch_3.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet_new.svg", icon_move_left=120)
+        self.fill_chapter("Gradient Descent", 3, "\nClick anywhere on the\ngraph to start an initial guess."
+                                                 "\nThen the steepest descent\ntrajectory will be shown.\n\n"
+                                                 "Modify the learning rate\nby moving the slide bar.\n\n"
+                                                 "Experiment with different\ninitial guesses and\nlearning rates.",
+                          PACKAGE_PATH + "Chapters/3_D/Logo_Ch_3.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet_new.svg",
+                          icon_move_left=120, description_coords=(535, 105, 450, 250))
 
         self.data = []
 
@@ -23,18 +27,17 @@ class GradientDescent(NNDLayout):
         self.make_plot(2, (260, 300, 255, 370))
 
         self.axis = Axes3D(self.figure)
-        # self.axis.mouse_init
 
         self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 1,
-                         (self.x_chapter_usual, 430, self.w_chapter_slider, 50), self.slider, "label_lr",
-                         "Learning rate: 0.01", (self.x_chapter_usual + 20, 430 - 25, self.w_chapter_slider, 50))
+                         (self.x_chapter_usual, 360, self.w_chapter_slider, 50), self.slider, "label_lr",
+                         "Learning rate: 0.01", (self.x_chapter_usual + 40, 360 - 25, self.w_chapter_slider, 50))
         self.lr = float(self.slider_lr.value() / 100)
 
         self.graph()
 
     def slider(self):
         self.lr = float(self.slider_lr.value() / 100)
-        self.label_lr.setText("Learning_rate: {}".format(self.lr))
+        self.label_lr.setText("Learning rate: {}".format(self.lr))
         self.graph()
 
     def on_mouseclick(self, event):
