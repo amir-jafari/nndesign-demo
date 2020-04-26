@@ -1,19 +1,19 @@
 import setuptools
 
 
-with open('README.md') as f:
-    README = f.read()
-
 setuptools.setup(
-    author="Pedro Uria",
-    author_email="pedroduriar@gmail.com",
-    name='nndesign',
+    author="Hagan, Jafari, Uría",
+    author_email="nndesign.demo@gmail.com",
+    name='nndesigndemos',
     license="MIT",
-    description='Demos for the Neural Network Design book',
-    version='v0.0.6',
-    long_description=README,
-    url='',
-    packages=["nndesign"],
+    description='Demos for the Neural Network Design & Deep Learning books',
+    version='v0.0.1',
+    long_description="This is a set of demonstrations paired with the Neural Network Design & Deep Learning books.\n"
+                     "Each demo is linked to a chapter section of the books. You can find more info at "
+                     "https://hagan.okstate.edu/nnd.html.\n\nAfter installing (creating a virtual environment is "
+                     "recommended), just open the Python Shell and type: from nndesigndemos import nndtoc; nndtoc()",
+    url='https://github.com/amir-jafari/nndesign-demo',
+    packages=["nndesigndemos"],
     include_package_data=True,
     python_requires=">=3.5",
     install_requires=["PyQt5==5.14.1", "numpy==1.18.1", "scipy==1.4.1", "matplotlib==3.1.2"],
@@ -24,7 +24,15 @@ setuptools.setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.5',
-        'Topic :: Software Development :: Libraries',
-        'Intended Audience :: Developers',
+        'Operating System :: MacOS',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX :: Linux',
+        'Topic :: Education',
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+        'Topic :: Scientific/Engineering :: Mathematics',
+        'Intended Audience :: Education',
+        'Intended Audience :: Science/Research',
+        'Natural Language :: English',
+
     ],
 )
