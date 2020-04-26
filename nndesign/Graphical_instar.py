@@ -19,8 +19,8 @@ class GraphicalInstar(NNDLayout):
                                                   "Click [Update] to\nmake the change.",
                           PACKAGE_PATH + "Logo/Logo_Ch_15.svg", None, description_coords=(535, 140, 450, 300))
 
-        self.make_plot(1, (120, 120, 270, 270))
-        self.make_plot(2, (120, 390, 270, 270))
+        self.make_plot(1, (115, 100, 290, 290))
+        self.make_plot(2, (115, 385, 290, 290))
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Click to change weight")

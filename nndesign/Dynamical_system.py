@@ -9,22 +9,13 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-wid_up = 1
-hei_up = 1.04
-nrows_up = 4
-ncols_up = 4
-inbetween_up = 0.12
-xx_up = np.arange(0, ncols_up, (wid_up + inbetween_up))
-yy_up = np.arange(0, nrows_up, (hei_up + inbetween_up))
-
-
 class DynamicalSystem(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(DynamicalSystem, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Dynamical System", 20, "Drag the pendulum or\nclick on the contour to\nset the initial state.\n\n"
                                                   "Click [Go] to simulate and\n[Clear] to ",
-                          PACKAGE_PATH + "Logo/Logo_Ch_20.svg", None, description_coords=(535, 80, 450, 250))
+                          PACKAGE_PATH + "Logo/Logo_Ch_20.svg", None, description_coords=(535, 75, 450, 250))
 
         self.make_plot(8, (300, 100, 210, 300))
         # self.figure8.subplots_adjust(left=0.15, right=0.95, bottom=0.125, top=0.9)
@@ -96,7 +87,7 @@ class DynamicalSystem(NNDLayout):
 
         # --
 
-        self.make_button("run_button", "Go", (self.x_chapter_button, 260, self.w_chapter_button, self.h_chapter_button), self.run_animation)
+        self.make_button("run_button", "Go", (self.x_chapter_button, 265, self.w_chapter_button, self.h_chapter_button), self.run_animation)
 
     def on_mouseclick(self, event):
         # d_angle_click_pendulum_point = abs(self.angle - (event.xdata + 90) * np.pi / 180)

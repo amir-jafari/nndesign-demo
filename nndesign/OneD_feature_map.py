@@ -75,7 +75,7 @@ class OneDFeatureMap(NNDLayout):
         # self.label_eq.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         # self.label_eq.setGeometry((self.x_chapter_slider_label - 30) * self.w_ratio, 350 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
 
-        self.make_label("label_presentations", "Presentations: 0", (self.x_chapter_slider_label - 20, 300, 150, 100), )
+        self.make_label("label_presentations", "Presentations: 0", (535, 290, 150, 100))
 
         self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 10, 100,
                          (15, 610, 250, 50), self.slide, "label_lr", "Learning Rate: 1.0", (90, 585, 150, 50))
@@ -85,8 +85,8 @@ class OneDFeatureMap(NNDLayout):
                          (265, 610, 250, 50), self.slide, "label_nei", "Neighborhood: 21.00", (335, 585, 150, 50))
         self.nei = 21
 
-        self.make_button("run_button", "Train", (self.x_chapter_button, 400, self.w_chapter_button, self.h_chapter_button), self.on_run_2)
-        self.make_button("reset_button", "Reset", (self.x_chapter_button, 430, self.w_chapter_button, self.h_chapter_button), self.on_reset)
+        self.make_button("run_button", "Train", (self.x_chapter_button, 370, self.w_chapter_button, self.h_chapter_button), self.on_run_2)
+        self.make_button("reset_button", "Reset", (self.x_chapter_button, 400, self.w_chapter_button, self.h_chapter_button), self.on_reset)
 
         self.do_slide = True
 

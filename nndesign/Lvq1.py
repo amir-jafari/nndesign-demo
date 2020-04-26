@@ -9,9 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-W2 = np.array([[1, 1, 0, 0], [0, 0, 1, 1]])
-
-
 class LVQ1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(LVQ1, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -22,6 +19,7 @@ class LVQ1(NNDLayout):
                                       "Misclassifications are shown in red.",
                           PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None, description_coords=(535, 160, 450, 250))
 
+        self.W2 = np.array([[1, 1, 0, 0], [0, 0, 1, 1]])
         self.alpha = 0.4
 
         self.make_plot(1, (15, 100, 500, 500))
@@ -114,7 +112,7 @@ class LVQ1(NNDLayout):
             for j in range(self.P.shape[1]):
                 dist_v[i, j] = distance.euclidean(self.W[i].reshape(-1), self.P[:, j].reshape(-1))
         a1 = self.compet(-dist_v, axis=0)
-        a2 = np.dot(W2, a1)
+        a2 = np.dot(self.W2, a1)
         e = self.T - a2
         miss_pos_points_x, miss_pos_points_y, miss_neg_points_x, miss_neg_points_y = [], [], [], []
         for i in range(self.P.shape[1]):
@@ -170,14 +168,14 @@ class LVQ1(NNDLayout):
             for i in range(len(self.W)):
                 dist_v[i] = distance.euclidean(self.W[i].reshape(-1), self.p.reshape(-1))
             self.a1 = self.compet(-dist_v)
-            a2 = np.dot(W2, self.a1)
+            a2 = np.dot(self.W2, self.a1)
             e = self.t - a2
             if sum(e == 0) > 0:
                 self.color = "red"
             else:
                 self.color = "green"
         elif idx in list(np.arange(1, 10000, 3)):
-            e = np.dot(W2.T, self.t)
+            e = np.dot(self.W2.T, self.t)
             i = np.argmax(self.a1)
             w1_new = self.W[i, :] - (e[i] * 2 - 1) * (self.alpha * self.a1[i] * (self.p.T - self.W[i, :]))
         elif idx in list(np.arange(2, 10000, 3)):

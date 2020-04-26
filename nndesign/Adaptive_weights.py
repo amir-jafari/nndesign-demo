@@ -8,9 +8,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-t = np.arange(0, 2, 0.01)
-
-
 class AdaptiveWeights(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(AdaptiveWeights, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -20,6 +17,7 @@ class AdaptiveWeights(NNDLayout):
                                                   " solid green\nW2(2,2) - broken green\n\nClick [Clear] to remove\n"
                                                   "old responses.",
                           PACKAGE_PATH + "Logo/Logo_Ch_18.svg", None)
+        self.t = np.arange(0, 2, 0.01)
 
         self.make_plot(1, (10, 90, 500, 450))
         self.figure.subplots_adjust(left=0.15, right=0.95, bottom=0.125, top=0.9)
@@ -56,13 +54,13 @@ class AdaptiveWeights(NNDLayout):
         self.make_input_box("n_22", "0.90", (420, 577, 70, 100))
 
         self.comboBox1_functions_str = ['Instar', 'Hebb']
-        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 460, self.w_chapter_slider, 50),
+        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 380, self.w_chapter_slider, 50),
                            self.change_learning_rule, "combobox1_label", "Learning rule",
-                           (self.x_chapter_usual + 20, 460 - 20, 100, 50))
+                           (self.x_chapter_usual + 20, 380 - 20, 100, 50))
         self.rule = 1
 
-        self.make_button("clear_button", "Clear", (self.x_chapter_button, 560, self.w_chapter_button, self.h_chapter_button), self.on_clear)
-        self.make_button("run_button", "Update", (self.x_chapter_button, 585, self.w_chapter_button, self.h_chapter_button), self.graph)
+        self.make_button("clear_button", "Clear", (self.x_chapter_button, 440, self.w_chapter_button, self.h_chapter_button), self.on_clear)
+        self.make_button("run_button", "Update", (self.x_chapter_button, 470, self.w_chapter_button, self.h_chapter_button), self.graph)
 
         self.graph()
 
@@ -116,10 +114,10 @@ class AdaptiveWeights(NNDLayout):
             line.set_alpha(0.2)
         for line in self.lines4:
             line.set_alpha(0.2)
-        self.lines1.append(self.axis.plot(t, out_11, color="red")[0])
-        self.lines2.append(self.axis.plot(t, out_12, color="red", linestyle="dashed")[0])
-        self.lines3.append(self.axis.plot(t, out_21, color="green")[0])
-        self.lines4.append(self.axis.plot(t, out_22, color="green", linestyle="dashed")[0])
+        self.lines1.append(self.axis.plot(self.t, out_11, color="red")[0])
+        self.lines2.append(self.axis.plot(self.t, out_12, color="red", linestyle="dashed")[0])
+        self.lines3.append(self.axis.plot(self.t, out_21, color="green")[0])
+        self.lines4.append(self.axis.plot(self.t, out_22, color="green", linestyle="dashed")[0])
         self.canvas.draw()
 
     def on_clear(self):

@@ -9,9 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-t = np.arange(0, 0.51, 0.01)
-
-
 class GrossbergLayer2(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(GrossbergLayer2, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -19,6 +16,8 @@ class GrossbergLayer2(NNDLayout):
         self.fill_chapter("Grossberg Layer 2", 18, "Use the slide bars\nto adjust the inputs, biases\nand the time constant (eps).\n\n"
                                                    "Output n2(1) is red,\noutput n2(2) is green.\n\nClick [Clear] to remove\nold responses.",
                           PACKAGE_PATH + "Logo/Logo_Ch_18.svg", None)
+
+        self.t = np.arange(0, 0.51, 0.01)
 
         self.make_plot(1, (25, 90, 450, 450))
 
@@ -62,8 +61,8 @@ class GrossbergLayer2(NNDLayout):
         self.func1 = self.f2
 
         self.make_button("clear_button", "Clear", (self.x_chapter_button, 560, self.w_chapter_button, self.h_chapter_button), self.on_clear)
-        self.make_button("random_button", "Random", (self.x_chapter_button, 585, self.w_chapter_button, self.h_chapter_button), self.on_random)
-        self.make_button("run_button", "Update", (self.x_chapter_button, 535, self.w_chapter_button, self.h_chapter_button), self.graph)
+        self.make_button("random_button", "Random", (self.x_chapter_button, 590, self.w_chapter_button, self.h_chapter_button), self.on_random)
+        self.make_button("run_button", "Update", (self.x_chapter_button, 530, self.w_chapter_button, self.h_chapter_button), self.graph)
 
         self.do_graph = True
 
@@ -142,8 +141,8 @@ class GrossbergLayer2(NNDLayout):
             for line in self.lines2:
                 # line.set_color("gray")
                 line.set_alpha(0.2)
-            self.lines1.append(self.axis.plot(t, out_1, color="red")[0])
-            self.lines2.append(self.axis.plot(t, out_2, color="green")[0])
+            self.lines1.append(self.axis.plot(self.t, out_1, color="red")[0])
+            self.lines2.append(self.axis.plot(self.t, out_2, color="green")[0])
             self.canvas.draw()
 
     def on_clear(self):

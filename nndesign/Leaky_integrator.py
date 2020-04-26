@@ -8,17 +8,16 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-t = np.arange(0, 5.1, 0.1)
-
-
 class LeakyIntegrator(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(LeakyIntegrator, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Leaky Integrator", 18, "Use the slide bars\nto adjust the input and\nthe time constant (eps)\n"
+        self.fill_chapter("Leaky Integrator", 18, "\nUse the slide bars\nto adjust the input and\nthe time constant (eps)\n"
                                                   "to the leaky integrator.\n\nClick [Clear] to remove\nold responses.\n\n"
                                                   "Click [Random] for\nrandom patterns.",
                           PACKAGE_PATH + "Logo/Logo_Ch_18.svg", None)
+
+        self.t = np.arange(0, 5.1, 0.1)
 
         self.make_plot(1, (20, 90, 480, 480))
         self.axis = self.figure.add_subplot(1, 1, 1)
@@ -60,13 +59,13 @@ class LeakyIntegrator(NNDLayout):
             tcte = self.slider_tcte.value() / 10
             self.label_input.setText("Input p: " + str(round(p, 2)))
             self.label_tcte.setText("Time Constant: " + str(round(tcte, 2)))
-            y = p * (1 - np.exp(-t / tcte))
+            y = p * (1 - np.exp(-self.t / tcte))
             while len(self.lines) > 3:
                 self.lines.pop(0).remove()
             for line in self.lines:
                 line.set_color("gray")
                 line.set_alpha(0.5)
-            self.lines.append(self.axis.plot(t, y, color="red")[0])
+            self.lines.append(self.axis.plot(self.t, y, color="red")[0])
             self.canvas.draw()
 
     def on_clear(self):

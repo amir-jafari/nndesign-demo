@@ -13,7 +13,7 @@ class CompetitiveLearning(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(CompetitiveLearning, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Competitive Learning", 16, "\n\nClick on the plot to\nadd new input vectors.\n\nClick on the weight\nvectors "
+        self.fill_chapter("Competitive Learning", 16, "\n\n\nClick on the plot to\nadd new input vectors.\n\nClick on the weight\nvectors "
                                                       "and drag the\nmouse to move them.\n\nClick [Learn] to present\n"
                                                       "one input.\n\nClick [Train] to present\nall inputs.",
                           PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None)
@@ -57,9 +57,9 @@ class CompetitiveLearning(NNDLayout):
                          (15, 610, 500, 50), self.slide, "label_lr", "Learning Rate: 0.4", (225, 585, 200, 50))
         self.alpha = float(self.slider_lr.value() / 10)
 
-        self.make_button("run_button", "Learn", (self.x_chapter_button, 360, self.w_chapter_button, self.h_chapter_button), self.on_learn)
-        self.make_button("run_button", "Train", (self.x_chapter_button, 390, self.w_chapter_button, self.h_chapter_button), self.on_run)
-        self.make_button("run_button", "Random", (self.x_chapter_button, 420, self.w_chapter_button, self.h_chapter_button), self.init_weights)
+        self.make_button("run_button", "Learn", (self.x_chapter_button, 365, self.w_chapter_button, self.h_chapter_button), self.on_learn)
+        self.make_button("run_button", "Train", (self.x_chapter_button, 395, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Random", (self.x_chapter_button, 425, self.w_chapter_button, self.h_chapter_button), self.init_weights)
 
     def slide(self):
         if self.ani:
@@ -115,7 +115,6 @@ class CompetitiveLearning(NNDLayout):
         else:
             idx = int(idx / 2)
             p = self.P[:, idx]
-            print(p)
             a = self.compet(np.dot(self.W, p[..., None]), axis=0)
             self.p_point_higlight.set_data([self.P[0, idx]], [self.P[1, idx]])
             if np.argmax(a) == 0:

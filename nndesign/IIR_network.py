@@ -24,21 +24,21 @@ class IIRNetwork(NNDLayout):
         self.make_plot(1, (15, 300, 500, 370))
 
         self.comboBox1_functions_str = ["square", 'sine']
-        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 495, self.w_chapter_slider, 100),
+        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 495 - 55, self.w_chapter_slider, 100),
                            self.change_transfer_function,
-                           "label_f", "f", (self.x_chapter_slider_label + 20, 465, 150, 100))
+                           "label_f", "f", (self.x_chapter_slider_label + 20, 465 - 55 + 5, 150, 100))
         self.func1 = "square"
 
         self.comboBox2_divs = ["1/16", '1/14', '1/12', '1/10', '1/8']
-        self.make_combobox(2, self.comboBox2_divs, (self.x_chapter_usual, 590, self.w_chapter_slider, 50),
+        self.make_combobox(2, self.comboBox2_divs, (self.x_chapter_usual, 590 - 55, self.w_chapter_slider, 50),
                            self.change_freq,
-                           "label_div", "frequency", (self.x_chapter_slider_label, 560, 150, 50))
+                           "label_div", "frequency", (self.x_chapter_slider_label, 560 - 55 + 5, 150, 50))
         self.freq = 1 / 12
 
         self.autoscale = False
-        self.make_combobox(3, ["No", "Yes"], (self.x_chapter_usual, 430, self.w_chapter_slider, 100),
+        self.make_combobox(3, ["No", "Yes"], (self.x_chapter_usual, 430 - 50, self.w_chapter_slider, 100),
                            self.change_autoscale,
-                           "label_autoscale", "Autoscale", (self.x_chapter_slider_label, 400, 150, 100))
+                           "label_autoscale", "Autoscale", (self.x_chapter_slider_label, 400 - 50 + 5, 150, 100))
 
         self.make_slider("slider_w0", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 5,
                          (self.x_chapter_usual, 270, self.w_chapter_slider, 50), self.graph, "label_w0", "iW(0): 0.5")

@@ -9,9 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-W2 = np.array([[1, 1, 0, 0], [0, 0, 1, 1]])
-
-
 class LVQ2(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(LVQ2, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -20,8 +17,9 @@ class LVQ2(NNDLayout):
                                       " the inputs.\n\nClick [Random] to get\nrandom weights.\n\nLeft-click on the plot "
                                       "to add\na positive class.\n\nRight-click to add a\nnegative class.\n\n"
                                       "Misclassifications are\nshown in red.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None, description_coords=(535, 160, 450, 270))
+                          PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None, description_coords=(535, 150, 450, 300))
 
+        self.W2 = np.array([[1, 1, 0, 0], [0, 0, 1, 1]])
         self.alpha = 0.4
 
         self.make_plot(1, (15, 100, 500, 500))
@@ -118,7 +116,7 @@ class LVQ2(NNDLayout):
             for j in range(self.P.shape[1]):
                 dist_v[i, j] = distance.euclidean(self.W[i].reshape(-1), self.P[:, j].reshape(-1))
         a1 = self.compet(-dist_v, axis=0)
-        a2 = np.dot(W2, a1)
+        a2 = np.dot(self.W2, a1)
         e = self.T - a2
         miss_pos_points_x, miss_pos_points_y, miss_neg_points_x, miss_neg_points_y = [], [], [], []
         for i in range(self.P.shape[1]):
@@ -174,14 +172,14 @@ class LVQ2(NNDLayout):
             for i in range(len(self.W)):
                 self.dist_v[i] = distance.euclidean(self.W[i].reshape(-1), self.p.reshape(-1))
             self.a1 = self.compet(-self.dist_v)
-            a2 = np.dot(W2, self.a1)
+            a2 = np.dot(self.W2, self.a1)
             self.e = self.t - a2
             if sum(self.e == 0) > 0:
                 self.color = "red"
             else:
                 self.color = "green"
         elif idx in list(np.arange(1, 10000, 6)):
-            e = np.dot(W2.T, self.t)
+            e = np.dot(self.W2.T, self.t)
             i = np.argmax(self.a1)
             w1_new = self.W[i, :] - (e[i] * 2 - 1) * (self.alpha * self.a1[i] * (self.p.T - self.W[i, :]))
         elif idx in list(np.arange(2, 10000, 6)):
@@ -189,11 +187,11 @@ class LVQ2(NNDLayout):
                 self.p_point_higlight.set_data([], [])
         elif idx in list(np.arange(3, 10000, 6)):
             if sum(self.e == 0) > 0:
-                self.a1 = self.compet(-self.dist_v - np.dot(W2.T, self.t) * 1e5)
+                self.a1 = self.compet(-self.dist_v - np.dot(self.W2.T, self.t) * 1e5)
                 self.color = "green"
         elif idx in list(np.arange(4, 10000, 6)):
             if sum(self.e == 0) > 0:
-                e = np.dot(W2.T, self.t)
+                e = np.dot(self.W2.T, self.t)
                 i = np.argmax(self.a1)
                 w1_new = self.W[i, :] - (e[i] * 2 - 1) * (self.alpha * self.a1[i] * (self.p.T - self.W[i, :]))
         elif idx in list(np.arange(5, 10000, 6)):

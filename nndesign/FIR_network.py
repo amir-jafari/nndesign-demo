@@ -24,32 +24,32 @@ class FIRNetwork(NNDLayout):
         self.make_plot(1, (15, 300, 500, 370))
 
         self.comboBox1_functions_str = ["square", 'sine']
-        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 495, self.w_chapter_slider, 100), self.change_transfer_function,
-                           "label_f", "f", (self.x_chapter_slider_label + 20, 465, 150, 100))
+        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 505, self.w_chapter_slider, 100), self.change_transfer_function,
+                           "label_f", "f", (self.x_chapter_slider_label + 20, 480, 150, 100))
         self.func1 = "square"
 
         self.comboBox2_divs = ["1/16", '1/14', '1/12', '1/10', '1/8']
-        self.make_combobox(2, self.comboBox2_divs, (self.x_chapter_usual, 590, self.w_chapter_slider, 50), self.change_freq,
-                           "label_div", "frequency", (self.x_chapter_slider_label, 560, 150, 50))
+        self.make_combobox(2, self.comboBox2_divs, (self.x_chapter_usual, 595, self.w_chapter_slider, 50), self.change_freq,
+                           "label_div", "frequency", (self.x_chapter_slider_label, 570, 150, 50))
         self.freq = 1 / 12
 
         self.autoscale = False
-        self.make_combobox(3, ["No", "Yes"], (self.x_chapter_usual, 430, self.w_chapter_slider, 100),
+        self.make_combobox(3, ["No", "Yes"], (self.x_chapter_usual, 445, self.w_chapter_slider, 100),
                            self.change_autoscale,
-                           "label_autoscale", "Autoscale", (self.x_chapter_slider_label, 400, 150, 100))
+                           "label_autoscale", "Autoscale", (self.x_chapter_slider_label, 420, 150, 100))
 
         self.make_slider("slider_w0", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 3,
-                         (self.x_chapter_usual, 260, self.w_chapter_slider, 50), self.graph,
+                         (self.x_chapter_usual, 270, self.w_chapter_slider, 50), self.graph,
                          "label_w0", "iW(0): 0.3",
-                         (self.x_chapter_slider_label, 230, 150, 50))
+                         (self.x_chapter_slider_label, 240, 150, 50))
         self.make_slider("slider_w1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 3,
-                         (self.x_chapter_usual, 330, self.w_chapter_slider, 50), self.graph,
+                         (self.x_chapter_usual, 340, self.w_chapter_slider, 50), self.graph,
                          "label_w1", "iW(1): 0.3",
-                         (self.x_chapter_slider_label, 300, 150, 50))
+                         (self.x_chapter_slider_label, 310, 150, 50))
         self.make_slider("slider_w2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 3,
-                         (self.x_chapter_usual, 400, self.w_chapter_slider, 50), self.graph,
+                         (self.x_chapter_usual, 410, self.w_chapter_slider, 50), self.graph,
                          "label_w2", "iW(2): 0.3",
-                         (self.x_chapter_slider_label, 370, 150, 50))
+                         (self.x_chapter_slider_label, 380, 150, 50))
 
         self.graph()
 

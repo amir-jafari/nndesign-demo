@@ -9,9 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-t = np.arange(0, 5.01, 0.01)
-
-
 class ShuntingNetwork(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(ShuntingNetwork, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -19,6 +16,8 @@ class ShuntingNetwork(NNDLayout):
         self.fill_chapter("Shunting Network", 18, "Use the slide bars\nto adjust the inputs, biases\nand the time constant (eps).\n\n"
                                                   "Click [Clear] to remove\nold responses.",
                           PACKAGE_PATH + "Logo/Logo_Ch_18.svg", None, description_coords=(535, 100, 450, 200))
+
+        self.t = np.arange(0, 5.01, 0.01)
 
         self.make_plot(1, (20, 90, 480, 480))
         self.axis = self.figure.add_subplot(1, 1, 1)
@@ -61,7 +60,7 @@ class ShuntingNetwork(NNDLayout):
         self.slider_tcte.sliderReleased.connect(self.slider_reconnect)
 
         self.make_button("clear_button", "Clear", (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.on_clear)
-        self.make_button("random_button", "Random", (self.x_chapter_button, 605, self.w_chapter_button, self.h_chapter_button), self.on_random)
+        self.make_button("random_button", "Random", (self.x_chapter_button, 610, self.w_chapter_button, self.h_chapter_button), self.on_random)
 
         self.do_graph = True
 
@@ -102,7 +101,7 @@ class ShuntingNetwork(NNDLayout):
                 line.set_color("gray")
                 line.set_alpha(0.5)
             out[0] = 0
-            self.lines.append(self.axis.plot(t, out, color="red")[0])
+            self.lines.append(self.axis.plot(self.t, out, color="red")[0])
             self.canvas.draw()
 
     def on_clear(self):

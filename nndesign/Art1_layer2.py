@@ -9,9 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-t = np.arange(0, 0.21, 0.001)
-
-
 class ART1Layer2(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(ART1Layer2, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -20,6 +17,8 @@ class ART1Layer2(NNDLayout):
                                               "see the layer respond.\n\nn2(1) is red,\nn2(2) is green.\n\n"
                                               "Click [Clear] to\nremove old responses.",
                           PACKAGE_PATH + "Logo/Logo_Ch_19.svg", None)
+
+        self.t = np.arange(0, 0.21, 0.001)
 
         self.make_plot(1, (20, 90, 480, 480))
         self.figure.subplots_adjust(left=0.175, right=0.95, bottom=0.125, top=0.9)
@@ -49,7 +48,7 @@ class ART1Layer2(NNDLayout):
         self.make_slider("slider_tcte", QtCore.Qt.Horizontal, (1, 200), QtWidgets.QSlider.TicksAbove, 1, 100,
                          (20, 600, 480, 50), self.slide, "label_tcte", "Time Constant: 10.00", (200, 575, 170, 50))
 
-        self.make_button("clear_button", "Clear", (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.on_clear)
+        self.make_button("clear_button", "Clear", (self.x_chapter_button, 575, self.w_chapter_button, self.h_chapter_button), self.on_clear)
         self.make_button("random_button", "Update", (self.x_chapter_button, 605, self.w_chapter_button, self.h_chapter_button), self.graph)
 
         self.do_graph = True
@@ -112,8 +111,8 @@ class ART1Layer2(NNDLayout):
             for line in self.lines2:
                 # line.set_color("gray")
                 line.set_alpha(0.5)
-            self.lines1.append(self.axis.plot(t, out_1, color="red")[0])
-            self.lines2.append(self.axis.plot(t, out_2, color="green")[0])
+            self.lines1.append(self.axis.plot(self.t, out_1, color="red")[0])
+            self.lines2.append(self.axis.plot(self.t, out_2, color="green")[0])
             self.canvas.draw()
 
     def on_clear(self):

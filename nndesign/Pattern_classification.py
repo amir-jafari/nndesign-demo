@@ -10,10 +10,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-p1, p2 = np.arange(-5, 5, 0.05), np.arange(-5, 5, 0.05)
-pp1, pp2 = np.meshgrid(p1, p2)
-
-
 class PatternClassification(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(PatternClassification, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -29,6 +25,9 @@ class PatternClassification(NNDLayout):
         # self.label_eq.setText("a = purelin(w2 * tansig(w1 * p + b1) + b2))")
         # self.label_eq.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         # self.label_eq.setGeometry(180 * self.w_ratio, 270 * self.h_ratio, (self.w_chapter_slider + 100) * self.w_ratio, 50 * self.h_ratio)
+
+        p1, p2 = np.arange(-5, 5, 0.05), np.arange(-5, 5, 0.05)
+        self.pp1, self.pp2 = np.meshgrid(p1, p2)
 
         self.make_plot(1, (5, 400, 260, 260))
         self.make_plot(2, (255, 400, 260, 260))
@@ -163,13 +162,13 @@ class PatternClassification(NNDLayout):
         weight_2, bias_2 = np.array([[weight2_1], [weight2_2]]), np.array([[bias2]])
 
         # a = W2(1)*exp(-((p-W1(1)).*b1(1)).^2) + W2(2)*exp(-((p-W1(2)).*b1(2)).^2) + b2
-        out = weight_2[0, 0] * np.exp(-((pp1 - weight_1[0, 0]) * bias_1[0, 0]) ** 2 - ((pp2 - weight1_12) * bias_1[0, 0]) ** 2)
-        out += weight_2[1, 0] * np.exp(-((pp1 - weight_1[0, 1]) * bias_1[0, 1]) ** 2 - ((pp2 - weight1_22) * bias_1[0, 0]) ** 2) + bias_2[0, 0]
+        out = weight_2[0, 0] * np.exp(-((self.pp1 - weight_1[0, 0]) * bias_1[0, 0]) ** 2 - ((self.pp2 - weight1_12) * bias_1[0, 0]) ** 2)
+        out += weight_2[1, 0] * np.exp(-((self.pp1 - weight_1[0, 1]) * bias_1[0, 1]) ** 2 - ((self.pp2 - weight1_22) * bias_1[0, 0]) ** 2) + bias_2[0, 0]
 
         x_0_surf, y_0_surf = np.linspace(-5, 5, 100), np.linspace(-5, 5, 100)
         xx_0_surf, yy_0_surf = np.meshgrid(x_0_surf, y_0_surf)
         a.plot_surface(xx_0_surf, yy_0_surf, np.zeros((100, 100)), color="gray", alpha=0.5)
-        a.plot_surface(pp1, pp2, out, color="cyan")
+        a.plot_surface(self.pp1, self.pp2, out, color="cyan")
         a.set_xticks([-5, 0, 5])
         a.set_yticks([-5, 0, 5])
         a.set_zticks([-2, -1, 0, 1])
@@ -206,7 +205,7 @@ class PatternClassification(NNDLayout):
                     break
         if col_start and not col_end:
             col_end = len(out_gray)"""
-        b.contourf(pp1, pp2, out_gray, cmap=plt.cm.Paired, alpha=0.6)
+        b.contourf(self.pp1, self.pp2, out_gray, cmap=plt.cm.Paired, alpha=0.6)
         b.set_xlabel("$p1$")
         b.set_ylabel("$p2$")
         self.canvas2.draw()

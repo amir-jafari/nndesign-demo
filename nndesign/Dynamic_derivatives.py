@@ -16,7 +16,7 @@ class DynamicDerivatives(NNDLayout):
         self.fill_chapter("Dynamic Derivatives", 14, "\n\nOriginal responses - black\ndots.\n"
                                                      "Incremental responses - blue\ncrosses.\n"
                                                      "Total derivatives - blue\ndiamonds.\nStatic derivatives"
-                                                     "- black\nsquares.\n\nSelect the input and"
+                                                     " - black\nsquares.\n\nSelect the input and"
                                                      "\nfrequency to the IIR\nnetwork.\n\nUse the sliders to alter\n"
                                                      "the network weights.",  # \n\n"
                                              # "Click on [Random] to set\neach parameter to\a random value.\n\n"
@@ -35,9 +35,9 @@ class DynamicDerivatives(NNDLayout):
         self.figure4.subplots_adjust(left=0.15, bottom=0.2)
 
         self.comboBox1_functions_str = ["square", 'sine']
-        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 515, self.w_chapter_slider, 100),
+        self.make_combobox(1, self.comboBox1_functions_str, (self.x_chapter_usual, 520, self.w_chapter_slider, 100),
                            self.change_transfer_function,
-                           "label_f", "f", (self.x_chapter_slider_label + 20, 495, 150, 100))
+                           "label_f", "f", (self.x_chapter_slider_label + 20, 500, 150, 100))
         self.func1 = "square"
 
         self.comboBox2_divs = ["1/16", '1/14', '1/12', '1/10', '1/8']

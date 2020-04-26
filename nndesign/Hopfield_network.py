@@ -11,11 +11,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-x = np.arange(-1, 1.0001, 0.05)
-y = np.copy(x)
-X, Y = np.meshgrid(x, y)
-
-
 class HopfieldNetwork(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(HopfieldNetwork, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -23,7 +18,11 @@ class HopfieldNetwork(NNDLayout):
         self.fill_chapter("Hopfield Network", 21, "Click in the left graph\nto simulate the\nHopfield Network.\n\n"
                                                   "Change the weights, biases\nand gain. Then click\n[Update] to change\n"
                                                   "the network.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_21.svg", None)
+                          PACKAGE_PATH + "Logo/Logo_Ch_21.svg", None, description_coords=(535, 95, 450, 250))
+
+        self.x_ = np.arange(-1, 1.0001, 0.05)
+        self.y_ = np.copy(self.x_)
+        self.X, self.Y = np.meshgrid(self.x_, self.y_)
 
         self.make_plot(1, (5, 90, 260, 260))
         self.figure.subplots_adjust(left=0.175, right=0.95, bottom=0.15, top=0.9)
@@ -162,10 +161,10 @@ class HopfieldNetwork(NNDLayout):
         if not self.finite_gain:
             finite_value_gain = np.inf
 
-        F = np.zeros((len(x), len(y)))
-        for i in range(len(x)):
-            for j in range(len(y)):
-                a = np.array([[X[i, j]], [Y[i, j]]])
+        F = np.zeros((len(self.x_), len(self.y_)))
+        for i in range(len(self.x_)):
+            for j in range(len(self.y_)):
+                a = np.array([[self.X[i, j]], [self.Y[i, j]]])
                 F[i, j] = -0.5 * np.dot(a.T, np.dot(W, a)) - np.dot(b.T, a)
                 for k in range(2):
                     temp1 = np.cos(np.pi / 2 * a[k, 0])
@@ -187,7 +186,7 @@ class HopfieldNetwork(NNDLayout):
                 collection.remove()
 
         # Draws new stuff
-        self.axes_1.contour(X, Y, F, levels=[-5, -2, -1, -0.5, -0.041, -0.023, -0.003, 0.017, 0.16, 0.45, 1, 2, 4, 8, 16])
+        self.axes_1.contour(self.X, self.Y, F, levels=[-5, -2, -1, -0.5, -0.041, -0.023, -0.003, 0.017, 0.16, 0.45, 1, 2, 4, 8, 16])
         # indxx = 3:2:(length(xx)-2);
         #   indyy = 3:2:(length(yy)-2);
         #   xx = xx(indxx);
@@ -195,10 +194,10 @@ class HopfieldNetwork(NNDLayout):
         #   F = F(indxx,:);
         #   F = F(:,indyy);
         #   func_mesh = mesh(xx,yy,F)
-        indxx = np.arange(2, len(X) - 2, 2)
-        indyy = np.arange(2, len(Y) - 2, 2)
-        xx = x[indxx]
-        yy = y[indyy]
+        indxx = np.arange(2, len(self.X) - 2, 2)
+        indyy = np.arange(2, len(self.Y) - 2, 2)
+        xx = self.x_[indxx]
+        yy = self.y_[indyy]
         XX, YY = np.meshgrid(xx, yy)
         F = F[indxx, :]
         F = F[:, indyy]

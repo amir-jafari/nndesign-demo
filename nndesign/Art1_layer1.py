@@ -9,9 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-t = np.arange(0, 0.2, 0.001)
-
-
 class ART1Layer1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(ART1Layer1, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -20,6 +17,8 @@ class ART1Layer1(NNDLayout):
                                               "see the layer respond.\n\nn1(1) is red,\nn1(2) is green.\n\n"
                                               "Click [Clear] to\nremove old responses.",
                           PACKAGE_PATH + "Logo/Logo_Ch_19.svg", None)
+
+        self.t = np.arange(0, 0.2, 0.001)
 
         self.bp, self.bn, self.e = 1, 0, 0.1
 
@@ -57,7 +56,7 @@ class ART1Layer1(NNDLayout):
         self.make_input_box("w_21", "0", (235, 580, 70, 100))
         self.make_input_box("w_22", "1", (295, 580, 70, 100))
 
-        self.make_button("clear_button", "Clear", (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.on_clear)
+        self.make_button("clear_button", "Clear", (self.x_chapter_button, 575, self.w_chapter_button, self.h_chapter_button), self.on_clear)
         self.make_button("random_button", "Update", (self.x_chapter_button, 605, self.w_chapter_button, self.h_chapter_button), self.graph)
 
         self.graph()
@@ -123,8 +122,8 @@ class ART1Layer1(NNDLayout):
         for line in self.lines2:
             # line.set_color("gray")
             line.set_alpha(0.2)
-        self.lines1.append(self.axis.plot(t, out_1, color="red")[0])
-        self.lines2.append(self.axis.plot(t, out_2, color="green")[0])
+        self.lines1.append(self.axis.plot(self.t, out_1, color="red")[0])
+        self.lines2.append(self.axis.plot(self.t, out_2, color="green")[0])
         self.canvas.draw()
 
     def on_clear(self):

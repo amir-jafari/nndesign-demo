@@ -8,10 +8,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-randseq = [-0.7616, -1.0287, 0.5348, -0.8102, -1.1690, 0.0419, 0.8944, 0.5460, -0.9345, 0.0754,
-           -0.7616, -1.0287, 0.5348, -0.8102, -1.1690, 0.0419, 0.8944, 0.5460, -0.9345, 0.0754]
-
-
 class LinearLeastSquares(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(LinearLeastSquares, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -21,6 +17,9 @@ class LinearLeastSquares(NNDLayout):
                                                       "overlap at 0.5.\n\nThe function is shown in\nblue and the network\n"
                                                       "response in red.",
                           PACKAGE_PATH + "Logo/Logo_Ch_17.svg", None)
+
+        self.randseq = [-0.7616, -1.0287, 0.5348, -0.8102, -1.1690, 0.0419, 0.8944, 0.5460, -0.9345, 0.0754,
+                        -0.7616, -1.0287, 0.5348, -0.8102, -1.1690, 0.0419, 0.8944, 0.5460, -0.9345, 0.0754]
 
         self.make_plot(1, (20, 100, 450, 300))
         self.make_plot(2, (20, 390, 450, 140))
@@ -119,7 +118,7 @@ class LinearLeastSquares(NNDLayout):
 
         d1 = (2 - -2) / (n_points - 1)
         p = np.arange(-2, 2 + 0.0001, d1)
-        t = np.sin(2 * np.pi * (freq * p + phase / 360)) + 1 + sigma * np.array(randseq[:len(p)])
+        t = np.sin(2 * np.pi * (freq * p + phase / 360)) + 1 + sigma * np.array(self.randseq[:len(p)])
         delta = (2 - -2) / (S1 - 1)
         if self.auto_bias:
             bias = 1.6652 / delta

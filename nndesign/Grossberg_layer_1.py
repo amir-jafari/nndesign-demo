@@ -9,9 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-t = np.arange(0, 5.01, 0.01)
-
-
 class GrossbergLayer1(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(GrossbergLayer1, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -19,6 +16,8 @@ class GrossbergLayer1(NNDLayout):
         self.fill_chapter("Grossberg Layer 1", 18, "Use the slide bars\nto adjust the inputs, biases\nand the time constant (eps).\n\n"
                                                    "Output n1(1) is red,\noutput n1(2) is green.\n\nClick [Clear] to remove\nold responses.",
                           PACKAGE_PATH + "Logo/Logo_Ch_18.svg", None)
+
+        self.t = np.arange(0, 5.01, 0.01)
 
         self.make_plot(1, (20, 90, 480, 480))
         self.axis = self.figure.add_subplot(1, 1, 1)
@@ -61,7 +60,7 @@ class GrossbergLayer1(NNDLayout):
         self.slider_tcte.sliderReleased.connect(self.slider_reconnect)
 
         self.make_button("clear_button", "Clear", (self.x_chapter_button, 560, self.w_chapter_button, self.h_chapter_button), self.on_clear)
-        self.make_button("random_button", "Random", (self.x_chapter_button, 585, self.w_chapter_button, self.h_chapter_button), self.on_random)
+        self.make_button("random_button", "Random", (self.x_chapter_button, 590, self.w_chapter_button, self.h_chapter_button), self.on_random)
 
         self.do_graph = True
 
@@ -110,8 +109,8 @@ class GrossbergLayer1(NNDLayout):
             for line in self.lines2:
                 # line.set_color("gray")
                 line.set_alpha(0.5)
-            self.lines1.append(self.axis.plot(t, out_1, color="red")[0])
-            self.lines2.append(self.axis.plot(t, out_2, color="green")[0])
+            self.lines1.append(self.axis.plot(self.t, out_1, color="red")[0])
+            self.lines2.append(self.axis.plot(self.t, out_2, color="green")[0])
             self.canvas.draw()
 
     def on_clear(self):

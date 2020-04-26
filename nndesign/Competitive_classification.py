@@ -12,7 +12,7 @@ class CompetitiveClassification(NNDLayout):
 
         self.fill_chapter("Competitive Classification", 16, "Click [Go] to send a fruit\ndown the belt to be\nclassified"
                           " by the\ncompetitive layer.\n\nThe calculations for the\nlayer will appear\nbelow.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None)
+                          PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None, description_coords=(535, 90, 450, 250))
 
         self.make_plot(1, (15, 100, 500, 390))
         self.axis = Axes3D(self.figure)

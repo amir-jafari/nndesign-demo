@@ -9,16 +9,15 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-t = np.arange(0, 0.201, 0.001)
-
-
 class OrientingSubsystem(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(OrientingSubsystem, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Orienting Subsystem", 19, "Adjust the inputs\nand constants.\nThen click [Update] to\n"
                                                      "see the system respond.\n\nClick [Clear] to\nremove old responses.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_19.svg", None)
+                          PACKAGE_PATH + "Logo/Logo_Ch_19.svg", None, description_coords=(535, 90, 450, 250))
+
+        self.t = np.arange(0, 0.201, 0.001)
 
         self.make_plot(1, (20, 90, 480, 460))
         self.figure.subplots_adjust(left=0.175, right=0.95, bottom=0.125, top=0.9)
@@ -50,7 +49,7 @@ class OrientingSubsystem(NNDLayout):
         self.make_slider("slider_tcte1", QtCore.Qt.Horizontal, (1, 50), QtWidgets.QSlider.TicksAbove, 1, 40,
                          (20, 630, 480, 50), self.slide, "label_tcte1", "-W0 Elements: 4.00", (200, 605, 170, 50))
 
-        self.make_button("clear_button", "Clear", (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.on_clear)
+        self.make_button("clear_button", "Clear", (self.x_chapter_button, 575, self.w_chapter_button, self.h_chapter_button), self.on_clear)
         self.make_button("random_button", "Update", (self.x_chapter_button, 605, self.w_chapter_button, self.h_chapter_button), self.graph)
 
         self.graph()
@@ -100,7 +99,7 @@ class OrientingSubsystem(NNDLayout):
         for line in self.lines:
             line.set_color("gray")
             line.set_alpha(0.5)
-        self.lines.append(self.axis.plot(t, out, color="red")[0])
+        self.lines.append(self.axis.plot(self.t, out, color="red")[0])
         self.canvas.draw()
 
     def on_clear(self):
