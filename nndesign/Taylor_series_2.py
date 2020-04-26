@@ -64,13 +64,13 @@ class TaylorSeries2(NNDLayout):
         self.axis1 = Axes3D(self.figure3)
         self.axis1.set_title("Function", fontdict={'fontsize': 10}, pad=3)
         self.axis1.plot_surface(self.XX, self.YY, FF)
-        self.axis1.view_init(5, -90)
+        self.axis1.view_init(30, -30)
         self.axis1.autoscale()
         self.canvas3.draw()
 
         self.axis2 = Axes3D(self.figure4)
         self.axis2.set_title("Approximation", fontdict={'fontsize': 10}, pad=3)
-        self.axis2.view_init(5, -90)
+        self.axis2.view_init(30, -30)
         self.canvas4.draw()
 
     def on_mouseclick(self, event):
