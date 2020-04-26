@@ -6,8 +6,8 @@ from matplotlib.ticker import FormatStrFormatter
 from matplotlib.animation import FuncAnimation
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-from nndesign.nndesign_layout import NNDLayout
-from nndesign.get_package_path import PACKAGE_PATH
+from nndesigndemos.nndesign_layout import NNDLayout
+from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class RecurrentNetworkTraining(NNDLayout):

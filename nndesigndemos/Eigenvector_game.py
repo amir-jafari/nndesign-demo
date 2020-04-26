@@ -6,8 +6,8 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 import matplotlib.pyplot as plt
 from matplotlib import patches
 
-from nndesign.nndesign_layout import NNDLayout
-from nndesign.get_package_path import PACKAGE_PATH
+from nndesigndemos.nndesign_layout import NNDLayout
+from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class EigenvectorGame(NNDLayout):

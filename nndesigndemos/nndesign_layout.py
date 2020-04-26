@@ -7,8 +7,8 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import math
 
-from nndesign.get_package_path import PACKAGE_PATH
-from nndesign.nndesign_settings import OS_NAME
+from nndesigndemos.get_package_path import PACKAGE_PATH
+from nndesigndemos.nndesign_settings import OS_NAME
 
 
 # -------------------------------------------------------------------------------------------------------------

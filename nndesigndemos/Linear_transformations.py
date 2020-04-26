@@ -3,9 +3,9 @@ import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-from nndesign.nndesign_layout import NNDLayout
+from nndesigndemos.nndesign_layout import NNDLayout
 
-from nndesign.get_package_path import PACKAGE_PATH
+from nndesigndemos.get_package_path import PACKAGE_PATH
 
 # v1 = v11 * e1 + v12 * e2
 # v2 = v21 * e1 + v22 * e2

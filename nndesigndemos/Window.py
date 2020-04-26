@@ -1,116 +1,116 @@
 from PyQt5 import QtWidgets, QtGui
 from functools import partial
 
-from nndesign.nndesign_layout import NNDLayout
-from nndesign.get_package_path import PACKAGE_PATH
+from nndesigndemos.nndesign_layout import NNDLayout
+from nndesigndemos.get_package_path import PACKAGE_PATH
 
 # ----------------------------------------------------- Book 1 ---------------------------------------------------------
 # ------ Chapter 2 --------
-from nndesign.One_input_neuron import OneInputNeuron
-# from nndesign.One_input_neuron_new import OneInputNeuron
-from nndesign.Two_input_neuron import TwoInputNeuron
+from nndesigndemos.One_input_neuron import OneInputNeuron
+# from nndesigndemos.One_input_neuron_new import OneInputNeuron
+from nndesigndemos.Two_input_neuron import TwoInputNeuron
 # ------ Chapter 3 --------
-from nndesign.Perceptron_classification import PerceptronClassification
-from nndesign.Hamming_classification import HammingClassification
-from nndesign.Hopfield_classification import HopfieldClassification
+from nndesigndemos.Perceptron_classification import PerceptronClassification
+from nndesigndemos.Hamming_classification import HammingClassification
+from nndesigndemos.Hopfield_classification import HopfieldClassification
 # ------ Chapter 4 --------
-from nndesign.Perceptron_rule import PerceptronRule
-from nndesign.Decision_boundary import DecisionBoundaries
+from nndesigndemos.Perceptron_rule import PerceptronRule
+from nndesigndemos.Decision_boundary import DecisionBoundaries
 # ------ Chapter 5 --------
-from nndesign.Gram_Schmidt import GramSchmidt
-from nndesign.Reciprocal_basis import ReciprocalBasis
+from nndesigndemos.Gram_Schmidt import GramSchmidt
+from nndesigndemos.Reciprocal_basis import ReciprocalBasis
 # ------ Chapter 6 --------
-from nndesign.Linear_transformations import LinearTransformations
-from nndesign.Eigenvector_game import EigenvectorGame
+from nndesigndemos.Linear_transformations import LinearTransformations
+from nndesigndemos.Eigenvector_game import EigenvectorGame
 # ------ Chapter 7 --------
-from nndesign.Supervised_Hebb import SupervisedHebb
+from nndesigndemos.Supervised_Hebb import SupervisedHebb
 # ------ Chapter 8 --------
-from nndesign.Taylor_series_1 import TaylorSeries1
-from nndesign.Taylor_series_2 import TaylorSeries2
-from nndesign.Directional_derivatives import DirectionalDerivatives
-from nndesign.Quadratic_function import QuadraticFunction
+from nndesigndemos.Taylor_series_1 import TaylorSeries1
+from nndesigndemos.Taylor_series_2 import TaylorSeries2
+from nndesigndemos.Directional_derivatives import DirectionalDerivatives
+from nndesigndemos.Quadratic_function import QuadraticFunction
 # ------ Chapter 9 --------
-from nndesign.Steepest_descent_quadratic import SteepestDescentQuadratic
-from nndesign.Comparison_of_methods import ComparisonOfMethods
-from nndesign.Newtons_method import NewtonsMethod
-from nndesign.Steepest_descent import SteepestDescent
+from nndesigndemos.Steepest_descent_quadratic import SteepestDescentQuadratic
+from nndesigndemos.Comparison_of_methods import ComparisonOfMethods
+from nndesigndemos.Newtons_method import NewtonsMethod
+from nndesigndemos.Steepest_descent import SteepestDescent
 # ------ Chapter 10 --------
-from nndesign.Adaptive_noise_cancellation import AdaptiveNoiseCancellation
-from nndesign.EEG_noise_cancellation import EEGNoiseCancellation
-from nndesign.Linear_classification import LinearClassification
+from nndesigndemos.Adaptive_noise_cancellation import AdaptiveNoiseCancellation
+from nndesigndemos.EEG_noise_cancellation import EEGNoiseCancellation
+from nndesigndemos.Linear_classification import LinearClassification
 # ------ Chapter 11 -------
-from nndesign.Function_approximation import FunctionApproximation
+from nndesigndemos.Function_approximation import FunctionApproximation
 # from Backpropagation_calculation import BackpropagationCalculation
-from nndesign.Network_function import NetworkFunction
-from nndesign.Generalization import Generalization
+from nndesigndemos.Network_function import NetworkFunction
+from nndesigndemos.Generalization import Generalization
 # ------ Chapter 12 -------
-from nndesign.Steepest_descent_backprop_1 import SteepestDescentBackprop1
-from nndesign.Steepest_descent_backprop_2 import SteepestDescentBackprop2
-from nndesign.Momentum import Momentum
-from nndesign.Variable_learning_rate import VariableLearningRate
-from nndesign.Conjugate_gradient_line_search import ConjugateGradientLineSearch
-from nndesign.Conjugate_gradient import ConjugateGradient
-from nndesign.Marquardt_step import MarquardtStep
-from nndesign.Marquardt import Marquardt
+from nndesigndemos.Steepest_descent_backprop_1 import SteepestDescentBackprop1
+from nndesigndemos.Steepest_descent_backprop_2 import SteepestDescentBackprop2
+from nndesigndemos.Momentum import Momentum
+from nndesigndemos.Variable_learning_rate import VariableLearningRate
+from nndesigndemos.Conjugate_gradient_line_search import ConjugateGradientLineSearch
+from nndesigndemos.Conjugate_gradient import ConjugateGradient
+from nndesigndemos.Marquardt_step import MarquardtStep
+from nndesigndemos.Marquardt import Marquardt
 # ------ Chapter 13 -------
-from nndesign.Early_stopping import EarlyStopping
-from nndesign.Regularization import Regularization
-from nndesign.Bayesian_regularization import BayesianRegularization
-from nndesign.Early_stoppping_regularization import EarlyStoppingRegularization
+from nndesigndemos.Early_stopping import EarlyStopping
+from nndesigndemos.Regularization import Regularization
+from nndesigndemos.Bayesian_regularization import BayesianRegularization
+from nndesigndemos.Early_stoppping_regularization import EarlyStoppingRegularization
 # ------ Chapter 14 -------
-from nndesign.FIR_network import FIRNetwork
-from nndesign.IIR_network import IIRNetwork
-from nndesign.Dynamic_derivatives import DynamicDerivatives
-from nndesign.Recurrent_network_training import RecurrentNetworkTraining
+from nndesigndemos.FIR_network import FIRNetwork
+from nndesigndemos.IIR_network import IIRNetwork
+from nndesigndemos.Dynamic_derivatives import DynamicDerivatives
+from nndesigndemos.Recurrent_network_training import RecurrentNetworkTraining
 # ------ Chapter 15 -------
-# from nndesign.Unsupervised_hebb import UnsupervisedHebb
-# from nndesign.Unsupervised_hebb_v2 import UnsupervisedHebb
-from nndesign.Unsupervised_hebb_v3 import UnsupervisedHebb
-from nndesign.Effects_of_decay_rate import EffectsOfDecayRate
-# from nndesign.Hebb_with_decay import HebbWithDecay
-from nndesign.Hebb_with_decay_v3 import HebbWithDecay
-from nndesign.Graphical_instar import GraphicalInstar
-# from nndesign.Outstar import OutStar
-from nndesign.Outstar_v3 import OutStar
+# from nndesigndemos.Unsupervised_hebb import UnsupervisedHebb
+# from nndesigndemos.Unsupervised_hebb_v2 import UnsupervisedHebb
+from nndesigndemos.Unsupervised_hebb_v3 import UnsupervisedHebb
+from nndesigndemos.Effects_of_decay_rate import EffectsOfDecayRate
+# from nndesigndemos.Hebb_with_decay import HebbWithDecay
+from nndesigndemos.Hebb_with_decay_v3 import HebbWithDecay
+from nndesigndemos.Graphical_instar import GraphicalInstar
+# from nndesigndemos.Outstar import OutStar
+from nndesigndemos.Outstar_v3 import OutStar
 # ------ Chapter 16 -------
-from nndesign.Competitive_classification import CompetitiveClassification
-from nndesign.Competitive_learning import CompetitiveLearning
-from nndesign.OneD_feature_map import OneDFeatureMap
-from nndesign.TwoD_feature_map import TwoDFeatureMap
-from nndesign.Lvq1 import LVQ1
-from nndesign.Lvq2 import LVQ2
+from nndesigndemos.Competitive_classification import CompetitiveClassification
+from nndesigndemos.Competitive_learning import CompetitiveLearning
+from nndesigndemos.OneD_feature_map import OneDFeatureMap
+from nndesigndemos.TwoD_feature_map import TwoDFeatureMap
+from nndesigndemos.Lvq1 import LVQ1
+from nndesigndemos.Lvq2 import LVQ2
 # ------ Chapter 17 -------
-from nndesign.Network_function_radial import NetworkFunctionRadial
-from nndesign.Pattern_classification import PatternClassification
-from nndesign.Linear_least_squares import LinearLeastSquares
-from nndesign.Orthogonal_least_squares import OrthogonalLeastSquares
-from nndesign.Nonlinear_optimization import NonlinearOptimization
+from nndesigndemos.Network_function_radial import NetworkFunctionRadial
+from nndesigndemos.Pattern_classification import PatternClassification
+from nndesigndemos.Linear_least_squares import LinearLeastSquares
+from nndesigndemos.Orthogonal_least_squares import OrthogonalLeastSquares
+from nndesigndemos.Nonlinear_optimization import NonlinearOptimization
 # ------ Chapter 18 -------
-from nndesign.Leaky_integrator import LeakyIntegrator
-from nndesign.Shunting_network import ShuntingNetwork
-from nndesign.Grossberg_layer_1 import GrossbergLayer1
-from nndesign.Grossberg_layer_2 import GrossbergLayer2
-from nndesign.Adaptive_weights import AdaptiveWeights
+from nndesigndemos.Leaky_integrator import LeakyIntegrator
+from nndesigndemos.Shunting_network import ShuntingNetwork
+from nndesigndemos.Grossberg_layer_1 import GrossbergLayer1
+from nndesigndemos.Grossberg_layer_2 import GrossbergLayer2
+from nndesigndemos.Adaptive_weights import AdaptiveWeights
 # ------ Chapter 19 -------
-from nndesign.Art1_layer1 import ART1Layer1
-from nndesign.Art1_layer2 import ART1Layer2
-from nndesign.Orienting_subsystem import OrientingSubsystem
-from nndesign.Art1_algorithm import ART1Algorithm
+from nndesigndemos.Art1_layer1 import ART1Layer1
+from nndesigndemos.Art1_layer2 import ART1Layer2
+from nndesigndemos.Orienting_subsystem import OrientingSubsystem
+from nndesigndemos.Art1_algorithm import ART1Algorithm
 # ------ Chapter 20 -------
-from nndesign.Dynamical_system import DynamicalSystem
+from nndesigndemos.Dynamical_system import DynamicalSystem
 # ------ Chapter 21 -------
-from nndesign.Hopfield_network import HopfieldNetwork
+from nndesigndemos.Hopfield_network import HopfieldNetwork
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 2 --------
-from nndesign.Poslin_network_function import PoslinNetworkFunction
-from nndesign.Poslin_decision_regions import PoslinDecisionRegions
-from nndesign.Poslin_decision_regions_2d import PoslinDecisionRegions2D
-from nndesign.Poslin_decision_regions_3d import PoslinDecisionRegions3D
-from nndesign.Cascaded_function import CascadedFunction
+from nndesigndemos.Poslin_network_function import PoslinNetworkFunction
+from nndesigndemos.Poslin_decision_regions import PoslinDecisionRegions
+from nndesigndemos.Poslin_decision_regions_2d import PoslinDecisionRegions2D
+from nndesigndemos.Poslin_decision_regions_3d import PoslinDecisionRegions3D
+from nndesigndemos.Cascaded_function import CascadedFunction
 # ------ Chapter 3 --------
-from nndesign.Gradient_descent import GradientDescent
-from nndesign.Gradient_descent_stochastic import GradientDescentStochastic
+from nndesigndemos.Gradient_descent import GradientDescent
+from nndesigndemos.Gradient_descent_stochastic import GradientDescentStochastic
 
 
 # -------------------------------------------------------------------------------------------------------------

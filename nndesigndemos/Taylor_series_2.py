@@ -3,8 +3,8 @@ import warnings
 warnings.filterwarnings("ignore")
 from mpl_toolkits.mplot3d import Axes3D
 
-from nndesign.nndesign_layout import NNDLayout
-from nndesign.get_package_path import PACKAGE_PATH
+from nndesigndemos.nndesign_layout import NNDLayout
+from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class TaylorSeries2(NNDLayout):

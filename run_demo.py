@@ -1,3 +1,3 @@
-from nndesign.nndesign import nndtoc
+from nndesigndemos.nndesign import nndtoc
 
 nndtoc()

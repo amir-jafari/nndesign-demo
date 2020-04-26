@@ -1,9 +1,9 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication
 
-from nndesign.nndesign_layout import NNDLayout
-from nndesign.Window import MainWindowNN, MainWindowDL
-from nndesign.get_package_path import PACKAGE_PATH
+from nndesigndemos.nndesign_layout import NNDLayout
+from nndesigndemos.Window import MainWindowNN, MainWindowDL
+from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class MainWindow(NNDLayout):
@@ -51,7 +51,7 @@ class MainWindow(NNDLayout):
         self.book1_link.linkActivated.connect(self.link_1)
 
         self.make_label("book2_info", "Click on the button above to access the\ndemonstrations for the Neural Network\n"
-                                      "Design: Deep Learning book.\n\n... TODO ...\n...", (x_right, y_text, w, h_text))
+                                      "Design: Deep Learning book.\n\nThis book is in progress.", (x_right, y_text - 8, w, h_text))
 
         self.button1 = QtWidgets.QPushButton("Neural Network Design", self)
         self.button1.setGeometry(x_left * self.w_ratio, y_button * self.h_ratio, w * self.w_ratio, h_button * self.h_ratio)
