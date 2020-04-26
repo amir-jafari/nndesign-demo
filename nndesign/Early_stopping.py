@@ -177,7 +177,7 @@ class EarlyStopping(NNDLayout):
             # self.ani_1.event_source.start()
         # else:
         self.init_params()
-        np.random.seed(self.random_state)
+        # np.random.seed(self.random_state)
         self.nsd = float(self.slider_nsd.value() / 10)
         self.label_nsd.setText("Noise standard deviation: " + str(self.nsd))
         self.plot_train_test_data()
