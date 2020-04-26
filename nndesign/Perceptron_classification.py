@@ -39,13 +39,13 @@ class PerceptronClassification(NNDLayout):
 
         self.p, self.a, self.label = None, None, None
 
-        self.make_label("label_w", "w = [1 0 0]", (550, 300, 150, 25))
-        self.make_label("label_b", "b = 0", (550, 330, 150, 25))
-        self.make_label("label_p", "", (550, 360, 150, 25))
-        self.make_label("label_a_1", "", (550, 390, 150, 25))
-        self.make_label("label_a_2", "", (550, 420, 150, 25))
-        self.make_label("label_a_3", "", (550, 450, 150, 25))
-        self.make_label("label_fruit", "", (550, 480, 150, 25))
+        self.make_label("label_w", "w = [1 0 0]", (550, 310, 150, 25))
+        self.make_label("label_b", "b = 0", (550, 340, 150, 25))
+        self.make_label("label_p", "", (550, 370, 150, 25))
+        self.make_label("label_a_1", "", (550, 400, 150, 25))
+        self.make_label("label_a_2", "", (550, 430, 150, 25))
+        self.make_label("label_a_3", "", (550, 460, 150, 25))
+        self.make_label("label_fruit", "", (550, 490, 150, 25))
 
         self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
@@ -57,7 +57,7 @@ class PerceptronClassification(NNDLayout):
             self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
 
-        self.make_button("run_button", "Go", (self.x_chapter_button, 520, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Go", (self.x_chapter_button, 525, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
     def paintEvent(self, event):
         super(PerceptronClassification, self).paintEvent(event)

@@ -1,28 +1,10 @@
 import numpy as np
 import warnings
-import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore")
 from mpl_toolkits.mplot3d import Axes3D
 
 from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
-
-
-# x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
-#               0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])
-x = np.linspace(-2, 2, 1000)
-y = np.copy(x)
-X, Y = np.meshgrid(x, y)
-F = (Y - X) ** 4 + 8 * X * Y - X + Y + 3
-F[F < 0] = 0
-F[F > 12] = 12
-
-xs = np.linspace(-2, 2, 100)
-ys = np.linspace(-2, 2, 100)
-XX, YY = np.meshgrid(xs, ys)
-FF = (YY - XX) ** 4 + 8 * XX * YY - XX + YY + 3
-FF[FF < 0] = 0
-FF[FF > 12] = 12
 
 
 class TaylorSeries2(NNDLayout):
@@ -34,31 +16,39 @@ class TaylorSeries2(NNDLayout):
                                                  "in the plot window.\n\nSelect the approximation\norder below.",
                           PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None)
 
+        self.x_ = np.linspace(-2, 2, 1000)
+        self.y_ = np.copy(self.x_)
+        self.X, self.Y = np.meshgrid(self.x_, self.y_)
+        self.F = (self.Y - self.X) ** 4 + 8 * self.X * self.Y - self.X + self.Y + 3
+        self.F[self.F < 0] = 0
+        self.F[self.F > 12] = 12
+
+        xs = np.linspace(-2, 2, 100)
+        ys = np.linspace(-2, 2, 100)
+        self.XX, self.YY = np.meshgrid(xs, ys)
+        FF = (self.YY - self.XX) ** 4 + 8 * self.XX * self.YY - self.XX + self.YY + 3
+        FF[FF < 0] = 0
+        FF[FF > 12] = 12
+
         self.order, self.x, self.y = 2, None, None
         self.make_combobox(1, ["Order 0", "Order 1", "Order 2"], (self.x_chapter_usual, 300, self.w_chapter_slider, 100),
                            self.change_approx_order)
         self.comboBox1.setCurrentIndex(self.order)
 
-        self.make_plot(1, (20, 120, 230, 230))
-        self.make_plot(2, (270, 120, 230, 230))
+        self.make_plot(1, (20, 135, 230, 230))
+        self.make_plot(2, (270, 135, 230, 230))
         self.make_plot(3, (20, 400, 230, 230))
         self.make_plot(4, (270, 400, 230, 230))
 
         self.x_data, self.y_data = [], []
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.contour(X, Y, F, colors='blue')
+        self.axes_1.contour(self.X, self.Y, self.F, colors='blue')
         self.axes_1.set_title("Function", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
         self.axes1_point, = self.axes_1.plot([], "o", fillstyle="none", color="k")
         self.axes1_point1, = self.axes_1.plot([], "o", fillstyle="none", markersize=11, color="k")
-        # self.axes_1.set_xticks([-2, -1, 0, 1])
-        # self.axes_1.set_yticks([-2, -1, 0, 1])
-        # self.axes_1.set_xlabel("$x$")
-        # self.axes_1.xaxis.set_label_coords(1, -0.025)
-        # self.axes_1.set_ylabel("$y$")
-        # self.axes_1.yaxis.set_label_coords(-0.025, 1)
         self.axes_1.text(-1.5, 1.65, "<CLICK ON ME>")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
@@ -67,38 +57,19 @@ class TaylorSeries2(NNDLayout):
         self.axes_2.set_title("Approximation", fontdict={'fontsize': 10})
         self.axes_2.set_xlim(-2, 2)
         self.axes_2.set_ylim(-2, 2)
-        # self.axes_2.set_xticks([-2, -1, 0, 1])
-        # self.axes_2.set_yticks([-2, -1, 0, 1])
-        # self.axes_2.set_xlabel("$x$")
-        # self.axes_2.xaxis.set_label_coords(1, -0.025)
-        # self.axes_2.set_ylabel("$y$")
-        # self.axes_2.yaxis.set_label_coords(-0.025, 1)
         self.axes2_point, = self.axes_2.plot([], "o", fillstyle="none", color="k")
         self.axes2_point1, = self.axes_2.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.canvas2.draw()
 
         self.axis1 = Axes3D(self.figure3)
-        # self.axis1.dist = 20
         self.axis1.set_title("Function", fontdict={'fontsize': 10}, pad=3)
-        self.axis1.plot_surface(XX, YY, FF)
-        # self.axis1.set_xticks([-2, -1, 0, 1])
-        # self.axis1.set_yticks([-2, -1, 0, 1])
-        # self.axis1.set_xlabel("$x$")
-        # self.axis1.xaxis.set_label_coords(1, -0.025)
-        # self.axis1.set_ylabel("$y$")
-        # self.axis1.yaxis.set_label_coords(-0.025, 1)
+        self.axis1.plot_surface(self.XX, self.YY, FF)
         self.axis1.view_init(5, -90)
         self.axis1.autoscale()
         self.canvas3.draw()
 
         self.axis2 = Axes3D(self.figure4)
         self.axis2.set_title("Approximation", fontdict={'fontsize': 10}, pad=3)
-        # self.axis2.set_xticks([-2, -1, 0, 1])
-        # self.axis2.set_yticks([-2, -1, 0, 1])
-        # self.axis2.set_xlabel("$x$")
-        # self.axis2.xaxis.set_label_coords(1, -0.025)
-        # self.axis2.set_ylabel("$y$")
-        # self.axis2.yaxis.set_label_coords(-0.025, 1)
         self.axis2.view_init(5, -90)
         self.canvas4.draw()
 
@@ -117,10 +88,10 @@ class TaylorSeries2(NNDLayout):
                     y_event = event.ydata - 0.06
             x_event = round(x_event, 1)
             y_event = round(y_event, 1)"""
-            d_x, d_y = event.xdata - x, event.ydata - y
-            x_event = x[np.argmin(np.abs(d_x))]
-            y_event = y[np.argmin(np.abs(d_y))]
-            if F[np.bitwise_and(X == x_event, Y == y_event)].item() == 12:
+            d_x, d_y = event.xdata - self.x_, event.ydata - self.y_
+            x_event = self.x_[np.argmin(np.abs(d_x))]
+            y_event = self.y_[np.argmin(np.abs(d_y))]
+            if self.F[np.bitwise_and(self.X == x_event, self.Y == y_event)].item() == 12:
                 return
 
             self.axes1_point.set_data([event.xdata], [event.ydata])
@@ -148,9 +119,9 @@ class TaylorSeries2(NNDLayout):
         gradient = np.array([[gx], [gy]])
         temp = 12 * (self.y - self.x) ** 2
         hess = np.array([[temp, 8 - temp], [8 - temp, temp]])
-        dX, dY = X - self.x, Y - self.y
+        dX, dY = self.X - self.x, self.Y - self.y
         if self.order == 0:
-            Fa = np.zeros(X.shape) + Fo
+            Fa = np.zeros(self.X.shape) + Fo
         elif self.order == 1:
             Fa = gradient[0, 0] * dX + gradient[1, 0] * dY + Fo
         elif self.order == 2:
@@ -158,7 +129,7 @@ class TaylorSeries2(NNDLayout):
             Fa += gradient[0, 0] * dX + gradient[1, 0] * dY + Fo
         Fa[Fa < 0] = 0
         Fa[Fa > 12] = 12
-        self.axes_2.contour(X, Y, Fa, colors="blue")
+        self.axes_2.contour(self.X, self.Y, Fa, colors="blue")
         self.canvas2.draw()
 
         # Removes surface from fourth plot
@@ -166,9 +137,9 @@ class TaylorSeries2(NNDLayout):
             for collection in self.axis2.collections:
                 collection.remove()
         # Draws new surface
-        dXX, dYY = XX - self.x, YY - self.y
+        dXX, dYY = self.XX - self.x, self.YY - self.y
         if self.order == 0:
-            Fa = np.zeros(XX.shape) + Fo
+            Fa = np.zeros(self.XX.shape) + Fo
         elif self.order == 1:
             Fa = gradient[0, 0] * dXX + gradient[1, 0] * dYY + Fo
         elif self.order == 2:
@@ -176,5 +147,5 @@ class TaylorSeries2(NNDLayout):
             Fa += gradient[0, 0] * dXX + gradient[1, 0] * dYY + Fo
         Fa[Fa < 0] = 0
         Fa[Fa > 12] = 12
-        self.axis2.plot_surface(XX, YY, Fa, color='#1f77b4')
+        self.axis2.plot_surface(self.XX, self.YY, Fa, color='#1f77b4')
         self.canvas4.draw()

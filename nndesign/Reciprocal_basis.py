@@ -16,8 +16,8 @@ class ReciprocalBasis(NNDLayout):
                                                  "\n\nClick [Expand] to expand\na new vector.\n\nClick [Start] to\ndefine a new basis.",
                           PACKAGE_PATH + "Logo/Logo_Ch_5.svg", None)
 
-        self.make_plot(1, (120, 120, 270, 270))
-        self.make_plot(2, (120, 390, 270, 270))
+        self.make_plot(1, (115, 100, 290, 290))
+        self.make_plot(2, (115, 385, 290, 290))
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
@@ -41,7 +41,6 @@ class ReciprocalBasis(NNDLayout):
         self.axes_1.set_title("Basis Vectors", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
-        # self.axes1_points = []
         self.axes1_v1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
         self.axes1_v2 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
         self.text_v1, self.text_v2 = None, None
@@ -58,13 +57,7 @@ class ReciprocalBasis(NNDLayout):
         self.axes_1.plot([0] * 20, np.linspace(-2, 2, 20), linestyle="dashed", linewidth=0.5, color="gray")
         self.axes_1.plot(np.linspace(-2, 2, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
         self.axes1_proj_line, = self.axes_1.plot([], "-")
-        self.text_start = self.axes_1.text(-1.2, -0.5, "<CLICK ON ME>")
-        # self.axes_1.set_xticks([-2, -1, 0, 1])
-        # self.axes_1.set_yticks([-2, -1, 0, 1])
-        # self.axes_1.set_xlabel("$x$")
-        # self.axes_1.xaxis.set_label_coords(1, -0.025)
-        # self.axes_1.set_ylabel("$y$")
-        # self.axes_1.yaxis.set_label_coords(-0.025, 1)
+        self.text_start = self.axes_1.text(-1.1, -0.5, "<CLICK ON ME>")
 
         self.axes_2.set_title("Vector Expansion", fontdict={'fontsize': 10})
         self.axes_2.set_xlim(-2, 2)
@@ -78,16 +71,6 @@ class ReciprocalBasis(NNDLayout):
         self.axes_2_l2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="black")
         self.axes_2.plot([0] * 20, np.linspace(-2, 2, 20), linestyle="dashed", linewidth=0.5, color="gray")
         self.axes_2.plot(np.linspace(-2, 2, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
-        # self.axes2_line1, = self.axes_2.plot([], "-")
-        # self.axes2_line1.set_color("black")
-        # self.axes2_line2, = self.axes_2.plot([], "-")
-        # self.axes2_line2.set_color("black")
-        # self.axes_2.set_xticks([-2, -1, 0, 1])
-        # self.axes_2.set_yticks([-2, -1, 0, 1])
-        # self.axes_2.set_xlabel("$x$")
-        # self.axes_2.xaxis.set_label_coords(1, -0.025)
-        # self.axes_2.set_ylabel("$y$")
-        # self.axes_2.yaxis.set_label_coords(-0.025, 1)
 
     def on_mouseclick1(self, event):
         if event.xdata != None and event.xdata != None:
@@ -100,7 +83,7 @@ class ReciprocalBasis(NNDLayout):
             self.axes1_points.append((event.xdata, event.ydata))
             if len(self.axes1_points) == 1:
                 self.text_start.remove()
-                self.text_start = self.axes_1.text(-1.2, -0.5, "<ONCE MORE>")
+                self.text_start = self.axes_1.text(-1.05, -0.5, "<ONCE MORE>")
             self.draw_vector()
 
     def draw_vector(self):
@@ -148,7 +131,7 @@ class ReciprocalBasis(NNDLayout):
                 self.axes1_x.set_UVC(0, 0)
                 if self.text_v2:
                     self.text_v2.remove()
-                self.text_start = self.axes_1.text(-1.2, -0.5, "<ONCE MORE>")
+                self.text_start = self.axes_1.text(-1.05, -0.5, "<ONCE MORE>")
                 self.canvas.draw()
                 self.axes_2.clear()
                 self.axes_2.set_title("Vector Expansion", fontdict={'fontsize': 10})

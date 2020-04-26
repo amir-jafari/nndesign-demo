@@ -39,12 +39,12 @@ class HopfieldClassification(NNDLayout):
 
         self.p, self.a1, self.a2, self.fruit, self.label = None, None, None, None, None
 
-        self.make_label("label_w", "W = [.2 0 0; 0 1.2 0; 0 0 .2]", (530, 320, 170, 25))
-        self.make_label("label_b", "b = [0.9; 0; -0.9]", (530, 350, 150, 25))
-        self.make_label("label_p", "", (530, 380, 150, 25))
-        self.make_label("label_a_11", "", (530, 410, 150, 25))
-        self.make_label("label_a_12", "", (530, 440, 150, 25))
-        self.make_label("label_fruit", "", (530, 470, 150, 25))
+        self.make_label("label_w", "W = [.2 0 0; 0 1.2 0; 0 0 .2]", (532, 320 - 5, 170, 25))
+        self.make_label("label_b", "b = [0.9; 0; -0.9]", (532, 350 - 5, 150, 25))
+        self.make_label("label_p", "", (532, 380 - 5, 150, 25))
+        self.make_label("label_a_11", "", (532, 410 - 5, 150, 25))
+        self.make_label("label_a_12", "", (532, 440 - 5, 150, 25))
+        self.make_label("label_fruit", "", (532, 470 - 5, 150, 25))
 
         self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
@@ -56,7 +56,7 @@ class HopfieldClassification(NNDLayout):
             self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
 
-        self.make_button("run_button", "Go", (self.x_chapter_button, 570, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Go", (self.x_chapter_button, 500, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
     def paintEvent(self, event):
         super(HopfieldClassification, self).paintEvent(event)
@@ -84,7 +84,6 @@ class HopfieldClassification(NNDLayout):
             self.label_a_11.setText(""); self.label_a_12.setText("")
             self.label_fruit.setText("")
             self.p = np.round(np.random.uniform(-1, 1, (1, 3)), 2)
-            # self.p = np.array([[0.6, 0.98, -0.4]])
             w = np.array([[0.2, 0, 0], [0, 1.2, 0], [0, 0, 0.2]])
             b = np.array([[0.9], [0], [-0.9]])
             self.a1 = np.round(self.satlins(np.dot(w, self.p.T) + b), 2)

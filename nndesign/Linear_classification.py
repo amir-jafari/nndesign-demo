@@ -9,15 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-wid_up = 1
-hei_up = 1.04
-nrows_up = 4
-ncols_up = 4
-inbetween_up = 0.12
-xx_up = np.arange(0, ncols_up, (wid_up + inbetween_up))
-yy_up = np.arange(0, nrows_up, (hei_up + inbetween_up))
-
-
 class LinearClassification(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(LinearClassification, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -28,19 +19,27 @@ class LinearClassification(NNDLayout):
                                                        "the arrow bottoms.",
                           PACKAGE_PATH + "Logo/Logo_Ch_10.svg", None, description_coords=(535, 120, 300, 250))
 
+        self.wid_up = 1
+        self.hei_up = 1.04
+        self.nrows_up = 4
+        self.ncols_up = 4
+        inbetween_up = 0.12
+        self.xx_up = np.arange(0, self.ncols_up, (self.wid_up + inbetween_up))
+        self.yy_up = np.arange(0, self.nrows_up, (self.hei_up + inbetween_up))
+
         self.make_label("label_pattern1", "Target = 60", (50, 105, 150, 50))
         self.make_plot(1, (15, 130, 130, 130))
         self.axis1 = self.figure.add_axes([0, 0, 1, 1])
         self.pattern1 = [1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
-        self.pattern11 = np.flip(np.array(self.pattern1).reshape((ncols_up, nrows_up)).T, axis=0)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        self.pattern11 = np.flip(np.array(self.pattern1).reshape((self.ncols_up, self.nrows_up)).T, axis=0)
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern11[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis1.add_patch(sq)
-        self.axis1.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis1.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis1.axis("off")
         self.canvas.draw()
         self.canvas.mpl_connect("button_press_event", self.on_mouseclick1)
@@ -52,15 +51,15 @@ class LinearClassification(NNDLayout):
         self.make_plot(2, (140, 130, 130, 130))
         self.axis2 = self.figure2.add_axes([0, 0, 1, 1])
         self.pattern2 = [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1]
-        self.pattern22 = np.flip(np.array(self.pattern2).reshape((ncols_up, nrows_up)).T, axis=0)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        self.pattern22 = np.flip(np.array(self.pattern2).reshape((self.ncols_up, self.nrows_up)).T, axis=0)
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern22[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis2.add_patch(sq)
-        self.axis2.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis2.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis2.axis("off")
         self.canvas2.draw()
         self.canvas2.mpl_connect("button_press_event", self.on_mouseclick2)
@@ -72,15 +71,15 @@ class LinearClassification(NNDLayout):
         self.make_plot(3, (260, 130, 130, 130))
         self.axis3 = self.figure3.add_axes([0, 0, 1, 1])
         self.pattern3 = [1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
-        self.pattern33 = np.flip(np.array(self.pattern3).reshape((ncols_up, nrows_up)).T, axis=0)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        self.pattern33 = np.flip(np.array(self.pattern3).reshape((self.ncols_up, self.nrows_up)).T, axis=0)
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern33[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis3.add_patch(sq)
-        self.axis3.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis3.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis3.axis("off")
         self.canvas3.draw()
         self.canvas3.mpl_connect("button_press_event", self.on_mouseclick3)
@@ -91,15 +90,15 @@ class LinearClassification(NNDLayout):
         self.make_plot(4, (15, 300, 130, 130))
         self.axis4 = self.figure4.add_axes([0, 0, 1, 1])
         self.pattern4 = [0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]
-        self.pattern44 = np.flip(np.array(self.pattern4).reshape((ncols_up, nrows_up)).T, axis=0)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        self.pattern44 = np.flip(np.array(self.pattern4).reshape((self.ncols_up, self.nrows_up)).T, axis=0)
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern44[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis4.add_patch(sq)
-        self.axis4.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis4.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis4.axis("off")
         self.canvas4.draw()
         self.canvas4.mpl_connect("button_press_event", self.on_mouseclick4)
@@ -110,15 +109,15 @@ class LinearClassification(NNDLayout):
         self.make_plot(5, (140, 300, 130, 130))
         self.axis5 = self.figure5.add_axes([0, 0, 1, 1])
         self.pattern5 = [1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0]
-        self.pattern55 = np.flip(np.array(self.pattern5).reshape((ncols_up, nrows_up)).T, axis=0)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        self.pattern55 = np.flip(np.array(self.pattern5).reshape((self.ncols_up, self.nrows_up)).T, axis=0)
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern55[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis5.add_patch(sq)
-        self.axis5.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis5.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis5.axis("off")
         self.canvas5.draw()
         self.canvas5.mpl_connect("button_press_event", self.on_mouseclick5)
@@ -129,15 +128,15 @@ class LinearClassification(NNDLayout):
         self.make_plot(6, (260, 300, 130, 130))
         self.axis6 = self.figure6.add_axes([0, 0, 1, 1])
         self.pattern6 = [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0]
-        self.pattern66 = np.flip(np.array(self.pattern6).reshape((ncols_up, nrows_up)).T, axis=0)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        self.pattern66 = np.flip(np.array(self.pattern6).reshape((self.ncols_up, self.nrows_up)).T, axis=0)
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern66[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis6.add_patch(sq)
-        self.axis6.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis6.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis6.axis("off")
         self.canvas6.draw()
         self.canvas6.mpl_connect("button_press_event", self.on_mouseclick6)
@@ -150,14 +149,14 @@ class LinearClassification(NNDLayout):
         self.axis7 = self.figure7.add_axes([0, 0, 1, 1])
         self.pattern7 = self.pattern1[:]
         self.pattern77 = np.copy(self.pattern11)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern77[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="red")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="red")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis7.add_patch(sq)
-        self.axis7.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis7.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis7.axis("off")
         self.canvas7.draw()
         self.canvas7.mpl_connect("button_press_event", self.on_mouseclick7)
@@ -198,22 +197,22 @@ class LinearClassification(NNDLayout):
 
         # --
 
-        self.make_button("run_button", "Weights", (self.x_chapter_button, 420, self.w_chapter_button, self.h_chapter_button), self.on_run)
-        self.make_button("run_button", "Train", (self.x_chapter_button, 520, self.w_chapter_button, self.h_chapter_button), self.response)
+        # self.make_button("run_button", "Weights", (self.x_chapter_button, 420, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Train", (self.x_chapter_button, 355, self.w_chapter_button, self.h_chapter_button), self.response)
 
         self.response()
 
     def change_test_input(self, pattern):
         self.pattern7 = pattern[:]
-        self.pattern77 = np.flip(np.array(self.pattern7).reshape((ncols_up, nrows_up)).T, axis=0)
+        self.pattern77 = np.flip(np.array(self.pattern7).reshape((self.ncols_up, self.nrows_up)).T, axis=0)
         while self.axis7.patches:
             self.axis7.patches.pop()
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern77[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="red")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="red")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis7.add_patch(sq)
         self.canvas7.draw()
         self.run_animation()
@@ -236,14 +235,14 @@ class LinearClassification(NNDLayout):
     def button6_pressed(self):
         self.change_test_input(self.pattern6)
 
-    def on_run(self):
-        print("TODO")
+    # def on_run(self):
+    #     print("!")
 
     def on_mouseclick1(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis1.patches:
                 self.axis1.patches.pop()
             if self.pattern11[yyy, xxx] == 1:
@@ -251,12 +250,12 @@ class LinearClassification(NNDLayout):
             else:
                 self.pattern11[yyy, xxx] = 1
             self.pattern1 = np.flip(self.pattern11.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern11[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis1.add_patch(sq)
             self.canvas.draw()
 
@@ -264,9 +263,9 @@ class LinearClassification(NNDLayout):
 
     def on_mouseclick2(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis2.patches:
                 self.axis2.patches.pop()
             if self.pattern22[yyy, xxx] == 1:
@@ -274,21 +273,21 @@ class LinearClassification(NNDLayout):
             else:
                 self.pattern22[yyy, xxx] = 1
             self.pattern2 = np.flip(self.pattern22.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern22[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis2.add_patch(sq)
             self.canvas2.draw()
             # self.response()
 
     def on_mouseclick3(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis3.patches:
                 self.axis3.patches.pop()
             if self.pattern33[yyy, xxx] == 1:
@@ -296,21 +295,21 @@ class LinearClassification(NNDLayout):
             else:
                 self.pattern33[yyy, xxx] = 1
             self.pattern3 = np.flip(self.pattern33.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern33[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis3.add_patch(sq)
             self.canvas3.draw()
             # self.response()
 
     def on_mouseclick4(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis4.patches:
                 self.axis4.patches.pop()
             if self.pattern44[yyy, xxx] == 1:
@@ -318,21 +317,21 @@ class LinearClassification(NNDLayout):
             else:
                 self.pattern44[yyy, xxx] = 1
             self.pattern4 = np.flip(self.pattern44.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern44[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis4.add_patch(sq)
             self.canvas4.draw()
             # self.response()
 
     def on_mouseclick5(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis5.patches:
                 self.axis5.patches.pop()
             if self.pattern55[yyy, xxx] == 1:
@@ -340,21 +339,21 @@ class LinearClassification(NNDLayout):
             else:
                 self.pattern55[yyy, xxx] = 1
             self.pattern5 = np.flip(self.pattern55.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern55[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis5.add_patch(sq)
             self.canvas5.draw()
             # self.response()
 
     def on_mouseclick6(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis6.patches:
                 self.axis6.patches.pop()
             if self.pattern66[yyy, xxx] == 1:
@@ -362,21 +361,21 @@ class LinearClassification(NNDLayout):
             else:
                 self.pattern66[yyy, xxx] = 1
             self.pattern6 = np.flip(self.pattern66.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern66[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis6.add_patch(sq)
             self.canvas6.draw()
             # self.response()
 
     def on_mouseclick7(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis7.patches:
                 self.axis7.patches.pop()
             if self.pattern77[yyy, xxx] == 1:
@@ -384,12 +383,12 @@ class LinearClassification(NNDLayout):
             else:
                 self.pattern77[yyy, xxx] = 1
             self.pattern7 = np.flip(self.pattern77.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern77[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="red")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="red")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis7.add_patch(sq)
             self.canvas7.draw()
             self.run_animation()

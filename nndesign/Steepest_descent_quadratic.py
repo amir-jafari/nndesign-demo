@@ -9,24 +9,22 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-x, y = np.linspace(-4, 0+(0.2*22), 200, endpoint=False), np.linspace(-2, 0+(4/31*17), 200, endpoint=False)
-X, Y = np.meshgrid(x, y)
-
-a, b, c = np.array([[2, 0], [0, 50]]), np.array([0, 0]), 0
-max_epoch = 50
-
-F = (a[0, 0] * X ** 2 + a[0, 1] + a[1, 0] * X * Y + a[1, 1] * Y ** 2) / 2 + b[0] * X + b[1] * Y + c
-
-
 class SteepestDescentQuadratic(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(SteepestDescentQuadratic, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Steepest Descent for Quadratic", 9, "Click anywhere on the\ngraph to start an initial guess."
-                                                               "\nThen the steepest descent\ntrajectory will be shown.\n\n"
+        self.fill_chapter("Steepest Descent for Quadratic", 9, "Click anywhere on the\ngraph to start an initial\nguess."
+                                                               "Then the steepest\ndescent trajectory\nwill be shown.\n\n"
                                                                "Modify the learning rate\nby moving the slide bar.\n\n"
                                                                "Experiment with different\ninitial guesses and\nlearning rates.",
                           PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None, description_coords=(535, 120, 300, 250))
+
+        x, y = np.linspace(-4, 0 + (0.2 * 22), 200, endpoint=False), np.linspace(-2, 0 + (4 / 31 * 17), 200, endpoint=False)
+        X, Y = np.meshgrid(x, y)
+        self.a, self.b, c = np.array([[2, 0], [0, 50]]), np.array([0, 0]), 0
+        self.max_epoch = 50
+        F = (self.a[0, 0] * X ** 2 + self.a[0, 1] + self.a[1, 0] * X * Y + self.a[1, 1] * Y ** 2) / 2\
+            + self.b[0] * X + self.b[1] * Y + c
 
         self.make_plot(1, (25, 100, 470, 470))
         self.axes = self.figure.add_subplot(1, 1, 1)
@@ -70,7 +68,7 @@ class SteepestDescentQuadratic(NNDLayout):
         return self.path,
 
     def on_animate(self, idx):
-        gradient = np.dot(a, np.array([self.x, self.y])) + b.T
+        gradient = np.dot(self.a, np.array([self.x, self.y])) + self.b.T
         self.x -= self.lr * gradient[0]
         self.y -= self.lr * gradient[1]
         self.x_data.append(self.x)
@@ -93,5 +91,5 @@ class SteepestDescentQuadratic(NNDLayout):
         if event.xdata != None and event.xdata != None:
             self.x_data, self.y_data = [event.xdata], [event.ydata]
             self.x, self.y = event.xdata, event.ydata
-            self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=max_epoch,
+            self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=self.max_epoch,
                                      interval=self.animation_speed, repeat=False, blit=True)

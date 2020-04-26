@@ -9,16 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-max_epoch = 120
-
-T = 2
-pp0 = np.linspace(-1, 1, 201)
-tt0 = np.sin(2 * np.pi * pp0 / T)
-
-pp = np.linspace(-0.95, 0.95, 20)
-p = np.linspace(-1, 1, 21)
-
-
 class EarlyStopping(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(EarlyStopping, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -26,8 +16,16 @@ class EarlyStopping(NNDLayout):
         self.fill_chapter("Early Stopping", 13, "Use the slider to change the\nNoise Standard Deviation of\nthe training points.\n\n"
                                                 "Click [Train] to train\non the training points.\n\nThe training and validation\n"
                                                 "performance indexes will be\npresented on the right.\n\nYou will notice that\n"
-                                                "without early stopping the\nvalidation error will increase.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 110, 450, 300))
+                                                "without early stopping\nthe validation error\nwill increase.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 120, 450, 300))
+
+        self.max_epoch = 120
+        self.T = 2
+        self.pp0 = np.linspace(-1, 1, 201)
+        self.tt0 = np.sin(2 * np.pi * self.pp0 / self.T)
+
+        self.pp = np.linspace(-0.95, 0.95, 20)
+        self.p = np.linspace(-1, 1, 21)
 
         self.make_plot(1, (100, 90, 300, 300))
         self.make_plot(2, (100, 380, 300, 300))
@@ -44,7 +42,7 @@ class EarlyStopping(NNDLayout):
         self.axes_1.set_title("Function", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-1, 1)
         self.axes_1.set_ylim(-1.5, 1.5)
-        self.axes_1.plot(pp0, np.sin(2 * np.pi * pp0 / T))
+        self.axes_1.plot(self.pp0, np.sin(2 * np.pi * self.pp0 / self.T))
         self.net_approx, = self.axes_1.plot([], linestyle="--")
         self.train_points, = self.axes_1.plot([], marker='*', label="Train", linestyle="")
         self.test_points, = self.axes_1.plot([], marker='.', label="Test", linestyle="")
@@ -74,8 +72,8 @@ class EarlyStopping(NNDLayout):
 
         self.nsd = 1
         self.make_slider("slider_nsd", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
-                         (self.x_chapter_usual, 400, self.w_chapter_slider, 100), self.slide,
-                         "label_nsd", "Noise standard deviation: 1.0", (self.x_chapter_usual + 10, 370, self.w_chapter_slider, 100))
+                         (self.x_chapter_usual, 410, self.w_chapter_slider, 100), self.slide,
+                         "label_nsd", "Noise standard deviation: 1.0", (self.x_chapter_usual + 10, 380, self.w_chapter_slider, 100))
 
         self.animation_speed = 100
 
@@ -83,10 +81,10 @@ class EarlyStopping(NNDLayout):
 
         self.run_button = QtWidgets.QPushButton("Train", self)
         self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 500 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
+        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 490 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.run_button.clicked.connect(self.on_run)
 
-        self.make_button("pause_button", "Pause", (self.x_chapter_button, 530, self.w_chapter_button, self.h_chapter_button), self.on_stop)
+        self.make_button("pause_button", "Pause", (self.x_chapter_button, 520, self.w_chapter_button, self.h_chapter_button), self.on_stop)
         self.pause = True
 
         self.init_params()
@@ -110,7 +108,7 @@ class EarlyStopping(NNDLayout):
 
     def animate_init_1(self):
         self.error_goal_reached = False
-        self.a1 = self.logsigmoid_stable(np.dot(self.W1, pp.reshape(1, -1)) + self.b1)
+        self.a1 = self.logsigmoid_stable(np.dot(self.W1, self.pp.reshape(1, -1)) + self.b1)
         self.a2 = self.purelin(np.dot(self.W2, self.a1) + self.b2)
         self.e = self.tt.reshape(1, -1) - self.a2
         self.error_prev = np.dot(self.e, self.e.T).item()
@@ -142,10 +140,10 @@ class EarlyStopping(NNDLayout):
 
     def on_animate_2(self, idx):
         nn_output = []
-        for sample, target in zip(pp0, tt0):
+        for sample, target in zip(self.pp0, self.tt0):
             a, n2, n1, a1, a0 = self.forward(sample)
             nn_output.append(a)
-        self.net_approx.set_data(pp0, nn_output)
+        self.net_approx.set_data(self.pp0, nn_output)
         # self.axes_2.set_yscale("log")
         return self.net_approx,
 
@@ -168,9 +166,9 @@ class EarlyStopping(NNDLayout):
             self.ani_1.event_source.stop()
         if self.ani_2:
             self.ani_2.event_source.stop()
-        self.ani_1 = FuncAnimation(self.figure2, self.on_animate_1, init_func=self.animate_init_1, frames=max_epoch,
+        self.ani_1 = FuncAnimation(self.figure2, self.on_animate_1, init_func=self.animate_init_1, frames=self.max_epoch,
                                    interval=self.animation_speed, repeat=False, blit=True)
-        self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=max_epoch,
+        self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=self.max_epoch,
                                    interval=self.animation_speed, repeat=False, blit=True)
 
     def slide(self):
@@ -195,10 +193,10 @@ class EarlyStopping(NNDLayout):
         self.canvas2.draw()
 
     def plot_train_test_data(self):
-        self.tt = np.sin(2 * np.pi * pp / T) + np.random.uniform(-2, 2, pp.shape) * 0.2 * self.nsd
-        self.train_points.set_data(pp, self.tt)
-        self.t = np.sin(2 * np.pi * p / T) + np.random.uniform(-2, 2, p.shape) * 0.2 * self.nsd
-        self.test_points.set_data(p, self.t)
+        self.tt = np.sin(2 * np.pi * self.pp / self.T) + np.random.uniform(-2, 2, self.pp.shape) * 0.2 * self.nsd
+        self.train_points.set_data(self.pp, self.tt)
+        self.t = np.sin(2 * np.pi * self.p / self.T) + np.random.uniform(-2, 2, self.p.shape) * 0.2 * self.nsd
+        self.test_points.set_data(self.p, self.t)
 
     def init_params(self):
         np.random.seed(self.random_state)
@@ -222,7 +220,7 @@ class EarlyStopping(NNDLayout):
         alpha = 0.03
 
         error_train, dw1, db1, dw2, db2 = [], 0, 0, 0, 0
-        for sample, target in zip(pp, self.tt):
+        for sample, target in zip(self.pp, self.tt):
             a, n2, n1, a1, a0 = self.forward(sample)
             e = target - a
             error_train.append(e)
@@ -258,7 +256,7 @@ class EarlyStopping(NNDLayout):
             self.b2 += -alpha * db2
 
         error_test = []
-        for sample, target in zip(p, self.t):
+        for sample, target in zip(self.p, self.t):
             a, n2, n1, a1, a0 = self.forward(sample)
             e = target - a
             error_test.append(e)
@@ -272,7 +270,7 @@ class EarlyStopping(NNDLayout):
         self.a1 = np.kron(self.a1, np.ones((1, 1)))
         d2 = self.lin_delta(self.a2)
         d1 = self.log_delta(self.a1, d2, self.W2)
-        jac1 = self.marq(np.kron(pp.reshape(1, -1), np.ones((1, 1))), d1)
+        jac1 = self.marq(np.kron(self.pp.reshape(1, -1), np.ones((1, 1))), d1)
         jac2 = self.marq(self.a1, d2)
         jac = np.hstack((jac1, d1.T))
         jac = np.hstack((jac, jac2))
@@ -282,7 +280,7 @@ class EarlyStopping(NNDLayout):
         grad = np.sqrt(np.dot(je.T, je)).item()
         if grad < 1e-8:
             error_test = []
-            for sample, target in zip(p, self.t):
+            for sample, target in zip(self.p, self.t):
                 a, n2, n1, a1, a0 = self.forward(sample)
                 e = target - a
                 error_test.append(e)
@@ -296,7 +294,7 @@ class EarlyStopping(NNDLayout):
         dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
         db2 = dw[self.RSS2].reshape(1, 1)
 
-        self.a1 = self.logsigmoid_stable(np.dot((self.W1 + dW1), pp.reshape(1, -1)) + self.b1 + db1)
+        self.a1 = self.logsigmoid_stable(np.dot((self.W1 + dW1), self.pp.reshape(1, -1)) + self.b1 + db1)
         self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
         self.e = self.tt.reshape(1, -1) - self.a2
         error = np.dot(self.e, self.e.T).item()
@@ -315,7 +313,7 @@ class EarlyStopping(NNDLayout):
                 dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
                 db2 = dw[self.RSS2].reshape(1, 1)
 
-                self.a1 = self.logsigmoid_stable(np.dot((self.W1 + dW1), pp.reshape(1, -1)) + self.b1 + db1)
+                self.a1 = self.logsigmoid_stable(np.dot((self.W1 + dW1), self.pp.reshape(1, -1)) + self.b1 + db1)
                 self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
                 self.e = self.tt.reshape(1, -1) - self.a2
                 error = np.dot(self.e, self.e.T).item()
@@ -339,14 +337,14 @@ class EarlyStopping(NNDLayout):
                 print("Error goal reached!")
                 self.error_goal_reached = None
             error_test = []
-            for sample, target in zip(p, self.t):
+            for sample, target in zip(self.p, self.t):
                 a, n2, n1, a1, a0 = self.forward(sample)
                 e = target - a
                 error_test.append(e)
             return self.error_prev, np.sum(np.abs(error_test))
 
         error_test = []
-        for sample, target in zip(p, self.t):
+        for sample, target in zip(self.p, self.t):
             a, n2, n1, a1, a0 = self.forward(sample)
             e = target - a
             error_test.append(e)

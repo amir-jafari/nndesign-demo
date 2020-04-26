@@ -12,15 +12,13 @@ class OneInputNeuron(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(OneInputNeuron, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("One-Input Neuron", 2, "Alter the weight, bias and\ninput by moving the\nsliders.\n\n"
+        self.fill_chapter("One-Input Neuron", 2, "\nAlter the weight, bias and\ninput by moving the\nsliders.\n\n"
                                                  "Pick the transfer function\nwith the f menu."
                                                  "\n\nWatch the change to the\nneuron function and its\noutput.",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/SingleInputNeuron.svg",
                           icon_move_left=-5)
 
         self.make_plot(1)
-
-        # self.make_label("label_eq", "a = purelin(w * p + b)", (self.x_chapter_slider_label - 40, 340, 150, 100))
 
         self.make_slider("slider_w", QtCore.Qt.Horizontal, (-30, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
                          (self.x_chapter_usual, 340, self.w_chapter_slider, 50), self.graph, "label_w", "w: 1.0")
@@ -39,14 +37,9 @@ class OneInputNeuron(NNDLayout):
     def graph(self):
 
         a = self.figure.add_subplot(1, 1, 1)
-        a.clear()  # Clear the plot
+        a.clear()
         a.set_xlim(-2, 2)
         a.set_ylim(-2, 2)
-        # a.set_xticks([0], minor=True)
-        # a.set_yticks([0], minor=True)
-        # a.set_xticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.set_yticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.grid(which="minor")
         a.set_xticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
         a.set_yticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
         a.plot([0] * 10, np.linspace(-2, 2, 10), color="black", linestyle="--", linewidth=0.2)
@@ -66,17 +59,10 @@ class OneInputNeuron(NNDLayout):
 
         a.plot(p, out, markersize=3, color="red")
         a.set_title("$a = {}(w \cdot p + b)$".format(self.comboBox1_functions_str[self.func_idx]))
-        # Setting limits so that the point moves instead of the plot.
-        # a.set_xlim(-4, 4)
-        # a.set_ylim(-2, 2)
-        # add grid and axes
-        # a.grid(True, which='both')
-        # a.axhline(y=0, color='k')
-        # a.axvline(x=0, color='k')
+
         self.canvas.draw()
 
     def change_transfer_function(self, idx):
         self.func1 = self.comboBox1_functions[idx]
         self.func_idx = idx
-        # self.label_eq.setText("a = {}(w * p + b)".format(self.comboBox1_functions_str[idx]))
         self.graph()

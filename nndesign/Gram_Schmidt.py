@@ -16,59 +16,49 @@ class GramSchmidt(NNDLayout):
                                              "Click [Start] again to repeat.",
                           PACKAGE_PATH + "Logo/Logo_Ch_5.svg", None)
 
-        self.make_plot(1, (120, 120, 270, 270))
-        self.make_plot(2, (120, 390, 270, 270))
+        self.make_plot(1, (115, 100, 290, 290))
+        # self.figure.subplots_adjust(left=0.2, right=0.975)
+        self.make_plot(2, (115, 385, 290, 290))
+        # self.figure2.subplots_adjust(left=0.2, right=0.975)
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Original Vectors")
-        self.axes_1.set_xlim(-1.2, 1.2)
-        self.axes_1.set_ylim(-1.2, 1.2)
+        self.axes_1.set_xlim(-2, 2)
+        self.axes_1.set_ylim(-2, 2)
         self.axes1_points = []
         self.axes1_v1 = self.axes_1.quiver([0], [0], [0], [0], units="xy", scale=1)
         self.axes1_v2 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1)
         self.axes1_proj = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, headlength=0, headwidth=0, headaxislength=0, linestyle='dashed', color="red")
         self.text1, self.text2 = None, None
-        self.text_start = self.axes_1.text(-0.7, -0.075, "<CLICK ON ME>")
+        self.text_start = self.axes_1.text(-1.1, -0.12, "<CLICK ON ME>")
         self.axes1_proj_line, = self.axes_1.plot([], "--")
         self.axes1_proj_line.set_color("red")
-        self.axes_1.plot([0] * 20, np.linspace(-1.2, 1.2, 20), linestyle="dashed", linewidth=0.5, color="gray")
-        self.axes_1.plot(np.linspace(-1.2, 1.2, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
-        # self.axes_1.set_xticks([-2, -1, 0, 1])
-        # self.axes_1.set_yticks([-2, -1, 0, 1])
-        # self.axes_1.set_xlabel("$x$")
-        # self.axes_1.xaxis.set_label_coords(1, -0.025)
-        # self.axes_1.set_ylabel("$y$")
-        # self.axes_1.yaxis.set_label_coords(-0.025, 1)
+        self.axes_1.plot([0] * 20, np.linspace(-2, 2, 20), linestyle="dashed", linewidth=0.5, color="gray")
+        self.axes_1.plot(np.linspace(-2, 2, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("Orthogonalized Vectors")
-        self.axes_2.set_xlim(-1.2, 1.2)
-        self.axes_2.set_ylim(-1.2, 1.2)
+        self.axes_2.set_xlim(-2, 2)
+        self.axes_2.set_ylim(-2, 2)
         self.axes2_v1 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
         self.axes2_v2 = self.axes_2.quiver([0], [0], [0], [0], units="xy", scale=1, color="g")
-        self.axes_2.plot([0] * 20, np.linspace(-1.2, 1.2, 20), linestyle="dashed", linewidth=0.5, color="gray")
-        self.axes_2.plot(np.linspace(-1.2, 1.2, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
+        self.axes_2.plot([0] * 20, np.linspace(-2, 2, 20), linestyle="dashed", linewidth=0.5, color="gray")
+        self.axes_2.plot(np.linspace(-2, 2, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
         self.text3, self.text4 = None, None
-        # self.axes_2.set_xticks([-2, -1, 0, 1])
-        # self.axes_2.set_yticks([-2, -1, 0, 1])
-        # self.axes_2.set_xlabel("$x$")
-        # self.axes_2.xaxis.set_label_coords(1, -0.025)
-        # self.axes_2.set_ylabel("$y$")
-        # self.axes_2.yaxis.set_label_coords(-0.025, 1)
         self.axes2_proj_line, = self.axes_2.plot([], "*")
         self.canvas2.draw()
 
-        self.make_button("button", "Compute", (self.x_chapter_button, 500, self.w_chapter_button, self.h_chapter_button), self.gram_schmidt)
-        self.make_button("button", "Start", (self.x_chapter_button, 530, self.w_chapter_button, self.h_chapter_button), self.clear_all)
-        self.make_label("label_warning", "", (530, 300, 300, 100))
+        self.make_label("label_warning", "", (537, 340, 300, 150))
+        self.make_button("button", "Compute", (self.x_chapter_button, 315, self.w_chapter_button, self.h_chapter_button), self.gram_schmidt)
+        self.make_button("button", "Start", (self.x_chapter_button, 345, self.w_chapter_button, self.h_chapter_button), self.clear_all)
 
     def on_mouseclick1(self, event):
         if event.xdata != None and event.xdata != None:
             if len(self.axes1_points) == 0:
                 self.text_start.remove()
-                self.text_start = self.axes_1.text(-0.7, -0.075, "<ONCE MORE>")
+                self.text_start = self.axes_1.text(-1.05, -0.12, "<ONCE MORE>")
             elif len(self.axes1_points) == 1:
                 self.text_start.remove()
                 self.text_start = None
@@ -100,7 +90,7 @@ class GramSchmidt(NNDLayout):
 
     def gram_schmidt(self):
         if len(self.axes1_points) < 2:
-            self.label_warning.setText("WHOOPS! Please enter\n2 vectors.")
+            self.label_warning.setText("Please enter 2 vectors.")
             return
         cos_angle = (self.axes1_points[0][0] * self.axes1_points[1][0] + self.axes1_points[1][0] * self.axes1_points[1][1]) / (
             np.sqrt(self.axes1_points[0][0]**2 + self.axes1_points[0][1] ** 2) * np.sqrt(self.axes1_points[1][0]**2 + self.axes1_points[1][1] ** 2)
@@ -109,17 +99,17 @@ class GramSchmidt(NNDLayout):
             self.axes1_points = []
             self.axes1_v1.set_UVC(0, 0)
             self.axes1_v2.set_UVC(0, 0)
-            self.label_warning.setText("WHOOPS!  You entered a zero vector. Please try again!")
+            self.label_warning.setText("WHOOPS! You entered\na zero vector.\nPlease try again!")
         elif cos_angle == 1:
             self.axes1_points = []
             self.axes1_v1.set_UVC(0, 0)
             self.axes1_v2.set_UVC(0, 0)
-            self.label_warning.setText("WHOOPS!  You entered parallel vectors, which cannot be orthogonalized. Please try again!")
+            self.label_warning.setText("WHOOPS! You entered\nparallel vectors, which\ncannot be orthogonalized.\nPlease try again!")
         elif cos_angle == 0:
             self.axes1_points = []
             self.axes1_v1.set_UVC(0, 0)
             self.axes1_v2.set_UVC(0, 0)
-            self.label_warning.setText("Wooow!  You entered vectors that are already orthogonal. Please try again!")
+            self.label_warning.setText("Wooow! You entered\nvectors that are\nalready orthogonal.\nPlease try again!")
         else:
             v1 = np.array([[self.axes1_points[0][0]], [self.axes1_points[0][1]]])
             v2 = np.array([[self.axes1_points[1][0]], [self.axes1_points[1][1]]])
@@ -161,7 +151,7 @@ class GramSchmidt(NNDLayout):
             self.text4 = None
         if self.text_start:
             self.text_start.remove()
-        self.text_start = self.axes_1.text(-0.7, -0.075, "<CLICK ON ME>")
+        self.text_start = self.axes_1.text(-1.1, -0.12, "<CLICK ON ME>")
         self.label_warning.setText("")
         self.canvas.draw()
         self.canvas2.draw()

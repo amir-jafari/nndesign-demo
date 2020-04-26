@@ -8,21 +8,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-p1, p2 = np.array([[1], [1]]), np.array([[-1], [1]])
-t1, t2 = 1, -1
-prob1, prob2 = 0.75, 0.25
-R = prob1 * p1.dot(p1.T) + prob2 * p2.dot(p2.T)
-h = prob1 * t1 * p1 + prob2 * t2 * p2
-c = prob1 * t1 ** 2 + prob2 * t2 ** 2
-a, b = 2 * R, -2 * h
-a1, b1, c1 = np.array([[2, 0], [0, 2]]), np.zeros((2, 1)), 0
-
-x1, y1 = np.linspace(-0.5, 1.5, 50), np.linspace(-1, 1, 50)
-X, Y = np.meshgrid(x1, y1)
-
-max_epoch = 100
-
-
 class EarlyStoppingRegularization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(EarlyStoppingRegularization, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -31,6 +16,20 @@ class EarlyStoppingRegularization(NNDLayout):
                                                                "Click on the ro slider\nto see the minimum of\nthe regularized"
                                                                "\nperformance index.",
                           PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 110, 450, 200))
+
+        p1, p2 = np.array([[1], [1]]), np.array([[-1], [1]])
+        t1, t2 = 1, -1
+        prob1, prob2 = 0.75, 0.25
+        R = prob1 * p1.dot(p1.T) + prob2 * p2.dot(p2.T)
+        h = prob1 * t1 * p1 + prob2 * t2 * p2
+        c = prob1 * t1 ** 2 + prob2 * t2 ** 2
+        a, b = 2 * R, -2 * h
+        a1, b1, c1 = np.array([[2, 0], [0, 2]]), np.zeros((2, 1)), 0
+
+        x1, y1 = np.linspace(-0.5, 1.5, 50), np.linspace(-1, 1, 50)
+        X, Y = np.meshgrid(x1, y1)
+
+        max_epoch = 100
 
         self.make_plot(1, (100, 90, 300, 300))
         self.figure.subplots_adjust(left=0.175, bottom=0.175, right=0.95)

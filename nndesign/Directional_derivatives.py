@@ -8,18 +8,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-x1_lim = [-4, 4]
-x2_lim = [-2, 2]
-a = np.array([[1, 0], [0, 2]])
-b = np.zeros((2, 1))
-c = 0
-
-x1 = np.arange(x1_lim[0], x1_lim[1] + 0.2, (x1_lim[1] - x1_lim[0]) / 30)
-x2 = np.arange(x2_lim[0], x2_lim[1] + 0.2, (x2_lim[1] - x2_lim[0]) / 30)
-X1, X2 = np.meshgrid(x1, x2)
-F = (a[0, 0] * X1 ** 2 + (a[0, 1] + a[1, 0]) * X1 * X2 + a[1, 1] * X2 ** 2) / 2 + b[0, 0] * X1 + b[1, 0] * X2 + c
-
-
 class DirectionalDerivatives(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(DirectionalDerivatives, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -27,7 +15,19 @@ class DirectionalDerivatives(NNDLayout):
         self.fill_chapter("Directional Derivatives", 8, "To measure a directional derivative click on the graph and move the cursor.\n\n"
                                                         "The directional derivative is taken at the point you clicked\nin the direction of the current cursor position.\n\n"
                                                         "Click again to choose a new point where you want\nto measure the directional derivative.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None, description_coords=(30, 400, 500, 200))
+                          PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None, description_coords=(30, 410, 500, 200))
+
+        x1_lim = [-4, 4]
+        x2_lim = [-2, 2]
+        self.a = np.array([[1, 0], [0, 2]])
+        self.b = np.zeros((2, 1))
+        c = 0
+
+        x1 = np.arange(x1_lim[0], x1_lim[1] + 0.2, (x1_lim[1] - x1_lim[0]) / 30)
+        x2 = np.arange(x2_lim[0], x2_lim[1] + 0.2, (x2_lim[1] - x2_lim[0]) / 30)
+        X1, X2 = np.meshgrid(x1, x2)
+        F = (self.a[0, 0] * X1 ** 2 + (self.a[0, 1] + self.a[1, 0]) * X1 * X2 + self.a[1, 1] * X2 ** 2) / 2\
+            + self.b[0, 0] * X1 + self.b[1, 0] * X2 + c
 
         self.cid = None
 
@@ -82,7 +82,7 @@ class DirectionalDerivatives(NNDLayout):
             #   dir_der = p'*grad/norm(p);
             xnorm = np.array([[x1], [x2]])
             p = np.array([[y1 - x1], [y2 - x2]])
-            grad = b + np.dot(a, xnorm)
+            grad = self.b + np.dot(self.a, xnorm)
             dir_der = np.dot(p.T, grad) / np.sqrt(np.dot(p.T, p))
             self.dir_der = dir_der
             self.slider_dirder.setValue(self.dir_der * 10)

@@ -9,10 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-mu_initial = 0.01
-mingrad = 0.0001
-
-
 class FunctionApproximation(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(FunctionApproximation, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -20,6 +16,9 @@ class FunctionApproximation(NNDLayout):
         self.fill_chapter("Function Approximation", 11, "Click the [Train] button\nto train the logsig-linear\nnetwork on the\nblue function.\n\n"
                                                         "Use the slide bars to choose\nthe number of neurons and\nthe difficulty of the\nblue function.",
                           PACKAGE_PATH + "Logo/Logo_Ch_11.svg", None)
+
+        self.mu_initial = 0.01
+        self.mingrad = 0.0001
 
         self.S1 = 4
         self.diff = 1
@@ -60,7 +59,7 @@ class FunctionApproximation(NNDLayout):
         self.make_slider("slider_s1", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 4, (20, 580, 480, 50), self.slide)
         self.make_slider("slider_diff", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 1, (20, 635, 480, 50), self.slide)
 
-        self.make_button("run_button", "Train", (self.x_chapter_button, 310, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Train", (self.x_chapter_button, 315, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
     def slide(self):
         self.error_goal_reached = False
@@ -112,7 +111,7 @@ class FunctionApproximation(NNDLayout):
         self.a2 = self.purelin(np.dot(self.W2, self.a1) + self.b2)
         self.e = self.f_to_approx(self.p) - self.a2
         self.error_prev = np.dot(self.e, self.e.T).item()
-        self.mu = mu_initial
+        self.mu = self.mu_initial
         self.RS = self.S1 * 1
         self.RS1 = self.RS + 1
         self.RSS = self.RS + self.S1
@@ -140,7 +139,7 @@ class FunctionApproximation(NNDLayout):
         je = np.dot(jac.T, self.e.T)
 
         grad = np.sqrt(np.dot(je.T, je)).item()
-        if grad < mingrad:
+        if grad < self.mingrad:
             self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
             return self.net_approx,
 

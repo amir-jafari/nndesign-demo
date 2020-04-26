@@ -9,10 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-mu_initial = 0.01
-mingrad = 0.001
-
-
 class Generalization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(Generalization, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -20,6 +16,9 @@ class Generalization(NNDLayout):
         self.fill_chapter("Generalization", 11, "Click the [Train] button\nto train the logsig-linear\nnetwork on the data points.\n\n"
                                                 "Use the slide bars to choose\nthe number of neurons and\nthe difficulty of the\ndata points.",
                           PACKAGE_PATH + "Logo/Logo_Ch_11.svg", None)
+
+        self.mu_initial = 0.01
+        # self.mingrad = 0.001
 
         self.S1 = 4
         self.diff = 1
@@ -185,7 +184,7 @@ class Generalization(NNDLayout):
         self.a2 = self.purelin(np.dot(self.W2, self.a1) + self.b2)
         self.e = self.f_to_approx(self.p) - self.a2
         self.error_prev = np.dot(self.e, self.e.T).item()
-        self.mu = mu_initial
+        self.mu = self.mu_initial
         self.RS = self.S1 * 1
         self.RS1 = self.RS + 1
         self.RSS = self.RS + self.S1
@@ -213,7 +212,7 @@ class Generalization(NNDLayout):
         je = np.dot(jac.T, self.e.T)
 
         # grad = np.sqrt(np.dot(je.T, je)).item()
-        # if grad < mingrad:
+        # if grad < self.mingrad:
         #     self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
         #     return self.net_approx,
 

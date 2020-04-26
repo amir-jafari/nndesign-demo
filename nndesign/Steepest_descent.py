@@ -9,34 +9,33 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
-              0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])
-y = np.copy(x)
-X, Y = np.meshgrid(x, y)
-
-max_epoch = 50
-
-F = (Y - X) ** 4 + 8 * X * Y - X + Y + 3
-F[F < 0] = 0
-F[F > 12] = 12
-
-
 class SteepestDescent(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(SteepestDescent, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Steepest Descent", 9, "Click anywhere on the\ngraph to start an initial guess."
+        self.fill_chapter("Steepest Descent", 9, "Click anywhere on the\ngraph to start an initial\nguess."
                                                  "\nThen the steepest descent\ntrajectory will be shown.\n\n"
                                                  "Modify the learning rate\nby moving the slide bar.\n\n"
                                                  "Experiment with different\ninitial guesses and\nlearning rates.",
                           PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None, description_coords=(535, 120, 300, 250))
 
+        x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
+                      0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])
+        y = np.copy(x)
+        self.X, self.Y = np.meshgrid(x, y)
+        self.max_epoch = 50
+        self.F = (self.Y - self.X) ** 4 + 8 * self.X * self.Y - self.X + self.Y + 3
+        self.F[self.F < 0] = 0
+        self.F[self.F > 12] = 12
+
+        self.make_plot(1, (115, 100, 290, 290))
+        self.make_plot(2, (115, 385, 290, 290))
+
         self.x_data, self.y_data = [], []
         self.ani_1, self.ani_2, self.event, self.x, self.y = None, None, None, None, None
 
-        self.make_plot(1, (120, 120, 270, 270))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.contour(X, Y, F)
+        self.axes_1.contour(self.X, self.Y, self.F)
         self.axes_1.set_title("Function F", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
@@ -47,7 +46,6 @@ class SteepestDescent(NNDLayout):
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
-        self.make_plot(2, (120, 390, 270, 270))
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("Approximation Fa", fontdict={'fontsize': 10})
         self.path_2, = self.axes_2.plot([], linestyle='--', marker="o", fillstyle="none", color="k",
@@ -60,9 +58,9 @@ class SteepestDescent(NNDLayout):
 
         self.lr = 0.03
         self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 20), QtWidgets.QSlider.TicksBelow, 1, 6,
-                         (self.x_chapter_usual, 380, self.w_chapter_slider, 50), self.slide, "label_lr", "lr: 0.03")
-        self.make_label("label_lr1", "0.00", (self.x_chapter_usual + 15, 420, 100, 20))
-        self.make_label("label_lr2", "0.20", (self.x_chapter_usual + 145, 420, 100, 20))
+                         (self.x_chapter_usual, 390, self.w_chapter_slider, 50), self.slide, "label_lr", "lr: 0.03")
+        self.make_label("label_lr1", "0.00", (self.x_chapter_usual + 15, 430, 100, 20))
+        self.make_label("label_lr2", "0.20", (self.x_chapter_usual + 145, 430, 100, 20))
         self.animation_speed = 100
         # self.make_slider("slider_anim_speed", QtCore.Qt.Horizontal, (0, 6), QtWidgets.QSlider.TicksBelow, 1, 2,
         #                  (self.x_chapter_usual, 380, self.w_chapter_slider, 100), self.slide, "label_anim_speed", "Animation Delay: 200 ms")
@@ -106,7 +104,7 @@ class SteepestDescent(NNDLayout):
                     y_event = event.ydata - 0.06
             x_event = round(x_event, 1)
             y_event = round(y_event, 1)
-            if F[np.bitwise_and(X == x_event, Y == y_event)].item() == 12:
+            if self.F[np.bitwise_and(self.X == x_event, self.Y == y_event)].item() == 12:
                 return
 
             self.x, self.y = event.xdata, event.ydata
@@ -119,9 +117,9 @@ class SteepestDescent(NNDLayout):
             gx = -4 * (self.y - self.x) ** 3 + 8 * self.y - 1
             gy = 4 * (self.y - self.x) ** 3 + 8 * self.x + 1
             gradient = np.array([[gx], [gy]])
-            dX, dY = X - self.x, Y - self.y
+            dX, dY = self.X - self.x, self.Y - self.y
             Fa = gradient[0, 0] * dX + gradient[1, 0] * dY + Fo
-            self.axes_2.contour(X, Y, Fa)
+            self.axes_2.contour(self.X, self.Y, Fa)
 
             self.event = event
             if self.ani_1:
@@ -140,9 +138,9 @@ class SteepestDescent(NNDLayout):
     def run_animation(self, event):
         if event.xdata != None and event.xdata != None:
             self.x_data, self.y_data = [self.x], [self.y]
-            self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=max_epoch,
+            self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=self.max_epoch,
                                        interval=self.animation_speed, repeat=False, blit=True)
-            self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=max_epoch,
+            self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=self.max_epoch,
                                        interval=self.animation_speed, repeat=False, blit=True)
 
     def slide(self):

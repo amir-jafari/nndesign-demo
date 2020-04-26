@@ -14,10 +14,12 @@ class TaylorSeries1(NNDLayout):
 
         self.fill_chapter("Taylor Series #1", 8, "Click on the top graph to\ncreate a Taylor series\napproximation"
                                                  " of the\ncosine function.\n\nClick on the checkboxes\nto turn various orders\n"
-                                                 "of approximation on and off.",
+                                                 "of approximation\non and off.",
                           PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None)
 
-        self.make_plot(1, (120, 120, 270, 270))
+        self.make_plot(1, (115, 100, 290, 290))
+        self.make_plot(2, (115, 385, 290, 290))
+
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("cos(x)", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-6, 6)
@@ -35,7 +37,6 @@ class TaylorSeries1(NNDLayout):
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
-        self.make_plot(2, (120, 390, 270, 270))
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("Approximation", fontdict={'fontsize': 10})
         self.f0, self.f1, self.f2, self.f3, self.f4 = None, None, None, None, None
@@ -58,7 +59,7 @@ class TaylorSeries1(NNDLayout):
         self.axes_2.yaxis.set_label_coords(-0.025, 1)
         self.canvas2.draw()
 
-        self.make_checkbox("function_cbx", "Function", (self.x_chapter_slider_label - 20, 300, 100, 50),
+        self.make_checkbox("function_cbx", "Function", (self.x_chapter_slider_label - 20, 310, 100, 50),
                            self.function_checked, True)
         self.make_checkbox("order0_cbx", "Order 0", (self.x_chapter_slider_label - 20, 350, 100, 50),
                            self.order0_checked, False)

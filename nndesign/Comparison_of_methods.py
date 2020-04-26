@@ -8,25 +8,25 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-x, y = np.linspace(-2, 0+(4/31*17), 100, endpoint=False), np.linspace(-2, 0+(4/31*17), 100, endpoint=False)
-X, Y = np.meshgrid(x, y)
-
-a, b, c = np.array([[2, 1], [1, 2]]), np.array([0, 0]), 0
-max_epoch = 50
-
-F = (a[0, 0] * X ** 2 + a[0, 1] + a[1, 0] * X * Y + a[1, 1] * Y ** 2) / 2 + b[0] * X + b[1] * Y + c
-
-
 class ComparisonOfMethods(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(ComparisonOfMethods, self).__init__(w_ratio, h_ratio, main_menu=1)
 
         self.fill_chapter("Comparison of Methods", 9, "Click in either graph\nto start a search point.\n\nThen watch the two\n"
-                                                      "algorithms attempt to\nfind the minima.\n\nThe two alrorithms are:\n"
-                                                      " Steepest Descent using\nline search.\n Conjugate Gradient using\nline search.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None, description_coords=(535, 120, 300, 250))
+                                                      "algorithms attempt to\nfind the minima.\n\nThe two alrorithms are:\n\n"
+                                                      " - Steepest Descent using\n   line search.\n\n"
+                                                      " - Conjugate Gradient using\n   line search.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None, description_coords=(535, 140, 300, 250))
 
-        self.make_plot(1, (120, 120, 270, 270))
+        x, y = np.linspace(-2, 0+(4/31*17), 100, endpoint=False), np.linspace(-2, 0 + (4 / 31 * 17), 200, endpoint=False)
+        X, Y = np.meshgrid(x, y)
+        self.a, self.b, c = np.array([[2, 1], [1, 2]]), np.array([0, 0]), 0
+        F = (self.a[0, 0] * X ** 2 + self.a[0, 1] + self.a[1, 0] * X * Y + self.a[1, 1] * Y ** 2) / 2 \
+            + self.b[0] * X + self.b[1] * Y + c
+
+        self.make_plot(1, (115, 100, 290, 290))
+        self.make_plot(2, (115, 385, 290, 290))
+
         self.event, self.ani_1, self.ani_2 = None, None, None
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Steepest Descent Path", fontdict={'fontsize': 10})
@@ -40,7 +40,6 @@ class ComparisonOfMethods(NNDLayout):
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.canvas.draw()
 
-        self.make_plot(2, (120, 390, 270, 270))
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("Conjugate Gradient Path")
         self.axes_2.contour(X, Y, F, levels=[0.5, 1, 2, 4, 6, 8])
@@ -97,9 +96,9 @@ class ComparisonOfMethods(NNDLayout):
         return self.path_2,
 
     def on_animate_1(self, idx):
-        gradient = np.dot(a, np.array([self.x_1, self.y_1])) + b.T
+        gradient = np.dot(self.a, np.array([self.x_1, self.y_1])) + self.b.T
         p_g = -gradient
-        hess = a
+        hess = self.a
         lr = -np.dot(gradient, p_g.T) / np.dot(p_g.T, np.dot(hess, p_g))
         self.x_1 -= lr * gradient[0]
         self.y_1 -= lr * gradient[1]
@@ -114,15 +113,15 @@ class ComparisonOfMethods(NNDLayout):
 
     def on_animate_2(self, idx):
         if self.i == 0:
-            self.gradient = np.dot(a, np.array([self.x_2, self.y_2])) + b.T
+            self.gradient = np.dot(self.a, np.array([self.x_2, self.y_2])) + self.b.T
             self.p = -self.gradient
             self.i += 1
         elif self.i == 1:
             gradient_old = self.gradient
-            self.gradient = np.dot(a, np.array([self.x_2, self.y_2])) + b.T
+            self.gradient = np.dot(self.a, np.array([self.x_2, self.y_2])) + self.b.T
             beta = np.dot(self.gradient.T, self.gradient) / np.dot(gradient_old.T, gradient_old)
             self.p = -self.gradient + np.dot(beta, self.p)
-        hess = a
+        hess = self.a
         lr = -np.dot(self.gradient, self.p.T) / np.dot(self.p.T, np.dot(hess, self.p))
         self.x_2 += lr * self.p[0]
         self.y_2 += lr * self.p[1]

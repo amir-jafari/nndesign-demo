@@ -8,34 +8,33 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
-              0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])
-y = np.copy(x)
-X, Y = np.meshgrid(x, y)
-
-max_epoch = 50
-
-F = (Y - X) ** 4 + 8 * X * Y - X + Y + 3
-F[F < 0] = 0
-F[F > 12] = 12
-
-
 class NewtonsMethod(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(NewtonsMethod, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Newton's Method", 9, "Click anywhere on the\ngraph to start an\ninitial guess.\n\nThen the "
+        self.fill_chapter("Newton's Method", 9, "\n\nClick anywhere on the\ngraph to start an\ninitial guess.\n\nThen the "
                                                 "steepest descent\ntrajectory will be shown.\n\nThe bottom graph shows\nthe"
-                                                "approximation of\nfunction F at\nthe initial point.",
+                                                "approximation of\nfunction self.F at the\ninitial point.",
                           PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None)
+
+        x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
+                      0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])
+        y = np.copy(x)
+        self.X, self.Y = np.meshgrid(x, y)
+        self.max_epoch = 50
+        self.F = (self.Y - self.X) ** 4 + 8 * self.X * self.Y - self.X + self.Y + 3
+        self.F[self.F < 0] = 0
+        self.F[self.F > 12] = 12
+
+        self.make_plot(1, (115, 100, 290, 290))
+        self.make_plot(2, (115, 385, 290, 290))
 
         self.x_data, self.y_data = [], []
         self.ani_1, self.ani_2, self.event, self.x, self.y = None, None, None, None, None
 
-        self.make_plot(1, (120, 120, 270, 270))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.text(-0.9, 1.7, ">Click me<")
-        self.axes_1.contour(X, Y, F)
+        self.axes_1.contour(self.X, self.Y, self.F)
         self.axes_1.set_title("Function F", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
@@ -46,7 +45,6 @@ class NewtonsMethod(NNDLayout):
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
-        self.make_plot(2, (120, 390, 270, 270))
         self.axes_2 = self.figure2.add_subplot(1, 1, 1)
         self.axes_2.set_title("Approximation Fa", fontdict={'fontsize': 10})
         self.path_2, = self.axes_2.plot([], linestyle='--', marker="o", fillstyle="none", color="k",
@@ -119,7 +117,7 @@ class NewtonsMethod(NNDLayout):
                     y_event = event.ydata - 0.06
             x_event = round(x_event, 1)
             y_event = round(y_event, 1)
-            if F[np.bitwise_and(X == x_event, Y == y_event)].item() == 12:
+            if self.F[np.bitwise_and(self.X == x_event, self.Y == y_event)].item() == 12:
                 return
 
             self.x, self.y = event.xdata, event.ydata
@@ -134,10 +132,10 @@ class NewtonsMethod(NNDLayout):
             gradient = np.array([[gx], [gy]])
             temp = 12 * (self.y - self.x) ** 2
             hess = np.array([[temp, 8 - temp], [8 - temp, temp]])
-            dX, dY = X - self.x, Y - self.y
+            dX, dY = self.X - self.x, self.Y - self.y
             Fa = (hess[0, 0] * dX ** 2 + (hess[0, 1] + hess[1, 0]) * dX * dY + hess[1, 1] * dY ** 2) / 2
             Fa += gradient[0, 0] * dX + gradient[1, 0] * dY + Fo
-            self.axes_2.contour(X, Y, Fa)
+            self.axes_2.contour(self.X, self.Y, Fa)
 
             self.event = event
             if self.ani_1:
@@ -156,7 +154,7 @@ class NewtonsMethod(NNDLayout):
     def run_animation(self, event):
         if event.xdata != None and event.xdata != None:
             self.x_data, self.y_data = [self.x], [self.y]
-            self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=max_epoch,
+            self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=self.max_epoch,
                                        interval=self.animation_speed, repeat=False, blit=True)
-            self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=max_epoch,
+            self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=self.max_epoch,
                                        interval=self.animation_speed, repeat=False, blit=True)

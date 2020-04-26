@@ -8,15 +8,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-wid_up = 1
-hei_up = 1
-nrows_up = 6
-ncols_up = 5
-inbetween_up = 0.1
-xx_up = np.arange(0, ncols_up, (wid_up + inbetween_up))
-yy_up = np.arange(0, nrows_up, (hei_up + inbetween_up))
-
-
 class SupervisedHebb(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(SupervisedHebb, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -26,19 +17,27 @@ class SupervisedHebb(NNDLayout):
                                                 "Select a rule to calculate\nthe network weights.",
                           PACKAGE_PATH + "Logo/Logo_Ch_7.svg", None)
 
+        self.wid_up = 1
+        self.hei_up = 1
+        self.nrows_up = 6
+        self.ncols_up = 5
+        inbetween_up = 0.1
+        self.xx_up = np.arange(0, self.ncols_up, (self.wid_up + inbetween_up))
+        self.yy_up = np.arange(0, self.nrows_up, (self.hei_up + inbetween_up))
+
         self.make_label("label_pattern1", "Pattern 1", (75, 105, 150, 50))
         self.make_plot(1, (15, 130, 170, 170))
         self.axis1 = self.figure.add_axes([0, 0, 1, 1])
         self.pattern1 = [0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0]
-        self.pattern11 = np.flip(np.array(self.pattern1).reshape((ncols_up, nrows_up)).T, axis=0)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        self.pattern11 = np.flip(np.array(self.pattern1).reshape((self.ncols_up, self.nrows_up)).T, axis=0)
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern11[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis1.add_patch(sq)
-        self.axis1.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis1.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis1.axis("off")
         self.canvas.show()
         self.canvas.mpl_connect("button_press_event", self.on_mouseclick1)
@@ -50,15 +49,15 @@ class SupervisedHebb(NNDLayout):
         # self.figure2 = Figure(frameon=False)
         self.axis2 = self.figure2.add_axes([0, 0, 1, 1])
         self.pattern2 = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.pattern22 = np.flip(np.array(self.pattern2).reshape((ncols_up, nrows_up)).T, axis=0)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        self.pattern22 = np.flip(np.array(self.pattern2).reshape((self.ncols_up, self.nrows_up)).T, axis=0)
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern22[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis2.add_patch(sq)
-        self.axis2.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis2.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis2.axis("off")
         self.canvas2.show()
         self.canvas2.mpl_connect("button_press_event", self.on_mouseclick2)
@@ -69,51 +68,51 @@ class SupervisedHebb(NNDLayout):
         self.make_plot(3, (335, 130, 170, 170))
         self.axis3 = self.figure3.add_axes([0, 0, 1, 1])
         self.pattern3 = [1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1]
-        self.pattern33 = np.flip(np.array(self.pattern3).reshape((ncols_up, nrows_up)).T, axis=0)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        self.pattern33 = np.flip(np.array(self.pattern3).reshape((self.ncols_up, self.nrows_up)).T, axis=0)
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern33[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis3.add_patch(sq)
-        self.axis3.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis3.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis3.axis("off")
         self.canvas3.show()
         self.canvas3.mpl_connect("button_press_event", self.on_mouseclick3)
 
         # ---
 
-        self.make_label("label_pattern4", "Tes Pattern", (115, 325, 150, 50))
-        self.make_plot(4, (30, 350, 240, 240))
+        self.make_label("label_pattern4", "Test Pattern", (115, 305, 150, 50))
+        self.make_plot(4, (30, 330, 240, 240))
         self.axis4 = self.figure4.add_axes([0, 0, 1, 1])
         self.pattern4 = self.pattern1[:]
         self.pattern44 = np.copy(self.pattern11)
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern44[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="gray")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="gray")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis4.add_patch(sq)
-        self.axis4.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis4.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis4.axis("off")
         self.canvas4.draw()
         self.canvas4.mpl_connect("button_press_event", self.on_mouseclick4)
 
         # ---
 
-        self.make_label("label_pattern5", "Response Pattern", (320, 325, 150, 50))
-        self.make_plot(5, (250, 350, 240, 240))
+        self.make_label("label_pattern5", "Response Pattern", (320, 305, 150, 50))
+        self.make_plot(5, (250, 330, 240, 240))
         self.axis5 = self.figure5.add_axes([0, 0, 1, 1])
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if self.pattern11[yi, xi] == 1:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="red")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="red")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis5.add_patch(sq)
-        self.axis5.axis([-0.1, ncols_up + 0.5, -0.1, nrows_up + 0.6])
+        self.axis5.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
         self.axis5.axis("off")
         self.canvas5.draw()
 
@@ -129,7 +128,7 @@ class SupervisedHebb(NNDLayout):
         #                                     self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         #         self.run_button.clicked.connect(self.on_run)
 
-   #  def on_run(self):
+    #  def on_run(self):
     #
     #         pattern = np.array([self.pattern1, self.pattern2, self.pattern3]).T * 2 - 1
     #         if self.rule == 0:
@@ -143,9 +142,9 @@ class SupervisedHebb(NNDLayout):
 
     def on_mouseclick1(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis1.patches:
                 self.axis1.patches.pop()
             if self.pattern11[yyy, xxx] == 1:
@@ -153,21 +152,21 @@ class SupervisedHebb(NNDLayout):
             else:
                 self.pattern11[yyy, xxx] = 1
             self.pattern1 = np.flip(self.pattern11.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern11[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis1.add_patch(sq)
             self.canvas.draw()
             self.response()
 
     def on_mouseclick2(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis2.patches:
                 self.axis2.patches.pop()
             if self.pattern22[yyy, xxx] == 1:
@@ -175,21 +174,21 @@ class SupervisedHebb(NNDLayout):
             else:
                 self.pattern22[yyy, xxx] = 1
             self.pattern2 = np.flip(self.pattern22.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern22[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis2.add_patch(sq)
             self.canvas2.draw()
             self.response()
 
     def on_mouseclick3(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis3.patches:
                 self.axis3.patches.pop()
             if self.pattern33[yyy, xxx] == 1:
@@ -197,21 +196,21 @@ class SupervisedHebb(NNDLayout):
             else:
                 self.pattern33[yyy, xxx] = 1
             self.pattern3 = np.flip(self.pattern33.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern33[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="green")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="green")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis3.add_patch(sq)
             self.canvas3.draw()
             self.response()
 
     def on_mouseclick4(self, event):
         if event.xdata != None and event.xdata != None:
-            d_x = [abs(event.xdata - xx - 0.5) for xx in xx_up]
-            d_y = [abs(event.ydata - yy - 0.5) for yy in yy_up]
-            xxx, yyy = list(range(len(xx_up)))[np.argmin(d_x)], list(range(len(yy_up)))[np.argmin(d_y)]
+            d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
+            d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
+            xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
             while self.axis4.patches:
                 self.axis4.patches.pop()
             if self.pattern44[yyy, xxx] == 1:
@@ -219,12 +218,12 @@ class SupervisedHebb(NNDLayout):
             else:
                 self.pattern44[yyy, xxx] = 1
             self.pattern4 = np.flip(self.pattern44.T, axis=1).reshape(-1)
-            for xi in range(len(xx_up)):
-                for yi in range(len(yy_up)):
+            for xi in range(len(self.xx_up)):
+                for yi in range(len(self.yy_up)):
                     if self.pattern44[yi, xi] == 1:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="gray")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="gray")
                     else:
-                        sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                        sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                     self.axis4.add_patch(sq)
             self.canvas4.draw()
             self.response()
@@ -236,15 +235,15 @@ class SupervisedHebb(NNDLayout):
             w = np.dot(pattern, pattern.T)
         elif self.rule == 1:
             w = np.dot(pattern, np.linalg.pinv(pattern))
-        a = np.flip(np.dot(w, p).reshape(ncols_up, nrows_up).T, axis=0)
+        a = np.flip(np.dot(w, p).reshape(self.ncols_up, self.nrows_up).T, axis=0)
         while self.axis5.patches:
             self.axis5.patches.pop()
-        for xi in range(len(xx_up)):
-            for yi in range(len(yy_up)):
+        for xi in range(len(self.xx_up)):
+            for yi in range(len(self.yy_up)):
                 if a[yi, xi] > 0:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="red")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="red")
                 else:
-                    sq = patches.Rectangle((xx_up[xi], yy_up[yi]), wid_up, hei_up, fill=True, color="khaki")
+                    sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
                 self.axis5.add_patch(sq)
         self.canvas5.draw()
 

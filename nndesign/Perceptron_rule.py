@@ -10,14 +10,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-POS = 1
-NEG = 0
-
-
-def hardlim(n):
-    return 0 if n < 0 else 1
-
-
 class PerceptronRule(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(PerceptronRule, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -154,7 +146,7 @@ class PerceptronRule(NNDLayout):
     def on_mouseclick(self, event):
         """Add an item to the plot"""
         if event.xdata != None and event.xdata != None:
-            self.data.append((event.xdata, event.ydata, POS if event.button == 1 else NEG))
+            self.data.append((event.xdata, event.ydata, 1 if event.button == 1 else 0))
             if self.ani1:
                 self.ani1.event_source.stop()
             if self.ani2:
@@ -378,7 +370,7 @@ class PerceptronRule(NNDLayout):
 
     def run_forward(self, p):
         """Given an input of dimension R, run the network"""
-        return hardlim(self.Weights.dot(p) + self.bias)
+        return self.hardlim(self.Weights.dot(p) + self.bias)
 
     def train_one_iteration(self, p, t):
         """Given one input of dimension R and its target, perform one training iteration.

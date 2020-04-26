@@ -9,16 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-max_epoch = 101
-
-T = 2
-pp0 = np.linspace(-1, 1, 201)
-tt0 = np.sin(2 * np.pi * pp0 / T)
-
-pp = np.linspace(-0.95, 0.95, 20)
-p = np.linspace(-1, 1, 21)
-
-
 class BayesianRegularization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(BayesianRegularization, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -28,6 +18,13 @@ class BayesianRegularization(NNDLayout):
                                                          " data points,\nthe Noise Standard\nDeviation and the\nfrequency of "
                                                          "the function.",
                           PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 90, 450, 300))
+
+        self.max_epoch = 101
+        self.T = 2
+        self.pp0 = np.linspace(-1, 1, 201)
+        self.tt0 = np.sin(2 * np.pi * self.pp0 / self.T)
+
+        self.p = np.linspace(-1, 1, 21)
 
         self.make_plot(1, (100, 90, 300, 300))
         self.make_plot(2, (100, 380, 300, 300))
@@ -157,10 +154,10 @@ class BayesianRegularization(NNDLayout):
 
     def on_animate_2(self, idx):
         nn_output = []
-        for sample, target in zip(pp0, tt0):
+        for sample, target in zip(self.pp0, self.tt0):
             a, n2, n1, a1, a0 = self.forward(sample)
             nn_output.append(a)
-        self.net_approx.set_data(pp0, nn_output)
+        self.net_approx.set_data(self.pp0, nn_output)
         return self.net_approx,
 
     def on_run(self):
@@ -180,9 +177,9 @@ class BayesianRegularization(NNDLayout):
             self.ani_1.event_source.stop()
         if self.ani_2:
             self.ani_2.event_source.stop()
-        self.ani_1 = FuncAnimation(self.figure2, self.on_animate_1, init_func=self.animate_init_1, frames=max_epoch,
+        self.ani_1 = FuncAnimation(self.figure2, self.on_animate_1, init_func=self.animate_init_1, frames=self.max_epoch,
                                    interval=self.animation_speed, repeat=False, blit=True)
-        self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=max_epoch,
+        self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=self.max_epoch,
                                    interval=self.animation_speed, repeat=False, blit=True)
 
     def slide(self):
@@ -210,18 +207,18 @@ class BayesianRegularization(NNDLayout):
         # self.run_animation()
 
     def plot_train_test_data(self):
-        self.axes_1_blue_line.set_data(pp0, np.sin(2 * np.pi * pp0 * self.freq / T))
+        self.axes_1_blue_line.set_data(self.pp0, np.sin(2 * np.pi * self.pp0 * self.freq / self.T))
         self.pp = np.linspace(-0.95, 0.95, self.n_points)
-        self.tt = np.sin(2 * np.pi * self.pp * self.freq / T) + np.random.uniform(-2, 2, self.pp.shape) * 0.2 * self.nsd
+        self.tt = np.sin(2 * np.pi * self.pp * self.freq / self.T) + np.random.uniform(-2, 2, self.pp.shape) * 0.2 * self.nsd
         self.train_points.set_data(self.pp, self.tt)
-        self.t = np.sin(2 * np.pi * p * self.freq / T) + np.random.uniform(-2, 2, p.shape) * 0.2 * self.nsd
-        # self.test_points.set_data(p, self.t)
+        self.t = np.sin(2 * np.pi * self.p * self.freq / self.T) + np.random.uniform(-2, 2, self.p.shape) * 0.2 * self.nsd
+        # self.test_points.set_data(self.p, self.t)
 
     def init_params(self):
         # np.random.seed(self.random_state)
         # self.W1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
         # self.b1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
-        pr = np.array([np.min(p), np.max(p)])
+        pr = np.array([np.min(self.p), np.max(self.p)])
         r = 1
         magw = 0.7 * self.S1 ** (1 / r)
         w = magw * self.nnnormr(2 * np.random.uniform(-0.5, 0.5, (self.S1, r)) - 1)
@@ -301,7 +298,7 @@ class BayesianRegularization(NNDLayout):
             self.b2 += -alpha * db2
 
         error_test = []
-        for sample, target in zip(p, self.t):
+        for sample, target in zip(self.p, self.t):
             a, n2, n1, a1, a0 = self.forward(sample)
             e = target - a
             error_test.append(e)
@@ -323,7 +320,7 @@ class BayesianRegularization(NNDLayout):
         grad = np.sqrt(np.dot(je.T, je)).item()
         if grad < 1e-8:
             error_test = []
-            for sample, target in zip(p, self.t):
+            for sample, target in zip(self.p, self.t):
                 a, n2, n1, a1, a0 = self.forward(sample)
                 e = target - a
                 error_test.append(e)
@@ -384,14 +381,14 @@ class BayesianRegularization(NNDLayout):
                 print("Error goal reached!")
                 self.error_goal_reached = None
             error_test = []
-            for sample, target in zip(p, self.t):
+            for sample, target in zip(self.p, self.t):
                 a, n2, n1, a1, a0 = self.forward(sample)
                 e = target - a
                 error_test.append(e)
             return self.error_prev, np.sum(np.abs(error_test)), self.gamk
 
         error_test = []
-        for sample, target in zip(p, self.t):
+        for sample, target in zip(self.p, self.t):
             a, n2, n1, a1, a0 = self.forward(sample)
             e = target - a
             error_test.append(e)

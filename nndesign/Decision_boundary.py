@@ -8,29 +8,19 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-POS = 1
-NEG = 0
-
-
-def hardlim(n):
-    return 0 if n < 0 else 1
-
-
 class DecisionBoundaries(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(DecisionBoundaries, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Decision Boundaries", 4, "Move the perceptron\ndecision boundary by\ndragging the stars.\n\nTry to divide the points so\nthat "
-                                                    "none of them are red.\n\nLeft-click on the plot to add\na positive class.\n\nRight-click to add a\nnegative class.\n\n"
-                                                    "The weight and bias will\ntake on values associated\nwith the chosen decision\nboundary.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_4.svg", None,  # PACKAGE_PATH + "Chapters/4/Percptron1.svg"
-                          description_coords=(535, 140, 450, 300))
+        self.fill_chapter("Decision Boundaries", 4, "Move the perceptron\ndecision boundary by\ndragging the stars.\n\n"
+                                                    "Try to divide the points so\nthat none of them are red.\n\nLeft-click"
+                                                    " on the plot to add\na positive class.\n\nRight-click to add a\n"
+                                                    "negative class.\n\nThe weight and bias will\ntake on values "
+                                                    "associated\nwith the chosen decision\nboundary.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_4.svg", None, description_coords=(535, 140, 450, 300))
 
-        self.make_label("label_error", "Error: ---", (self.x_chapter_slider_label, 580, 150, 100))
+        self.make_label("label_error", "Error: ---", (self.x_chapter_slider_label, 485, 150, 100))
 
-        # self.w = np.ones((2,))
-        # self.w[1] = -1
-        # self.b = np.zeros((1,))
         self.w = np.array([1.79, 0.894])
         self.b = np.array([1.79])
         self.cid, self.cid2 = None, None
@@ -47,10 +37,6 @@ class DecisionBoundaries(NNDLayout):
         self.axes.set_xlim(-3, 3)
         self.axes.set_ylim(-3, 3)
         self.axes.tick_params(labelsize=8)
-        # self.axes.set_xlabel("$p^1$", fontsize=10)
-        # self.axes.xaxis.set_label_coords(0.5, 0.1)
-        # self.axes.set_ylabel("$p^2$", fontsize=10)
-        # self.axes.yaxis.set_label_coords(-0.05, 0.5)
         self.axes.plot([0] * 20, np.linspace(-3, 3, 20), linestyle="dashed", linewidth=0.5, color="gray")
         self.axes.plot(np.linspace(-3, 3, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
         self.pos_line, = self.axes.plot([], 'mo', label="Positive Class")
@@ -72,24 +58,18 @@ class DecisionBoundaries(NNDLayout):
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
-        # latex_w = self.mathTex_to_QPixmap("$W = [1.0 \quad -1.0]$", 6)
         latex_w = self.mathTex_to_QPixmap("$W = [1.0 \quad -1.0]$", 10)
         self.latex_w = QtWidgets.QLabel(self)
         self.latex_w.setPixmap(latex_w)
-        # self.latex_w.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 420 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
         self.latex_w.setGeometry(50 * self.w_ratio, 80 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
 
-        # latex_b = self.mathTex_to_QPixmap("$b = [0.0]$", 6)
         latex_b = self.mathTex_to_QPixmap("$b = [0.0]$", 10)
         self.latex_b = QtWidgets.QLabel(self)
         self.latex_b.setPixmap(latex_b)
-        # self.latex_b.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 450 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
         self.latex_b.setGeometry(350 * self.w_ratio, 80 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
 
-        self.make_button("undo_click_button", "Undo Last Mouse Click",
-                         (self.x_chapter_button, 550, self.w_chapter_button, self.h_chapter_button), self.on_undo_mouseclick)
-        self.make_button("clear_button", "Clear Data",
-                         (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.on_clear)
+        self.make_button("undo_click_button", "Undo Last Mouse Click", (self.x_chapter_button, 450, self.w_chapter_button, self.h_chapter_button), self.on_undo_mouseclick)
+        self.make_button("clear_button", "Clear Data", (self.x_chapter_button, 480, self.w_chapter_button, self.h_chapter_button), self.on_clear)
 
     def on_mouseclick(self, event):
         """Add an item to the plot"""
@@ -106,7 +86,7 @@ class DecisionBoundaries(NNDLayout):
                 if self.cid2:
                     self.canvas.mpl_disconnect(self.cid2)
                 self.cid, self.cid2 = None, None
-                self.data.append((event.xdata, event.ydata, POS if event.button == 1 else NEG))
+                self.data.append((event.xdata, event.ydata, 1 if event.button == 1 else 0))
                 self.compute_error()
                 self.draw_data()
 
@@ -163,7 +143,6 @@ class DecisionBoundaries(NNDLayout):
         x_coords, y_coords = zip(*[self.point_1, self.point_2])
         A = vstack([x_coords, ones(len(x_coords))]).T
         m, c = lstsq(A, y_coords, rcond=None)[0]
-        # print("Line Solution is y = {m}x + {c}".format(m=m, c=c))
         if str(self.prev_x_diff)[0] != str(self.current_x_diff)[0]:
             if str(self.prev_y_diff)[0] != str(self.current_y_diff)[0]:
                 self.w[1] = -self.w[1]
@@ -182,7 +161,6 @@ class DecisionBoundaries(NNDLayout):
         self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(self.w[0], self.w[1]), 10))
         self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(self.b[0]), 10))
         self.compute_error()
-        # p2 = -w1*p1/w2 - b/w2
 
     def find_decision_boundary(self, x):
         """Returns the corresponding y value for the input x on the decision
@@ -191,7 +169,7 @@ class DecisionBoundaries(NNDLayout):
 
     def run_forward(self, p):
         """Given an input of dimension R, run the network"""
-        return hardlim(self.w.dot(p) + self.b)
+        return self.hardlim(self.w.dot(p) + self.b)
 
     def compute_error(self):
         if self.data:

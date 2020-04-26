@@ -8,21 +8,19 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
-              0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])
-y = np.copy(x)
-X, Y = np.meshgrid(x, y)
-
-
 class QuadraticFunction(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(QuadraticFunction, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Taylor Series", 8, "\n\nChange the values of the\nHessian matrix A, the\nvector d, and the constant c.\n"
-                                              "Then click [Update] to see\nthe new function.\n\nNote that the Hessian matrix\n"
-                                              "will always be symmetric.\n\nYou can rotate the 3D plots\nby clicking and dragging\n"
-                                              "in the plot window.",
+        self.fill_chapter("Quadratic Function", 8, "\n\nChange the values of the\nHessian matrix A, the\nvector d, and the constant c.\n"
+                                                   "Then click [Update] to see\nthe new function.\n\nNote that the Hessian matrix\n"
+                                                   "will always be symmetric.\n\nYou can rotate the 3D plots\nby clicking and dragging\n"
+                                                   "in the plot window.",
                           PACKAGE_PATH + "Logo/Logo_Ch_8.svg", None)
+
+        self.x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
+                           0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])
+        self.y = np.copy(self.x)
 
         self.make_plot(1, (20, 120, 230, 230))
         self.make_plot(2, (270, 120, 230, 230))
@@ -61,7 +59,7 @@ class QuadraticFunction(NNDLayout):
         self.paint_latex_string("latex_c3", "$]$", 16, (500 - 5, 415 + 30, 500, 200))
         self.make_input_box("c", "1.0", (460 - 5, 465 + 30, 60, 100))
 
-        self.make_button("run_button", "Update", (self.x_chapter_button, 350, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Update", (self.x_chapter_button, 355, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
         self.on_run()
 
@@ -77,8 +75,8 @@ class QuadraticFunction(NNDLayout):
 
         minima = -np.dot(np.linalg.pinv(A), d)
         x0, y0 = minima[0, 0], minima[1, 0]
-        xx = x + x0
-        yy = y + y0
+        xx = self.x + x0
+        yy = self.y + y0
         XX, YY = np.meshgrid(xx, yy)
         F = (A[0, 0] * XX ** 2 + (A[0, 1] + A[1, 0]) * XX * YY + A[1, 1] * YY ** 2) / 2 + d[0, 0] * XX + d[
             1, 0] * YY + c

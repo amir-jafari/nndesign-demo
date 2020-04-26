@@ -9,17 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-max_epoch = 500
-
-T = 2
-pp0 = np.linspace(-1, 1, 201)
-tt0 = np.sin(2 * np.pi * pp0 / T)
-
-pp = np.linspace(-0.95, 0.95, 20)
-p = np.linspace(-1, 1, 21)
-P = np.linspace(-1, 1, 100)
-
-
 class Regularization(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(Regularization, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -28,6 +17,13 @@ class Regularization(NNDLayout):
                                                 "Use the slide bars to choose\nthe Regularization Ratio\nand the "
                                                 "Noise Standard\nDeviation.",
                           PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 90, 450, 250))
+
+        self.max_epoch = 500
+        self.T = 2
+        pp0 = np.linspace(-1, 1, 201)
+
+        self.pp = np.linspace(-0.95, 0.95, 20)
+        self.P = np.linspace(-1, 1, 100)
 
         self.ani, self.tt, self.clicked = None, None, False
         self.W1, self.b1, self.W2, self.b2 = None, None, None, None
@@ -40,7 +36,7 @@ class Regularization(NNDLayout):
         self.axes_1.set_xlim(-1, 1)
         self.axes_1.set_ylim(-1.5, 1.5)
         self.axes_1.set_yticks([-1, -0.5, 0, 0.5, 1])
-        self.axes_1.plot(pp0, np.sin(2 * np.pi * pp0 / T))
+        self.axes_1.plot(pp0, np.sin(2 * np.pi * pp0 / self.T))
         self.net_approx, = self.axes_1.plot([], linestyle="--")
         self.train_points, = self.axes_1.plot([], marker='*', label="Train", linestyle="")
         self.axes_1.legend()
@@ -74,7 +70,7 @@ class Regularization(NNDLayout):
     def on_animate(self, idx):
         alpha = 0.03
         nn_output = []
-        for sample, target in zip(pp, self.tt):
+        for sample, target in zip(self.pp, self.tt):
             # Propagates the input forward
             # Reshapes input as 1x1
             a0 = sample.reshape(-1, 1)
@@ -106,13 +102,13 @@ class Regularization(NNDLayout):
             # Output Layer
             self.W2 += -alpha * np.dot(s, a1.T)
             self.b2 += -alpha * s
-        self.net_approx.set_data(pp, nn_output)
+        self.net_approx.set_data(self.pp, nn_output)
         return self.net_approx,
 
     def animate_init_v2(self):
         self.init_params()
         self.error_goal_reached = False
-        self.a1 = self.tansig(np.dot(self.W1, pp.reshape(1, -1)) + self.b1)
+        self.a1 = self.tansig(np.dot(self.W1, self.pp.reshape(1, -1)) + self.b1)
         self.a2 = self.purelin(np.dot(self.W2, self.a1) + self.b2)
         self.e = self.tt.reshape(1, -1) - self.a2
         self.error_prev = np.dot(self.e, self.e.T).item()
@@ -138,7 +134,7 @@ class Regularization(NNDLayout):
         self.a1 = np.kron(self.a1, np.ones((1, 1)))
         d2 = self.lin_delta(self.a2)
         d1 = self.tan_delta(self.a1, d2, self.W2)
-        jac1 = self.marq(np.kron(pp.reshape(1, -1), np.ones((1, 1))), d1)
+        jac1 = self.marq(np.kron(self.pp.reshape(1, -1), np.ones((1, 1))), d1)
         jac2 = self.marq(self.a1, d2)
         jac = np.hstack((jac1, d1.T))
         jac = np.hstack((jac, jac2))
@@ -149,7 +145,7 @@ class Regularization(NNDLayout):
         # for param in [self.W1, self.b1, self.W2, self.b2]:
         #     grad += self.regularization_ratio * np.dot(param, param.T).item()
         if grad < 1e-7:
-            self.net_approx.set_data(P, self.forward(P.reshape(1, -1)))
+            self.net_approx.set_data(self.P, self.forward(self.P.reshape(1, -1)))
             return self.net_approx,
 
         jj = np.dot(jac.T, jac)
@@ -160,7 +156,7 @@ class Regularization(NNDLayout):
         dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
         db2 = dw[self.RSS2].reshape(1, 1)
 
-        self.a1 = self.tansig(np.dot((self.W1 + dW1), pp.reshape(1, -1)) + self.b1 + db1)
+        self.a1 = self.tansig(np.dot((self.W1 + dW1), self.pp.reshape(1, -1)) + self.b1 + db1)
         self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
         self.e = self.tt.reshape(1, -1) - self.a2
         error = np.dot(self.e, self.e.T).item()
@@ -181,7 +177,7 @@ class Regularization(NNDLayout):
                 dW2 = dw[self.RSS:self.RSS2].reshape(1, -1)
                 db2 = dw[self.RSS2].reshape(1, 1)
 
-                self.a1 = self.tansig(np.dot((self.W1 + dW1), pp.reshape(1, -1)) + self.b1 + db1)
+                self.a1 = self.tansig(np.dot((self.W1 + dW1), self.pp.reshape(1, -1)) + self.b1 + db1)
                 self.a2 = self.purelin(np.dot((self.W2 + dW2), self.a1) + self.b2 + db2)
                 self.e = self.tt.reshape(1, -1) - self.a2
                 error = np.dot(self.e, self.e.T).item()
@@ -206,10 +202,10 @@ class Regularization(NNDLayout):
             if self.error_goal_reached:
                 print("Error goal reached!")
                 self.error_goal_reached = None
-            self.net_approx.set_data(P, self.forward(P.reshape(1, -1)))
+            self.net_approx.set_data(self.P, self.forward(self.P.reshape(1, -1)))
             return self.net_approx,
 
-        self.net_approx.set_data(P, self.forward(P.reshape(1, -1)))
+        self.net_approx.set_data(self.P, self.forward(self.P.reshape(1, -1)))
         return self.net_approx,
 
     def forward(self, p_in):
@@ -223,12 +219,12 @@ class Regularization(NNDLayout):
         self.run_animation()
 
     def run_animation(self):
-        self.ani = FuncAnimation(self.figure, self.on_animate_v2, init_func=self.animate_init_v2, frames=max_epoch,
+        self.ani = FuncAnimation(self.figure, self.on_animate_v2, init_func=self.animate_init_v2, frames=self.max_epoch,
                                  interval=self.animation_speed, repeat=False, blit=True)
 
     def plot_train_test_data(self):
-        self.tt = np.sin(2 * np.pi * pp / T) + np.random.uniform(-2, 2, pp.shape) * 0.2 * self.nsd
-        self.train_points.set_data(pp, self.tt)
+        self.tt = np.sin(2 * np.pi * self.pp / self.T) + np.random.uniform(-2, 2, self.pp.shape) * 0.2 * self.nsd
+        self.train_points.set_data(self.pp, self.tt)
 
     def slide(self):
         if self.ani:
