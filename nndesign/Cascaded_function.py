@@ -14,8 +14,8 @@ class CascadedFunction(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(CascadedFunction, self).__init__(w_ratio, h_ratio, main_menu=2)
 
-        self.fill_chapter("Cascaded Function", 2, "\nExperiment with the hidden\nfunction and number of layers\n"
-                                                  "using the dropdown menus\nbelow.\n\nSet the number of iterations\n"
+        self.fill_chapter("Cascaded Function", 2, "\nExperiment with the hidden\nfunction and number\nof layers "
+                                                  "using\nthe dropdown menus below.\n\nSet the input value\n"
                                                   "to 0 in order to start\nthe animation, or control it\nmanually by moving"
                                                   "\nthe slider.",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/2f_1_1.svg", icon_move_left=120)
@@ -34,7 +34,7 @@ class CascadedFunction(NNDLayout):
 
         self.make_slider("sliderval", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 0,
                          (self.x_chapter_usual, 460, self.w_chapter_slider, 50), self.slide, "label_iter",
-                         "Number of iterations: 0", (self.x_chapter_usual + 20, 460 - 25, 150, 50))
+                         "Input value: 0", (self.x_chapter_usual + 40, 460 - 25, 150, 50))
         self.last_idx = 0
         self.do_graph = True
         self.ani = None
@@ -60,7 +60,7 @@ class CascadedFunction(NNDLayout):
             self.ani.event_source.stop()
             self.do_graph = True
         self.last_idx = self.sliderval.value()
-        self.label_iter.setText("Number of iterations: {}".format(self.last_idx))
+        self.label_iter.setText("Input value: {}".format(self.last_idx))
         if self.do_graph:
             self.graph()
 
