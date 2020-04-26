@@ -165,6 +165,8 @@ class MainWindowNN(NNDLayout):
         font_size = 14
         if self.running_on_windows:
             font_size = int(font_size * 0.8)
+        elif self.running_on_linux:
+            font_size = int(font_size * 0.8)
         else:
             font_size = int(font_size * (self.w_ratio + self.h_ratio) / 2)
 
@@ -549,6 +551,8 @@ class MainWindowDL(NNDLayout):
         font_size = 14
         if self.running_on_windows:
             font_size = int(font_size * 0.8)
+        elif self.running_on_linux:
+            font_size = int(font_size * 0.8)
         else:
             font_size = int(font_size * (self.w_ratio + self.h_ratio) / 2)
 
@@ -565,6 +569,7 @@ class MainWindowDL(NNDLayout):
         self.comboBox1.setGeometry(self.wm - xcm1 * self.w_ratio, ycm1 * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box1 = QtWidgets.QLabel(self)
         self.label_box1.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box1.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.icon2 = QtWidgets.QLabel(self)
         self.comboBox2 = QtWidgets.QComboBox(self)
@@ -572,6 +577,7 @@ class MainWindowDL(NNDLayout):
         self.comboBox2.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box2 = QtWidgets.QLabel(self)
         self.label_box2.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box2.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.show_chapters()
 

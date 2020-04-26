@@ -42,7 +42,8 @@ class NNDLayout(QMainWindow):
 
         super(NNDLayout, self).__init__()
 
-        self.running_on_windows = OS_NAME == "nt"
+        self.running_on_windows = OS_NAME == "Windows"
+        self.running_on_linux = OS_NAME == "Linux"
 
         self.print_mouse_coords = print_mouse_coords
         self.setMouseTracking(print_mouse_coords)
@@ -197,10 +198,9 @@ class NNDLayout(QMainWindow):
     def paint_latex_string(self, latex_label_attr_name, latex_sting, font_size, latex_coords):
         if self.running_on_windows:
             font_size *= 2
-        if self.running_on_windows:
-            latex_paint = self.mathTex_to_QPixmap(latex_sting, font_size)
-        else:
-            latex_paint = self.mathTex_to_QPixmap(latex_sting, font_size)
+        elif self.running_on_linux:
+            font_size *= 2
+        latex_paint = self.mathTex_to_QPixmap(latex_sting, font_size)
         setattr(self, latex_label_attr_name, QtWidgets.QLabel(self))
         latex_label = getattr(self, latex_label_attr_name)
         latex_label.setPixmap(latex_paint)
@@ -228,8 +228,10 @@ class NNDLayout(QMainWindow):
         label.setText(label_str)
         if self.running_on_windows:
             label.setFont(QtGui.QFont(font_name, int(font_size * 0.78 * (self.w_ratio + self.h_ratio) / 2), italic=italics))
-        else:
+        elif self.running_on_linux:
             label.setFont(QtGui.QFont(font_name, int(font_size * 0.78 * (self.w_ratio + self.h_ratio) / 2), italic=italics))
+        else:
+            label.setFont(QtGui.QFont(font_name, int(font_size * (self.w_ratio + self.h_ratio) / 2), italic=italics))
         label.setGeometry(label_coords[0] * self.w_ratio, label_coords[1] * self.h_ratio,
                           label_coords[2] * self.w_ratio, label_coords[3] * self.h_ratio)
 
@@ -331,6 +333,8 @@ class NNDLayout(QMainWindow):
                              checkbox_coords[2] * self.w_ratio, checkbox_coords[3] * self.h_ratio)
         if self.running_on_windows:
             checkbox.setStyleSheet("font-size: {}px".format(int(12 * 0.9)))
+        elif self.running_on_linux:
+            checkbox.setStyleSheet("font-size: {}px".format(int(12 * 0.9)))
         else:
             checkbox.setStyleSheet("font-size: {}px".format(int(12 * (self.w_ratio + self.h_ratio) / 2)))
         checkbox.stateChanged.connect(f_connect)
@@ -345,6 +349,8 @@ class NNDLayout(QMainWindow):
         # font.setPointSize(int(20 * (self.w_ratio + self.h_ratio) / 2))
         # input_box.setFont(font)
         if self.running_on_windows:
+            input_box.setStyleSheet("font: {}px".format(int(12 * 0.9)))
+        elif self.running_on_linux:
             input_box.setStyleSheet("font: {}px".format(int(12 * 0.9)))
         else:
             input_box.setStyleSheet("font: {}px".format(int(12 * (self.w_ratio + self.h_ratio) / 2)))

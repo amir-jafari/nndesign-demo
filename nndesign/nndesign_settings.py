@@ -1,2 +1,2 @@
-import os
-OS_NAME = os.name
+import platform
+OS_NAME = platform.system()
