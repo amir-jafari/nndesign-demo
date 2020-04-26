@@ -10,31 +10,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-def logsigmoid(n):
-    return 1 / (1 + np.exp(-n))
-
-
-def logsigmoid_der(n):
-    return (1 - 1 / (1 + np.exp(-n))) * 1 / (1 + np.exp(-n))
-
-
-def purelin(n):
-    return n
-
-
-def purelin_der(n):
-    return np.array([1]).reshape(n.shape)
-
-
-W1 = np.array([[10], [10]])
-b1 = np.array([[-5], [5]])
-W2 = np.array([[1, 1]])
-b2 = np.array([-1])
-P = np.arange(-2, 2.1, 0.1).reshape(1, -1)
-A1 = logsigmoid(np.dot(W1, P) + b1)
-T = logsigmoid(np.dot(W2, A1) + b2)
-
-
 class SteepestDescentBackprop2(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(SteepestDescentBackprop2, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -47,8 +22,11 @@ class SteepestDescentBackprop2(NNDLayout):
                           PACKAGE_PATH + "Logo/Logo_Ch_12.svg", PACKAGE_PATH + "Figures/nnd12_1.svg",
                           icon_move_left=120, icon_coords=(130, 90, 500, 200), description_coords=(535, 120, 450, 300))
 
-        self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
+        self.P = np.arange(-2, 2.1, 0.1).reshape(1, -1)
+        self.W1, self.b1 = np.array([[10], [10]]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
+        A1 = self.logsigmoid(np.dot(self.W1, self.P) + self.b1)
+        self.T = self.logsigmoid(np.dot(self.W2, A1) + self.b2)
         self.lr, self.epochs = None, None
 
         self.make_plot(1, (20, 280, 480, 400))
@@ -133,16 +111,16 @@ class SteepestDescentBackprop2(NNDLayout):
 
     def on_animate(self, idx):
 
-        n1 = np.dot(self.W1, P) + self.b1
-        a1 = logsigmoid(n1)
+        n1 = np.dot(self.W1, self.P) + self.b1
+        a1 = self.logsigmoid(n1)
         n2 = np.dot(self.W2, a1) + self.b2
-        a2 = logsigmoid(n2)
+        a2 = self.logsigmoid(n2)
 
-        e = T - a2
+        e = self.T - a2
 
         D2 = a2 * (1 - a2) * e
         D1 = a1 * (1 - a1) * np.dot(self.W2.T, D2)
-        dW1 = np.dot(D1, P.T) * self.lr
+        dW1 = np.dot(D1, self.P.T) * self.lr
         db1 = np.dot(D1, np.ones((D1.shape[1], 1))) * self.lr
         dW2 = np.dot(D2, a1.T) * self.lr
         db2 = np.dot(D2, np.ones((D2.shape[1], 1))) * self.lr

@@ -1,55 +1,38 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow
-import warnings
+# import warnings
 import numpy as np
 import matplotlib
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import math
-# from matplotlib import rc
-# rc('text', usetex=True)
 
 from nndesign.get_package_path import PACKAGE_PATH
 from nndesign.nndesign_settings import OS_NAME
 
-WM_MAC_MAIN, HM_MAC_MAIN = 1280 - 750, 800 - 120  # For my Mac
-WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 580, 800 - 120  # For my Mac - original size
 
 # -------------------------------------------------------------------------------------------------------------
 # Original Size
+
+WM_MAC_MAIN, HM_MAC_MAIN = 1280 - 750, 800 - 120  # For my Mac
+WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 580, 800 - 120  # For my Mac - original size
 
 xlabel, ylabel, wlabel, hlabel, add = 30, 5, 500, 100, 20
 
 x_info, y_info, w_info, h_info = 535, 100, 450, 250
 
-wp_pic2_1 = 120; hp_pic2_1 = 100; x_pic2_1 = 560; y_pic2_1= 30; w_pic2_1= wp_pic2_1; h_pic2_1=hp_pic2_1;
-wp_pic2_2 = 500; hp_pic2_2 = 200; x_pic2_2 = 130; y_pic2_2= 100; w_pic2_2= 500; h_pic2_2=200;
+wp_pic2_1, hp_pic2_1, x_pic2_1, y_pic2_1 = 120, 100, 560, 30
+w_pic2_1, h_pic2_1 = wp_pic2_1, hp_pic2_1
+wp_pic2_2, hp_pic2_2, x_pic2_2, y_pic2_2 = 500, 200, 130, 100
+w_pic2_2, h_pic2_2 = 500, 200
 
 # Lines
-# Starting line point for my MAC. The ending point is determined by the w, h and ratio of screen compared to mine
+# Starting line point for my Mac. The ending point is determined by the w, h and ratio of screen compared to mine
 xl1, yl1 = 10, 90
 xl2 = 520
 xl3, xl4 = 560, 700
 yl4 = 670
 x_chapter = 560
-
-# New size
-
-"""WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 192, 800 - 120
-
-xlabel, ylabel, wlabel, hlabel, add = 30 * 1.5542857143, 5, 500, 100, 20
-
-x_info, y_info, w_info, h_info = 535 * 1.5542857143, 70, 450 * 1.5542857143, 250
-
-wp_pic2_1 = 100; hp_pic2_1 = 80; x_pic2_1 = 550 * 1.5542857143; y_pic2_1= 50; w_pic2_1= wp_pic2_1; h_pic2_1=hp_pic2_1;
-wp_pic2_2 = 500 * 1.5542857143; hp_pic2_2 = 200; x_pic2_2 = 130; y_pic2_2= 100; w_pic2_2= 500 * 1.5542857143; h_pic2_2=200;
-
-xl1, yl1 = 10, 90
-xl2 = 520 * 1.5542857143
-xl3, xl4 = 560 * 1.5542857143, 700 * 1.5542857143
-yl4 = 670
-x_chapter = 560 * 1.5542857143"""
-
 # -------------------------------------------------------------------------------------------------------------
 
 
@@ -280,7 +263,7 @@ class NNDLayout(QMainWindow):
                              combobox_coords[2] * self.w_ratio, combobox_coords[3] * self.h_ratio)
         # combobox.setFixedSize((combobox_coords[2] - 10) * self.w_ratio, (combobox_coords[3] + 50) * self.h_ratio)
         # I'm able to adjust the font of the combobox in the right way, but I'm not able to increase the height of the combobox,
-        # so I'm just going to increase the font when it's clicked instead - # TODO
+        # so I'm just going to increase the font when it's clicked instead
         # font = QtGui.QFont()
         # font.setPointSize(int(13 * (self.w_ratio + self.h_ratio) / 2))
         # combobox.setFont(font)
@@ -293,9 +276,9 @@ class NNDLayout(QMainWindow):
             if not label_coords:
                 label_coords = (combobox_coords[0] + 80, combobox_coords[1] - 20, combobox_coords[2], combobox_coords[3])
             self.make_label(label_attr_name, label_str, label_coords, label_font_name, label_font_size, label_italics)
-        if combobox_coords[-1] > 50 * self.h_ratio:
-            warnings.warn("Setting combobox with too high height ({}).".format(combobox_coords[-1] * self.h_ratio)
-                          + " This may result in interactive problems")
+        # if combobox_coords[-1] > 50 * self.h_ratio:
+        #     warnings.warn("Setting combobox with too high height ({}).".format(combobox_coords[-1] * self.h_ratio)
+        #                   + " This may result in interactive problems")
         self.set_layout(combobox_coords, combobox)
         if f_connect:
             combobox.currentIndexChanged.connect(f_connect)
@@ -313,10 +296,10 @@ class NNDLayout(QMainWindow):
             if not label_coords:
                 label_coords = (slider_coords[0] + 80, slider_coords[1] - 30, slider_coords[2], slider_coords[3])
             self.make_label(label_attr_name, label_str, label_coords, label_font_name, label_font_size, label_italics)
-        if slider_coords[-1] > 50 * self.h_ratio and slider_type == QtCore.Qt.Horizontal:
-            warnings.warn("Setting horizontal slider {} with too much height ({}).".format(
-                slider_attr_name, slider_coords[-1] * self.h_ratio
-            ) + " This may result in interactive problems")
+        # if slider_coords[-1] > 50 * self.h_ratio and slider_type == QtCore.Qt.Horizontal:
+        #     warnings.warn("Setting horizontal slider {} with too much height ({}).".format(
+        #         slider_attr_name, slider_coords[-1] * self.h_ratio
+        #     ) + " This may result in interactive problems")
         self.set_layout(slider_coords, slider)
         if f_connect:
             slider.valueChanged.connect(f_connect)
@@ -485,13 +468,3 @@ class NNDLayout(QMainWindow):
 
     def nndtansig(self, x):
         a = self.tansig(x)
-
-
-# class Canvas(FigureCanvas):
-#     def __init__(self, parent, width, height, dpi=100):
-#         fig = Figure(figsize=(width, height), dpi=dpi)
-#         # if plot_type == "regular":
-#         #     setattr() = fig.add_subplot(111)
-#         self.axes = fig.add_subplot(111)
-#         FigureCanvas.__init__(self, fig)
-#         self.setParent(parent)

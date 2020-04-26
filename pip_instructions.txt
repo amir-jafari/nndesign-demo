@@ -1,0 +1,65 @@
+1. Create account on https://pypi.org/account/register/
+
+2. Make a directory with your project name. Create a README.md in this directory.
+
+3. Make another directory inside this one with the name of the package. Do not use "-" nor capital letters. This directory will contain almost all the code and static files.
+
+4. The main file should be named package_name.py (I don't think this is necessary)
+
+4. Create an __init__.py:
+from package_name.main_file_name import (
+  function_name,  # function_name for us is the function that starts the GUI
+)
+This means that when it's installed, you can do import package_name; package_name.function_name.
+
+5. Create a setup.py:
+
+import setuptools
+
+
+with open('README.md') as f:
+    README = f.read()
+
+setuptools.setup(
+    author="",
+    author_email="",
+    name='package_name',
+    license="MIT",
+    description='',
+    version='v0.0.1',
+    long_description=README,
+    url='github_url',
+    packages=["package_name"],
+    include_package_data=True,
+    python_requires=">=3.5",
+    install_requires=["dependencies"],
+    classifiers=[
+        # Trove classifiers
+        # (https://pypi.python.org/pypi?%3Aaction=list_classifiers)
+        'Development Status :: 4 - Beta',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3.7',
+        'Topic :: Software Development :: Libraries',
+        'Intended Audience :: Developers',
+    ],
+)
+
+6. nano ~/.pypirc
+
+[distutils]
+index-servers =
+  pypi
+  testpypi
+[pypi]
+username: username
+password: password
+
+7. nano MANIFEST.in in the same level that setup.py
+
+include README.md
+recursive-include package_name/static_files_folder *
+
+8. python setup.py sdist bdist_wheel
+
+9. twine upload dist/*

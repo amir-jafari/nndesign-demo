@@ -9,43 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-Sx, Sy = 1, 20
-S = Sx * Sy
-max_dist = np.ceil(np.sqrt(np.sum(np.array([Sx, Sy]) ** 2)))
-NDEC = 0.998
-
-W = np.zeros((S, 3))
-W[:, -1] = 1
-Y, X = np.meshgrid(np.arange(1, Sy + 1), np.arange(1, Sx + 1))
-Ind2Pos = np.array([X.reshape(-1), Y.reshape(-1)]).T
-N = np.zeros((S, S))
-for i in range(S):
-    for j in range(i):
-        N[i, j] = np.sqrt(np.sum((Ind2Pos[i, :] - Ind2Pos[j, :]) ** 2))
-
-Nfrom, Nto = list(range(2, 21)), list(range(1, 20))
-NN = len(Nfrom)
-NV = np.zeros((1, NN))
-for i in range(NN):
-    from_ = Nfrom[i]
-    to_ = Nto[i]
-
-N = N + N.T
-
-P = np.ones((3, 1000))
-# np.random.seed(0)  # This is only for testing - comment out for production
-P[:2, :] = np.random.random((1000, 2)).T - 0.5  # The transpose is done so we get the same random numbers as in MATLAB
-P = np.divide(P, (np.ones((3, 1)) * np.sqrt(np.sum(P ** 2, axis=0))))
-
-up = np.arange(-0.5, 0.5, 0.1)
-down = -np.copy(up)
-flat = np.zeros((1, len(up))) + 0.5
-xx = np.array(list(up) + list(flat.reshape(-1)) + list(down) + list(-flat.reshape(-1)) + [up[0]])
-yy = np.array(list(-flat.reshape(-1)) + list(up) + list(flat.reshape(-1)) + list(down) + [-flat[0, 0]])
-zz = np.array([list(xx), list(yy)])
-zz = zz / (np.ones((2, 1)) * np.sqrt(np.sum(zz ** 2, axis=0) + 1))
-
-
 class OneDFeatureMap(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(OneDFeatureMap, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -54,6 +17,38 @@ class OneDFeatureMap(NNDLayout):
                                                  "Several clicks are required\nto obtain a stable network.\n\n"
                                                  "Click [Reset] to start over\nif the network develops\na twist.",
                           PACKAGE_PATH + "Logo/Logo_Ch_16.svg", None)
+
+        Sx, Sy = 1, 20
+        S = Sx * Sy
+        self.NDEC = 0.998
+
+        self.W_ = np.zeros((S, 3))
+        self.W_[:, -1] = 1
+        Y, X = np.meshgrid(np.arange(1, Sy + 1), np.arange(1, Sx + 1))
+        Ind2Pos = np.array([X.reshape(-1), Y.reshape(-1)]).T
+        self.N = np.zeros((S, S))
+        for i in range(S):
+            for j in range(i):
+                self.N[i, j] = np.sqrt(np.sum((Ind2Pos[i, :] - Ind2Pos[j, :]) ** 2))
+
+        self.Nfrom, self.Nto = list(range(2, 21)), list(range(1, 20))
+        self.NN = len(self.Nfrom)
+
+        self.N = self.N + self.N.T
+
+        self.P = np.ones((3, 1000))
+        # np.random.seed(0)  # This is only for testing - comment out for production
+        self.P[:2, :] = np.random.random(
+            (1000, 2)).T - 0.5  # The transpose is done so we get the same random numbers as in MATLAB
+        self.P = np.divide(self.P, (np.ones((3, 1)) * np.sqrt(np.sum(self.P ** 2, axis=0))))
+
+        up = np.arange(-0.5, 0.5, 0.1)
+        down = -np.copy(up)
+        flat = np.zeros((1, len(up))) + 0.5
+        xx = np.array(list(up) + list(flat.reshape(-1)) + list(down) + list(-flat.reshape(-1)) + [up[0]])
+        yy = np.array(list(-flat.reshape(-1)) + list(up) + list(flat.reshape(-1)) + list(down) + [-flat[0, 0]])
+        zz = np.array([list(xx), list(yy)])
+        zz = zz / (np.ones((2, 1)) * np.sqrt(np.sum(zz ** 2, axis=0) + 1))
 
         self.make_plot(1, (15, 100, 500, 500))
         self.axis1 = self.figure.add_subplot(1, 1, 1)
@@ -66,7 +61,7 @@ class OneDFeatureMap(NNDLayout):
         self.lines_anim = []
         self.canvas.draw()
 
-        self.W = W
+        self.W = self.W_
         self.ani = None
         self.n_runs = 0
 
@@ -91,7 +86,7 @@ class OneDFeatureMap(NNDLayout):
         self.do_slide = True
 
     def on_reset(self):
-        self.W = W
+        self.W = self.W_
         while self.lines_anim:
             self.lines_anim.pop().remove()
         self.canvas.draw()
@@ -121,27 +116,27 @@ class OneDFeatureMap(NNDLayout):
             self.lines = []
 
         s, r = self.W.shape
-        Q = P.shape[1]
+        Q = self.P.shape[1]
 
         for z in range(500):
 
             q = int(np.fix(np.random.random() * Q))
-            p = P[:, q].reshape(-1, 1)
+            p = self.P[:, q].reshape(-1, 1)
 
             a = self.compet_(np.dot(self.W, p))
             i = np.argmax(a)
-            N_c = np.copy(N)[:, i]
+            N_c = np.copy(self.N)[:, i]
             N_c[N_c <= self.nei] = 1
             N_c[N_c != 1] = 0
             a = 0.5 * (a + N_c.reshape(-1, 1))
 
             self.W = self.W + self.lr * np.dot(a, np.ones((1, r))) * (np.dot(np.ones((s, 1)), p.T) - self.W)
             self.lr = (self.lr - 0.01) * 0.998 + 0.01
-            self.nei = (self.nei - 1) * NDEC + 1
+            self.nei = (self.nei - 1) * self.NDEC + 1
 
-        for i in range(NN):
-            from_ = Nfrom[i] - 1
-            to_ = Nto[i] - 1
+        for i in range(self.NN):
+            from_ = self.Nfrom[i] - 1
+            to_ = self.Nto[i] - 1
             print(self.W[from_, 0], self.W[to_, 0], "---", self.W[from_, 1], self.W[to_, 1])
             self.lines.append(self.axis1.plot([self.W[from_, 0], self.W[to_, 0]], [self.W[from_, 1], self.W[to_, 1]], color="red"))
 
@@ -157,28 +152,28 @@ class OneDFeatureMap(NNDLayout):
     def animate_init(self):
         while self.lines_anim:
             self.lines_anim.pop().remove()
-        for _ in range(NN - 1):
+        for _ in range(self.NN - 1):
             self.lines_anim.append(self.axis1.plot([], color="red")[0])
 
     def on_animate(self, idx):
 
         s, r = self.W.shape
-        Q = P.shape[1]
+        Q = self.P.shape[1]
 
         for z in range(100):
             q = int(np.fix(np.random.random() * Q))
-            p = P[:, q].reshape(-1, 1)
+            p = self.P[:, q].reshape(-1, 1)
 
             a = self.compet_(np.dot(self.W, p))
             i = np.argmax(a)
-            N_c = np.copy(N)[:, i]
+            N_c = np.copy(self.N)[:, i]
             N_c[N_c <= self.nei] = 1
             N_c[N_c != 1] = 0
             a = 0.5 * (a + N_c.reshape(-1, 1))
 
             self.W = self.W + self.lr * np.dot(a, np.ones((1, r))) * (np.dot(np.ones((s, 1)), p.T) - self.W)
             self.lr = (self.lr - 0.01) * 0.998 + 0.01
-            self.nei = (self.nei - 1) * NDEC + 1
+            self.nei = (self.nei - 1) * self.NDEC + 1
             self.do_slide = False
             self.slider_lr.setValue(self.lr * 100)
             self.slider_nei.setValue(self.nei * 10)
@@ -187,9 +182,9 @@ class OneDFeatureMap(NNDLayout):
             self.do_slide = True
             self.label_presentations.setText("Presentations: " + str((self.n_runs - 1) * 500 + idx * 100 + z + 1))
 
-        for i in range(NN - 1):
-            from_ = Nfrom[i] - 1
-            to_ = Nto[i] - 1
+        for i in range(self.NN - 1):
+            from_ = self.Nfrom[i] - 1
+            to_ = self.Nto[i] - 1
             self.lines_anim[i].set_data([self.W[from_, 0], self.W[to_, 0]], [self.W[from_, 1], self.W[to_, 1]])
 
     def on_run_2(self):

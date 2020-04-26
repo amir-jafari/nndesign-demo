@@ -10,30 +10,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-def logsigmoid(n):
-    return 1 / (1 + np.exp(-n))
-
-
-def logsigmoid_der(n):
-    return (1 - 1 / (1 + np.exp(-n))) * 1 / (1 + np.exp(-n))
-
-
-def purelin(n):
-    return n
-
-
-def purelin_der(n):
-    return np.array([1]).reshape(n.shape)
-
-W1 = np.array([[10], [10]])
-b1 = np.array([[-5], [5]])
-W2 = np.array([[1, 1]])
-b2 = np.array([-1])
-P = np.arange(-2, 2.1, 0.1).reshape(1, -1)
-A1 = logsigmoid(np.dot(W1, P) + b1)
-T = logsigmoid(np.dot(W2, A1) + b2)
-
-
 class VariableLearningRate(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(VariableLearningRate, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -45,8 +21,11 @@ class VariableLearningRate(NNDLayout):
                           PACKAGE_PATH + "Logo/Logo_Ch_12.svg", PACKAGE_PATH + "Figures/nnd12_1.svg",
                           icon_move_left=120, icon_coords=(130, 90, 500, 200), description_coords=(535, 90, 450, 300))
 
-        self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
+        self.P = np.arange(-2, 2.1, 0.1).reshape(1, -1)
+        self.W1, self.b1 = np.array([[10], [10]]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
+        A1 = self.logsigmoid(np.dot(self.W1, self.P) + self.b1)
+        self.T = self.logsigmoid(np.dot(self.W2, A1) + self.b2)
         self.lr, self.epochs = None, None
 
         self.make_plot(1, (20, 280, 480, 400))
@@ -155,18 +134,18 @@ class VariableLearningRate(NNDLayout):
         self.path.set_data(self.x_data, self.y_data)
         self.dW1, self.db1, self.dW2, self.db2 = 0, 0, 0, 0
         self.mc = 0.8
-        self.n1 = np.dot(self.W1, P) + self.b1
-        self.a1 = logsigmoid(self.n1)
+        self.n1 = np.dot(self.W1, self.P) + self.b1
+        self.a1 = self.logsigmoid(self.n1)
         self.n2 = np.dot(self.W2, self.a1) + self.b2
-        self.a2 = logsigmoid(self.n2)
-        self.e = T - self.a2
+        self.a2 = self.logsigmoid(self.n2)
+        self.e = self.T - self.a2
         self.D2 = self.a2 * (1 - self.a2) * self.e
         self.D1 = self.a1 * (1 - self.a1) * np.dot(self.W2.T, self.D2)
         return self.path, self.end_point_1
 
     def on_animate(self, idx):
 
-        self.dW1 = self.mc * self.dW1 + (1 - self.mc) * np.dot(self.D1, P.T) * self.lr
+        self.dW1 = self.mc * self.dW1 + (1 - self.mc) * np.dot(self.D1, self.P.T) * self.lr
         self.db1 = self.mc * self.db1 + (1 - self.mc) * np.dot(self.D1, np.ones((self.D1.shape[1], 1))) * self.lr
         self.dW2 = self.mc * self.dW2 + (1 - self.mc) * np.dot(self.D2, self.a1.T) * self.lr
         self.db2 = self.mc * self.db2 + (1 - self.mc) * np.dot(self.D2, np.ones((self.D2.shape[1], 1))) * self.lr
@@ -186,11 +165,11 @@ class VariableLearningRate(NNDLayout):
             b1[1, 0] += self.db1[1, 0]
             self.x, self.y = b1[0, 0], b1[1, 0]
 
-        n1_new = np.dot(W1, P) + b1
-        a1_new = logsigmoid(n1_new)
+        n1_new = np.dot(W1, self.P) + b1
+        a1_new = self.logsigmoid(n1_new)
         n2_new = np.dot(W2, a1_new) + b2
-        a2_new = logsigmoid(n2_new)
-        e_new = T - a2_new
+        a2_new = self.logsigmoid(n2_new)
+        e_new = self.T - a2_new
 
         if np.sum(e_new * e_new) > np.sum(self.e * self.e) * 1.04:
             self.lr *= self.decrease_rate

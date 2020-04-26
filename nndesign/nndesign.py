@@ -15,7 +15,7 @@ class MainWindow(NNDLayout):
         x_title, y_title, w_title, h_title, add_x, add_y = 30, 5, 500, 100, 250, 20
         x_left, y_img, w, h_img, x_right = 20, 110, 230, 284, 20 + 260
         y_button, h_button = 415, 50
-        y_text, h_text = 440, 200
+        y_text, h_text = 435, 200
         x_authors, y_authors, w_authors, h_authors = 385, 650, 150, 20
 
         self.setWindowTitle("Neural Network Design & Deep Learning Demos")

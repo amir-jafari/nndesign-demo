@@ -1,7 +1,6 @@
 from PyQt5 import QtWidgets, QtGui
 from functools import partial
 
-# -------- Global imports ----------------
 from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
@@ -116,13 +115,13 @@ from nndesign.Gradient_descent_stochastic import GradientDescentStochastic
 
 # -------------------------------------------------------------------------------------------------------------
 xlabel, ylabel, wlabel, hlabel, add = 120, 5, 500, 100, 20
-xautor, yautor = 395, 600
+xautor, yautor = 385, 600
 
-xcm1, ycm1, wcm1, hcm1, add1, subt = 340, 140, 250, 20, 140, 20
+xcm1, ycm1, wcm1, hcm1, add1, subt = 350, 140, 250, 20, 140, 20
 xcm2 = 333
 xbtn1, ybtn1, wbtn1, hbtn1, add2 = 10, 635, 60, 30, 65
 
-w_Logo1, h_Logo1, xL_g1, yL_g1, add_l = 100, 80, 100, 110, 140
+w_Logo1, h_Logo1, xL_g1, yL_g1, add_l = 100, 80, 90, 110, 140
 
 BOOK1_CHAPTERS_DEMOS = {
     2: ["Neuron Model & Network Architecture", "Chapter 2 demos", "One-input Neuron", "Two-input Neuron"],

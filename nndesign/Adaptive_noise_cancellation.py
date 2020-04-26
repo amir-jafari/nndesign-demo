@@ -9,32 +9,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-N, f, max_t = 3, 60, 0.5
-s = N * f
-ts = s * max_t + 1
-A, theta, k = 0.1, np.pi/2, 0.2
-signal = k * (2 * np.random.uniform(0, 1, (1, int(ts))) - 1)
-i = np.arange(ts).reshape(1, -1)
-noise = 1.2 * np.sin(2 * np.pi * (i - 1) / N + theta)
-filtered_noise = A * 1.20 * np.sin(2 * np.pi * (i-1) / N + theta)
-delayed_noise = np.array([list(noise.reshape(-1)), [0] + list(noise.reshape(-1))[:-1]])
-noisy_signal = signal + filtered_noise
-
-w = np.array([0, -2])
-time = np.arange(1, ts + 1) / ts * max_t
-
-P = delayed_noise
-T = noisy_signal[:]
-A = 2 * np.dot(P, P.T)
-d = -2 * np.dot(P, T.T)
-c = np.dot(T, T.T)
-
-x = np.linspace(-2.1, 2.1, 30)
-y = np.copy(x)
-X, Y = np.meshgrid(x, y)
-F = (A[0, 0] * X ** 2 + (A[0, 1] + A[1, 0]) * X * Y + A[1, 1] * Y ** 2) / 2 + d[0, 0] * X + d[1, 0] * Y + c
-
-
 class AdaptiveNoiseCancellation(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(AdaptiveNoiseCancellation, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -44,6 +18,31 @@ class AdaptiveNoiseCancellation(NNDLayout):
                                                              "You can choose to display\nthe original and estimated\nsignals"
                                                              " or their difference.",
                           PACKAGE_PATH + "Logo/Logo_Ch_10.svg", None)
+
+        N, f, max_t = 3, 60, 0.5
+        s = N * f
+        self.ts = s * max_t + 1
+        A, theta, k = 0.1, np.pi / 2, 0.2
+        self.signal_ = k * (2 * np.random.uniform(0, 1, (1, int(self.ts))) - 1)
+        i = np.arange(self.ts).reshape(1, -1)
+        noise = 1.2 * np.sin(2 * np.pi * (i - 1) / N + theta)
+        filtered_noise = A * 1.20 * np.sin(2 * np.pi * (i - 1) / N + theta)
+        delayed_noise = np.array([list(noise.reshape(-1)), [0] + list(noise.reshape(-1))[:-1]])
+        noisy_signal = self.signal_ + filtered_noise
+
+        w = np.array([0, -2])
+        self.time = np.arange(1, self.ts + 1) / self.ts * max_t
+
+        self.P = delayed_noise
+        self.T = noisy_signal[:]
+        A = 2 * np.dot(self.P, self.P.T)
+        d = -2 * np.dot(self.P, self.T.T)
+        c = np.dot(self.T, self.T.T)
+
+        x = np.linspace(-2.1, 2.1, 30)
+        y = np.copy(x)
+        X, Y = np.meshgrid(x, y)
+        F = (A[0, 0] * X ** 2 + (A[0, 1] + A[1, 0]) * X * Y + A[1, 1] * Y ** 2) / 2 + d[0, 0] * X + d[1, 0] * Y + c
 
         self.x_data, self.y_data = [], []
         self.ani_1, self.ani_2, self.event, self.x, self.y = None, None, None, None, None
@@ -62,7 +61,7 @@ class AdaptiveNoiseCancellation(NNDLayout):
         self.axes_1.set_xlabel("Time")
         self.axes_1.plot(np.linspace(0, 0.5, 100), [0] * 100, color="gray", linestyle="dashed", linewidth=0.5)
         self.signal, = self.axes_1.plot([], linestyle='--', label="Original Signal", color="blue")
-        self.signal.set_data(time, signal)
+        self.signal.set_data(self.time, self.signal_)
         self.signal_approx, = self.axes_1.plot([], linestyle='-', label="Approx Signal", color="red")
         self.signal_diff, = self.axes_1.plot([], linestyle='-', label="Signal Difference", color="red")
         self.canvas.draw()
@@ -132,7 +131,7 @@ class AdaptiveNoiseCancellation(NNDLayout):
         self.w = np.array([self.w1_data[0], self.w2_data[0]])
         if idx == 0:
             self.axes_1.set_title("Original (blue) and Estimated (red) Signals", fontdict={'fontsize': 10})
-            self.signal.set_data(time, signal)
+            self.signal.set_data(self.time, self.signal_)
             self.signal_diff.set_data([], [])
             self.canvas.draw()
             self.canvas2.draw()
@@ -165,7 +164,7 @@ class AdaptiveNoiseCancellation(NNDLayout):
             self.w1_data, self.w2_data = [self.w1_data[0]], [self.w2_data[0]]
             self.w = np.array([self.w1_data[0], self.w2_data[0]])
             # e_temp = self.e[0]
-            self.e = np.zeros((int(ts),))
+            self.e = np.zeros((int(self.ts),))
             # self.e[0] = e_temp
             self.canvas.draw()
             self.canvas2.draw()
@@ -187,26 +186,26 @@ class AdaptiveNoiseCancellation(NNDLayout):
         return self.signal_diff,
 
     def on_animate_1(self, idx):
-        self.signal_approx.set_data(time[:idx + 1], self.e[:idx + 1])
+        self.signal_approx.set_data(self.time[:idx + 1], self.e[:idx + 1])
         return self.signal_approx,
 
     def on_animate_2(self, idx):
-        a = np.dot(self.w, P[:, idx])
-        self.e[idx] = T[0, idx] - a
-        self.w = self.w + self.mc * self.w + (1 - self.mc) * self.lr * self.e[idx] * P[:, idx].T
+        a = np.dot(self.w, self.P[:, idx])
+        self.e[idx] = self.T[0, idx] - a
+        self.w = self.w + self.mc * self.w + (1 - self.mc) * self.lr * self.e[idx] * self.P[:, idx].T
         self.w1_data.append(self.w[0])
         self.w2_data.append(self.w[1])
         self.path_2.set_data(self.w1_data, self.w2_data)
         return self.path_2,
 
     def on_animate_3(self, idx):
-        self.signal_diff.set_data(time[:idx + 1], (signal - self.e).reshape(-1)[:idx + 1])
+        self.signal_diff.set_data(self.time[:idx + 1], (self.signal_ - self.e).reshape(-1)[:idx + 1])
         return self.signal_diff,
 
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:
             self.w = np.array([event.xdata, event.ydata])
-            self.e = np.zeros((int(ts),))
+            self.e = np.zeros((int(self.ts),))
             self.event = event
             if self.ani_1:
                 self.ani_1.event_source.stop()
@@ -225,13 +224,13 @@ class AdaptiveNoiseCancellation(NNDLayout):
             self.canvas2.draw()
 
     def run_animation(self):
-        self.ani_2 = FuncAnimation(self.figure2, self.on_animate_2, init_func=self.animate_init_2, frames=int(ts),
+        self.ani_2 = FuncAnimation(self.figure2, self.on_animate_2, init_func=self.animate_init_2, frames=int(self.ts),
                                    interval=20, repeat=False, blit=True)
-        self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=int(ts),
+        self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.animate_init_1, frames=int(self.ts),
                                    interval=20, repeat=False, blit=True)
 
     def run_animation_diff(self):
-        self.ani_2 = FuncAnimation(self.figure2, self.on_animate_2, init_func=self.animate_init_2, frames=int(ts),
+        self.ani_2 = FuncAnimation(self.figure2, self.on_animate_2, init_func=self.animate_init_2, frames=int(self.ts),
                                    interval=20, repeat=False, blit=True)
-        self.ani_1 = FuncAnimation(self.figure, self.on_animate_3, init_func=self.animate_init_3, frames=int(ts),
+        self.ani_1 = FuncAnimation(self.figure, self.on_animate_3, init_func=self.animate_init_3, frames=int(self.ts),
                                    interval=20, repeat=False, blit=True)

@@ -10,44 +10,22 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-def logsigmoid(n):
-    return 1 / (1 + np.exp(-n))
-
-
-def logsigmoid_der(n):
-    return (1 - 1 / (1 + np.exp(-n))) * 1 / (1 + np.exp(-n))
-
-
-def purelin(n):
-    return n
-
-
-def purelin_der(n):
-    return np.array([1]).reshape(n.shape)
-
-
-W1 = np.array([[10], [10]])
-b1 = np.array([[-5], [5]])
-W2 = np.array([[1, 1]])
-b2 = np.array([-1])
-P = np.arange(-2, 2.1, 0.1).reshape(1, -1)
-A1 = logsigmoid(np.dot(W1, P) + b1)
-T = logsigmoid(np.dot(W2, A1) + b2)
-
-
 class Marquardt(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(Marquardt, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Marquardt", 12, "\nUUse the pop up menu below\nto select the network\nparameters"
+        self.fill_chapter("Marquardt", 12, "\nUse the pop up menu below\nto select the network\nparameters"
                                            " to train\nwith backpropagation.\n\nThe corresponding contour\nplot "
                                            "is shown below.\n\nClick in the contour graph\nto start "
                                            "the Marquardt\nbackprop algorithm.",
                           PACKAGE_PATH + "Logo/Logo_Ch_12.svg", PACKAGE_PATH + "Figures/nnd12_1.svg",
                           icon_move_left=120, icon_coords=(130, 90, 500, 200), description_coords=(535, 90, 450, 300))
 
-        self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
+        self.P = np.arange(-2, 2.1, 0.1).reshape(1, -1)
+        self.W1, self.b1 = np.array([[10], [10]]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
+        A1 = self.logsigmoid(np.dot(self.W1, self.P) + self.b1)
+        self.T = self.logsigmoid(np.dot(self.W2, A1) + self.b2)
 
         self.make_plot(1, (20, 280, 480, 400))
         self.axes = self.figure.add_subplot(1, 1, 1)
@@ -143,9 +121,9 @@ class Marquardt(NNDLayout):
 
     def animate_init(self):
         self.path.set_data(self.x_data, self.y_data)
-        self.a1 = self.logsigmoid_stable(np.dot(self.W1, P) + self.b1)
+        self.a1 = self.logsigmoid_stable(np.dot(self.W1, self.P) + self.b1)
         self.a2 = self.logsigmoid_stable(np.dot(self.W2, self.a1) + self.b2)
-        self.e = T - self.a2
+        self.e = self.T - self.a2
         self.error_prev = np.dot(self.e, self.e.T).item()
         self.ii = np.eye(2)
         return self.path,
@@ -161,7 +139,7 @@ class Marquardt(NNDLayout):
         self.a1 = np.kron(self.a1, np.ones((1, 1)))
         d2 = self.log_delta(self.a2)
         d1 = self.log_delta(self.a1, d2, self.W2)
-        jac1 = self.marq(np.kron(P, np.ones((1, 1))), d1)
+        jac1 = self.marq(np.kron(self.P, np.ones((1, 1))), d1)
         jac2 = self.marq(self.a1, d2)
         jac = np.hstack((jac1, d1.T))
         jac = np.hstack((jac, jac2))
@@ -193,9 +171,9 @@ class Marquardt(NNDLayout):
             self.x, self.y = self.b1[0] + dw[0], self.b1[1] + dw[1]
             b1[0], b1[1] = self.x, self.y
 
-        self.a1 = self.logsigmoid_stable(np.dot(W1, P) + b1)
+        self.a1 = self.logsigmoid_stable(np.dot(W1, self.P) + b1)
         self.a2 = self.logsigmoid_stable(np.dot(W2, self.a1) + b2)
-        self.e = T - self.a2
+        self.e = self.T - self.a2
         error = np.dot(self.e, self.e.T).item()
 
         while error >= self.error_prev:
@@ -222,9 +200,9 @@ class Marquardt(NNDLayout):
                     self.x, self.y = self.b1[0] + dw[0], self.b1[1] + dw[1]
                     b1[0], b1[1] = self.x, self.y
 
-                self.a1 = self.logsigmoid_stable(np.dot(W1, P) + b1)
+                self.a1 = self.logsigmoid_stable(np.dot(W1, self.P) + b1)
                 self.a2 = self.logsigmoid_stable(np.dot(W2, self.a1) + b2)
-                self.e = T - self.a2
+                self.e = self.T - self.a2
                 error = np.dot(self.e, self.e.T).item()
 
             except Exception as e:

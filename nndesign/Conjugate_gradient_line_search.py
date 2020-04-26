@@ -8,36 +8,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-def logsigmoid(n):
-    return 1 / (1 + np.exp(-n))
-
-
-def logsigmoid_der(n):
-    return (1 - 1 / (1 + np.exp(-n))) * 1 / (1 + np.exp(-n))
-
-
-def purelin(n):
-    return n
-
-
-def purelin_der(n):
-    return np.array([1]).reshape(n.shape)
-
-W1 = np.array([[10], [10]])
-b1 = np.array([[-5], [5]])
-W2 = np.array([[1, 1]])
-b2 = np.array([-1])
-P = np.arange(-2, 2.1, 0.1).reshape(1, -1)
-A1 = logsigmoid(np.dot(W1, P) + b1)
-T = logsigmoid(np.dot(W2, A1) + b2)
-tau1 = 1 - 0.618
-delta = 0.32
-tol = 0.03 / 20
-scale = 2
-b_max = 26
-n = 2
-
-
 class ConjugateGradientLineSearch(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(ConjugateGradientLineSearch, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -49,8 +19,17 @@ class ConjugateGradientLineSearch(NNDLayout):
                           PACKAGE_PATH + "Logo/Logo_Ch_12.svg", PACKAGE_PATH + "Figures/nnd12_1.svg",
                           icon_move_left=120, icon_coords=(130, 90, 500, 200), description_coords=(535, 90, 450, 300))
 
-        self.W1, self.b1 = np.array([[10], 10]), np.array([[-5], [5]])
+        self.P = np.arange(-2, 2.1, 0.1).reshape(1, -1)
+        self.W1, self.b1 = np.array([[10], [10]]), np.array([[-5], [5]])
         self.W2, self.b2 = np.array([[1, 1]]), np.array([[-1]])
+        A1 = self.logsigmoid(np.dot(self.W1, self.P) + self.b1)
+        self.T = self.logsigmoid(np.dot(self.W2, A1) + self.b2)
+        self.tau1 = 1 - 0.618
+        self.delta = 0.32
+        self.tol = 0.03 / 20
+        self.scale = 2
+        self.b_max = 26
+        self.n = 2
         self.lr, self.epochs = None, None
 
         self.make_plot(1, (20, 280, 480, 400))
@@ -119,7 +98,7 @@ class ConjugateGradientLineSearch(NNDLayout):
 
             a = 0
             aold = 0
-            b = delta
+            b = self.delta
             faold = self.fa
 
             W1t, b1t, W2t, b2t = np.copy(self.W1), np.copy(self.b1), np.copy(self.W2), np.copy(self.b2)
@@ -135,19 +114,19 @@ class ConjugateGradientLineSearch(NNDLayout):
                 self.x, self.y = self.b1[0] + b * self.db1[0], self.b1[1] + b * self.db1[1]
                 b1t[0] = self.x
                 b1t[1] = self.y
-            n1 = np.dot(W1t, P) + b1t
-            a1 = logsigmoid(n1)
+            n1 = np.dot(W1t, self.P) + b1t
+            a1 = self.logsigmoid(n1)
             n2 = np.dot(W2t, a1) + b2t
-            a2 = logsigmoid(n2)
-            e = T - a2
+            a2 = self.logsigmoid(n2)
+            e = self.T - a2
             fb = np.sum(e * e)
 
-            while self.fa > fb and b < b_max:
+            while self.fa > fb and b < self.b_max:
                 aold = a
                 faold = self.fa
                 self.fa = fb
                 a = b
-                b *= scale
+                b *= self.scale
                 if self.pair_of_params == 1:
                     self.x, self.y = self.W1[0, 0] + b * self.dW1[0, 0], self.W2[0, 0] + b * self.dW2[0, 0]
                     W1t[0, 0] = self.x
@@ -160,11 +139,11 @@ class ConjugateGradientLineSearch(NNDLayout):
                     self.x, self.y = self.b1[0] + b * self.db1[0], self.b1[1] + b * self.db1[1]
                     b1t[0] = self.x
                     b1t[1] = self.y
-                n1 = np.dot(W1t, P) + b1t
-                a1 = logsigmoid(n1)
+                n1 = np.dot(W1t, self.P) + b1t
+                a1 = self.logsigmoid(n1)
                 n2 = np.dot(W2t, a1) + b2t
-                a2 = logsigmoid(n2)
-                e = T - a2
+                a2 = self.logsigmoid(n2)
+                e = self.T - a2
                 fb = np.sum(e * e)
                 self.x_data.append(self.x)
                 self.y_data.append(self.y)
@@ -190,7 +169,7 @@ class ConjugateGradientLineSearch(NNDLayout):
             self.x_data_k.append(self.x)
             self.y_data_k.append(self.y)
 
-            c = a + tau1 * (b - a)
+            c = a + self.tau1 * (b - a)
             if self.pair_of_params == 1:
                 self.x, self.y = self.W1[0, 0] + c * self.dW1[0, 0], self.W2[0, 0] + c * self.dW2[0, 0]
                 W1t[0, 0] = self.x
@@ -203,16 +182,16 @@ class ConjugateGradientLineSearch(NNDLayout):
                 self.x, self.y = self.b1[0] + c * self.db1[0], self.b1[1] + c * self.db1[1]
                 b1t[0] = self.x
                 b1t[1] = self.y
-            n1 = np.dot(W1t, P) + b1t
-            a1 = logsigmoid(n1)
+            n1 = np.dot(W1t, self.P) + b1t
+            a1 = self.logsigmoid(n1)
             n2 = np.dot(W2t, a1) + b2t
-            a2 = logsigmoid(n2)
-            e = T - a2
+            a2 = self.logsigmoid(n2)
+            e = self.T - a2
             fc = np.sum(e * e)
             self.x_data_k.append(self.x)
             self.y_data_k.append(self.y)
 
-            d = b - tau1 * (b - a)
+            d = b - self.tau1 * (b - a)
             if self.pair_of_params == 1:
                 self.x, self.y = self.W1[0, 0] + d * self.dW1[0, 0], self.W2[0, 0] + d * self.dW2[0, 0]
                 W1t[0, 0] = self.x
@@ -225,21 +204,21 @@ class ConjugateGradientLineSearch(NNDLayout):
                 self.x, self.y = self.b1[0] + d * self.db1[0], self.b1[1] + d * self.db1[1]
                 b1t[0] = self.x
                 b1t[1] = self.y
-            n1 = np.dot(W1t, P) + b1t
-            a1 = logsigmoid(n1)
+            n1 = np.dot(W1t, self.P) + b1t
+            a1 = self.logsigmoid(n1)
             n2 = np.dot(W2t, a1) + b2t
-            a2 = logsigmoid(n2)
-            e = T - a2
+            a2 = self.logsigmoid(n2)
+            e = self.T - a2
             fd = np.sum(e * e)
             self.x_data_k.append(self.x)
             self.y_data_k.append(self.y)
 
-            while b - a > tol:
+            while b - a > self.tol:
                 if (fc < fd and fb >= np.min([self.fa, fc, fd])) or self.fa < np.min([fb, fc, fd]):
                     b = d
                     d = c
                     fb = fd
-                    c = a + tau1 * (b - a)
+                    c = a + self.tau1 * (b - a)
                     fd = fc
                     if self.pair_of_params == 1:
                         self.x, self.y = self.W1[0, 0] + c * self.dW1[0, 0], self.W2[0, 0] + c * self.dW2[0, 0]
@@ -253,11 +232,11 @@ class ConjugateGradientLineSearch(NNDLayout):
                         self.x, self.y = self.b1[0] + c * self.db1[0], self.b1[1] + c * self.db1[1]
                         b1t[0] = self.x
                         b1t[1] = self.y
-                    n1 = np.dot(W1t, P) + b1t
-                    a1 = logsigmoid(n1)
+                    n1 = np.dot(W1t, self.P) + b1t
+                    a1 = self.logsigmoid(n1)
                     n2 = np.dot(W2t, a1) + b2t
-                    a2 = logsigmoid(n2)
-                    e = T - a2
+                    a2 = self.logsigmoid(n2)
+                    e = self.T - a2
                     fc = np.sum(e * e)
                     self.x_data_k.append(self.x)
                     self.y_data_k.append(self.y)
@@ -265,7 +244,7 @@ class ConjugateGradientLineSearch(NNDLayout):
                     a = c
                     c = d
                     self.fa = fc
-                    d = b - tau1 * (b - a)
+                    d = b - self.tau1 * (b - a)
                     fc = fd
                     if self.pair_of_params == 1:
                         self.x, self.y = self.W1[0, 0] + d * self.dW1[0, 0], self.W2[0, 0] + d * self.dW2[0, 0]
@@ -279,11 +258,11 @@ class ConjugateGradientLineSearch(NNDLayout):
                         self.x, self.y = self.b1[0] + d * self.db1[0], self.b1[1] + d * self.db1[1]
                         b1t[0] = self.x
                         b1t[1] = self.y
-                    n1 = np.dot(W1t, P) + b1t
-                    a1 = logsigmoid(n1)
+                    n1 = np.dot(W1t, self.P) + b1t
+                    a1 = self.logsigmoid(n1)
                     n2 = np.dot(W2t, a1) + b2t
-                    a2 = logsigmoid(n2)
-                    e = T - a2
+                    a2 = self.logsigmoid(n2)
+                    e = self.T - a2
                     fd = np.sum(e * e)
                     # self.x_data_k.append(self.x)
                     # self.y_data_k.append(self.y)
@@ -303,14 +282,14 @@ class ConjugateGradientLineSearch(NNDLayout):
                 self.b1[1] = self.y
             self.x_data.append(self.x)
             self.y_data.append(self.y)
-            self.n1 = np.dot(self.W1, P) + self.b1
-            self.a1 = logsigmoid(self.n1)
+            self.n1 = np.dot(self.W1, self.P) + self.b1
+            self.a1 = self.logsigmoid(self.n1)
             self.n2 = np.dot(self.W2, self.a1) + self.b2
-            self.a2 = logsigmoid(self.n2)
-            self.e = T - self.a2
+            self.a2 = self.logsigmoid(self.n2)
+            self.e = self.T - self.a2
             self.D2 = self.a2 * (1 - self.a2) * self.e
             self.D1 = self.a1 * (1 - self.a1) * np.dot(self.W2.T, self.D2)
-            self.gW1 = np.dot(self.D1, P.T)
+            self.gW1 = np.dot(self.D1, self.P.T)
             self.gb1 = np.dot(self.D1, np.ones((self.D1.shape[1], 1)))
             self.gW2 = np.dot(self.D2, self.a1.T)
             self.gb2 = np.dot(self.D2, np.ones((self.D1.shape[1], 1)))
@@ -320,7 +299,7 @@ class ConjugateGradientLineSearch(NNDLayout):
                 nrmn = self.gW1[0, 0] ** 2 + self.gb1[0] ** 2
             elif self.pair_of_params == 3:
                 nrmn = self.gb1[0] ** 2 + self.gb1[1] ** 2
-            if idx % n == 0:
+            if idx % self.n == 0:
                 Z = nrmn / self.nrmo
             else:
                 Z = 0
@@ -353,15 +332,15 @@ class ConjugateGradientLineSearch(NNDLayout):
             self.W1[0, 0], self.b1[0, 0] = self.x, self.y
         elif self.pair_of_params == 3:
             self.b1[0, 0], self.b1[1, 0] = self.x, self.y
-        self.n1 = np.dot(self.W1, P) + self.b1
-        self.a1 = logsigmoid(self.n1)
+        self.n1 = np.dot(self.W1, self.P) + self.b1
+        self.a1 = self.logsigmoid(self.n1)
         self.n2 = np.dot(self.W2, self.a1) + self.b2
-        self.a2 = logsigmoid(self.n2)
-        self.e = T - self.a2
+        self.a2 = self.logsigmoid(self.n2)
+        self.e = self.T - self.a2
         self.fa = np.sum(self.e * self.e)
         self.D2 = self.a2 * (1 - self.a2) * self.e
         self.D1 = self.a1 * (1 - self.a1) * np.dot(self.W2.T, self.D2)
-        self.gW1 = np.dot(self.D1, P.T)
+        self.gW1 = np.dot(self.D1, self.P.T)
         self.gb1 = np.dot(self.D1, np.ones((self.D1.shape[1], 1)))
         self.gW2 = np.dot(self.D2, self.a1.T)
         self.gb2 = np.dot(self.D2, np.ones((self.D1.shape[1], 1)))

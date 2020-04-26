@@ -188,12 +188,20 @@ class OutStar(NNDLayout):
         painter = QtGui.QPainter(self.icon3.pixmap())
         pen = QtGui.QPen(QtCore.Qt.white if self.first_scanner_on else QtCore.Qt.red, 2)
         painter.setPen(pen)
-        painter.drawLine(170 * self.w_ratio, 80 * self.h_ratio, 185 * self.w_ratio, 95 * self.h_ratio)
-        painter.drawLine(170 * self.w_ratio, 95 * self.h_ratio, 185 * self.w_ratio, 80 * self.h_ratio)
+        if self.running_on_windows:
+            painter.drawLine(170 * self.h_ratio, 80 * self.h_ratio, 185 * self.h_ratio, 95 * self.h_ratio)
+            painter.drawLine(170 * self.h_ratio, 95 * self.h_ratio, 185 * self.h_ratio, 80 * self.h_ratio)
+        else:
+            painter.drawLine(170 * self.w_ratio, 80 * self.h_ratio, 185 * self.w_ratio, 95 * self.h_ratio)
+            painter.drawLine(170 * self.w_ratio, 95 * self.h_ratio, 185 * self.w_ratio, 80 * self.h_ratio)
         pen = QtGui.QPen(QtCore.Qt.black, 1)
         painter.setPen(pen)
-        painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
-        painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), "Active" if self.first_scanner_on else "Inactive")
+        if self.running_on_windows:
+            painter.setFont(QtGui.QFont("times", 12 * (self.h_ratio + self.h_ratio) / 2))
+            painter.drawText(QtCore.QPoint(100 * self.h_ratio, 28 * self.h_ratio), "Active" if self.first_scanner_on else "Inactive")
+        else:
+            painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
+            painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), "Active" if self.first_scanner_on else "Inactive")
 
         self.shape_text.remove()
         self.shape_text = self.axis1.text(15, 86, self.shape, fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
@@ -236,6 +244,7 @@ class OutStar(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
                 self.update = False
                 self.run_button.setText("Fruit")
+                self.checkbox_scanner.setEnabled(True)
             except Exception as e:
                 if str(e) == "can't multiply sequence by non-int of type 'float'":
                     pass
@@ -253,6 +262,7 @@ class OutStar(NNDLayout):
 
     def update_label(self):
         if self.idx == 0:
+            self.checkbox_scanner.setEnabled(False)
             if np.random.uniform() > 0.25:
                 self.p1, p2, self.fruit = np.array([[-1], [-1], [1]]), 1, "pineapple"
             elif np.random.uniform() > 0.66:

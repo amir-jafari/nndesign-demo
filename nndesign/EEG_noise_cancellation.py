@@ -10,29 +10,6 @@ from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
 
 
-N, f, max_t = 3.33, 60, 0.5
-s = N * f
-ts = s * max_t + 1
-A1, A2, theta1, theta2, k = 1, 0.75, np.pi/2, np.pi/2.5, 0.00001
-signal = k * loadmat(PACKAGE_PATH + "Data/eegdata.mat")["eegdata"][:, :int(ts) + 1]
-i = np.arange(ts).reshape(1, -1)
-noise1, noise2 = 1.2 * np.sin(2 * np.pi * (i - 1) / N), 0.6 * np.sin(4 * np.pi * (i - 1) / N)
-noise = noise1 + noise2
-filtered_noise1 = A1 * 1.20 * np.sin(2 * np.pi * (i-1) / N + theta1)
-filtered_noise2 = A2 * 0.6 * np.sin(4 * np.pi * (i-1) / N + theta1)
-filtered_noise = filtered_noise1 + filtered_noise2
-noisy_signal = signal + filtered_noise
-
-w = np.array([0, -2])
-time = np.arange(1, ts + 1) / ts * max_t
-
-P = np.zeros((21, 101))
-for i in range(21):
-    P[i, i+1:] = noise[:, :101 - i - 1]
-P = np.array(P)
-T = noisy_signal[:]
-
-
 class EEGNoiseCancellation(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(EEGNoiseCancellation, self).__init__(w_ratio, h_ratio, main_menu=1)
@@ -43,6 +20,27 @@ class EEGNoiseCancellation(NNDLayout):
                                                         " choose to display\nthe original and estimated\nsignals or their"
                                                         " difference.",
                           PACKAGE_PATH + "Logo/Logo_Ch_10.svg", None, description_coords=(535, 100, 450, 300))
+
+        N, f, max_t = 3.33, 60, 0.5
+        s = N * f
+        self.ts = s * max_t + 1
+        A1, A2, theta1, theta2, k = 1, 0.75, np.pi / 2, np.pi / 2.5, 0.00001
+        self.signal_ = k * loadmat(PACKAGE_PATH + "Data/eegdata.mat")["eegdata"][:, :int(self.ts) + 1]
+        i = np.arange(self.ts).reshape(1, -1)
+        noise1, noise2 = 1.2 * np.sin(2 * np.pi * (i - 1) / N), 0.6 * np.sin(4 * np.pi * (i - 1) / N)
+        noise = noise1 + noise2
+        filtered_noise1 = A1 * 1.20 * np.sin(2 * np.pi * (i - 1) / N + theta1)
+        filtered_noise2 = A2 * 0.6 * np.sin(4 * np.pi * (i - 1) / N + theta1)
+        filtered_noise = filtered_noise1 + filtered_noise2
+        noisy_signal = self.signal_ + filtered_noise
+
+        self.time = np.arange(1, self.ts + 1) / self.ts * max_t
+
+        self.P_ = np.zeros((21, 101))
+        for i in range(21):
+            self.P_[i, i + 1:] = noise[:, :101 - i - 1]
+        self.P_ = np.array(self.P_)
+        self.T = noisy_signal[:]
 
         self.x_data, self.y_data = [], []
         self.ani, self.x, self.y = None, None, None
@@ -57,7 +55,7 @@ class EEGNoiseCancellation(NNDLayout):
         self.axes_1.set_xlim(0, 0.5)
         self.axes_1.set_ylim(-2, 2)
         self.signal, = self.axes_1.plot([], linestyle='--', label="Original Signal", color="blue")
-        self.signal.set_data(time, signal)
+        self.signal.set_data(self.time, self.signal_)
         self.signal_approx, = self.axes_1.plot([], linestyle='-', label="Approx Signal", color="red")
         self.axes_1.plot(np.linspace(0, 0.5, 100), [0] * 100, color="gray", linestyle="dashed", linewidth=0.5)
         self.signal_diff, = self.axes_1.plot([], linestyle='-', label="Signal Difference", color="red")
@@ -105,7 +103,7 @@ class EEGNoiseCancellation(NNDLayout):
             self.ani.event_source.stop()
         if idx == 0:
             self.axes_1.set_title("Original (blue) and Estimated (red) Signals", fontdict={'fontsize': 10})
-            self.signal.set_data(time, signal)
+            self.signal.set_data(self.time, self.signal_)
             self.signal_diff.set_data([], [])
             self.canvas.draw()
             self.run_animation()
@@ -132,7 +130,7 @@ class EEGNoiseCancellation(NNDLayout):
         if self.ani:
             self.ani.event_source.stop()
         if self.plot_idx == 0:
-            self.signal.set_data(time, signal)
+            self.signal.set_data(self.time, self.signal_)
             self.signal_diff.set_data([], [])
             self.canvas.draw()
             self.run_animation()
@@ -145,7 +143,7 @@ class EEGNoiseCancellation(NNDLayout):
 
     def animate_init(self):
         self.R = self.delays + 1
-        self.P = P[:self.R]
+        self.P = self.P_[:self.R]
         self.w = np.zeros((1, self.R))
         self.a, self.e = np.zeros((1, 101)), np.zeros((1, 101))
         self.signal_approx, = self.axes_1.plot([], linestyle='-', label="Approx Signal", color="red")
@@ -154,14 +152,14 @@ class EEGNoiseCancellation(NNDLayout):
     def on_animate(self, idx):
         p = self.P[:, idx]
         self.a[0, idx] = np.dot(self.w, p)
-        self.e[0, idx] = T[0, idx] - self.a[0, idx]
+        self.e[0, idx] = self.T[0, idx] - self.a[0, idx]
         self.w += self.lr * self.e[0, idx] * p.T
-        self.signal_approx.set_data(time[:idx + 1], self.e[0, :idx + 1])
+        self.signal_approx.set_data(self.time[:idx + 1], self.e[0, :idx + 1])
         return self.signal_approx,
 
     def animate_init_diff(self):
         self.R = self.delays + 1
-        self.P = P[:self.R]
+        self.P = self.P_[:self.R]
         self.w = np.zeros((1, self.R))
         self.a, self.e = np.zeros((1, 101)), np.zeros((1, 101))
         self.signal_diff, = self.axes_1.plot([], linestyle='-', label="Signal Difference", color="red")
@@ -170,15 +168,15 @@ class EEGNoiseCancellation(NNDLayout):
     def on_animate_diff(self, idx):
         p = self.P[:, idx]
         self.a[0, idx] = np.dot(self.w, p)
-        self.e[0, idx] = T[0, idx] - self.a[0, idx]
+        self.e[0, idx] = self.T[0, idx] - self.a[0, idx]
         self.w += self.lr * self.e[0, idx] * p.T
-        self.signal_diff.set_data(time[:idx + 1], (signal - self.e)[0, :idx + 1])
+        self.signal_diff.set_data(self.time[:idx + 1], (self.signal_ - self.e)[0, :idx + 1])
         return self.signal_diff,
 
     def run_animation(self):
-        self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=int(ts),
+        self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=int(self.ts),
                                  interval=self.animation_speed, repeat=False, blit=True)
 
     def run_animation_diff(self):
-        self.ani = FuncAnimation(self.figure, self.on_animate_diff, init_func=self.animate_init_diff, frames=int(ts),
+        self.ani = FuncAnimation(self.figure, self.on_animate_diff, init_func=self.animate_init_diff, frames=int(self.ts),
                                  interval=self.animation_speed, repeat=False, blit=True)
