@@ -141,7 +141,8 @@ class FunctionApproximation(NNDLayout):
         grad = np.sqrt(np.dot(je.T, je)).item()
         if grad < self.mingrad:
             self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
-            return self.net_approx,
+            self.ani.event_source.stop()
+            # return self.net_approx,
 
         jj = np.dot(jac.T, jac)
         # Can't get this operation to produce the exact same results as MATLAB...
@@ -194,7 +195,8 @@ class FunctionApproximation(NNDLayout):
                 print("Error goal reached!")
                 self.error_goal_reached = None
             self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
-            return self.net_approx,
+            self.ani.event_source.stop()
+            # return self.net_approx,
 
         self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
         return self.net_approx,

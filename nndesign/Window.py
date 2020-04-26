@@ -117,8 +117,8 @@ from nndesign.Gradient_descent_stochastic import GradientDescentStochastic
 xlabel, ylabel, wlabel, hlabel, add = 120, 5, 500, 100, 20
 xautor, yautor = 385, 600
 
-xcm1, ycm1, wcm1, hcm1, add1, subt = 350, 140, 250, 20, 140, 20
-xcm2 = 342
+xcm1, ycm1, wcm1, hcm1, add1, subt = 190, 140, 250, 20, 140, 20
+xcm2 = 198
 xbtn1, ybtn1, wbtn1, hbtn1, add2 = 10, 635, 60, 30, 65
 
 w_Logo1, h_Logo1, xL_g1, yL_g1, add_l = 100, 80, 90, 110, 140
@@ -180,33 +180,33 @@ class MainWindowNN(NNDLayout):
         self.icon1 = QtWidgets.QLabel(self)
         self.comboBox1 = QtWidgets.QComboBox(self)
         self.comboBox1.connected = False  # Need to create this attribute so that we don't have more than one connected function
-        self.comboBox1.setGeometry(self.wm - xcm1 * self.w_ratio, ycm1 * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.comboBox1.setGeometry(xcm1 * self.w_ratio, ycm1 * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box1 = QtWidgets.QLabel(self)
-        self.label_box1.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box1.setGeometry(xcm2 * self.w_ratio, (ycm1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box1.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.icon2 = QtWidgets.QLabel(self)
         self.comboBox2 = QtWidgets.QComboBox(self)
         self.comboBox2.connected = False
-        self.comboBox2.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.comboBox2.setGeometry(xcm1 * self.w_ratio, (ycm1 + add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box2 = QtWidgets.QLabel(self)
-        self.label_box2.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box2.setGeometry(xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box2.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.icon3 = QtWidgets.QLabel(self)
         self.comboBox3 = QtWidgets.QComboBox(self)
         self.comboBox3.connected = False
-        self.comboBox3.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + 2 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.comboBox3.setGeometry(xcm1 * self.w_ratio, (ycm1 + 2 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box3 = QtWidgets.QLabel(self)
-        self.label_box3.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + 2 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box3.setGeometry(xcm2 * self.w_ratio, (ycm1 + 2 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box3.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.icon4 = QtWidgets.QLabel(self)
         self.comboBox4 = QtWidgets.QComboBox(self)
         self.comboBox4.connected = False
-        self.comboBox4.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + 3 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.comboBox4.setGeometry(xcm1 * self.w_ratio, (ycm1 + 3 * add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box4 = QtWidgets.QLabel(self)
-        self.label_box4.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + 3 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box4.setGeometry(xcm2 * self.w_ratio, (ycm1 + 3 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box4.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.show_chapters()
@@ -566,17 +566,17 @@ class MainWindowDL(NNDLayout):
         self.icon1 = QtWidgets.QLabel(self)
         self.comboBox1 = QtWidgets.QComboBox(self)
         self.comboBox1.connected = False  # Need to create this attribute so that we don't have more than one connected function
-        self.comboBox1.setGeometry(self.wm - xcm1 * self.w_ratio, ycm1 * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.comboBox1.setGeometry(xcm1 * self.w_ratio, ycm1 * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box1 = QtWidgets.QLabel(self)
-        self.label_box1.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box1.setGeometry(xcm2 * self.w_ratio, (ycm1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box1.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.icon2 = QtWidgets.QLabel(self)
         self.comboBox2 = QtWidgets.QComboBox(self)
         self.comboBox2.connected = False
-        self.comboBox2.setGeometry(self.wm - xcm1 * self.w_ratio, (ycm1 + add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.comboBox2.setGeometry(xcm1 * self.w_ratio, (ycm1 + add1) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box2 = QtWidgets.QLabel(self)
-        self.label_box2.setGeometry(self.wm - xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
+        self.label_box2.setGeometry(xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box2.setFont(QtGui.QFont("Times New Roman", font_size))
 
         self.show_chapters()
