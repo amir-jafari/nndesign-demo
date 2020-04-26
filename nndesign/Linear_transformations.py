@@ -33,8 +33,14 @@ class LinearTransformations(NNDLayout):
     def __init__(self, w_ratio, h_ratio):
         super(LinearTransformations, self).__init__(w_ratio, h_ratio, main_menu=1)
 
-        self.fill_chapter("Linear Transformations", 6, "TODO - Include instructions\nwhen decide if change\nfunctionality or not",
-                          PACKAGE_PATH + "Logo/Logo_Ch_6.svg", None)
+        self.fill_chapter("Linear Transformations", 6, "Click in the top graph to\ncreate a vector. Move\nthe mouse and "
+                                                       "click again\nto create the transformed\nvector. Repeat for a\n"
+                                                       "second vector.\n\nThese four vectors define\na linear transformation.\n"
+                                                       "The eigenvectors of the\ntransformation will be\nshown in the bottom graph.\n"
+                                                       "If the eigenvectors are\ncomplex they will not\nbe shown.\n\n"
+                                                       "Click in the bottom graph\nand move the mouse to\nsee how other vectors\n"
+                                                       "are transformed.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_6.svg", None, description_coords=(535, 140, 450, 350))
 
         self.cid1, self.cid2 = None, None
         self.cid3 = None
@@ -79,7 +85,7 @@ class LinearTransformations(NNDLayout):
         self.canvas2.draw()
         self.canvas2.mpl_connect('button_press_event', self.on_mouseclick2)
 
-        self.make_button("run_button", "Clear", (self.x_chapter_button, 420, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("run_button", "Clear", (self.x_chapter_button, 500, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
         self.on_run()
 

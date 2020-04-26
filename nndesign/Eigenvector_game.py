@@ -3,6 +3,8 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+import matplotlib.pyplot as plt
+from matplotlib import patches
 
 from nndesign.nndesign_layout import NNDLayout
 from nndesign.get_package_path import PACKAGE_PATH
@@ -14,13 +16,16 @@ class EigenvectorGame(NNDLayout):
 
         self.fill_chapter("Eigenvector Game", 6, "Your job is to find\nthe two eigenvectors of an\nunknown transformation.\n\n"
                                                  "Click on the plot to draw a\nvector (in red) and see\nthe transformed vector.\n\n"
-                                                 "If their directions are\n the same or opposite,\nthe first eigenvector will\nshow up in green.\n\n"
+                                                 "If their directions are\nthe same or opposite,\nthe first eigenvector will\nshow up in green.\n\n"
                                                  "Repeat to find\nthe second eigenvector.",
                           PACKAGE_PATH + "Logo/Logo_Ch_6.svg", None, description_coords=(535, 100, 450, 350))
 
-        self.make_plot(1, (90, 300, 370, 370))
+        self.make_plot(2, (150, 95, 210, 210))
+        self.ax = self.figure2.add_subplot(1, 1, 1)
+
+        self.make_plot(1, (75, 300, 370, 370))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
-        self.axes_1.set_title("Original Vectors", fontdict={'fontsize': 10})
+        # self.axes_1.set_title("Original Vectors", fontdict={'fontsize': 10})
         self.axes_1.set_xlim(-2, 2)
         self.axes_1.set_ylim(-2, 2)
         self.axes1_points = []
@@ -42,13 +47,57 @@ class EigenvectorGame(NNDLayout):
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
         self.make_slider("slider_n_tries", QtCore.Qt.Vertical, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
-                         (530, 430, 100, 180), self.freeze, "label_n_tries", "Number of Tries Left: 10",
-                         (530, 400, 150, 50))
+                         (590, 430, 100, 180), self.freeze, "label_n_tries", "Number of Tries Left: 10",
+                         (540, 400, 150, 50))
         self.make_label("label_message", "", (150, 100, 400, 150))
         self.make_label("label_message1", "", (150, 200, 400, 150))
         self.make_button("button", "Restart", (self.x_chapter_button, 615, self.w_chapter_button, self.h_chapter_button), self.random_transform)
         self.A, self.eig_v1, self.eig_v2 = None, None, None
         self.random_transform()
+        self.save_show_face()
+
+    def save_show_face(self, draw_win=False):
+        """fig, ax = plt.subplots()
+        ax.set_axis_off()
+        circle = plt.Circle((0.5, 0.5), 0.5, color="yellow", fill=True)
+        ax.add_artist(circle)
+        circle = plt.Circle((0.3, 0.65), 0.05, color="black", fill=True)
+        ax.add_artist(circle)
+        circle = plt.Circle((0.7, 0.65), 0.05, color="black", fill=True)
+        ax.add_artist(circle)
+        if self.n_tries > 5:
+            arc = patches.Arc((0.5, 0.35), self.n_tries / 100, 0.6, 90, 90, 270, color="black", linewidth=10)
+        elif self.n_tries < 5:
+            if self.n_tries == 0:
+                arc = patches.Arc((0.5, 0.35), 1 / (1 * 3), 0.6, 90, 270, 90, color="black", linewidth=10)
+            else:
+                arc = patches.Arc((0.5, 0.35), 1 / (self.n_tries * 3), 0.6, 90, 270, 90, color="black", linewidth=10)
+        else:
+            arc = patches.Arc((0.5, 0.35), 0.01, 0.6, 90, 270, 90, color="black", linewidth=10)
+        ax.add_artist(arc)
+        fig.savefig("temp.png", transparent=True)"""
+        self.ax.clear()
+        self.ax.set_axis_off()
+        circle = plt.Circle((0.5, 0.5), 0.5, color="yellow", fill=True)
+        self.ax.add_artist(circle)
+        circle = plt.Circle((0.3, 0.65), 0.05, color="black", fill=True)
+        self.ax.add_artist(circle)
+        circle = plt.Circle((0.7, 0.65), 0.05, color="black", fill=True)
+        self.ax.add_artist(circle)
+        if draw_win:
+            arc = patches.Arc((0.5, 0.35), 15 / 50, 0.6, 90, 90, 270, color="black", linewidth=3)
+        else:
+            if self.n_tries > 5:
+                arc = patches.Arc((0.5, 0.35), self.n_tries / 50, 0.6, 90, 90, 270, color="black", linewidth=3)
+            elif self.n_tries < 5:
+                if self.n_tries == 0:
+                    arc = patches.Arc((0.5, 0.35), 1 / (1 * 3), 0.6, 90, 270, 90, color="black", linewidth=3)
+                else:
+                    arc = patches.Arc((0.5, 0.35), 1 / (self.n_tries * 5), 0.6, 90, 270, 90, color="black", linewidth=3)
+            else:
+                arc = patches.Arc((0.5, 0.35), 0.01, 0.6, 90, 270, 90, color="black", linewidth=3)
+        self.ax.add_artist(arc)
+        self.canvas2.draw()
 
     def freeze(self):
         self.slider_n_tries.setValue(self.n_tries)
@@ -94,6 +143,10 @@ class EigenvectorGame(NNDLayout):
             self.A = np.dot(m, np.dot(np.diag(e.reshape(-1)), np.linalg.inv(m)))
             e, v = np.linalg.eig(self.A)
         self.eig_v1, self.eig_v2 = np.array([[v[0, 0]], [v[1, 0]]]), np.array([[v[0, 1]], [v[1, 1]]])
+        self.axes_1.set_title("")
+        self.save_show_face()
+        self.canvas.draw()
+        self.canvas2.draw()
 
     def on_mouseclick1(self, event):
         if event.xdata != None and event.xdata != None and not self.eig2_found:
@@ -101,6 +154,7 @@ class EigenvectorGame(NNDLayout):
                 self.n_tries -= 1
                 self.label_n_tries.setText("Number of Tries Left: {}".format(self.n_tries))
                 self.slider_n_tries.setValue(self.n_tries)
+                self.save_show_face()
                 self.clear_all()
                 self.axes1_points = [(round(event.xdata, 2), round(event.ydata, 2))]
                 self.draw_vector()
@@ -123,7 +177,8 @@ class EigenvectorGame(NNDLayout):
             if 1.2 > abs(slope_v1 / slope_v1_t) > 0.8:
                 self.axes1_eig1.set_UVC(x_trimmed1, y_trimmed1)
                 self.eig1_found, self.slope1 = True, slope_v1
-                self.label_message1.setText("First eigenvector found!")
+                self.axes_1.set_title("First eigenvector found! 1 left!")
+                # self.label_message1.setText("First eigenvector found!")
                 self.axes1_v1.set_color("black")
             else:
                 self.axes1_v1.set_color("red")
@@ -132,13 +187,16 @@ class EigenvectorGame(NNDLayout):
                 self.axes1_eig2.set_UVC(x_trimmed1, y_trimmed1)
                 self.eig2_found = True
                 self.clear_all()
-                self.label_message1.setText("Second eigenvector found!")
-                self.label_message.setText("You won :D. Click Restart to play again")
+                # self.label_message1.setText("Second eigenvector found!")
+                self.axes_1.set_title("Second eigenvector found! You won :D")
+                # self.label_message.setText("You won :D. Click Restart to play again")
                 self.axes1_v1.set_color("black")
+                self.save_show_face(draw_win=True)
             else:
                 self.axes1_v1.set_color("red")
         if not self.eig2_found and self.n_tries == 0:
-            self.label_message.setText("You lost :(. Click Restart to try again")
+            self.axes_1.set_title("You lost :(. Click Restart to try again")
+            # self.label_message.setText("You lost :(. Click Restart to try again")
         self.canvas.draw()
 
     def clear_all(self):
