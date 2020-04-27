@@ -4,7 +4,7 @@ with open("README.md", "r") as s:
     description = s.read()
 
 setuptools.setup(
-    author="Hagan, Jafari, Uría",
+    author="Amir Jafari, Martin Hagan, Pedro Uría",
     author_email="nndesign.demo@gmail.com",
     name='nndesigndemos',
     license="MIT",
