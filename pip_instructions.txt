@@ -17,9 +17,6 @@ This means that when it's installed, you can do import package_name; package_nam
 import setuptools
 
 
-with open('README.md') as f:
-    README = f.read()
-
 setuptools.setup(
     author="",
     author_email="",
@@ -27,7 +24,7 @@ setuptools.setup(
     license="MIT",
     description='',
     version='v0.0.1',
-    long_description=README,
+    long_description='',
     url='github_url',
     packages=["package_name"],
     include_package_data=True,

@@ -1,5 +1,7 @@
 import setuptools
 
+with open("README.md", "r") as s:
+    description = s.read()
 
 setuptools.setup(
     author="Hagan, Jafari, Uría",
@@ -7,12 +9,14 @@ setuptools.setup(
     name='nndesigndemos',
     license="MIT",
     description='Demos for the Neural Network Design & Deep Learning books',
-    version='v0.0.1',
-    long_description="This is a set of demonstrations paired with the Neural Network Design & Deep Learning books.\n"
-                     "Each demo is linked to a chapter section of the books. You can find more info at "
-                     "https://hagan.okstate.edu/nnd.html.\n\nAfter installing (creating a virtual environment is "
-                     "recommended), just open the Python Shell and type: from nndesigndemos import nndtoc; nndtoc()",
-    url='https://github.com/amir-jafari/nndesign-demo',
+    version='v0.0.3',
+    long_description_content_type="text/markdown",
+    # long_description="This is a set of demonstrations paired with the Neural Network Design & Deep Learning books.\n"
+    #                  "Each demo is linked to a chapter section of the books. You can find more info at "
+    #                  "https://hagan.okstate.edu/nnd.html.\n\nAfter installing (creating a virtual environment is "
+    #                  "recommended), just open the Python Shell and type: from nndesigndemos import nndtoc; nndtoc()",
+    long_description=description,
+    url='https://hagan.okstate.edu/nnd.html',
     packages=["nndesigndemos"],
     include_package_data=True,
     python_requires=">=3.5",

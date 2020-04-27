@@ -1,6 +1,6 @@
 include README.md
-recursive-include nndesign/Chapters *
-recursive-include nndesign/Logo *
-recursive-include nndesign/Figures *
-recursive-include nndesign/Data *
+recursive-include nndesigndemos/Chapters *
+recursive-include nndesigndemos/Logo *
+recursive-include nndesigndemos/Figures *
+recursive-include nndesigndemos/Data *
 

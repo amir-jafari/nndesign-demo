@@ -1,4 +1,4 @@
-# nndesign-demo
+# nndesigndemos
 
 Demonstrations for the [Neural Network Design](https://hagan.okstate.edu/nnd.html) book and the Neural Network Design: Deep Learning book (work in progress) written in Python.
 

@@ -178,10 +178,9 @@ class PerceptronRule(NNDLayout):
     def update_run_status(self):
         if self.total_epochs == 0:
             self.epoch_label.setText(" -   Iterations so far: 0")
-            self.error_label.setText("Error: ---")
         else:
             self.epoch_label.setText(" -   Iterations so far: {}".format(self.total_epochs))
-            self.error_label.setText("Error: {}".format(self.total_error))
+        self.error_label.setText("Error: {}".format(self.total_error))
 
     def on_run(self):
 
@@ -351,11 +350,24 @@ class PerceptronRule(NNDLayout):
             self.ani1.event_source.stop()
         if self.ani2:
             self.ani2.event_source.stop()
+        self.warning_label.setText("")
         self.initialize_weights()
+        self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(round(self.Weights[0], 2), round(self.Weights[1], 2)), 10))
+        self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(round(self.bias[0], 2)), 10))
         self.total_epochs = 0
-        self.update_run_status()
         self.clear_decision_boundary()
         self.draw_decision_boundary()
+        self.data_missclasified, error = [], 0
+        for xy in self.data:
+            t_hat = self.run_forward(np.array(xy[0:2]))
+            if t_hat != xy[2]:
+                self.data_missclasified.append(True)
+                error += 1
+            else:
+                self.data_missclasified.append(False)
+        self.total_error = error
+        self.draw_data()
+        self.update_run_status()
         self.canvas.draw()
 
     def on_undo_mouseclick(self):
