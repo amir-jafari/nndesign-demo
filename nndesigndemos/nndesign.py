@@ -65,8 +65,8 @@ class MainWindow(NNDLayout):
         self.button2.setGeometry(x_right * self.w_ratio, y_button * self.h_ratio, w * self.w_ratio, h_button * self.h_ratio)
         self.button2.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
         self.button2.clicked.connect(self.new_window2)
-        self.button2.setStyleSheet("background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);"
-                                   "\nfont-size:{}px".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
+        self.button2.setStyleSheet("background-color: rgb(147, 197, 209);\nborder:3px solid rgb(147, 197, 209);"
+                                   "\nfont-size:{}px;\ncolor: white;".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
         self.button2_win = None
 
     def new_window1(self):
