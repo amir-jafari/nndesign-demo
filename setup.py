@@ -9,7 +9,7 @@ setuptools.setup(
     name='nndesigndemos',
     license="MIT",
     description='Demos for the Neural Network Design & Deep Learning books',
-    version='v0.0.3',
+    version='v0.0.4',
     long_description_content_type="text/markdown",
     # long_description="This is a set of demonstrations paired with the Neural Network Design & Deep Learning books.\n"
     #                  "Each demo is linked to a chapter section of the books. You can find more info at "

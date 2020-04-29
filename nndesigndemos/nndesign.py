@@ -33,7 +33,7 @@ class MainWindow(NNDLayout):
 
         self.show_image("icon1", PACKAGE_PATH + "Logo/Figure.jpg", (x_left, y_img, w, h_img))
 
-        self.show_image("icon2", PACKAGE_PATH + "Logo/Figure.jpg", (x_right, y_img, w, h_img))
+        self.show_image("icon2", PACKAGE_PATH + "Logo/Figure_DL.jpg", (x_right, y_img, w, h_img))
 
         # Not sure why this doesn't work
         # self.make_button(
@@ -84,13 +84,12 @@ class MainWindow(NNDLayout):
 
 def nndtoc():
     import sys
+    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     app = QApplication(sys.argv)
     dimensions = QtWidgets.QDesktopWidget().screenGeometry(-1)
-    W_SCREEN, H_SCREEN = dimensions.width(), dimensions.height()
-    # W_SCREEN, H_SCREEN = 1900, 850  # To check how it would look on a bigger screen
-    # W_SCREEN, H_SCREEN = 1500, 700  # To check how it would look on a bigger screen
-    W_RATIO, H_RATIO = W_SCREEN / 1280, H_SCREEN / 800
-    win = MainWindow(W_RATIO, H_RATIO)
+    w_screen, h_screen = dimensions.width(), dimensions.height()
+    w_ratio, h_ratio = w_screen / 1280, h_screen / 800
+    win = MainWindow(w_ratio, h_ratio)
     win.show()
     sys.exit(app.exec_())
 
