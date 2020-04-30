@@ -269,6 +269,8 @@ class MainWindowNN(NNDLayout):
             comboBox.connected = True
             idx += 1
 
+        QtWidgets.QApplication.processEvents()
+
     def chapter2(self, idx):
         self.comboBox1.setCurrentIndex(0)
         if idx == 1:
