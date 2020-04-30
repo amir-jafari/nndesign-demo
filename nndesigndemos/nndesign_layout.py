@@ -174,7 +174,9 @@ class NNDLayout(QMainWindow):
         ax = fig.add_axes([0, 0, 1, 1])
         ax.axis('off')
         ax.patch.set_facecolor('none')
-        fs *= 113.5 / self.dpi  # My screen's dpi
+        if self.dpi > 113.5:
+            fs *= 113.5 / self.dpi  # My screen's dpi
+            fs /= 2
         t = ax.text(0, 0, mathTex, ha='left', va='bottom', fontsize=int(fs * (self.w_ratio + self.h_ratio) / 2))
 
         # ---- fit figure size to text artist ----
