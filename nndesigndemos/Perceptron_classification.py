@@ -73,6 +73,8 @@ class PerceptronClassification(NNDLayout):
             w_ratio, h_ratio = self.h_ratio, self.h_ratio
         else:
             w_ratio, h_ratio = self.w_ratio, self.h_ratio
+        if self.dpi > 113.5:
+            w_ratio /= (self.dpi / 113.5)
         painter.setFont(QtGui.QFont("times", 12 * (w_ratio + h_ratio) / 2))
         painter.drawText(QtCore.QPoint(100 * w_ratio, 28 * h_ratio), self.text_shape)
         painter.drawText(QtCore.QPoint(245 * w_ratio, 28 * h_ratio), self.text_texture)
