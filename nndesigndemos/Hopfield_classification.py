@@ -46,18 +46,25 @@ class HopfieldClassification(NNDLayout):
         self.make_label("label_a_12", "", (532, 440 - 5, 150, 25))
         self.make_label("label_fruit", "", (532, 470 - 5, 150, 25))
 
-        self.figure_w, self.figure_h = 575, 190
+        if self.dpi > 113.5:
+            self.figure_w, self.figure_h = 575 / (self.dpi / 113.5), 190 / (self.dpi / 113.5)
+        else:
+            self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
         if self.running_on_windows:
             if self.dpi > 113.5:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5), QtGui.QIcon.Normal, QtGui.QIcon.On))
-                self.icon3.setGeometry(28 * self.h_ratio * (self.dpi / 113.5), 485 * self.h_ratio, self.figure_w * self.h_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setGeometry(28 * self.h_ratio * (self.dpi / 113.5), 485 * self.h_ratio, self.figure_w * self.h_ratio, self.figure_h * self.h_ratio)
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
                 self.icon3.setGeometry(28 * self.h_ratio, 485 * self.h_ratio, self.figure_w * self.h_ratio, self.figure_h * self.h_ratio)
         else:
-            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5), QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon3.setGeometry(28 * self.w_ratio * (self.dpi / 113.5), 485 * self.h_ratio, self.figure_w * self.w_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5))
+            if self.dpi > 113.5:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5), QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setGeometry(28 * self.w_ratio * (self.dpi / 113.5), 485 * self.h_ratio, self.figure_w * self.w_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5))
+            else:
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
 
         self.make_button("run_button", "Go", (self.x_chapter_button, 500, self.w_chapter_button, self.h_chapter_button), self.on_run)
