@@ -35,7 +35,7 @@ class EarlyStopping(NNDLayout):
         self.ani_1, self.ani_2 = None, None
         self.W1, self.b1, self.W2, self.b2 = None, None, None, None
         self.S1, self.random_state = 20, 42
-        np.random.seed(self.random_state)
+        # np.random.seed(self.random_state)
         self.tt, self.t = None, None
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
@@ -199,7 +199,7 @@ class EarlyStopping(NNDLayout):
         self.test_points.set_data(self.p, self.t)
 
     def init_params(self):
-        np.random.seed(self.random_state)
+        # np.random.seed(self.random_state)
         self.W1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
         self.b1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
         self.W2 = np.random.uniform(-0.5, 0.5, (1, self.S1))

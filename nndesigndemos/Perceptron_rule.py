@@ -218,8 +218,6 @@ class PerceptronRule(NNDLayout):
                         if self.total_error == 0:
                             break
 
-                    self.update_run_status()
-                    self.draw_decision_boundary()
                     self.data_missclasified, error = [], 0
                     for xy in self.data:
                         t_hat = self.run_forward(np.array(xy[0:2]))
@@ -228,8 +226,18 @@ class PerceptronRule(NNDLayout):
                             error += 1
                         else:
                             self.data_missclasified.append(False)
+                    self.total_error = error
                     self.draw_data()
+
+                    self.update_run_status()
+                    self.draw_decision_boundary()
+
+                    self.latex_w.setPixmap(self.mathTex_to_QPixmap(
+                        "$W = [{} \quad {}]$".format(round(self.Weights[0], 2), round(self.Weights[1], 2)), 10))
+                    self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(round(self.bias[0], 2)), 10))
+
                     self.canvas.draw()
+
 
         else:
 
