@@ -65,7 +65,7 @@ class HopfieldNetwork(NNDLayout):
         # self.paint_latex_string("latex_a1", "$W =$", 16, (80, 340, 500, 200))
         # self.paint_latex_string("latex_a2", "$[$", 45, (170, 340, 500, 200))
         # self.paint_latex_string("latex_a3", "$]$", 45, (320, 340, 500, 200))
-        self.make_label("label_a", "W =", (40, 335, 500, 200), font_size=70)
+        self.make_label("label_a", "W =", (90, 335, 500, 200), font_size=45)
         self.make_label("label_a1", "[   ]", (182, 322, 500, 200), font_size=120)
         self.label_a.setStyleSheet("color:black")
         self.label_a1.setStyleSheet("color:black")
