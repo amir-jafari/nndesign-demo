@@ -96,18 +96,23 @@ class PerceptronRule(NNDLayout):
         self.learn = None
 
         # latex_w = self.mathTex_to_QPixmap("$W = [1.0 \quad -1.0]$", 6)
-        latex_w = self.mathTex_to_QPixmap("$W = [1.0 \quad -0.8]$", 10)
-        self.latex_w = QtWidgets.QLabel(self)
-        self.latex_w.setPixmap(latex_w)
+        # latex_w = self.mathTex_to_QPixmap("$W = [1.0 \quad -0.8]$", 10)
+        # self.latex_w = QtWidgets.QLabel(self)
+        # self.latex_w.setPixmap(latex_w)
         # self.latex_w.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 420 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.latex_w.setGeometry(50 * self.w_ratio, 80 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
+        # self.latex_w.setGeometry(50 * self.w_ratio, 80 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
+        self.make_label("label_W", "W = [1.0  -0.8]", (70, 80, 300, 100), font_size=30)
+        self.label_W.setStyleSheet("color:black")
 
         # latex_b = self.mathTex_to_QPixmap("$b = [0.0]$", 6)
-        latex_b = self.mathTex_to_QPixmap("$b = [0.0]$", 10)
-        self.latex_b = QtWidgets.QLabel(self)
-        self.latex_b.setPixmap(latex_b)
+        # latex_b = self.mathTex_to_QPixmap("$b = [0.0]$", 10)
+        # self.latex_b = QtWidgets.QLabel(self)
+        # self.latex_b.setPixmap(latex_b)
         # self.latex_b.setGeometry((self.x_chapter_usual + 10) * self.w_ratio, 450 * self.h_ratio, 150 * self.w_ratio, 100 * self.h_ratio)
-        self.latex_b.setGeometry(350 * self.w_ratio, 80 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
+        # self.latex_b.setGeometry(350 * self.w_ratio, 80 * self.h_ratio, 300 * self.w_ratio, 100 * self.h_ratio)
+        self.make_label("label_b", "b = [0.0]", (320, 80, 300, 100), font_size=30)
+        self.label_b.setStyleSheet("color:black")
+
         self.draw_decision_boundary()
         self.draw_data()
         self.canvas.draw()
@@ -232,9 +237,11 @@ class PerceptronRule(NNDLayout):
                     self.update_run_status()
                     self.draw_decision_boundary()
 
-                    self.latex_w.setPixmap(self.mathTex_to_QPixmap(
-                        "$W = [{} \quad {}]$".format(round(self.Weights[0], 2), round(self.Weights[1], 2)), 10))
-                    self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(round(self.bias[0], 2)), 10))
+                    # self.latex_w.setPixmap(self.mathTex_to_QPixmap(
+                    #     "$W = [{} \quad {}]$".format(round(self.Weights[0], 2), round(self.Weights[1], 2)), 10))
+                    # self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(round(self.bias[0], 2)), 10))
+                    self.label_W.setText("W = [{}  {}]".format(round(self.Weights[0], 1), round(self.Weights[1], 1)))
+                    self.label_b.setText("b = [{}]".format(round(self.bias[0], 1)))
 
                     self.canvas.draw()
 
@@ -348,8 +355,10 @@ class PerceptronRule(NNDLayout):
                 self.epoch_label.setText(" -   Iterations so far: {}".format(self.total_epochs))
                 self.error_label.setText("Error: {}".format(self.total_error))
 
-                self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(round(self.Weights[0], 2), round(self.Weights[1], 2)), 10))
-                self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(round(self.bias[0], 2)), 10))
+                # self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(round(self.Weights[0], 2), round(self.Weights[1], 2)), 10))
+                # self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(round(self.bias[0], 2)), 10))
+                self.label_W.setText("W = [{}  {}]".format(round(self.Weights[0], 1), round(self.Weights[1], 1)))
+                self.label_b.setText("b = [{}]".format(round(self.bias[0], 1)))
 
                 return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
 
@@ -360,8 +369,10 @@ class PerceptronRule(NNDLayout):
             self.ani2.event_source.stop()
         self.warning_label.setText("")
         self.initialize_weights()
-        self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(round(self.Weights[0], 2), round(self.Weights[1], 2)), 10))
-        self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(round(self.bias[0], 2)), 10))
+        # self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(round(self.Weights[0], 2), round(self.Weights[1], 2)), 10))
+        # self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(round(self.bias[0], 2)), 10))
+        self.label_W.setText("W = [{}  {}]".format(round(self.Weights[0], 1), round(self.Weights[1], 1)))
+        self.label_b.setText("b = [{}]".format(round(self.bias[0], 1)))
         self.total_epochs = 0
         self.clear_decision_boundary()
         self.draw_decision_boundary()

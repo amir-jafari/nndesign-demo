@@ -31,7 +31,7 @@ class PerceptronClassification(NNDLayout):
         self.axis.set_zlabel("weight")
         self.axis.zaxis._axinfo['label']['space_factor'] = 0.1
         self.axis.set_zticks([-1, 1])
-        self.axis.scatter(orange[0], orange[1], orange[2], color='yellow')
+        self.axis.scatter(orange[0], orange[1], orange[2], color='green')
         self.axis.scatter(apple[0], apple[1], apple[2], color='orange')
         self.line1, self.line2, self.line3 = None, None, None
         self.axis.view_init(10, 110)
@@ -50,11 +50,11 @@ class PerceptronClassification(NNDLayout):
         self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
         if self.running_on_windows:
-            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon3.setGeometry(28 * self.h_ratio, 485 * self.h_ratio, self.figure_w * self.h_ratio, self.figure_h * self.h_ratio)
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5), QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setGeometry(28 * self.h_ratio * (self.dpi / 113.5), 485 * self.h_ratio * (self.dpi / 113.5), self.figure_w * self.h_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5))
         else:
-            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5), QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setGeometry(28 * self.w_ratio * (self.dpi / 113.5), 485 * self.h_ratio * (self.dpi / 113.5), self.figure_w * self.w_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5))
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
 
         self.make_button("run_button", "Go", (self.x_chapter_button, 525, self.w_chapter_button, self.h_chapter_button), self.on_run)

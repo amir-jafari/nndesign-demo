@@ -90,7 +90,6 @@ def nndtoc():
     w_screen, h_screen = dimensions.width(), dimensions.height()
     w_ratio, h_ratio = w_screen / 1280, h_screen / 800
     dpi = round(app.screens()[0].physicalDotsPerInch(), 1)
-    print(dpi / 113.5)
     win = MainWindow(w_ratio, h_ratio, dpi)
     win.show()
     sys.exit(app.exec_())

@@ -48,9 +48,13 @@ class ART1Layer1(NNDLayout):
                          (self.x_chapter_usual, 520, self.w_chapter_slider, 50), self.slide,
                          "label_bias_neg", "Bias b-: 1.50", (self.x_chapter_usual + 70, 520 - 25, 150, 50))
 
-        self.paint_latex_string("latex_W21", "$W2:1 =$", 16, (30, 510, 250, 200))
-        self.paint_latex_string("latex_W22", "$[$", 45, (215, 510, 250, 200))
-        self.paint_latex_string("latex_W23", "$]$", 45, (335, 510, 250, 200))
+        # self.paint_latex_string("latex_W21", "$W2:1 =$", 16, (30, 510, 250, 200))
+        # self.paint_latex_string("latex_W22", "$[$", 45, (215, 510, 250, 200))
+        # self.paint_latex_string("latex_W23", "$]$", 45, (335, 510, 250, 200))
+        self.make_label("label_a", "W2:1 =", (145, 503, 500, 200), font_size=25)
+        self.make_label("label_a1", "[   ]", (226, 494, 500, 200), font_size=100)
+        self.label_a.setStyleSheet("color:black")
+        self.label_a1.setStyleSheet("color:black")
         self.make_input_box("w_11", "1", (235, 530, 70, 100))
         self.make_input_box("w_12", "1", (295, 530, 70, 100))
         self.make_input_box("w_21", "0", (235, 580, 70, 100))
