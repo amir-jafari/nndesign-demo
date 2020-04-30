@@ -168,7 +168,7 @@ class OutStar(NNDLayout):
                 QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_1.svg").pixmap(self.figure_w * self.h_ratio,
                                                                            self.figure_h * self.h_ratio,
                                                                            QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon3.setGeometry(28 * self.h_ratio * (self.dpi / 113.5), 470 * self.h_ratio * (self.dpi / 113.5),
+            self.icon3.setGeometry(28 * self.h_ratio * (self.dpi / 113.5), 470 * self.h_ratio,
                                    self.figure_w * self.h_ratio,
                                    self.figure_h * self.h_ratio)
 
@@ -177,7 +177,7 @@ class OutStar(NNDLayout):
                 QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_1.svg").pixmap(self.figure_w * self.w_ratio,
                                                                            self.figure_h * self.h_ratio,
                                                                            QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon3.setGeometry(28 * self.w_ratio * (self.dpi / 113.5), 470 * self.h_ratio * (self.dpi / 113.5),
+            self.icon3.setGeometry(28 * self.w_ratio * (self.dpi / 113.5), 470 * self.h_ratio,
                                    self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
 
         self.first_scanner_on = True
