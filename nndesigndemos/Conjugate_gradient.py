@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class ConjugateGradient(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(ConjugateGradient, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(ConjugateGradient, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Conjugate Gradient", 12, "\nUse the pop up menu below\nto select the network\nparameters"
                                                     " to train\nwith backpropagation.\n\nThe corresponding contour\nplot "

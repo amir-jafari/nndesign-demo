@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class LinearClassification(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(LinearClassification, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(LinearClassification, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Linear Classification", 10, "Edit the RED grid and\nwatch the output meter\nrespond to the"
                                                        " new inputs.\n\nEdit the GREEN grids and\nthen click [Train] to\n"

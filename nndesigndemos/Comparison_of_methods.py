@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class ComparisonOfMethods(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(ComparisonOfMethods, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(ComparisonOfMethods, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Comparison of Methods", 9, "Click in either graph\nto start a search point.\n\nThen watch the two\n"
                                                       "algorithms attempt to\nfind the minima.\n\nThe two alrorithms are:\n\n"

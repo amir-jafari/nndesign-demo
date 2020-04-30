@@ -155,9 +155,9 @@ BOOK2_CHAPTERS_DEMOS = {
 
 
 class MainWindowNN(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
+    def __init__(self, w_ratio, h_ratio, dpi):
         """ Main Window for the Neural Network Design Book. Inherits basic layout from NNDLayout """
-        super(MainWindowNN, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=1, draw_vertical=False)
+        super(MainWindowNN, self).__init__(w_ratio, h_ratio, dpi, chapter_window=False, main_menu=1, draw_vertical=False)
 
         self.make_label("label_3", "Table of Contents", (380, ylabel + add, wlabel, hlabel), font_size=18)
         self.make_label("label4", "By Hagan, Jafari, Uría", (xautor, yautor, wlabel, hlabel))
@@ -272,278 +272,278 @@ class MainWindowNN(NNDLayout):
     def chapter2(self, idx):
         self.comboBox1.setCurrentIndex(0)
         if idx == 1:
-            self.chapter2_window1 = OneInputNeuron(self.w_ratio, self.h_ratio)
+            self.chapter2_window1 = OneInputNeuron(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter2_window1.show()
         elif idx == 2:
-            self.chapter2_window2 = TwoInputNeuron(self.w_ratio, self.h_ratio)
+            self.chapter2_window2 = TwoInputNeuron(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter2_window2.show()
 
     def chapter3(self, idx):
         self.comboBox2.setCurrentIndex(0)
         if idx == 1:
-            self.chapter3_window1 = PerceptronClassification(self.w_ratio, self.h_ratio)
+            self.chapter3_window1 = PerceptronClassification(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter3_window1.show()
         if idx == 2:
-            self.chapter3_window2 = HammingClassification(self.w_ratio, self.h_ratio)
+            self.chapter3_window2 = HammingClassification(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter3_window2.show()
         elif idx == 3:
-            self.chapter3_window3 = HopfieldClassification(self.w_ratio, self.h_ratio)
+            self.chapter3_window3 = HopfieldClassification(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter3_window3.show()
 
     def chapter4(self, idx):
         self.comboBox3.setCurrentIndex(0)
         if idx == 1:
-            self.chapter4_window1 = DecisionBoundaries(self.w_ratio, self.h_ratio)
+            self.chapter4_window1 = DecisionBoundaries(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter4_window1.show()
         elif idx == 2:
-            self.chapter4_window2 = PerceptronRule(self.w_ratio, self.h_ratio)
+            self.chapter4_window2 = PerceptronRule(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter4_window2.show()
 
     def chapter5(self, idx):
         self.comboBox4.setCurrentIndex(0)
         if idx == 1:
-            self.chapter5_window1 = GramSchmidt(self.w_ratio, self.h_ratio)
+            self.chapter5_window1 = GramSchmidt(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter5_window1.show()
         elif idx == 2:
-            self.chapter5_window2 = ReciprocalBasis(self.w_ratio, self.h_ratio)
+            self.chapter5_window2 = ReciprocalBasis(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter5_window2.show()
 
     def chapter6(self, idx):
         self.comboBox1.setCurrentIndex(0)
         if idx == 1:
-            self.chapter6_window1 = LinearTransformations(self.w_ratio, self.h_ratio)
+            self.chapter6_window1 = LinearTransformations(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter6_window1.show()
         elif idx == 2:
-            self.chapter6_window2 = EigenvectorGame(self.w_ratio, self.h_ratio)
+            self.chapter6_window2 = EigenvectorGame(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter6_window2.show()
 
     def chapter7(self, idx):
         self.comboBox2.setCurrentIndex(0)
         if idx == 1:
-            self.chapter7_window1 = SupervisedHebb(self.w_ratio, self.h_ratio)
+            self.chapter7_window1 = SupervisedHebb(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter7_window1.show()
 
     def chapter8(self, idx):
         self.comboBox3.setCurrentIndex(0)
         if idx == 1:
-            self.chapter8_window1 = TaylorSeries1(self.w_ratio, self.h_ratio)
+            self.chapter8_window1 = TaylorSeries1(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter8_window1.show()
         elif idx == 2:
-            self.chapter8_window2 = TaylorSeries2(self.w_ratio, self.h_ratio)
+            self.chapter8_window2 = TaylorSeries2(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter8_window2.show()
         elif idx == 3:
-            self.chapter8_window3 = DirectionalDerivatives(self.w_ratio, self.h_ratio)
+            self.chapter8_window3 = DirectionalDerivatives(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter8_window3.show()
         elif idx == 4:
-            self.chapter8_window4 = QuadraticFunction(self.w_ratio, self.h_ratio)
+            self.chapter8_window4 = QuadraticFunction(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter8_window4.show()
 
     def chapter9(self, idx):
         self.comboBox4.setCurrentIndex(0)
         if idx == 1:
-            self.chapter9_window1 = SteepestDescentQuadratic(self.w_ratio, self.h_ratio)
+            self.chapter9_window1 = SteepestDescentQuadratic(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter9_window1.show()
         elif idx == 2:
-            self.chapter9_window2 = ComparisonOfMethods(self.w_ratio, self.h_ratio)
+            self.chapter9_window2 = ComparisonOfMethods(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter9_window2.show()
         elif idx == 3:
-            self.chapter9_window3 = NewtonsMethod(self.w_ratio, self.h_ratio)
+            self.chapter9_window3 = NewtonsMethod(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter9_window3.show()
         elif idx == 4:
-            self.chapter9_window4 = SteepestDescent(self.w_ratio, self.h_ratio)
+            self.chapter9_window4 = SteepestDescent(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter9_window4.show()
 
     def chapter10(self, idx):
         self.comboBox1.setCurrentIndex(0)
         if idx == 1:
-            self.chapter10_window1 = AdaptiveNoiseCancellation(self.w_ratio, self.h_ratio)
+            self.chapter10_window1 = AdaptiveNoiseCancellation(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter10_window1.show()
         elif idx == 2:
-            self.chapter10_window2 = EEGNoiseCancellation(self.w_ratio, self.h_ratio)
+            self.chapter10_window2 = EEGNoiseCancellation(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter10_window2.show()
         elif idx == 3:
-            self.chapter10_window3 = LinearClassification(self.w_ratio, self.h_ratio)
+            self.chapter10_window3 = LinearClassification(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter10_window3.show()
 
     def chapter11(self, idx):
         self.comboBox2.setCurrentIndex(0)
         if idx == 1:
-            self.chapter11_window1 = NetworkFunction(self.w_ratio, self.h_ratio)
+            self.chapter11_window1 = NetworkFunction(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter11_window1.show()
         # elif idx == 2:
         #     self.chapter_window2 = BackpropagationCalculation(self.w_ratio, self.h_ratio)
         #     self.chapter_window2.show()
         elif idx == 2:
-            self.chapter11_window3 = FunctionApproximation(self.w_ratio, self.h_ratio)
+            self.chapter11_window3 = FunctionApproximation(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter11_window3.show()
         elif idx == 3:
-            self.chapter11_window4 = Generalization(self.w_ratio, self.h_ratio)
+            self.chapter11_window4 = Generalization(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter11_window4.show()
 
     def chapter12(self, idx):
         self.comboBox3.setCurrentIndex(0)
         if idx == 1:
-            self.chapter12_window1 = SteepestDescentBackprop1(self.w_ratio, self.h_ratio)
+            self.chapter12_window1 = SteepestDescentBackprop1(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter12_window1.show()
         elif idx == 2:
-            self.chapter12_window2 = SteepestDescentBackprop2(self.w_ratio, self.h_ratio)
+            self.chapter12_window2 = SteepestDescentBackprop2(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter12_window2.show()
         elif idx == 3:
-            self.chapter12_window3 = Momentum(self.w_ratio, self.h_ratio)
+            self.chapter12_window3 = Momentum(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter12_window3.show()
         elif idx == 4:
-            self.chapter12_window4 = VariableLearningRate(self.w_ratio, self.h_ratio)
+            self.chapter12_window4 = VariableLearningRate(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter12_window4.show()
         elif idx == 5:
-            self.chapter12_window5 = ConjugateGradientLineSearch(self.w_ratio, self.h_ratio)
+            self.chapter12_window5 = ConjugateGradientLineSearch(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter12_window5.show()
         elif idx == 6:
-            self.chapter12_window6 = ConjugateGradient(self.w_ratio, self.h_ratio)
+            self.chapter12_window6 = ConjugateGradient(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter12_window6.show()
         elif idx == 7:
-            self.chapter12_window7 = MarquardtStep(self.w_ratio, self.h_ratio)
+            self.chapter12_window7 = MarquardtStep(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter12_window7.show()
         elif idx == 8:
-            self.chapter12_window8 = Marquardt(self.w_ratio, self.h_ratio)
+            self.chapter12_window8 = Marquardt(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter12_window8.show()
 
     def chapter13(self, idx):
         self.comboBox4.setCurrentIndex(0)
         if idx == 1:
-            self.chapter13_window1 = EarlyStopping(self.w_ratio, self.h_ratio)
+            self.chapter13_window1 = EarlyStopping(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter13_window1.show()
         elif idx == 2:
-            self.chapter13_window2 = Regularization(self.w_ratio, self.h_ratio)
+            self.chapter13_window2 = Regularization(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter13_window2.show()
         elif idx == 3:
-            self.chapter13_window3 = BayesianRegularization(self.w_ratio, self.h_ratio)
+            self.chapter13_window3 = BayesianRegularization(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter13_window3.show()
         elif idx == 4:
-            self.chapter13_window4 = EarlyStoppingRegularization(self.w_ratio, self.h_ratio)
+            self.chapter13_window4 = EarlyStoppingRegularization(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter13_window4.show()
 
     def chapter14(self, idx):
         self.comboBox1.setCurrentIndex(0)
         if idx == 1:
-            self.chapter14_window1 = FIRNetwork(self.w_ratio, self.h_ratio)
+            self.chapter14_window1 = FIRNetwork(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter14_window1.show()
         elif idx == 2:
-            self.chapter14_window2 = IIRNetwork(self.w_ratio, self.h_ratio)
+            self.chapter14_window2 = IIRNetwork(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter14_window2.show()
         elif idx == 3:
-            self.chapter14_window3 = DynamicDerivatives(self.w_ratio, self.h_ratio)
+            self.chapter14_window3 = DynamicDerivatives(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter14_window3.show()
         elif idx == 4:
-            self.chapter14_window4 = RecurrentNetworkTraining(self.w_ratio, self.h_ratio)
+            self.chapter14_window4 = RecurrentNetworkTraining(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter14_window4.show()
 
     def chapter15(self, idx):
         self.comboBox2.setCurrentIndex(0)
         if idx == 1:
-            self.chapter15_window1 = UnsupervisedHebb(self.w_ratio, self.h_ratio)
+            self.chapter15_window1 = UnsupervisedHebb(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter15_window1.show()
         elif idx == 2:
-            self.chapter15_window2 = EffectsOfDecayRate(self.w_ratio, self.h_ratio)
+            self.chapter15_window2 = EffectsOfDecayRate(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter15_window2.show()
         elif idx == 3:
-            self.chapter15_window3 = HebbWithDecay(self.w_ratio, self.h_ratio)
+            self.chapter15_window3 = HebbWithDecay(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter15_window3.show()
         elif idx == 4:
-            self.chapter15_window4 = GraphicalInstar(self.w_ratio, self.h_ratio)
+            self.chapter15_window4 = GraphicalInstar(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter15_window4.show()
         elif idx == 5:
-            self.chapter15_window5 = OutStar(self.w_ratio, self.h_ratio)
+            self.chapter15_window5 = OutStar(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter15_window5.show()
 
     def chapter16(self, idx):
         self.comboBox3.setCurrentIndex(0)
         if idx == 1:
-            self.chapter16_window1 = CompetitiveClassification(self.w_ratio, self.h_ratio)
+            self.chapter16_window1 = CompetitiveClassification(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter16_window1.show()
         elif idx == 2:
-            self.chapter16_window2 = CompetitiveLearning(self.w_ratio, self.h_ratio)
+            self.chapter16_window2 = CompetitiveLearning(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter16_window2.show()
         elif idx == 3:
-            self.chapter16_window3 = OneDFeatureMap(self.w_ratio, self.h_ratio)
+            self.chapter16_window3 = OneDFeatureMap(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter16_window3.show()
         elif idx == 4:
-            self.chapter16_window4 = TwoDFeatureMap(self.w_ratio, self.h_ratio)
+            self.chapter16_window4 = TwoDFeatureMap(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter16_window4.show()
         elif idx == 5:
-            self.chapter16_window5 = LVQ1(self.w_ratio, self.h_ratio)
+            self.chapter16_window5 = LVQ1(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter16_window5.show()
         elif idx == 6:
-            self.chapter16_window6 = LVQ2(self.w_ratio, self.h_ratio)
+            self.chapter16_window6 = LVQ2(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter16_window6.show()
 
     def chapter17(self, idx):
         self.comboBox4.setCurrentIndex(0)
         if idx == 1:
-            self.chapter17_window1 = NetworkFunctionRadial(self.w_ratio, self.h_ratio)
+            self.chapter17_window1 = NetworkFunctionRadial(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter17_window1.show()
         elif idx == 2:
-            self.chapter17_window2 = PatternClassification(self.w_ratio, self.h_ratio)
+            self.chapter17_window2 = PatternClassification(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter17_window2.show()
         elif idx == 3:
-            self.chapter17_window3 = LinearLeastSquares(self.w_ratio, self.h_ratio)
+            self.chapter17_window3 = LinearLeastSquares(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter17_window3.show()
         elif idx == 4:
-            self.chapter17_window4 = OrthogonalLeastSquares(self.w_ratio, self.h_ratio)
+            self.chapter17_window4 = OrthogonalLeastSquares(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter17_window4.show()
         elif idx == 5:
-            self.chapter17_window5 = NonlinearOptimization(self.w_ratio, self.h_ratio)
+            self.chapter17_window5 = NonlinearOptimization(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter17_window5.show()
 
     def chapter18(self, idx):
         self.comboBox1.setCurrentIndex(0)
         if idx == 1:
-            self.chapter18_window1 = LeakyIntegrator(self.w_ratio, self.h_ratio)
+            self.chapter18_window1 = LeakyIntegrator(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter18_window1.show()
         elif idx == 2:
-            self.chapter18_window2 = ShuntingNetwork(self.w_ratio, self.h_ratio)
+            self.chapter18_window2 = ShuntingNetwork(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter18_window2.show()
         elif idx == 3:
-            self.chapter18_window3 = GrossbergLayer1(self.w_ratio, self.h_ratio)
+            self.chapter18_window3 = GrossbergLayer1(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter18_window3.show()
         elif idx == 4:
-            self.chapter18_window4 = GrossbergLayer2(self.w_ratio, self.h_ratio)
+            self.chapter18_window4 = GrossbergLayer2(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter18_window4.show()
         elif idx == 5:
-            self.chapter18_window5 = AdaptiveWeights(self.w_ratio, self.h_ratio)
+            self.chapter18_window5 = AdaptiveWeights(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter18_window5.show()
 
     def chapter19(self, idx):
         self.comboBox2.setCurrentIndex(0)
         if idx == 1:
-            self.chapter19_window1 = ART1Layer1(self.w_ratio, self.h_ratio)
+            self.chapter19_window1 = ART1Layer1(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter19_window1.show()
         elif idx == 2:
-            self.chapter19_window2 = ART1Layer2(self.w_ratio, self.h_ratio)
+            self.chapter19_window2 = ART1Layer2(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter19_window2.show()
         elif idx == 3:
-            self.chapter19_window3 = OrientingSubsystem(self.w_ratio, self.h_ratio)
+            self.chapter19_window3 = OrientingSubsystem(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter19_window3.show()
         elif idx == 4:
-            self.chapter19_window4 = ART1Algorithm(self.w_ratio, self.h_ratio)
+            self.chapter19_window4 = ART1Algorithm(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter19_window4.show()
 
     def chapter20(self, idx):
         self.comboBox3.setCurrentIndex(0)
         if idx == 1:
-            self.chapter20_window1 = DynamicalSystem(self.w_ratio, self.h_ratio)
+            self.chapter20_window1 = DynamicalSystem(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter20_window1.show()
 
     def chapter21(self, idx):
         self.comboBox4.setCurrentIndex(0)
         if idx == 1:
-            self.chapter20_window1 = HopfieldNetwork(self.w_ratio, self.h_ratio)
+            self.chapter20_window1 = HopfieldNetwork(self.w_ratio, self.h_ratio, self.dpi)
             self.chapter20_window1.show()
 
 
 class MainWindowDL(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
+    def __init__(self, w_ratio, h_ratio, dpi):
         """ Main Window for the Neural Network Design - Deep Learning Book. Inherits basic layout from NNDLayout """
-        super(MainWindowDL, self).__init__(w_ratio, h_ratio, chapter_window=False, main_menu=2, draw_vertical=False)
+        super(MainWindowDL, self).__init__(w_ratio, h_ratio, dpi, chapter_window=False, main_menu=2, draw_vertical=False)
 
         self.make_label("label_3", "Table of Contents", (380, ylabel + add, wlabel, hlabel), font_size=18)
         self.make_label("label4", "By Hagan, Jafari, Uría", (xautor, yautor, wlabel, hlabel))
@@ -620,26 +620,26 @@ class MainWindowDL(NNDLayout):
     def chapter2(self, idx):
         self.comboBox1.setCurrentIndex(0)
         if idx == 1:
-            self.book2_chapter2_window1 = PoslinNetworkFunction(self.w_ratio, self.h_ratio)
+            self.book2_chapter2_window1 = PoslinNetworkFunction(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter2_window1.show()
         elif idx == 2:
-            self.book2_chapter2_window2 = PoslinDecisionRegions(self.w_ratio, self.h_ratio)
+            self.book2_chapter2_window2 = PoslinDecisionRegions(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter2_window2.show()
         elif idx == 3:
-            self.book2_chapter2_window3 = PoslinDecisionRegions2D(self.w_ratio, self.h_ratio)
+            self.book2_chapter2_window3 = PoslinDecisionRegions2D(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter2_window3.show()
         elif idx == 4:
-            self.book2_chapter2_window4 = PoslinDecisionRegions3D(self.w_ratio, self.h_ratio)
+            self.book2_chapter2_window4 = PoslinDecisionRegions3D(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter2_window4.show()
         elif idx == 5:
-            self.book2_chapter2_window5 = CascadedFunction(self.w_ratio, self.h_ratio)
+            self.book2_chapter2_window5 = CascadedFunction(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter2_window5.show()
 
     def chapter3(self, idx):
         self.comboBox2.setCurrentIndex(0)
         if idx == 1:
-            self.book2_chapter3_window1 = GradientDescent(self.w_ratio, self.h_ratio)
+            self.book2_chapter3_window1 = GradientDescent(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter3_window1.show()
         elif idx == 2:
-            self.book2_chapter3_window2 = GradientDescentStochastic(self.w_ratio, self.h_ratio)
+            self.book2_chapter3_window2 = GradientDescentStochastic(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter3_window2.show()

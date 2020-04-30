@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class NewtonsMethod(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(NewtonsMethod, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(NewtonsMethod, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Newton's Method", 9, "\n\nClick anywhere on the\ngraph to start an\ninitial guess.\n\nThen the "
                                                 "steepest descent\ntrajectory will be shown.\n\nThe bottom graph shows\nthe"

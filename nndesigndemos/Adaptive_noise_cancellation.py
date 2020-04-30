@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class AdaptiveNoiseCancellation(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(AdaptiveNoiseCancellation, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(AdaptiveNoiseCancellation, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Adaptive Noise Cancellation", 10, "\n\nClick on the bottom contour\nplot to change\nthe initial weights.\n\n"
                                                              "Use the sliders to alter\nthe learning rate\nand momentum.\n\n"

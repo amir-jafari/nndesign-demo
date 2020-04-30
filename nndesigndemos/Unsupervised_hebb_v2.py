@@ -8,8 +8,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class UnsupervisedHebb(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(UnsupervisedHebb, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(UnsupervisedHebb, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Unsupervised Hebb", 15, "\n\nClick [Fruit] to send a fruit\ndown the belt to be\nrecognized.\n\n"
                                                    "Click [Update] to\napply the Hebb rule.\n\nWhen the lower weight is\n"

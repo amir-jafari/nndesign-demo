@@ -37,7 +37,7 @@ x_chapter = 560
 
 
 class NNDLayout(QMainWindow):
-    def __init__(self, w_ratio, h_ratio, chapter_window=True, main_menu=False, draw_vertical=True, print_mouse_coords=False,
+    def __init__(self, w_ratio, h_ratio, dpi, chapter_window=True, main_menu=False, draw_vertical=True, print_mouse_coords=False,
                  fixed_size=False, do_not_scale=False):
 
         super(NNDLayout, self).__init__()
@@ -47,6 +47,8 @@ class NNDLayout(QMainWindow):
 
         self.print_mouse_coords = print_mouse_coords
         self.setMouseTracking(print_mouse_coords)
+
+        self.dpi = dpi
 
         if do_not_scale:
             self.w_ratio, self.h_ratio = 1, 1
@@ -172,6 +174,7 @@ class NNDLayout(QMainWindow):
         ax = fig.add_axes([0, 0, 1, 1])
         ax.axis('off')
         ax.patch.set_facecolor('none')
+        fs *= 113.5 / self.dpi  # My screen's dpi
         t = ax.text(0, 0, mathTex, ha='left', va='bottom', fontsize=int(fs * (self.w_ratio + self.h_ratio) / 2))
 
         # ---- fit figure size to text artist ----

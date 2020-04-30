@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class ART1Layer2(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(ART1Layer2, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(ART1Layer2, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("ART1 Layer 2", 19, "Adjust the inputs,\nbiases and gain.\nThen click [Update] to\n"
                                               "see the layer respond.\n\nn2(1) is red,\nn2(2) is green.\n\n"

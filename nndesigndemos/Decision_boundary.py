@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class DecisionBoundaries(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(DecisionBoundaries, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(DecisionBoundaries, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Decision Boundaries", 4, "Move the perceptron\ndecision boundary by\ndragging the stars.\n\n"
                                                     "Try to divide the points so\nthat none of them are red.\n\nLeft-click"

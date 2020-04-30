@@ -11,8 +11,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class PatternClassification(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(PatternClassification, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(PatternClassification, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("RBF Pattern Classification", 17, "\nAlter the network's\nparameters by dragging\nthe slide bars.\n\n"
                                                             "Click on [Random]/[Reset]\nto set each parameter\nto a random/original value.\n\n"

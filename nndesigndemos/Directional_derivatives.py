@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class DirectionalDerivatives(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(DirectionalDerivatives, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(DirectionalDerivatives, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Directional Derivatives", 8, "To measure a directional derivative click on the graph and move the cursor.\n\n"
                                                         "The directional derivative is taken at the point you clicked\nin the direction of the current cursor position.\n\n"

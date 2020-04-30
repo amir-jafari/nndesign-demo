@@ -11,8 +11,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class PoslinDecisionRegions3D(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(PoslinDecisionRegions3D, self).__init__(w_ratio, h_ratio, main_menu=2)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(PoslinDecisionRegions3D, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
         self.fill_chapter("Poslin Decision Regions 3D", 2, "\nAlter the network's\nparameters by clicking\nthe "
                                                            "buttons and\nmodifying the input text.\n\n"

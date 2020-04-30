@@ -6,8 +6,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class BackpropagationCalculation(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(BackpropagationCalculation, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(BackpropagationCalculation, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Backpropagation Calculation", 11, " TODO",
                           PACKAGE_PATH + "Chapters/2/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2/nn2d1.svg", show_pic=False)

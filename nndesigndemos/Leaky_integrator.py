@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class LeakyIntegrator(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(LeakyIntegrator, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(LeakyIntegrator, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Leaky Integrator", 18, "\nUse the slide bars\nto adjust the input and\nthe time constant (eps)\n"
                                                   "to the leaky integrator.\n\nClick [Clear] to remove\nold responses.\n\n"

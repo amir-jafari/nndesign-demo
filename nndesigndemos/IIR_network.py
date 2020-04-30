@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class IIRNetwork(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(IIRNetwork, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(IIRNetwork, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("IIR Network", 14, "Select the input and\nfrequency to the IIR\nnetwork.\n\n"
                                              "Use the sliders to alter\nthe network weights.",  # \n\n"

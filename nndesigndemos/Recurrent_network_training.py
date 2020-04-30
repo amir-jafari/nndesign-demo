@@ -11,8 +11,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class RecurrentNetworkTraining(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(RecurrentNetworkTraining, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(RecurrentNetworkTraining, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Recurrent Network Training", 14, "Show the change in\nweight values due to\nthe training of a\n"
                                                             "recurrent network.\n\nClick on the contour plot\nto select the initial\n"

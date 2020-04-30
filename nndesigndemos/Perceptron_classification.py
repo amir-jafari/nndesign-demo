@@ -7,8 +7,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class PerceptronClassification(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(PerceptronClassification, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(PerceptronClassification, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Perceptron Classification", 3, "Click [Go] to send a fruit\ndown the belt to be\nclassified"
                           " by a perceptron\nnetwork.\n\nThe calculations for the\nperceptron will appear\nbelow.",

@@ -7,8 +7,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class HebbWithDecay(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(HebbWithDecay, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(HebbWithDecay, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Hebb with Decay", 15, "\n\nClick [Fruit] to send a fruit\ndown the belt to be\nrecognized.\n\n"
                                                  "Click [Update] to\napply the Hebb rule.\n\nBecause of weight\n"

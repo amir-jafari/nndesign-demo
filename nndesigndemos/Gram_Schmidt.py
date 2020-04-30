@@ -8,8 +8,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class GramSchmidt(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(GramSchmidt, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(GramSchmidt, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Gram-Schmidt", 5, "Click [Start] to begin.\n\nClick twice in the top graph\nto create two vectors"
                                              "to be\northogonalized. Then click\n[Compute] to see the\northogonal vectors.\n\n"

@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class SupervisedHebb(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(SupervisedHebb, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(SupervisedHebb, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Supervised Hebb", 7, "Click on the green grids\nto define target patterns.\n\n"
                                                 "Click on the gray grid\nto define a test pattern.\n\n"

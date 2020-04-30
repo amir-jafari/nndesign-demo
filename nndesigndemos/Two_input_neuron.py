@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class TwoInputNeuron(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(TwoInputNeuron, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(TwoInputNeuron, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Two input neuron", 2, "\n\nAlter the input values by\nmoving the sliders."
                                                  "\n\nAlter the weight and bias\nin the same way."

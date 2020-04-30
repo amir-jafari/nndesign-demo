@@ -7,9 +7,9 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class MainWindow(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
+    def __init__(self, w_ratio, h_ratio, dpi):
         """ Window that shows the main menu, to choose between the two books """
-        super(MainWindow, self).__init__(w_ratio, h_ratio, chapter_window=False, draw_vertical=False)
+        super(MainWindow, self).__init__(w_ratio, h_ratio, dpi, chapter_window=False, draw_vertical=False)
 
         # Coordinates (in px)
         x_title, y_title, w_title, h_title, add_x, add_y = 30, 5, 500, 100, 250, 20
@@ -57,7 +57,7 @@ class MainWindow(NNDLayout):
         self.button1.setGeometry(x_left * self.w_ratio, y_button * self.h_ratio, w * self.w_ratio, h_button * self.h_ratio)
         self.button1.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
         self.button1.clicked.connect(self.new_window1)
-        self.button1.setStyleSheet("background-color: rgb(125, 150, 255);\nborder:3px solid rgb(100, 170, 255);"
+        self.button1.setStyleSheet("background-color: rgb(88, 157, 212);\nborder:3px solid rgb(88, 157, 212);"
                                    "\nfont-size:{}px".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
         self.button1_win = None
 
@@ -70,7 +70,7 @@ class MainWindow(NNDLayout):
         self.button2_win = None
 
     def new_window1(self):
-        self.button1_win = MainWindowNN(self.w_ratio, self.h_ratio)
+        self.button1_win = MainWindowNN(self.w_ratio, self.h_ratio, self.dpi)
         self.button1_win.show()
 
     @staticmethod
@@ -78,7 +78,7 @@ class MainWindow(NNDLayout):
         QtGui.QDesktopServices.openUrl(QtCore.QUrl(link_str))
 
     def new_window2(self):
-        self.button2_win = MainWindowDL(self.w_ratio, self.h_ratio)
+        self.button2_win = MainWindowDL(self.w_ratio, self.h_ratio, self.dpi)
         self.button2_win.show()
 
 
@@ -89,7 +89,9 @@ def nndtoc():
     dimensions = QtWidgets.QDesktopWidget().screenGeometry(-1)
     w_screen, h_screen = dimensions.width(), dimensions.height()
     w_ratio, h_ratio = w_screen / 1280, h_screen / 800
-    win = MainWindow(w_ratio, h_ratio)
+    dpi = round(app.screens()[0].physicalDotsPerInch(), 1)
+    print(dpi / 113.5)
+    win = MainWindow(w_ratio, h_ratio, dpi)
     win.show()
     sys.exit(app.exec_())
 

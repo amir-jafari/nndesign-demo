@@ -8,8 +8,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class ReciprocalBasis(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(ReciprocalBasis, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(ReciprocalBasis, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Reciprocal Basis", 5, "\nClick on the plot to\ndefine the basis {v1, v2}\nand the vector x to be\nexpanded"
                                                  " in terms\nof {v1, v2}."

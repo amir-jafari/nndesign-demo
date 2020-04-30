@@ -7,8 +7,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class UnsupervisedHebb(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(UnsupervisedHebb, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(UnsupervisedHebb, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Unsupervised Hebb", 15, "\n\nClick [Fruit] to send a fruit\ndown the belt to be\nrecognized.\n\n"
                                                    "Click [Update] to\napply the Hebb rule.\n\nWhen the lower weight is\n"
@@ -98,7 +98,7 @@ class UnsupervisedHebb(NNDLayout):
         line.remove()
         self.canvas.draw()
 
-        self.figure_w, self.figure_h = 575, 190
+        self.figure_w, self.figure_h = 575 / (self.dpi / 113.5), 190 / (self.dpi / 113.5)
         self.icon3 = QtWidgets.QLabel(self)
         if self.running_on_windows:
             self.icon3.setPixmap(

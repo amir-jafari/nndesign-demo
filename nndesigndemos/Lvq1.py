@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class LVQ1(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(LVQ1, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(LVQ1, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("LVQ1", 16, "Click [Learn] to apply the\nLVQ1 rule once.\n\nClick [Train] to apply it\non all"
                                       " the inputs.\n\nClick [Random] to get\nrandom weights.\n\nLeft-click on the plot "

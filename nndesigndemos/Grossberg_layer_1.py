@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class GrossbergLayer1(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(GrossbergLayer1, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(GrossbergLayer1, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Grossberg Layer 1", 18, "Use the slide bars\nto adjust the inputs, biases\nand the time constant (eps).\n\n"
                                                    "Output n1(1) is red,\noutput n1(2) is green.\n\nClick [Clear] to remove\nold responses.",

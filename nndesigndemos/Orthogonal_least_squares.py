@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class OrthogonalLeastSquares(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(OrthogonalLeastSquares, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(OrthogonalLeastSquares, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Orthogonal Least Squares", 17, "\n\nUse the slide bars to\nchoose the network or\nfunction values.\n\n"
                                                           "Click [Add Neuron] to\nincrease the size of\nHidden Layer.\n\n"

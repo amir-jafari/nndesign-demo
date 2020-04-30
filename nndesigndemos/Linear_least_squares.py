@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class LinearLeastSquares(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(LinearLeastSquares, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(LinearLeastSquares, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Linear Least Squares", 17, "\n\nBasis functions are\nspaced evenly.\n\nYou can change the first\n"
                                                       "center location and\nthe bias. The automatic\nbias will produce\n"

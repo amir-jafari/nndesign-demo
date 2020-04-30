@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class SteepestDescent(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(SteepestDescent, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(SteepestDescent, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Steepest Descent", 9, "Click anywhere on the\ngraph to start an initial\nguess."
                                                  "\nThen the steepest descent\ntrajectory will be shown.\n\n"

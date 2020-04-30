@@ -6,8 +6,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class OutStar(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(OutStar, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(OutStar, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Outstar", 15, "\n\n\nClick [Fruit] to send a fruit\ndown the belt to be\nrecognized.\n\n"
                                          "Click [Update] to\napply the Hebb rule.\n\nOnce the network has\n"

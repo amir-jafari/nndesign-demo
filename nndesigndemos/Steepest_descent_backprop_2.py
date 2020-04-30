@@ -11,8 +11,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class SteepestDescentBackprop2(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(SteepestDescentBackprop2, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(SteepestDescentBackprop2, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Steepest Descent Backprop #2", 12, "Use the pop up menu below\nto select the network\nparameters"
                                                               " to train\nwith backpropagation.\n\nThe corresponding contour\nplot "

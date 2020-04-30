@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class QuadraticFunction(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(QuadraticFunction, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(QuadraticFunction, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Quadratic Function", 8, "\n\nChange the values of the\nHessian matrix A, the\nvector d, and the constant c.\n"
                                                    "Then click [Update] to see\nthe new function.\n\nNote that the Hessian matrix\n"

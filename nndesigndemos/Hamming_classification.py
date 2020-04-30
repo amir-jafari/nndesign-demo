@@ -7,8 +7,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class HammingClassification(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(HammingClassification, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(HammingClassification, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Hamming Classification", 3, "Click [Go] to send a fruit\ndown the belt to be\nclassified"
                           " by a Hamming\nnetwork.\n\nThe calculations for the\nHamming network will\nappear below.",

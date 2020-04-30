@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class NonlinearOptimization(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(NonlinearOptimization, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(NonlinearOptimization, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Nonlinear Optimization", 17, "\n\n\nUse the slide bars to\nchoose the number of\nneurons in the"
                                                         " hidden\nlayer and the difficulty\nof the function.\n\nSelect a Weight"

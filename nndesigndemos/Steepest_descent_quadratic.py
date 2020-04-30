@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class SteepestDescentQuadratic(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(SteepestDescentQuadratic, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(SteepestDescentQuadratic, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Steepest Descent for Quadratic", 9, "Click anywhere on the\ngraph to start an initial\nguess."
                                                                "Then the steepest\ndescent trajectory\nwill be shown.\n\n"

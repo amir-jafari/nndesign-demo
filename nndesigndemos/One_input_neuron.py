@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class OneInputNeuron(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(OneInputNeuron, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(OneInputNeuron, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("One-Input Neuron", 2, "\nAlter the weight, bias and\ninput by moving the\nsliders.\n\n"
                                                  "Pick the transfer function\nwith the f menu."

@@ -7,8 +7,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class CompetitiveClassification(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(CompetitiveClassification, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(CompetitiveClassification, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Competitive Classification", 16, "Click [Go] to send a fruit\ndown the belt to be\nclassified"
                           " by the\ncompetitive layer.\n\nThe calculations for the\nlayer will appear\nbelow.",

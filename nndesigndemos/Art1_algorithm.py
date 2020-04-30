@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class ART1Algorithm(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(ART1Algorithm, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(ART1Algorithm, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("ART1 Algorithm", 19, "\n\nClick on the green\ngrids to define patterns.\nClick on the buttons\n"
                                                 "to present them.\n\nThe ART1 network's\nprototype patterns are\nshown below.\n\n"

@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class NetworkFunctionRadial(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(NetworkFunctionRadial, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(NetworkFunctionRadial, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.make_plot(1, (10, 400, 500, 250))
 

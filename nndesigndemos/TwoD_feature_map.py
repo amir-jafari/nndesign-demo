@@ -10,8 +10,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class TwoDFeatureMap(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(TwoDFeatureMap, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(TwoDFeatureMap, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("2-D Feature Map", 16, "Click [Train] to present 500\nvectors to the feature map.\n\n"
                                                  "Several clicks are required\nto obtain a stable network.\n\n"

@@ -8,8 +8,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class TaylorSeries2(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(TaylorSeries2, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(TaylorSeries2, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Taylor Series #2", 8, "\nClick in the top-left graph to\ncreate a Taylor series\napproximation."
                                                  "\n\nYou can rotate the 3D plots\nby clicking and dragging\n"

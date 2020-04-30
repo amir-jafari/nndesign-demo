@@ -11,8 +11,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class EEGNoiseCancellation(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(EEGNoiseCancellation, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(EEGNoiseCancellation, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("EEG Noise Cancellation", 10, "\n\n\nAn EEG signal has been\ncontaminated with noise.\n\nAn adaptive"
                                                         " linear\nnetwork is used to\nremove the noise.\n\nUse the sliders"

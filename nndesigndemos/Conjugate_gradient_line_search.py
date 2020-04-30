@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class ConjugateGradientLineSearch(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(ConjugateGradientLineSearch, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(ConjugateGradientLineSearch, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Conjugate Gradient Line Search", 12, "\nUse the pop up menu below\nto select the network\nparameters"
                                                                 " to train\nwith backpropagation.\n\nThe corresponding contour\nplot "

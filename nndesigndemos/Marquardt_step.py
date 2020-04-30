@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class MarquardtStep(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(MarquardtStep, self).__init__(w_ratio, h_ratio, main_menu=1)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(MarquardtStep, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Marquardt Step", 12, "\n\nClick on the contour plot\nto do a single step of the\n"
                                                 "Marquardt learning\nalgorithm.\n\nThe black arrow indicates\nthe "

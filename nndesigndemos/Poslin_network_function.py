@@ -9,8 +9,8 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
 class PoslinNetworkFunction(NNDLayout):
-    def __init__(self, w_ratio, h_ratio):
-        super(PoslinNetworkFunction, self).__init__(w_ratio, h_ratio, main_menu=2)
+    def __init__(self, w_ratio, h_ratio, dpi):
+        super(PoslinNetworkFunction, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
         self.fill_chapter("Poslin Network Function", 2, "\nAlter the network's\nparameters by dragging\nthe slide bars.\n\n"
                                                         "Choose the output transfer\nfunction f below.\n\n"
