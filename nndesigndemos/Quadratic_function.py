@@ -59,15 +59,21 @@ class QuadraticFunction(NNDLayout):
         # self.paint_latex_string("latex_A1", "$A =$", 16, (10, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_A2", "$[$", 45, (80, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_A3", "$]$", 45, (175, 415 + 30, 500, 200))
-        self.make_label("label_a", "A =", (53, 445, 500, 200), font_size=25)
-        self.make_label("label_a1", "[  ]", (94, 435, 500, 200), font_size=100)
-        self.label_a.setStyleSheet("color:black")
-        self.label_a1.setStyleSheet("color:black")
+        # self.make_label("label_a", "A =", (53, 445, 500, 200), font_size=25)
+        # self.make_label("label_a1", "[  ]", (94, 435, 500, 200), font_size=100)
+        # self.label_a.setStyleSheet("color:black")
+        # self.label_a1.setStyleSheet("color:black")
+
         self.make_input_box("a_11", "1.5", (100, 440 + 30, 60, 100))
         self.make_input_box("a_12", "-0.7", (150, 440 + 30, 60, 100))
         self.make_input_box("a_21", "-0.7", (100, 490 + 30, 60, 100))
         self.make_input_box("a_22", "1.0", (150, 490 + 30, 60, 100))
-
+        self.matrix = QtWidgets.QLabel(self)
+        pixmap = QtGui.QIcon(PACKAGE_PATH + "Figures/matrix.svg").pixmap(300 * self.w_ratio, 100 * self.h_ratio,
+                                                                            QtGui.QIcon.Normal,
+                                                                            QtGui.QIcon.On)
+        self.matrix.setPixmap(pixmap)
+        self.matrix.setGeometry(43 * self.w_ratio, 445 * self.h_ratio, 440 * self.w_ratio, 200 * self.h_ratio)
         # self.paint_latex_string("latex_d1", "$d =$", 16, (230, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_d2", "$[$", 45, (300, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_d3", "$]$", 45, (350, 415 + 30, 500, 200))
