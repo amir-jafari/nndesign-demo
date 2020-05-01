@@ -270,6 +270,8 @@ class MainWindowNN(NNDLayout):
             idx += 1
 
         QtWidgets.QApplication.processEvents()
+        QtWidgets.QApplication.processEvents()
+        QtWidgets.QApplication.processEvents()
 
     def chapter2(self, idx):
         self.comboBox1.setCurrentIndex(0)
@@ -618,6 +620,10 @@ class MainWindowDL(NNDLayout):
             comboBox.currentIndexChanged.connect(chapter_functions[chapter_numbers[idx] - 2])
             comboBox.connected = True
             idx += 1
+
+        QtWidgets.QApplication.processEvents()
+        QtWidgets.QApplication.processEvents()
+        QtWidgets.QApplication.processEvents()
 
     def chapter2(self, idx):
         self.comboBox1.setCurrentIndex(0)
