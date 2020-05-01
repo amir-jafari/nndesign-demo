@@ -68,6 +68,7 @@ class PerceptronClassification(NNDLayout):
                 self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
 
+        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         self.make_button("run_button", "Go", (self.x_chapter_button, 525, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
     def paintEvent(self, event):

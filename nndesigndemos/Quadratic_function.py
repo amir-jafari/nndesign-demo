@@ -1,3 +1,4 @@
+from PyQt5 import QtWidgets, QtGui
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -35,10 +36,23 @@ class QuadraticFunction(NNDLayout):
         self.axes_2.set_title("Function F", fontdict={'fontsize': 10}, pad=2)
         # self.axes_2.set_xlim(-2, 2)
         # self.axes_2.set_ylim(-2, 2)
-        self.axes_2.view_init(5, -5)
+        self.axes_2.view_init(30, -30)
+        # self.canvas2.mpl_connect("motion_notify_event", self.print_view)
 
-        self.paint_latex_string("latex_eq", "$F(x) = 1/2 \cdot x^T \cdot A \cdot x + d \cdot x^T + c$",
-                                10, (50, 320, 500, 200))
+        self.eq = QtWidgets.QLabel(self)
+        pixmap = QtGui.QIcon(PACKAGE_PATH + "Figures/equation_quadratic_f.svg").pixmap(350 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Normal,
+                                               QtGui.QIcon.On)
+        self.eq.setPixmap(pixmap)
+        self.eq.setGeometry(50 * self.w_ratio, 310 * self.h_ratio,
+                            440 * self.w_ratio, 200 * self.h_ratio)
+
+        # if self.running_on_windows:
+        #     self.paint_latex_string("latex_eq", "$F(x) = 1/2 \cdot x^T \cdot A \cdot x + d \cdot x^T + c$", 10, (50, 320, 500, 200))
+        # if self.running_on_linux:
+        #     self.paint_latex_string("latex_eq", "$F(x) = 1/2 \cdot x^T \cdot A \cdot x + d \cdot x^T + c$", 10, (50, 320, 500, 200))
+        # else:
+        #     self.paint_latex_string("latex_eq", "$F(x) = 1/2 \cdot x^T \cdot A \cdot x + d \cdot x^T + c$",
+        #                             10 * (self.w_ratio + self.h_ratio) / 2, (50, 320, 500, 200))
 
         # self.paint_latex_string("latex_A1", "$A =$", 16, (10, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_A2", "$[$", 45, (80, 415 + 30, 500, 200))
@@ -74,6 +88,9 @@ class QuadraticFunction(NNDLayout):
         self.make_button("run_button", "Update", (self.x_chapter_button, 355, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
         self.on_run()
+
+    # def print_view(self, event):
+    #     print(self.axes_2.elev, self.axes_2.azim)
 
     def on_run(self):
         if self.a_12.text() != self.a_21.text():

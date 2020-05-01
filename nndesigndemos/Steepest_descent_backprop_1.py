@@ -44,7 +44,7 @@ class SteepestDescentBackprop1(NNDLayout):
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.ani, self.event = None, None
         self.axes2 = Axes3D(self.figure2)
-        self.axes2.view_init(67.88, 46.008)
+        self.axes2.view_init(30, -30)
         self.axes2.zaxis.set_major_formatter(FormatStrFormatter('%.0f'))
         # self.canvas2.mpl_connect("motion_notify_event", self.print_view)
         self.axes2.set_title("Sum Sq. Error", fontdict={'fontsize': 10})
@@ -92,7 +92,7 @@ class SteepestDescentBackprop1(NNDLayout):
             self.axes.set_yticks([-5, 0, 5, 10])
             self.axes2.set_xticks([-5, 0, 5, 10])
             self.axes2.set_yticks([-5, 0, 5, 10])
-            self.axes2.view_init(67.88, 46.008)
+            self.axes2.view_init(30, -30)
         elif self.pair_of_params == 2:
             self.axes.set_xlim(-10, 30)
             self.axes.set_ylim(-20, 10)
@@ -101,7 +101,7 @@ class SteepestDescentBackprop1(NNDLayout):
             self.axes2.set_xticks([-10, 0, 10, 20])
             self.axes2.set_yticks([-20, -10, 0, 10, 20])
             self.axes2.set_zticks([0, 1, 2])
-            self.axes2.view_init(77.03, -68.39)
+            self.axes2.view_init(30, -30)
         elif self.pair_of_params == 3:
             self.axes.set_xlim(-10, 10)
             self.axes.set_ylim(-10, 10)
@@ -110,7 +110,7 @@ class SteepestDescentBackprop1(NNDLayout):
             self.axes2.set_xticks([-10, -5, 0, 5])
             self.axes2.set_yticks([-5, 0, 5, 10])
             self.axes2.set_zticks([0, 1])
-            self.axes2.view_init(64.88, -51.62)
+            self.axes2.view_init(30, -30)
         self.axes.set_xlabel(self.pair_params[self.pair_of_params - 1][0], fontsize=8)
         self.axes.xaxis.set_label_coords(0.95, -0.025)
         self.axes.set_ylabel(self.pair_params[self.pair_of_params - 1][1], fontsize=8)
