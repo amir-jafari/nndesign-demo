@@ -51,7 +51,7 @@ class ART1Layer1(NNDLayout):
         # self.paint_latex_string("latex_W21", "$W2:1 =$", 16, (30, 510, 250, 200))
         # self.paint_latex_string("latex_W22", "$[$", 45, (215, 510, 250, 200))
         # self.paint_latex_string("latex_W23", "$]$", 45, (335, 510, 250, 200))
-        self.make_label("label_a", "W2:1 =", (145, 503, 500, 200), font_size=25)
+        self.make_label("label_a", "W2:1 =", (145, 503, 200, 200), font_size=25)
         # self.make_label("label_a1", "[   ]", (226, 494, 500, 200), font_size=100)
         self.label_a.setStyleSheet("color:black")
         # self.label_a1.setStyleSheet("color:black")

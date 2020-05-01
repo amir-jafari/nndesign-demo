@@ -17,13 +17,13 @@ class GradientDescent(NNDLayout):
                                                  "\nThen the steepest descent\ntrajectory will be shown.\n\n"
                                                  "Modify the learning rate\nby moving the slide bar.\n\n"
                                                  "Experiment with different\ninitial guesses and\nlearning rates.",
-                          PACKAGE_PATH + "Chapters/3_D/Logo_Ch_3.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet_new.svg",
+                          PACKAGE_PATH + "Chapters/3_D/Logo_Ch_3.svg", None,
                           icon_move_left=120, description_coords=(535, 105, 450, 250))
 
         self.data = []
 
-        self.make_plot(1, (15, 300, 255, 370))
-        self.make_plot(2, (260, 300, 255, 370))
+        self.make_plot(1, (100, 100, 290, 290))
+        self.make_plot(2, (100, 390, 290, 290))
 
         self.axis = Axes3D(self.figure)
 
@@ -54,6 +54,9 @@ class GradientDescent(NNDLayout):
 
         self.a1 = self.figure2.add_subplot(111)
         self.a1.clear()  # Clear the plot
+
+        # self.a1.set_xlim([-3, 3])
+        # self.a1.set_ylim([-3, 3])
 
         hh = np.array([[-1, 2, 0, - 1], [2, - 1, - 1, 0]])
         t = np.array([-1, -1, 1, 1]).reshape(-1, 1)
@@ -111,6 +114,8 @@ class GradientDescent(NNDLayout):
 
         # aa.plot_surface(X1, X2, F)
         aa.plot_wireframe(X1, X2, F, rcount=30,ccount=30)
+        # aa.set_xlim([-3, 3])
+        # aa.set_ylim([-3, 3])
         # aa.plot_wireframe(self.P1, self.P2, z11,  rcount=10,ccount=10)
         self.a1.contour(X1, X2, F)
 

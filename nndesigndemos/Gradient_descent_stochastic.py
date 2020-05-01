@@ -17,13 +17,13 @@ class GradientDescentStochastic(NNDLayout):
                                                             "\nThen the steepest descent\ntrajectory will be shown.\n\n"
                                                             "Modify the learning rate\nby moving the slide bar.\n\n"
                                                             "Experiment with different\ninitial guesses and\nlearning rates.",
-                          PACKAGE_PATH + "Chapters/3_D/Logo_Ch_3.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet_new.svg",
+                          PACKAGE_PATH + "Chapters/3_D/Logo_Ch_3.svg", None,
                           icon_move_left=120, description_coords=(535, 105, 450, 250))
 
         self.data = []
 
-        self.make_plot(1, (15, 300, 255, 370))
-        self.make_plot(2, (260, 300, 255, 370))
+        self.make_plot(1, (100, 100, 290, 290))
+        self.make_plot(2, (100, 390, 290, 290))
 
         self.axis = Axes3D(self.figure)
 
