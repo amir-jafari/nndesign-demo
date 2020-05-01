@@ -24,6 +24,8 @@ class GradientDescent(NNDLayout):
 
         self.make_plot(1, (100, 100, 290, 290))
         self.make_plot(2, (100, 390, 290, 290))
+        self.figure.set_tight_layout(True)
+        self.figure2.set_tight_layout(True)
 
         self.axis = Axes3D(self.figure)
 
@@ -118,6 +120,8 @@ class GradientDescent(NNDLayout):
         # aa.set_ylim([-3, 3])
         # aa.plot_wireframe(self.P1, self.P2, z11,  rcount=10,ccount=10)
         self.a1.contour(X1, X2, F)
+        self.a1.set_xlabel(r'$\mathrm{w}_{1,1}$')
+        self.a1.set_ylabel(r'$\mathrm{w}_{1,2}$')
 
         # Setting limits so that the point moves instead of the plot.
         #a.set_xlim(-4, 4)

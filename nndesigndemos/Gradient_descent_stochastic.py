@@ -24,6 +24,8 @@ class GradientDescentStochastic(NNDLayout):
 
         self.make_plot(1, (100, 100, 290, 290))
         self.make_plot(2, (100, 390, 290, 290))
+        self.figure.set_tight_layout(True)
+        self.figure2.set_tight_layout(True)
 
         self.axis = Axes3D(self.figure)
 
