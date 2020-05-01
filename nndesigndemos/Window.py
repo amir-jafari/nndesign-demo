@@ -209,7 +209,7 @@ class MainWindowNN(NNDLayout):
         self.label_box4.setGeometry(xcm2 * self.w_ratio, (ycm1 + 3 * add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box4.setFont(QtGui.QFont("Times New Roman", font_size))
 
-        self.show_chapters()
+        # self.show_chapters()
 
         # ---- Buttons at the bottom to switch between blocks of chapters ----
 
@@ -240,6 +240,8 @@ class MainWindowNN(NNDLayout):
 
         self.center()
 
+        self.show_chapters()
+
     def show_chapters(self, chapters="2-5"):
         """ Updates the icons and dropdown menus based on a block of chapters (chapters) """
 
@@ -269,9 +271,10 @@ class MainWindowNN(NNDLayout):
             comboBox.connected = True
             idx += 1
 
-        QtWidgets.QApplication.processEvents()
-        QtWidgets.QApplication.processEvents()
-        QtWidgets.QApplication.processEvents()
+        # QtWidgets.QApplication.processEvents()
+        # QtWidgets.QApplication.processEvents()
+        # QtWidgets.QApplication.processEvents()
+        self.show()
 
     def chapter2(self, idx):
         self.comboBox1.setCurrentIndex(0)
@@ -583,7 +586,7 @@ class MainWindowDL(NNDLayout):
         self.label_box2.setGeometry(xcm2 * self.w_ratio, (ycm1 + add1 - subt) * self.h_ratio, wcm1 * self.w_ratio, hcm1 * self.h_ratio)
         self.label_box2.setFont(QtGui.QFont("Times New Roman", font_size))
 
-        self.show_chapters()
+        # self.show_chapters()
 
         # ---- Buttons at the bottom to switch between blocks of chapters ----
 
@@ -593,6 +596,8 @@ class MainWindowDL(NNDLayout):
         self.button1.clicked.connect(partial(self.show_chapters, "2-3"))
 
         self.center()
+
+        self.show_chapters()
 
     def show_chapters(self, chapters="2-3"):
         """ Updates the icons and dropdown menus based on a block of chapters (chapters) """
@@ -621,9 +626,10 @@ class MainWindowDL(NNDLayout):
             comboBox.connected = True
             idx += 1
 
-        QtWidgets.QApplication.processEvents()
-        QtWidgets.QApplication.processEvents()
-        QtWidgets.QApplication.processEvents()
+        self.show()
+        # QtWidgets.QApplication.processEvents()
+        # QtWidgets.QApplication.processEvents()
+        # QtWidgets.QApplication.processEvents()
 
     def chapter2(self, idx):
         self.comboBox1.setCurrentIndex(0)
