@@ -257,24 +257,27 @@ class MainWindowNN(NNDLayout):
             icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/book_logos/{}.svg".format(chapter_numbers[idx])).pixmap(
                 w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio)
+            icon.repaint()
             idx += 1
 
         idx = 0
         for label_box, comboBox in zip([self.label_box1, self.label_box2, self.label_box3, self.label_box4],
                                        [self.comboBox1, self.comboBox2, self.comboBox3, self.comboBox4]):
             label_box.setText(BOOK1_CHAPTERS_DEMOS[chapter_numbers[idx]][0])
+            label_box.repaint()
             if comboBox.connected:
                 comboBox.currentIndexChanged.disconnect()
             comboBox.clear()
             comboBox.addItems(BOOK1_CHAPTERS_DEMOS[chapter_numbers[idx]][1:])
             comboBox.currentIndexChanged.connect(chapter_functions[chapter_numbers[idx] - 2])
             comboBox.connected = True
+            comboBox.repaint()
             idx += 1
 
         # QtWidgets.QApplication.processEvents()
         # QtWidgets.QApplication.processEvents()
         # QtWidgets.QApplication.processEvents()
-        self.show()
+        # self.show()
 
     def chapter2(self, idx):
         self.comboBox1.setCurrentIndex(0)
@@ -612,21 +615,24 @@ class MainWindowDL(NNDLayout):
                 w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
             # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, w_Logo1, h_Logo1)
             icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio)
+            icon.repaint()
             idx += 1
 
         idx = 0
         for label_box, comboBox in zip([self.label_box1, self.label_box2],
                                        [self.comboBox1, self.comboBox2]):
             label_box.setText(BOOK2_CHAPTERS_DEMOS[chapter_numbers[idx]][0])
+            label_box.repaint()
             if comboBox.connected:
                 comboBox.currentIndexChanged.disconnect()
             comboBox.clear()
             comboBox.addItems(BOOK2_CHAPTERS_DEMOS[chapter_numbers[idx]][1:])
             comboBox.currentIndexChanged.connect(chapter_functions[chapter_numbers[idx] - 2])
             comboBox.connected = True
+            comboBox.repaint()
             idx += 1
 
-        self.show()
+        # self.show()
         # QtWidgets.QApplication.processEvents()
         # QtWidgets.QApplication.processEvents()
         # QtWidgets.QApplication.processEvents()
