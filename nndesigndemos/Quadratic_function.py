@@ -39,11 +39,13 @@ class QuadraticFunction(NNDLayout):
         self.axes_2.view_init(30, -30)
         # self.canvas2.mpl_connect("motion_notify_event", self.print_view)
 
+        # self.make_label("label_eq", "F(x) = 1/2 x.T A x + d x.T + c", (50, 310, 440, 200))
+
         self.eq = QtWidgets.QLabel(self)
-        pixmap = QtGui.QIcon(PACKAGE_PATH + "Figures/equation_quadratic_f.svg").pixmap(350 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Normal,
+        pixmap = QtGui.QIcon(PACKAGE_PATH + "Figures/equation1.svg").pixmap(350 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Normal,
                                                QtGui.QIcon.On)
         self.eq.setPixmap(pixmap)
-        self.eq.setGeometry(50 * self.w_ratio, 310 * self.h_ratio,
+        self.eq.setGeometry(100 * self.w_ratio, 320 * self.h_ratio,
                             440 * self.w_ratio, 200 * self.h_ratio)
 
         # if self.running_on_windows:
