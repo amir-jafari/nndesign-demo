@@ -16,7 +16,7 @@ class PoslinNetworkFunction(NNDLayout):
                                                         "Choose the output transfer\nfunction f below.\n\n"
                                                         "Click on [Random] to\nset each parameter\nto a random value.",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg",
-                          PACKAGE_PATH + "Chapters/2_D/poslinNet_new.svg", icon_move_left=120, icon_coords=(130, 160, 500, 200))
+                          PACKAGE_PATH + "Figures/PoslinNetSimple.svg", icon_move_left=120, icon_coords=(130, 160, 500, 200))
 
         self.make_plot(1, (10, 415, 500, 270))
 
@@ -47,7 +47,7 @@ class PoslinNetworkFunction(NNDLayout):
                          (330, 380, 150, 50), self.graph, "label_w2_2", "W2(1,2):", (370, 380 - 25, 100, 50))
 
         self.make_slider("slider_b2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksAbove, 1, 0,
-                         (360, 190, 150, 50), self.graph, "label_b2", "b2:", (400, 190 - 25, 100, 50))
+                         (360, 180, 150, 50), self.graph, "label_b2", "b2:", (400, 180 - 25, 100, 50))
 
         self.graph()
 

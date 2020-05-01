@@ -17,7 +17,7 @@ class PoslinDecisionRegions3D(NNDLayout):
         self.fill_chapter("Poslin Decision Regions 3D", 2, "\nAlter the network's\nparameters by clicking\nthe "
                                                            "buttons and\nmodifying the input text.\n\n"
                                                            "Choose the output transfer\nfunction f below.",
-                          PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/poslinNet2D_1.svg",
+                          PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Figures/poslinNet2Ddemo.svg",
                           icon_move_left=120, description_coords=(535, 100, 450, 200))
 
         self.make_plot(1, (85, 300, 370, 370))
