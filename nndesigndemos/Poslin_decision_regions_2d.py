@@ -84,7 +84,7 @@ class PoslinDecisionRegions2D(NNDLayout):
                 print("Please enter value in the following format: [[a11,a12], [a21,a22]]")
                 return
             self.label_b1.setText("b1: " + str(b1))
-            self.b1 = b1
+            self.b1 = np.array(b1)
             self.graph()
 
     def change_b2(self):
@@ -96,7 +96,7 @@ class PoslinDecisionRegions2D(NNDLayout):
                 print("Please enter value in the following format: [[a11,a12], [a21,a22]]")
                 return
             self.label_b2.setText("b2: " + str(b2))
-            self.b2 = b2
+            self.b2 = np.array(b2)
             self.graph()
 
     def graph(self):
