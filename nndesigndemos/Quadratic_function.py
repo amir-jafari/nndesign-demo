@@ -87,7 +87,7 @@ class QuadraticFunction(NNDLayout):
         # self.paint_latex_string("latex_c1", "$c =$", 12, (405 - 5, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_c2", "$[$", 16, (460 - 5, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_c3", "$]$", 16, (500 - 5, 415 + 30, 500, 200))
-        self.make_label("label_c", "c =", (420, 445, 500, 200), font_size=25)
+        self.make_label("label_c", "c =", (415, 445, 500, 200), font_size=25)
         # self.make_label("label_c1", "[    ]", (455, 442, 500, 200), font_size=30)
         self.label_c.setStyleSheet("color:black")
         # self.label_c1.setStyleSheet("color:black")
@@ -108,7 +108,7 @@ class QuadraticFunction(NNDLayout):
         painter.setPen(pen)
         self.paint_bracket(painter, 100, 500, 590, 118)
         self.paint_bracket(painter, 320, 500, 590, 65)
-        self.paint_bracket(painter, 459, 530, 560, 40, 5)
+        self.paint_bracket(painter, 452, 530, 560, 56, 5)
         painter.end()
 
     def on_run(self):
