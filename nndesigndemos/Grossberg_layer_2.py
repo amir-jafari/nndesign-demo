@@ -50,13 +50,13 @@ class GrossbergLayer2(NNDLayout):
         # self.paint_latex_string("latex_W22", "$[$", 45, (170, 510, 500, 200))
         # self.paint_latex_string("latex_W23", "$]$", 45, (320, 510, 500, 200))
         self.make_label("label_a", "W =", (140, 503, 500, 200), font_size=25)
-        # self.make_label("label_a1", "[   ]", (190, 494, 500, 200), font_size=100)
+        self.make_label("label_a1", "[   ]", (190, 494, 500, 200), font_size=100)
         self.label_a.setStyleSheet("color:black")
-        # self.label_a1.setStyleSheet("color:black")
-        self.make_input_box("w_11", "0.9", (200, 530, 70, 100))
-        self.make_input_box("w_12", "0.45", (260, 530, 70, 100))
-        self.make_input_box("w_21", "0.45", (200, 580, 70, 100))
-        self.make_input_box("w_22", "0.9", (260, 580, 70, 100))
+        self.label_a1.setStyleSheet("color:black")
+        self.make_input_box("w_11", "0.9", (202, 530, 60, 100))
+        self.make_input_box("w_12", "0.45", (260, 530, 60, 100))
+        self.make_input_box("w_21", "0.45", (202, 580, 60, 100))
+        self.make_input_box("w_22", "0.9", (260, 580, 60, 100))
 
         self.comboBox1_functions = [self.f2, self.purelin, self.f3, self.f4]
         self.comboBox1_functions_str = ['(10n^2)/(1 + n^2)', "purelin", '10n^2', '1 - exp(-n)']

@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -60,14 +60,14 @@ class QuadraticFunction(NNDLayout):
         # self.paint_latex_string("latex_A2", "$[$", 45, (80, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_A3", "$]$", 45, (175, 415 + 30, 500, 200))
         self.make_label("label_a", "A =", (53, 445, 500, 200), font_size=25)
-        # self.make_label("label_a1", "[  ]", (94, 435, 500, 200), font_size=100)
+        # self.make_label("label_a1", "[   ]", (94, 435, 500, 200), font_size=100)
         self.label_a.setStyleSheet("color:black")
         # self.label_a1.setStyleSheet("color:black")
 
-        self.make_input_box("a_11", "1.5", (100, 440 + 30, 60, 100))
-        self.make_input_box("a_12", "-0.7", (150, 440 + 30, 60, 100))
-        self.make_input_box("a_21", "-0.7", (100, 490 + 30, 60, 100))
-        self.make_input_box("a_22", "1.0", (150, 490 + 30, 60, 100))
+        self.make_input_box("a_11", "1.5", (100, 440 + 30, 55, 100))
+        self.make_input_box("a_12", "-0.7", (165, 440 + 30, 55, 100))
+        self.make_input_box("a_21", "-0.7", (100, 490 + 30, 55, 100))
+        self.make_input_box("a_22", "1.0", (165, 490 + 30, 55, 100))
         # self.matrix = QtWidgets.QLabel(self)
         # pixmap = QtGui.QIcon(PACKAGE_PATH + "Figures/matrix.svg").pixmap(300 * self.w_ratio, 100 * self.h_ratio,
         #                                                                     QtGui.QIcon.Normal,
@@ -77,21 +77,21 @@ class QuadraticFunction(NNDLayout):
         # self.paint_latex_string("latex_d1", "$d =$", 16, (230, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_d2", "$[$", 45, (300, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_d3", "$]$", 45, (350, 415 + 30, 500, 200))
-        self.make_label("label_d", "d =", (265, 445, 500, 200), font_size=25)
+        # self.make_label("label_d", "d =", (265, 445, 500, 200), font_size=25)
         # self.make_label("label_d1", "[ ]", (305, 435, 500, 200), font_size=100)
-        self.label_d.setStyleSheet("color:black")
+        # self.label_d.setStyleSheet("color:black")
         # self.label_d1.setStyleSheet("color:black")
-        self.make_input_box("d_1", "0.35", (320, 440 + 30, 60, 100))
-        self.make_input_box("d_2", "0.25", (320, 490 + 30, 60, 100))
+        self.make_input_box("d_1", "0.35", (324, 440 + 30, 55, 100))
+        self.make_input_box("d_2", "0.25", (324, 490 + 30, 55, 100))
 
         # self.paint_latex_string("latex_c1", "$c =$", 12, (405 - 5, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_c2", "$[$", 16, (460 - 5, 415 + 30, 500, 200))
         # self.paint_latex_string("latex_c3", "$]$", 16, (500 - 5, 415 + 30, 500, 200))
-        self.make_label("label_c", "c =", (430, 445, 500, 200), font_size=25)
-        # self.make_label("label_c1", "[   ]", (465, 442, 500, 200), font_size=30)
-        self.label_c.setStyleSheet("color:black")
+        # self.make_label("label_c", "c =", (420, 445, 500, 200), font_size=25)
+        # self.make_label("label_c1", "[    ]", (455, 442, 500, 200), font_size=30)
+        # self.label_c.setStyleSheet("color:black")
         # self.label_c1.setStyleSheet("color:black")
-        self.make_input_box("c", "1.0", (460 - 5, 465 + 30, 60, 100))
+        self.make_input_box("c", "1.0", (452, 465 + 30, 55, 100))
 
         self.make_button("run_button", "Update", (self.x_chapter_button, 355, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
@@ -99,6 +99,21 @@ class QuadraticFunction(NNDLayout):
 
     # def print_view(self, event):
     #     print(self.axes_2.elev, self.axes_2.azim)
+
+    def paintEvent(self, event):
+        super(QuadraticFunction, self).paintEvent(event)
+        painter = QtGui.QPainter()
+        painter.begin(self)
+        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        painter.setPen(pen)
+        # painter.drawText(60, 550, "A =", font)
+        painter.drawLine(100 * self.w_ratio, 500 * self.h_ratio, 100 * self.w_ratio, 590 * self.h_ratio)
+        painter.drawLine(100 * self.w_ratio, 500 * self.h_ratio, 116 * self.w_ratio, 500 * self.h_ratio)
+        painter.drawLine(100 * self.w_ratio, 590 * self.h_ratio, 116 * self.w_ratio, 590 * self.h_ratio)
+        painter.drawLine((100 + 118) * self.w_ratio, 500 * self.h_ratio, (100 + 118) * self.w_ratio, 590 * self.h_ratio)
+        painter.drawLine((100 + 118 - 16) * self.w_ratio, 500 * self.h_ratio, (100 + 118) * self.w_ratio, 500 * self.h_ratio)
+        painter.drawLine((100 + 118 - 16) * self.w_ratio, 590 * self.h_ratio, (100 + 118) * self.w_ratio, 590 * self.h_ratio)
+        painter.end()
 
     def on_run(self):
         if self.a_12.text() != self.a_21.text():

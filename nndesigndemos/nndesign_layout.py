@@ -359,9 +359,10 @@ class NNDLayout(QMainWindow):
             input_box.setStyleSheet("font: {}px".format(int(12 * 0.9)))
         else:
             input_box.setStyleSheet("font: {}px".format(int(12 * (self.w_ratio + self.h_ratio) / 2)))
-        input_box.setGeometry(input_box_coords[0] * self.w_ratio * 1.1, input_box_coords[1] * self.h_ratio,
-                              input_box_coords[2], input_box_coords[3] * self.h_ratio)
-        self.set_layout((input_box_coords[0] * 1.01, input_box_coords[1], input_box_coords[2] * 0.9, input_box_coords[3]), input_box)
+        input_box.setGeometry(input_box_coords[0] * self.w_ratio, input_box_coords[1] * self.h_ratio,
+                              input_box_coords[2] * self.w_ratio, input_box_coords[3] * self.h_ratio)
+        # self.set_layout((input_box_coords[0] * 1.01, input_box_coords[1], input_box_coords[2] * 0.9, input_box_coords[3]), input_box)
+        self.set_layout(input_box_coords, input_box)
 
     def get_slider_value_and_update(self, slider, slider_label, value_multiplier=1, round_pos=0):
         value = slider.value() * value_multiplier
