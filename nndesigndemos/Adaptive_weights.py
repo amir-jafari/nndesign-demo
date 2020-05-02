@@ -1,3 +1,4 @@
+from PyQt5 import QtGui, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -44,9 +45,9 @@ class AdaptiveWeights(NNDLayout):
         # self.paint_latex_string("latex_n13", "$[$", 40, (140, 510, 500, 200))
         # self.paint_latex_string("latex_n14", "$]$", 40, (200, 510, 500, 200))
         self.make_label("label_a", "1st n1 =", (60, 503, 500, 200), font_size=25)
-        self.make_label("label_a1", "[ ]", (145, 494, 500, 200), font_size=100)
+        # self.make_label("label_a1", "[ ]", (145, 494, 500, 200), font_size=100)
         self.label_a.setStyleSheet("color:black")
-        self.label_a1.setStyleSheet("color:black")
+        # self.label_a1.setStyleSheet("color:black")
         self.make_input_box("n_11", "0.9", (161, 530, 60, 100))
         self.make_input_box("n_12", "0.45", (161, 577, 60, 100))
 
@@ -55,9 +56,9 @@ class AdaptiveWeights(NNDLayout):
         # self.paint_latex_string("latex_n23", "$[$", 40, (400, 510, 500, 200))
         # self.paint_latex_string("latex_n24", "$]$", 40, (460, 510, 500, 200))
         self.make_label("label_aa", "2nd n1 =", (320, 503, 500, 200), font_size=25)
-        self.make_label("label_aa1", "[ ]", (410, 494, 500, 200), font_size=100)
+        # self.make_label("label_aa1", "[ ]", (410, 494, 500, 200), font_size=100)
         self.label_aa.setStyleSheet("color:black")
-        self.label_aa1.setStyleSheet("color:black")
+        # self.label_aa1.setStyleSheet("color:black")
         self.make_input_box("n_21", "0.45", (426, 530, 60, 100))
         self.make_input_box("n_22", "0.90", (426, 577, 60, 100))
 
@@ -71,6 +72,16 @@ class AdaptiveWeights(NNDLayout):
         self.make_button("run_button", "Update", (self.x_chapter_button, 470, self.w_chapter_button, self.h_chapter_button), self.graph)
 
         self.graph()
+
+    def paintEvent(self, event):
+        super(AdaptiveWeights, self).paintEvent(event)
+        painter = QtGui.QPainter()
+        painter.begin(self)
+        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        painter.setPen(pen)
+        self.paint_bracket(painter, 161, 559, 646, 60)
+        self.paint_bracket(painter, 426, 559, 646, 60)
+        painter.end()
 
     def change_learning_rule(self, idx):
         self.rule = idx + 1

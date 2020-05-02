@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -52,9 +52,9 @@ class ART1Layer1(NNDLayout):
         # self.paint_latex_string("latex_W22", "$[$", 45, (215, 510, 250, 200))
         # self.paint_latex_string("latex_W23", "$]$", 45, (335, 510, 250, 200))
         self.make_label("label_a", "W2:1 =", (145, 503, 200, 200), font_size=25)
-        self.make_label("label_a1", "[   ]", (226, 494, 500, 200), font_size=100)
+        # self.make_label("label_a1", "[   ]", (226, 494, 500, 200), font_size=100)
         self.label_a.setStyleSheet("color:black")
-        self.label_a1.setStyleSheet("color:black")
+        # self.label_a1.setStyleSheet("color:black")
         self.make_input_box("w_11", "1", (239, 530, 60, 100))
         self.make_input_box("w_12", "1", (295, 530, 60, 100))
         self.make_input_box("w_21", "0", (239, 580, 60, 100))
@@ -64,6 +64,15 @@ class ART1Layer1(NNDLayout):
         self.make_button("random_button", "Update", (self.x_chapter_button, 605, self.w_chapter_button, self.h_chapter_button), self.graph)
 
         self.graph()
+
+    def paintEvent(self, event):
+        super(ART1Layer1, self).paintEvent(event)
+        painter = QtGui.QPainter()
+        painter.begin(self)
+        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        painter.setPen(pen)
+        self.paint_bracket(painter, 238, 558, 650, 118)
+        painter.end()
 
     def layer1(self, t, y):
         return [(-y[0] + (self.bp - y[0]) * (self.p[0, 0] + self.W2[0, 1]) - (y[0] + self.bn)) / 0.1,

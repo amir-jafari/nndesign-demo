@@ -25,7 +25,7 @@ To deactivate the virtual environment, just type `deactivate`.
 
 ## Usage
 
-All the demos start from the same main menu, which can be accessed by entering the Python Shell and typing
+All the demos start from the same main menu, which can be accessed by entering the Python Shell and running
 
 ```
 from nndesigndemos import nndtoc
@@ -36,8 +36,9 @@ After doing so, a window will pop up, and you will be able to navigate the demos
 
 The original software for these demos runs on MATLAB, so for every section of the 
 [Neural Network Design](https://hagan.okstate.edu/NNDesign.pdf) book where you see the MATLAB logo, 
-there will be a corresponding Python demo in this package. The second book is in progress and there is not even a cover 
-yet, as you will realize after running the code above.
+there will be a corresponding Python demo in this package. The second book is in progress.
+
+If you are using multiple monitors and switching between them, you may need to restart your computer to avoid scaling issues.
 
 ## Dependencies
 

@@ -212,6 +212,14 @@ class NNDLayout(QMainWindow):
         latex_label.setGeometry(latex_coords[0] * self.w_ratio, latex_coords[1] * self.h_ratio,
                                 latex_coords[2] * self.w_ratio, latex_coords[3] * self.h_ratio)
 
+    def paint_bracket(self, painter, x, y_1, y_2, w, add_small=16):
+        painter.drawLine(x * self.w_ratio, y_1 * self.h_ratio, x * self.w_ratio, y_2 * self.h_ratio)
+        painter.drawLine(x * self.w_ratio, y_1 * self.h_ratio, (x + add_small) * self.w_ratio, y_1 * self.h_ratio)
+        painter.drawLine(x * self.w_ratio, y_2 * self.h_ratio, (x + add_small) * self.w_ratio, y_2 * self.h_ratio)
+        painter.drawLine((x + w) * self.w_ratio, y_1 * self.h_ratio, (x + w) * self.w_ratio, y_2 * self.h_ratio)
+        painter.drawLine((x + w - add_small) * self.w_ratio, y_1 * self.h_ratio, (x + w) * self.w_ratio, y_1 * self.h_ratio)
+        painter.drawLine((x + w - add_small) * self.w_ratio, y_2 * self.h_ratio, (x + w) * self.w_ratio, y_2 * self.h_ratio)
+
     def show_image(self, image_attr_name, image_path, image_coords):
         setattr(self, image_attr_name, QtWidgets.QLabel(self))
         img = getattr(self, image_attr_name)

@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -66,9 +66,9 @@ class HopfieldNetwork(NNDLayout):
         # self.paint_latex_string("latex_a2", "$[$", 45, (170, 340, 500, 200))
         # self.paint_latex_string("latex_a3", "$]$", 45, (320, 340, 500, 200))
         self.make_label("label_a", "W =", (140, 335, 500, 200), font_size=25)
-        self.make_label("label_a1", "[   ]", (190, 324, 500, 200), font_size=100)
+        # self.make_label("label_a1", "[   ]", (190, 324, 500, 200), font_size=100)
         self.label_a.setStyleSheet("color:black")
-        self.label_a1.setStyleSheet("color:black")
+        # self.label_a1.setStyleSheet("color:black")
         self.make_input_box("a_11", "0", (201, 360, 60, 100))
         self.make_input_box("a_12", "1", (260, 360, 60, 100))
         self.make_input_box("a_21", "1", (201, 410, 60, 100))
@@ -78,9 +78,9 @@ class HopfieldNetwork(NNDLayout):
         # self.paint_latex_string("latex_b2", "$[$", 45, (210, 490, 500, 200))
         # self.paint_latex_string("latex_b3", "$]$", 45, (290, 490, 500, 200))
         self.make_label("label_d", "b =", (190, 486, 500, 200), font_size=25)
-        self.make_label("label_dd", "[ ]", (227, 476, 500, 200), font_size=100)
+        # self.make_label("label_dd", "[ ]", (227, 476, 500, 200), font_size=100)
         self.label_d.setStyleSheet("color:black")
-        self.label_dd.setStyleSheet("color:black")
+        # self.label_dd.setStyleSheet("color:black")
         self.make_input_box("d_1", "0", (243, 510, 60, 100))
         self.make_input_box("d_2", "0", (243, 560, 60, 100))
 
@@ -96,6 +96,16 @@ class HopfieldNetwork(NNDLayout):
         self.make_button("run_button", "Update", (self.x_chapter_button, 380, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
         self.on_run()
+
+    def paintEvent(self, event):
+        super(HopfieldNetwork, self).paintEvent(event)
+        painter = QtGui.QPainter()
+        painter.begin(self)
+        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        painter.setPen(pen)
+        self.paint_bracket(painter, 201, 390, 478, 119)
+        self.paint_bracket(painter, 241, 539, 630, 64)
+        painter.end()
 
     def hop(self, t, y):
         a = 2 / np.pi * np.arctan(self.finite_value_gain * np.pi * y * 0.5)

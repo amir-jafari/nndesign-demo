@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 import numpy as np
 import warnings
 import matplotlib.cbook
@@ -50,9 +50,9 @@ class GrossbergLayer2(NNDLayout):
         # self.paint_latex_string("latex_W22", "$[$", 45, (170, 510, 500, 200))
         # self.paint_latex_string("latex_W23", "$]$", 45, (320, 510, 500, 200))
         self.make_label("label_a", "W =", (140, 503, 500, 200), font_size=25)
-        self.make_label("label_a1", "[   ]", (190, 494, 500, 200), font_size=100)
+        # self.make_label("label_a1", "[   ]", (190, 494, 500, 200), font_size=100)
         self.label_a.setStyleSheet("color:black")
-        self.label_a1.setStyleSheet("color:black")
+        # self.label_a1.setStyleSheet("color:black")
         self.make_input_box("w_11", "0.9", (202, 530, 60, 100))
         self.make_input_box("w_12", "0.45", (260, 530, 60, 100))
         self.make_input_box("w_21", "0.45", (202, 580, 60, 100))
@@ -71,6 +71,15 @@ class GrossbergLayer2(NNDLayout):
         self.do_graph = True
 
         self.graph()
+
+    def paintEvent(self, event):
+        super(GrossbergLayer2, self).paintEvent(event)
+        painter = QtGui.QPainter()
+        painter.begin(self)
+        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        painter.setPen(pen)
+        self.paint_bracket(painter, 203, 560, 650, 115)
+        painter.end()
 
     def slider_disconnect(self):
         self.sender().valueChanged.disconnect()
