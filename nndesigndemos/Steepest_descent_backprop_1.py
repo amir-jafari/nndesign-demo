@@ -29,11 +29,6 @@ class SteepestDescentBackprop1(NNDLayout):
         self.T = self.logsigmoid(np.dot(self.W2, A1) + self.b2)
         self.lr, self.epochs = None, None
 
-        # p = np.linspace(-2, 2, 1000).reshape(1, -1)
-        # f_target = self.logsig(self.W2.dot(self.logsig(self.W1.dot(p) + self.b1)) + self.b2)
-        # w1_1, w1_2 = np.linspace(-5, 15, 1000).reshape(-1, 1), np.linspace(-5, 15, 1000)
-        # f_1 = self.logsig(self.W2.dot(self.logsig(w1_1.dot(p) + w1_2.dot(p) + self.b1)) + self.b2)
-
         self.make_plot(1, (255, 380, 260, 260))
         self.make_plot(2, (5, 380, 260, 260))
 
@@ -68,6 +63,8 @@ class SteepestDescentBackprop1(NNDLayout):
     #     print(self.axes2.elev, self.axes2.azim)
 
     def change_pair_of_params(self, idx):
+        if self.ani:
+            self.ani.event_source.stop()
         self.pair_of_params = idx + 1
         self.init_point_1.set_data([], [])
         self.end_point_1.set_data([], [])
@@ -84,12 +81,12 @@ class SteepestDescentBackprop1(NNDLayout):
         while self.axes2.collections:
             for collection in self.axes2.collections:
                 collection.remove()
-        f_data = loadmat(PACKAGE_PATH + "Data/nndbp{}.mat".format(self.pair_of_params))
+        f_data = loadmat(PACKAGE_PATH + "Data/nndbp_new_{}.mat".format(self.pair_of_params))
         x1, y1 = np.meshgrid(f_data["x1"], f_data["y1"])
-        x2, y2 = np.meshgrid(f_data["x2"], f_data["y2"])
         self.axes.contour(x1, y1, f_data["E1"], list(f_data["levels"].reshape(-1)))
-        self.axes2.plot_surface(x2, y2, f_data["E2"], color="cyan")
+        self.axes2.plot_surface(x1, y1, f_data["E1"], color="cyan")
         if self.pair_of_params == 1:
+            self.axes.scatter([self.W1[0, 0]], [self.W2[0, 0]], color="black", marker="+")
             self.axes.set_xlim(-5, 15)
             self.axes.set_ylim(-5, 15)
             self.axes.set_xticks([-5, 0, 5, 10])
@@ -98,6 +95,7 @@ class SteepestDescentBackprop1(NNDLayout):
             self.axes2.set_yticks([-5, 0, 5, 10])
             self.axes2.view_init(30, -30)
         elif self.pair_of_params == 2:
+            self.axes.scatter([self.W1[0, 0]], [self.b1[0, 0]], color="black", marker="+")
             self.axes.set_xlim(-10, 30)
             self.axes.set_ylim(-20, 10)
             self.axes.set_xticks([-10, 0, 10, 20])
@@ -107,6 +105,7 @@ class SteepestDescentBackprop1(NNDLayout):
             self.axes2.set_zticks([0, 1, 2])
             self.axes2.view_init(30, -30)
         elif self.pair_of_params == 3:
+            self.axes.scatter([self.b1[0, 0]], [self.b1[1, 0]], color="black", marker="+")
             self.axes.set_xlim(-10, 10)
             self.axes.set_ylim(-10, 10)
             self.axes.set_xticks([-10, -5, 0, 5])

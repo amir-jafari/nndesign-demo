@@ -58,6 +58,8 @@ class ConjugateGradient(NNDLayout):
         self.canvas.draw()
 
     def change_pair_of_params(self, idx):
+        if self.ani:
+            self.ani.event_source.stop()
         self.pair_of_params = idx + 1
         self.end_point_1.set_data([], [])
         self.init_point_1.set_data([], [])
@@ -71,20 +73,23 @@ class ConjugateGradient(NNDLayout):
         while self.axes.collections:
             for collection in self.axes.collections:
                 collection.remove()
-        f_data = loadmat(PACKAGE_PATH + "Data/nndbp{}.mat".format(self.pair_of_params))
+        f_data = loadmat(PACKAGE_PATH + "Data/nndbp_new_{}.mat".format(self.pair_of_params))
         x1, y1 = np.meshgrid(f_data["x1"], f_data["y1"])
         self.axes.contour(x1, y1, f_data["E1"], list(f_data["levels"].reshape(-1)))
         if self.pair_of_params == 1:
+            self.axes.scatter([self.W1[0, 0]], [self.W2[0, 0]], color="black", marker="+")
             self.axes.set_xlim(-5, 15)
             self.axes.set_ylim(-5, 15)
             self.axes.set_xticks([-5, 0, 5, 10])
             self.axes.set_yticks([-5, 0, 5, 10])
         elif self.pair_of_params == 2:
+            self.axes.scatter([self.W1[0, 0]], [self.b1[0, 0]], color="black", marker="+")
             self.axes.set_xlim(-10, 30)
             self.axes.set_ylim(-20, 10)
             self.axes.set_xticks([-10, 0, 10, 20])
             self.axes.set_yticks([-20, -15, -10, -5, 0, 5])
         elif self.pair_of_params == 3:
+            self.axes.scatter([self.b1[0, 0]], [self.b1[1, 0]], color="black", marker="+")
             self.axes.set_xlim(-10, 10)
             self.axes.set_ylim(-10, 10)
             self.axes.set_xticks([-10, -5, 0, 5])
