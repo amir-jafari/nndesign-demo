@@ -34,11 +34,13 @@ class ConjugateGradientLineSearch(NNDLayout):
 
         self.make_plot(1, (20, 280, 480, 400))
         self.axes = self.figure.add_subplot(1, 1, 1)
-        self.path, = self.axes.plot([], linestyle='none', marker='*', color="blue")
+        self.init_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=6, color="k")
+        self.x_data_circ, self.y_data_circ = [], []
+        self.path, = self.axes.plot([], linestyle='none', marker='.', color="blue")
         self.x_data, self.y_data = [], []
-        self.path_k, =  self.axes.plot([], linestyle='none', marker='*', color="black")
+        self.path_k, =  self.axes.plot([], linestyle='none', marker='.', color="black")
         self.x_data_k, self.y_data_k = [], []
-        self.path_r, = self.axes.plot([], linestyle='none', marker='*', color="red")
+        self.path_r, = self.axes.plot([], linestyle='none', marker='.', color="red")
         self.x_data_r, self.y_data_r = [], []
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
@@ -57,12 +59,13 @@ class ConjugateGradientLineSearch(NNDLayout):
     def change_pair_of_params(self, idx):
         self.pair_of_params = idx + 1
         self.init_params()
+        self.init_point_1.set_data([], [])
         self.plot_data()
         self.canvas.draw()
 
     def plot_data(self):
-        self.x_data, self.x_data_k, self.x_data_r = [], [], []
-        self.y_data, self.y_data_k, self.y_data_r = [], [], []
+        self.x_data, self.x_data_k, self.x_data_r, self.x_data_circ = [], [], [], []
+        self.y_data, self.y_data_k, self.y_data_r, self.y_data_circ = [], [], [], []
         self.path.set_data(self.x_data, self.y_data)
         self.path_k.set_data(self.x_data_k, self.y_data_k)
         self.path_r.set_data(self.x_data_k, self.y_data_r)
@@ -148,12 +151,10 @@ class ConjugateGradientLineSearch(NNDLayout):
                 a2 = self.logsigmoid(n2)
                 e = self.T - a2
                 fb = np.sum(e * e)
-                self.x_data.append(self.x)
-                self.y_data.append(self.y)
+                self.x_data_circ.append(self.x)
+                self.y_data_circ.append(self.y)
             a = aold
             self.fa = faold
-            self.x_data.append(self.x)
-            self.y_data.append(self.y)
 
             if self.pair_of_params == 1:
                 self.x, self.y = self.W1[0, 0] + a * self.dW1[0, 0], self.W2[0, 0] + a * self.dW2[0, 0]
@@ -163,6 +164,8 @@ class ConjugateGradientLineSearch(NNDLayout):
                 self.x, self.y = self.b1[0] + a * self.db1[0], self.b1[1] + a * self.db1[1]
             self.x_data_k.append(self.x)
             self.y_data_k.append(self.y)
+            self.x_data_circ.append(self.x)
+            self.y_data_circ.append(self.y)
             if self.pair_of_params == 1:
                 self.x, self.y = self.W1[0, 0] + b * self.dW1[0, 0], self.W2[0, 0] + b * self.dW2[0, 0]
             elif self.pair_of_params == 2:
@@ -171,6 +174,8 @@ class ConjugateGradientLineSearch(NNDLayout):
                 self.x, self.y = self.b1[0] + b * self.db1[0], self.b1[1] + b * self.db1[1]
             self.x_data_k.append(self.x)
             self.y_data_k.append(self.y)
+            self.x_data_circ.append(self.x)
+            self.y_data_circ.append(self.y)
 
             c = a + self.tau1 * (b - a)
             if self.pair_of_params == 1:
@@ -267,8 +272,8 @@ class ConjugateGradientLineSearch(NNDLayout):
                     a2 = self.logsigmoid(n2)
                     e = self.T - a2
                     fd = np.sum(e * e)
-                    # self.x_data_k.append(self.x)
-                    # self.y_data_k.append(self.y)
+                    self.x_data_k.append(self.x)
+                    self.y_data_k.append(self.y)
             self.x_data_r.append(self.x)
             self.y_data_r.append(self.y)
             if self.pair_of_params == 1:
@@ -324,6 +329,7 @@ class ConjugateGradientLineSearch(NNDLayout):
         self.x_data, self.y_data = [], []
         self.x_data_k, self.y_data_k = [], []
         self.x_data_r, self.y_data_r = [], []
+        self.x_data_circ, self.y_data_circ = [], []
         self.path.set_data(self.x_data, self.y_data)
         self.path_k.set_data(self.x_data_k, self.y_data_k)
         self.path_r.set_data(self.x_data_r, self.y_data_r)
@@ -360,6 +366,7 @@ class ConjugateGradientLineSearch(NNDLayout):
         self.path_k.set_data(self.x_data_k, self.y_data_k)
         self.path.set_data(self.x_data, self.y_data)
         self.path_r.set_data(self.x_data_r, self.y_data_r)
+        self.init_point_1.set_data([event.xdata] + self.x_data_circ, [event.ydata] + self.y_data_circ)
         self.canvas.draw()
 
     def init_params(self):
