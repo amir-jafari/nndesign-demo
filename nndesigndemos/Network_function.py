@@ -19,6 +19,18 @@ class NetworkFunction(NNDLayout):
                           icon_move_left=120, icon_coords=(130, 150, 500, 200))
 
         self.make_plot(1, (10, 390, 500, 290))
+        self.axis = self.figure.add_subplot(1, 1, 1)
+        self.axis.set_xlim(-2, 2)
+        self.axis.set_ylim(-2, 2)
+        self.axis.set_xticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
+        self.axis.set_yticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
+        self.axis.plot([0] * 10, np.linspace(-2, 2, 10), color="black", linestyle="--", linewidth=0.2)
+        self.axis.plot(np.linspace(-2, 2, 10), [0] * 10, color="black", linestyle="--", linewidth=0.2)
+        self.axis.set_xlabel("$p$")
+        self.axis.xaxis.set_label_coords(1, -0.025)
+        self.axis.set_ylabel("$a$")
+        self.axis.yaxis.set_label_coords(-0.025, 1)
+        self.axis_output, = self.axis.plot([], [], markersize=3, color="red")
 
         self.comboBox1_functions = [self.purelin, self.logsig, self.tansig]
         self.comboBox1_functions_str = ["purelin", 'logsig', 'tansig']
@@ -54,13 +66,7 @@ class NetworkFunction(NNDLayout):
 
     def graph(self):
 
-        a = self.figure.add_subplot(1, 1, 1)
-        a.clear()
-        a.set_xlim(-2, 2)
-        a.set_ylim(-2, 2)
-        a.plot([0]*10, np.linspace(-2, 2, 10), color="black", linestyle="--", linewidth=0.2)
-        a.plot(np.linspace(-2, 2, 10), [0]*10, color="black", linestyle="--", linewidth=0.2)
-        a.set_title("a = {}(w2 * tansig(w1 * p + b1) + b2))".format(self.comboBox1_functions_str[self.idx]))
+        self.axis.set_title("a = {}(w2 * tansig(w1 * p + b1) + b2))".format(self.comboBox1_functions_str[self.idx]))
 
         weight1_1 = self.slider_w1_1.value() / 10
         weight1_2 = self.slider_w1_2.value() / 10
@@ -85,7 +91,8 @@ class NetworkFunction(NNDLayout):
         func = np.vectorize(self.func1)
         out = func(np.dot(self.tansig(np.dot(p.reshape(-1, 1), weight_1) + bias_1), weight_2) + bias_2)
 
-        a.plot(p, out.reshape(-1), markersize=3, color="red")
+        self.axis_output.set_data(p, out.reshape(-1))
+
         self.canvas.draw()
 
     def change_transfer_function(self, idx):

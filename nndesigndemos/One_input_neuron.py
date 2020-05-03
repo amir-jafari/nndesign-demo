@@ -19,6 +19,18 @@ class OneInputNeuron(NNDLayout):
                           icon_move_left=-5)
 
         self.make_plot(1)
+        self.axis = self.figure.add_subplot(1, 1, 1)
+        self.axis.set_xlim(-2, 2)
+        self.axis.set_ylim(-2, 2)
+        self.axis.set_xticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
+        self.axis.set_yticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
+        self.axis.plot([0] * 10, np.linspace(-2, 2, 10), color="black", linestyle="--", linewidth=0.2)
+        self.axis.plot(np.linspace(-2, 2, 10), [0] * 10, color="black", linestyle="--", linewidth=0.2)
+        self.axis.set_xlabel("$p$")
+        self.axis.xaxis.set_label_coords(1, -0.025)
+        self.axis.set_ylabel("$a$")
+        self.axis.yaxis.set_label_coords(-0.025, 1)
+        self.axis_output, = self.axis.plot([], [], markersize=3, color="red")
 
         self.make_slider("slider_w", QtCore.Qt.Horizontal, (-30, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
                          (self.x_chapter_usual, 340, self.w_chapter_slider, 50), self.graph, "label_w", "w: 1.0")
@@ -36,19 +48,6 @@ class OneInputNeuron(NNDLayout):
 
     def graph(self):
 
-        a = self.figure.add_subplot(1, 1, 1)
-        a.clear()
-        a.set_xlim(-2, 2)
-        a.set_ylim(-2, 2)
-        a.set_xticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
-        a.set_yticks([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5])
-        a.plot([0] * 10, np.linspace(-2, 2, 10), color="black", linestyle="--", linewidth=0.2)
-        a.plot(np.linspace(-2, 2, 10), [0] * 10, color="black", linestyle="--", linewidth=0.2)
-        a.set_xlabel("$p$")
-        a.xaxis.set_label_coords(1, -0.025)
-        a.set_ylabel("$a$")
-        a.yaxis.set_label_coords(-0.025, 1)
-
         weight = self.slider_w.value() / 10
         bias = self.slider_b.value() / 10
         self.label_w.setText("w: " + str(weight))
@@ -57,8 +56,8 @@ class OneInputNeuron(NNDLayout):
         func = np.vectorize(self.func1)
         out = func(np.dot(weight, p) + bias)
 
-        a.plot(p, out, markersize=3, color="red")
-        a.set_title("$a = {}(w \cdot p + b)$".format(self.comboBox1_functions_str[self.func_idx]))
+        self.axis_output.set_data(p, out)
+        self.axis.set_title("$a = {}(w \cdot p + b)$".format(self.comboBox1_functions_str[self.func_idx]))
 
         self.canvas.draw()
 

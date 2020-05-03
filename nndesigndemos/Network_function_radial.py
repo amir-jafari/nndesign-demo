@@ -13,6 +13,12 @@ class NetworkFunctionRadial(NNDLayout):
         super(NetworkFunctionRadial, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.make_plot(1, (10, 400, 500, 250))
+        self.axis = self.figure.add_subplot(1, 1, 1)
+        self.axis.set_xlim(-5, 5)
+        self.axis.set_ylim(0, 1)
+        self.axis.plot([0] * 50, np.linspace(-5, 5, 50), color="black", linestyle="--", linewidth=0.2)
+        self.axis.plot(np.linspace(0, 1, 10), [0] * 10, color="black", linestyle="--", linewidth=0.2)
+        self.axis_output, = self.axis.plot([], [], markersize=3, color="red")
 
         self.fill_chapter("Network Function", 17, "Alter the network's\nparameters by dragging\nthe slide bars.\n\n"
                                                   "Click on [Random] to\nset each parameter\nto a random value.",
@@ -46,36 +52,6 @@ class NetworkFunctionRadial(NNDLayout):
 
     def graph(self):
 
-        a = self.figure.add_subplot(1, 1, 1)
-        a.clear()  # Clear the plot
-        a.set_xlim(-5, 5)
-        a.set_ylim(0, 1)
-        # a.set_xticks([0], minor=True)
-        # a.set_yticks([0], minor=True)
-        # a.set_xticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.set_yticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.grid(which="minor")
-        # a.set_xticks([-5, 0, 4])
-        # a.set_yticks([0, 0.2, 0.4, 0.6, 0.8])
-        a.plot([0]*50, np.linspace(-5, 5, 50), color="black", linestyle="--", linewidth=0.2)
-        a.plot(np.linspace(0, 1, 10), [0]*10, color="black", linestyle="--", linewidth=0.2)
-        # a.set_xlabel("$p$")
-        # a.xaxis.set_label_coords(1, -0.025)
-        # a.set_ylabel("$a$")
-        # a.yaxis.set_label_coords(-0.025, 1)
-
-        # ax.set_xticks(major_ticks)
-        # ax.set_xticks(minor_ticks, minor=True)
-        # ax.set_yticks(major_ticks)
-        # ax.set_yticks(minor_ticks, minor=True)
-        #
-        # # And a corresponding grid
-        # ax.grid(which='both')
-        #
-        # # Or if you want different settings for the grids:
-        # ax.grid(which='minor', alpha=0.2)
-        # ax.grid(which='major', alpha=0.5)
-
         weight1_1 = self.slider_w1_1.value() / 10
         weight1_2 = self.slider_w1_2.value() / 10
         bias1_1 = self.slider_b1_1.value() / 10
@@ -100,14 +76,8 @@ class NetworkFunctionRadial(NNDLayout):
         out = weight_2[0, 0] * np.exp(-((p - weight_1[0, 0]) * bias_1[0, 0]) ** 2)
         out += weight_2[1, 0] * np.exp(-((p - weight_1[0, 1]) * bias_1[0, 1]) ** 2) + bias_2[0, 0]
 
-        a.plot(p, out.reshape(-1), markersize=3, color="red")
-        # Setting limits so that the point moves instead of the plot.
-        # a.set_xlim(-2, 2)
-        # a.set_ylim(-2, 2)
-        # add grid and axes
-        # a.grid(True, which='both')
-        # a.axhline(y=0, color='k')
-        # a.axvline(x=0, color='k')
+        self.axis_output.set_data(p, out.reshape(-1))
+
         self.canvas.draw()
 
     def on_random(self):
