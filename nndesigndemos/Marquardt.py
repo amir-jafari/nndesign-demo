@@ -31,6 +31,8 @@ class Marquardt(NNDLayout):
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data, self.y_data = [], []
+        self.init_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=11, color="k")
+        self.end_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.ani, self.event = None, None
@@ -59,16 +61,42 @@ class Marquardt(NNDLayout):
                          (self.x_chapter_usual, 470, self.w_chapter_slider, 50), self.slide,
                          "label_nu", "Constant NU: 5.0", (self.x_chapter_usual + 50, 440, self.w_chapter_slider, 50))
 
+        self.slider_mu.sliderPressed.connect(self.slider_disconnect)
+        self.slider_mu.sliderReleased.connect(self.slider_reconnect)
+        self.slider_nu.sliderPressed.connect(self.slider_disconnect)
+        self.slider_nu.sliderReleased.connect(self.slider_reconnect)
+        self.slider_mu.valueChanged.connect(self.slider_update)
+        self.slider_nu.valueChanged.connect(self.slider_update)
+        self.do_slide = False
+
         self.animation_speed = 100
 
         self.canvas.draw()
 
         self.dW1, self.db1, self.dW2, self.db2 = 0, 0, 0, 0
         self.mc = 0.8
-        self.slider_do = True
+
+    def slider_update(self):
+        if self.ani:
+            self.ani.event_source.stop()
+        self.mu = float(self.slider_mu.value() / 100)
+        self.label_mu.setText("Initial Mu: " + str(round(self.mu, 2)))
+        self.nu = float(self.slider_nu.value() / 10)
+        self.label_nu.setText("Constant NU: " + str(self.nu))
+
+    def slider_disconnect(self):
+        self.sender().valueChanged.disconnect(self.slide)
+
+    def slider_reconnect(self):
+        self.do_slide = True
+        self.sender().valueChanged.connect(self.slide)
+        self.sender().valueChanged.emit(self.sender().value())
+        self.do_slide = False
 
     def change_pair_of_params(self, idx):
         self.pair_of_params = idx + 1
+        self.end_point_1.set_data([], [])
+        self.init_point_1.set_data([], [])
         self.init_params()
         self.plot_data()
 
@@ -104,20 +132,18 @@ class Marquardt(NNDLayout):
         self.canvas.draw()
 
     def slide(self):
-        if self.slider_do:
-            self.mu = float(self.slider_mu.value() / 100)
-            self.label_mu.setText("Initial Mu: " + str(round(self.mu, 2)))
-            self.nu = float(self.slider_nu.value() / 10)
-            self.label_nu.setText("Constant NU: " + str(self.nu))
-            # self.animation_speed = int(self.slider_anim_speed.value()) * 100
-            # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
-            if self.x_data:
-                if self.ani:
-                    self.ani.event_source.stop()
-                self.path.set_data([], [])
-                self.x_data, self.y_data = [self.x_data[0]], [self.y_data[0]]
-                self.canvas.draw()
-                # self.run_animation(self.event)
+        if self.ani:
+            self.ani.event_source.stop()
+        if not self.do_slide:
+            return
+        # self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+        if self.x_data:
+            self.path.set_data([], [])
+            self.x_data, self.y_data = [self.x_data[0]], [self.y_data[0]]
+            self.init_point_1.set_data([self.x_data[0]], [self.y_data[0]])
+            self.canvas.draw()
+            self.run_animation(self.event)
 
     def animate_init(self):
         self.path.set_data(self.x_data, self.y_data)
@@ -126,12 +152,12 @@ class Marquardt(NNDLayout):
         self.e = self.T - self.a2
         self.error_prev = np.dot(self.e, self.e.T).item()
         self.ii = np.eye(2)
-        return self.path,
+        self.end_point_1.set_data([], [])
+        return self.path, self.end_point_1
 
     def on_animate(self, idx):
 
         self.mu /= self.nu
-        self.slider_do = False
         # if abs(self.mu * 100) < 1000:
         #     self.slider_mu.setValue(self.mu * 100)
         # self.label_mu.setText("mu: " + str(round(self.mu, 2)))
@@ -181,7 +207,6 @@ class Marquardt(NNDLayout):
             try:
 
                 self.mu *= self.nu
-                self.slider_do = False
                 # if abs(self.mu * 100) < 1000:
                 #     self.slider_mu.setValue(self.mu * 100)
                 # self.label_mu.setText("mu: " + str(round(self.mu, 2)))
@@ -224,8 +249,11 @@ class Marquardt(NNDLayout):
         self.x_data.append(self.x)
         self.y_data.append(self.y)
         self.path.set_data(self.x_data, self.y_data)
-        self.slider_do = True
-        return self.path,
+
+        if idx == 11:
+            self.end_point_1.set_data(self.x_data[-1], self.y_data[-1])
+
+        return self.path, self.end_point_1
 
     def on_mouseclick(self, event):
         self.mu = float(self.slider_mu.value()) / 100
@@ -235,6 +263,7 @@ class Marquardt(NNDLayout):
             self.ani.event_source.stop()
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []
+        self.init_point_1.set_data([event.xdata], [event.ydata])
         self.canvas.draw()
         self.run_animation(event)
 

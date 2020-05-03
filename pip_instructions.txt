@@ -60,3 +60,5 @@ recursive-include package_name/static_files_folder *
 8. python setup.py sdist bdist_wheel
 
 9. twine upload dist/*
+
+To add release comments, do: twine upload -c "comment" dist/* -> actually this does not work :/

@@ -33,6 +33,8 @@ class Momentum(NNDLayout):
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data, self.y_data = [], []
+        self.init_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=11, color="k")
+        self.end_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.ani, self.event = None, None
@@ -60,14 +62,41 @@ class Momentum(NNDLayout):
                          (self.x_chapter_usual, 470, self.w_chapter_slider, 50), self.slide,
                          "label_momentum", "Momentum: 0.9", (self.x_chapter_usual + 50, 440, self.w_chapter_slider, 50))
 
+        self.slider_lr.sliderPressed.connect(self.slider_disconnect)
+        self.slider_lr.sliderReleased.connect(self.slider_reconnect)
+        self.slider_momentum.sliderPressed.connect(self.slider_disconnect)
+        self.slider_momentum.sliderReleased.connect(self.slider_reconnect)
+        self.slider_lr.valueChanged.connect(self.slider_update)
+        self.slider_momentum.valueChanged.connect(self.slider_update)
+        self.do_slide = False
+
         self.animation_speed = 0
 
         self.canvas.draw()
 
         self.dW1, self.db1, self.dW2, self.db2 = 0, 0, 0, 0
 
+    def slider_update(self):
+        if self.ani:
+            self.ani.event_source.stop()
+        self.lr = float(self.slider_lr.value() / 10)
+        self.label_lr.setText("lr: " + str(self.lr))
+        self.momentum = float(self.slider_momentum.value() / 100)
+        self.label_momentum.setText("Momentum: " + str(self.momentum))
+
+    def slider_disconnect(self):
+        self.sender().valueChanged.disconnect(self.slide)
+
+    def slider_reconnect(self):
+        self.do_slide = True
+        self.sender().valueChanged.connect(self.slide)
+        self.sender().valueChanged.emit(self.sender().value())
+        self.do_slide = False
+
     def change_pair_of_params(self, idx):
         self.pair_of_params = idx + 1
+        self.end_point_1.set_data([], [])
+        self.init_point_1.set_data([], [])
         self.init_params()
         self.plot_data()
 
@@ -103,23 +132,23 @@ class Momentum(NNDLayout):
         self.canvas.draw()
 
     def slide(self):
-        self.lr = float(self.slider_lr.value()/10)
-        self.label_lr.setText("lr: " + str(self.lr))
-        self.momentum = float(self.slider_momentum.value() / 100)
-        self.label_momentum.setText("Momentum: " + str(self.momentum))
+        if self.ani:
+            self.ani.event_source.stop()
+        if not self.do_slide:
+            return
         # self.animation_speed = int(self.slider_anim_speed.value()) * 100
         # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.x_data:
-            if self.ani:
-                self.ani.event_source.stop()
             self.path.set_data([], [])
             self.x_data, self.y_data = [self.x_data[0]], [self.y_data[0]]
+            self.init_point_1.set_data([self.x_data[0]], [self.y_data[0]])
             self.canvas.draw()
             self.run_animation(self.event)
 
     def animate_init(self):
         self.path.set_data(self.x_data, self.y_data)
-        return self.path,
+        self.end_point_1.set_data([], [])
+        return self.path, self.end_point_1
 
     def on_animate(self, idx):
 
@@ -150,10 +179,13 @@ class Momentum(NNDLayout):
             self.b1[1, 0] += self.db1[1, 0]
             self.x, self.y = self.b1[0, 0], self.b1[1, 0]
 
+        if idx == self.epochs - 1:
+            self.end_point_1.set_data(self.x_data[-1], self.y_data[-1])
+
         self.x_data.append(self.x)
         self.y_data.append(self.y)
         self.path.set_data(self.x_data, self.y_data)
-        return self.path,
+        return self.path, self.end_point_1
 
     def on_mouseclick(self, event):
         self.init_params()
@@ -162,6 +194,7 @@ class Momentum(NNDLayout):
             self.ani.event_source.stop()
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []
+        self.init_point_1.set_data([event.xdata], [event.ydata])
         self.canvas.draw()
         self.run_animation(event)
 
@@ -171,15 +204,15 @@ class Momentum(NNDLayout):
             self.x, self.y = event.xdata, event.ydata
             if self.pair_of_params == 1:
                 self.W1[0, 0], self.W2[0, 0] = self.x, self.y
-                epochs = 300
+                self.epochs = 300
             elif self.pair_of_params == 2:
                 self.W1[0, 0], self.b1[0, 0] = self.x, self.y
-                epochs = 300
+                self.epochs = 300
             elif self.pair_of_params == 3:
                 self.b1[0, 0], self.b1[1, 0] = self.x, self.y
-                epochs = 60
+                self.epochs = 60
             self.dW1, self.db1, self.dW2, self.db2 = 0, 0, 0, 0
-            self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=epochs,
+            self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=self.epochs,
                                      interval=self.animation_speed, repeat=False, blit=True)
 
     def init_params(self):

@@ -78,6 +78,8 @@ class VariableLearningRate(NNDLayout):
 
     def change_pair_of_params(self, idx):
         self.pair_of_params = idx + 1
+        self.end_point_1.set_data([], [])
+        self.init_point_1.set_data([], [])
         self.init_params()
         self.plot_data()
 
@@ -114,6 +116,7 @@ class VariableLearningRate(NNDLayout):
 
     def slide(self):
         if self.slider_do:
+            self.init_point_1.set_data([], [])
             self.lr = float(self.slider_lr.value()/10)
             self.label_lr.setText("lr: " + str(self.lr))
             self.increase_rate = float(self.slider_increase.value() / 100)
@@ -141,6 +144,7 @@ class VariableLearningRate(NNDLayout):
         self.e = self.T - self.a2
         self.D2 = self.a2 * (1 - self.a2) * self.e
         self.D1 = self.a1 * (1 - self.a1) * np.dot(self.W2.T, self.D2)
+        self.end_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=11, color="k")
         return self.path, self.end_point_1
 
     def on_animate(self, idx):
@@ -190,7 +194,8 @@ class VariableLearningRate(NNDLayout):
             self.D2 = self.a2 * (1 - self.a2) * self.e
             self.D1 = self.a1 * (1 - self.a1) * np.dot(self.W2.T, self.D2)
 
-        self.end_point_1.set_data([self.x_data[-1], self.y_data[-1]])
+        if idx == 99:
+            self.end_point_1.set_data([self.x_data[-1], self.y_data[-1]])
 
         self.x_data.append(self.x)
         self.y_data.append(self.y)

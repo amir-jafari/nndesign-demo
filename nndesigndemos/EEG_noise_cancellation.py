@@ -71,6 +71,14 @@ class EEGNoiseCancellation(NNDLayout):
         self.make_slider("slider_delays", QtCore.Qt.Horizontal, (0, 20), QtWidgets.QSlider.TicksBelow, 1, 10,
                          (25, 500, 480, 50), self.slide, "label_delays", "Delays: 10", (235, 470, 100, 50))
 
+        self.slider_lr.sliderPressed.connect(self.slider_disconnect)
+        self.slider_lr.sliderReleased.connect(self.slider_reconnect)
+        self.slider_lr.valueChanged.connect(self.slider_update)
+        self.slider_delays.sliderPressed.connect(self.slider_disconnect)
+        self.slider_delays.sliderReleased.connect(self.slider_reconnect)
+        self.slider_delays.valueChanged.connect(self.slider_update)
+        self.do_slide = False
+
         self.animation_speed = 20
         """self.label_anim_speed = QtWidgets.QLabel(self)
         self.label_anim_speed.setText("Animation Delay: 100 ms")
@@ -91,11 +99,28 @@ class EEGNoiseCancellation(NNDLayout):
 
         self.w, self.e = None, None
 
-        self.make_combobox(1, ["Signals", "Difference"], (60, 570, self.w_chapter_button, 50), self.change_plot_type)
+        self.make_combobox(1, ["Signals", "Difference"], (190, 570, self.w_chapter_button, 50), self.change_plot_type)
         self.plot_idx = 0
 
-        self.make_button("run", "Run", (300, 580, self.w_chapter_button, 25), self.on_run)
+        # self.make_button("run", "Run", (300, 580, self.w_chapter_button, 25), self.on_run)
         self.on_run()
+
+    def slider_update(self):
+        if self.ani:
+            self.ani.event_source.stop()
+        self.lr = float(self.slider_lr.value() / 100)
+        self.label_lr.setText("lr: " + str(self.lr))
+        self.delays = int(self.slider_delays.value())
+        self.label_delays.setText("Delays: " + str(self.delays))
+
+    def slider_disconnect(self):
+        self.sender().valueChanged.disconnect(self.slide)
+
+    def slider_reconnect(self):
+        self.do_slide = True
+        self.sender().valueChanged.connect(self.slide)
+        self.sender().valueChanged.emit(self.sender().value())
+        self.do_slide = False
 
     def change_plot_type(self, idx):
         self.plot_idx = idx
@@ -121,14 +146,12 @@ class EEGNoiseCancellation(NNDLayout):
         self.run_animation()
 
     def slide(self):
-        self.lr = float(self.slider_lr.value() / 100)
-        self.label_lr.setText("lr: " + str(self.lr))
-        self.delays = int(self.slider_delays.value())
-        self.label_delays.setText("Delays: " + str(self.delays))
-        # self.animation_speed = int(self.slider_anim_speed.value()) * 100
-        # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.ani:
             self.ani.event_source.stop()
+        if not self.do_slide:
+            return
+        # self.animation_speed = int(self.slider_anim_speed.value()) * 100
+        # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.plot_idx == 0:
             self.signal.set_data(self.time, self.signal_)
             self.signal_diff.set_data([], [])

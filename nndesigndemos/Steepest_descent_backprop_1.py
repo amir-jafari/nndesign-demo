@@ -40,6 +40,8 @@ class SteepestDescentBackprop1(NNDLayout):
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data, self.y_data = [], []
+        self.init_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=11, color="k")
+        self.end_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.ani, self.event = None, None
@@ -67,6 +69,8 @@ class SteepestDescentBackprop1(NNDLayout):
 
     def change_pair_of_params(self, idx):
         self.pair_of_params = idx + 1
+        self.init_point_1.set_data([], [])
+        self.end_point_1.set_data([], [])
         self.init_params()
         self.plot_data()
 
@@ -122,8 +126,9 @@ class SteepestDescentBackprop1(NNDLayout):
         self.canvas2.draw()
 
     def animate_init(self):
+        self.end_point_1.set_data([], [])
         self.path.set_data(self.x_data, self.y_data)
-        return self.path,
+        return self.path, self.end_point_1
 
     def on_animate(self, idx):
 
@@ -154,10 +159,13 @@ class SteepestDescentBackprop1(NNDLayout):
             self.b1[1, 0] += db1[1, 0]
             self.x, self.y = self.b1[0, 0], self.b1[1, 0]
 
+        if idx == self.epochs - 1:
+            self.end_point_1.set_data(self.x_data[-1], self.y_data[-1])
+
         self.x_data.append(self.x)
         self.y_data.append(self.y)
         self.path.set_data(self.x_data, self.y_data)
-        return self.path,
+        return self.path, self.end_point_1
 
     def on_mouseclick(self, event):
         self.init_params()
@@ -166,6 +174,7 @@ class SteepestDescentBackprop1(NNDLayout):
             self.ani.event_source.stop()
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []
+        self.init_point_1.set_data([event.xdata], [event.ydata])
         self.canvas.draw()
         self.run_animation(event)
 

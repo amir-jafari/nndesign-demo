@@ -43,20 +43,40 @@ class SteepestDescentQuadratic(NNDLayout):
                          (25, 600, 480, 50), self.slide, "label_lr", "lr: 0.03", (245, 570, 100, 50))
         self.make_label("label_lr1", "0.00", (35, 640, 100, 20))
         self.make_label("label_lr2", "0.06", (470, 640, 100, 20))
+        self.slider_lr.sliderPressed.connect(self.slider_disconnect)
+        self.slider_lr.sliderReleased.connect(self.slider_reconnect)
+        self.slider_lr.valueChanged.connect(self.slider_update)
+        self.do_slide = False
+
         self.animation_speed = 100
         # self.make_slider("slider_anim_speed", QtCore.Qt.Horizontal, (0, 6), QtWidgets.QSlider.TicksBelow, 1, 2,
         #                  (self.x_chapter_usual, 380, self.w_chapter_slider, 100), self.slide, "label_anim_speed", "Animation Delay: 200 ms")
 
         self.canvas.draw()
 
-    def slide(self):
+    def slider_update(self):
+        if self.ani:
+            self.ani.event_source.stop()
         self.lr = float(self.slider_lr.value() / 200)
         self.label_lr.setText("lr: " + str(self.lr))
+
+    def slider_disconnect(self):
+        self.sender().valueChanged.disconnect(self.slide)
+
+    def slider_reconnect(self):
+        self.do_slide = True
+        self.sender().valueChanged.connect(self.slide)
+        self.sender().valueChanged.emit(self.sender().value())
+        self.do_slide = False
+
+    def slide(self):
+        if self.ani:
+            self.ani.event_source.stop()
+        if not self.do_slide:
+            return
         # self.animation_speed = int(self.slider_anim_speed.value()) * 100
         # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.x_data:
-            if self.ani:
-                self.ani.event_source.stop()
             self.path.set_data([], [])
             self.x_data, self.y_data = [self.x_data[0]], [self.y_data[0]]
             self.init_point.set_data([self.x_data[0]], [self.y_data[0]])

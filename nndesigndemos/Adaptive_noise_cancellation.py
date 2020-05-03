@@ -82,6 +82,10 @@ class AdaptiveNoiseCancellation(NNDLayout):
         self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 15), QtWidgets.QSlider.TicksBelow, 1, 2,
                          (self.x_chapter_slider_label - 70, 370, self.w_chapter_slider, 50), self.slide,
                          "label_lr", "lr: 0.2")
+        self.slider_lr.sliderPressed.connect(self.slider_disconnect)
+        self.slider_lr.sliderReleased.connect(self.slider_reconnect)
+        self.slider_lr.valueChanged.connect(self.slider_update)
+        self.do_slide = False
 
         self.mc = 0
         """self.mc = 0
@@ -120,6 +124,23 @@ class AdaptiveNoiseCancellation(NNDLayout):
         event.xdata, event.ydata = 0, -2
         self.on_mouseclick(event)
 
+    def slider_update(self):
+        if self.ani_1:
+            self.ani_1.event_source.stop()
+        if self.ani_2:
+            self.ani_2.event_source.stop()
+        self.lr = float(self.slider_lr.value() / 10)
+        self.label_lr.setText("lr: " + str(self.lr))
+
+    def slider_disconnect(self):
+        self.sender().valueChanged.disconnect(self.slide)
+
+    def slider_reconnect(self):
+        self.do_slide = True
+        self.sender().valueChanged.connect(self.slide)
+        self.sender().valueChanged.emit(self.sender().value())
+        self.do_slide = False
+
     def change_plot_type(self, idx):
         self.plot_idx = idx
         if self.ani_1:
@@ -147,17 +168,17 @@ class AdaptiveNoiseCancellation(NNDLayout):
         self.canvas2.draw()
 
     def slide(self):
-        self.lr = float(self.slider_lr.value() / 10)
-        self.label_lr.setText("lr: " + str(self.lr))
+        if self.ani_1:
+            self.ani_1.event_source.stop()
+        if self.ani_2:
+            self.ani_2.event_source.stop()
+        if not self.do_slide:
+            return
         # self.mc = float(self.slider_mc.value() / 10)
         # self.label_mc.setText("mc: " + str(self.mc))
         # self.animation_speed = int(self.slider_anim_speed.value()) * 100
         # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
         if self.w1_data:
-            if self.ani_2:
-                self.ani_2.event_source.stop()
-            if self.ani_1:
-                self.ani_1.event_source.stop()
             self.path_2.set_data([], [])
             self.signal_approx.set_data([], [])
             self.signal_diff.set_data([], [])

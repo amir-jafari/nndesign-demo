@@ -37,6 +37,8 @@ class ConjugateGradient(NNDLayout):
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], linestyle='--', marker='*', label="Gradient Descent Path")
         self.x_data, self.y_data = [], []
+        self.init_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=11, color="k")
+        self.end_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.ani, self.event = None, None
@@ -57,6 +59,8 @@ class ConjugateGradient(NNDLayout):
 
     def change_pair_of_params(self, idx):
         self.pair_of_params = idx + 1
+        self.end_point_1.set_data([], [])
+        self.init_point_1.set_data([], [])
         self.init_params()
         self.plot_data()
 
@@ -114,7 +118,8 @@ class ConjugateGradient(NNDLayout):
         self.nrmrt = np.sqrt(self.nrmo)
         self.dW1_old, self.db1_old, self.dW2_old, self.db2_old = self.gW1, self.gb1, self.gW2, self.gb2
         self.dW1, self.db1, self.dW2, self.db2 = self.gW1 / self.nrmrt, self.gb1 / self.nrmrt, self.gW2 / self.nrmrt, self.gb2 / self.nrmrt
-        return self.path,
+        self.end_point_1, = self.axes.plot([], "o", fillstyle="none", markersize=11, color="k")
+        return self.path, self.end_point_1
 
     def on_animate(self, idx):
 
@@ -307,8 +312,11 @@ class ConjugateGradient(NNDLayout):
             nrm = np.sqrt(self.db1_old[0] ** 2 + self.db1_old[1] ** 2)
         self.dW1, self.db1, self.dW2, self.db2 = self.dW1_old / nrm, self.db1_old / nrm, self.dW2_old / nrm, self.db2_old / nrm
 
+        if idx == 14:
+            self.end_point_1.set_data([self.x_data[-1], self.y_data[-1]])
+
         self.path.set_data(self.x_data, self.y_data)
-        return self.path,
+        return self.path, self.end_point_1
 
     def on_mouseclick(self, event):
         self.init_params()
@@ -317,6 +325,7 @@ class ConjugateGradient(NNDLayout):
             self.ani.event_source.stop()
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []
+        self.init_point_1.set_data([event.xdata], [event.ydata])
         self.canvas.draw()
         self.run_animation(event)
 
