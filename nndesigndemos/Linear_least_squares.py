@@ -25,6 +25,27 @@ class LinearLeastSquares(NNDLayout):
         self.make_plot(2, (20, 390, 450, 140))
         self.figure2.set_tight_layout(True)
 
+        self.axis = self.figure.add_subplot(1, 1, 1)
+        self.axis.set_xlim(-2, 2)
+        self.axis.set_ylim(-2, 4)
+        self.axis.set_xticks([-2, -1, 0, 1])
+        self.axis.set_yticks([-2, -1, 0, 1, 2, 3])
+        self.axis.plot(np.linspace(-2, 2, 10), [0] * 10, color="black", linestyle="--", linewidth=0.2)
+        self.axis.set_xlabel("$p$")
+        self.axis.xaxis.set_label_coords(1, -0.025)
+        self.axis.set_ylabel("$a^2$")
+        self.axis.yaxis.set_label_coords(-0.025, 1)
+
+        self.axis2 = self.figure2.add_subplot(1, 1, 1)
+        self.axis2.set_xlim(-2, 2)
+        self.axis2.set_ylim(0, 1)
+        self.axis2.set_xticks([-2, -1, 0, 1])
+        self.axis2.set_yticks([0, 0.5])
+        self.axis2.set_xlabel("$p$")
+        self.axis2.xaxis.set_label_coords(1, -0.025)
+        self.axis2.set_ylabel("$a^1$")
+        self.axis2.yaxis.set_label_coords(-0.025, 1)
+
         self.make_combobox(1, ["Yes", "No"], (self.x_chapter_usual, 515, self.w_chapter_slider, 50), self.change_auto_bias,
                            "label_f", "Auto Bias", (self.x_chapter_usual + 60, 515 - 20, 100, 50))
         self.auto_bias = True
@@ -52,51 +73,6 @@ class LinearLeastSquares(NNDLayout):
         self.graph()
 
     def graph(self):
-
-        axis = self.figure.add_subplot(1, 1, 1)
-        axis.clear()  # Clear the plot
-        axis.set_xlim(-2, 2)
-        axis.set_ylim(-2, 4)
-        # a.set_xticks([0], minor=True)
-        # a.set_yticks([0], minor=True)
-        # a.set_xticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.set_yticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.grid(which="minor")
-        axis.set_xticks([-2, -1, 0, 1])
-        axis.set_yticks([-2, -1, 0, 1, 2, 3])
-        axis.plot(np.linspace(-2, 2, 10), [0]*10, color="black", linestyle="--", linewidth=0.2)
-        axis.set_xlabel("$p$")
-        axis.xaxis.set_label_coords(1, -0.025)
-        axis.set_ylabel("$a^2$")
-        axis.yaxis.set_label_coords(-0.025, 1)
-
-        axis2 = self.figure2.add_subplot(1, 1, 1)
-        axis2.clear()  # Clear the plot
-        axis2.set_xlim(-2, 2)
-        axis2.set_ylim(0, 1)
-        # a.set_xticks([0], minor=True)
-        # a.set_yticks([0], minor=True)
-        # a.set_xticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.set_yticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.grid(which="minor")
-        axis2.set_xticks([-2, -1, 0, 1])
-        axis2.set_yticks([0, 0.5])
-        axis2.set_xlabel("$p$")
-        axis2.xaxis.set_label_coords(1, -0.025)
-        axis2.set_ylabel("$a^1$")
-        axis2.yaxis.set_label_coords(-0.025, 1)
-
-        # ax.set_xticks(major_ticks)
-        # ax.set_xticks(minor_ticks, minor=True)
-        # ax.set_yticks(major_ticks)
-        # ax.set_yticks(minor_ticks, minor=True)
-        #
-        # # And a corresponding grid
-        # ax.grid(which='both')
-        #
-        # # Or if you want different settings for the grids:
-        # ax.grid(which='minor', alpha=0.2)
-        # ax.grid(which='major', alpha=0.5)
 
         w1_1 = self.slider_w1_1.value() / 10
         bias = self.slider_b.value() / 100
@@ -144,13 +120,20 @@ class LinearLeastSquares(NNDLayout):
         t_exact = np.sin(2 * np.pi * (freq * p2 + phase / 360)) + 1
         temp = np.vstack((np.dot(W2.T, np.ones((1, Q2)) * a12), b2 * np.ones((1, Q2))))
 
-        axis.scatter(p, t, color="white", edgecolor="black")
+        while len(self.axis.lines) > 1:
+            self.axis.lines[-1].remove()
+        if self.axis.collections:
+            self.axis.collections[0].remove()
+        self.axis.scatter(p, t, color="white", edgecolor="black")
         for i in range(len(temp)):
-            axis.plot(p2, temp[i], linestyle="--", color="black", linewidth=0.5)
-        axis.plot(p2, t_exact, color="blue", linewidth=2)
-        axis.plot(p2, a22, color="red", linewidth=1)
+            self.axis.plot(p2, temp[i], linestyle="--", color="black", linewidth=0.5)
+        self.axis.plot(p2, t_exact, color="blue", linewidth=2)
+        self.axis.plot(p2, a22, color="red", linewidth=1)
+
+        while self.axis2.lines:
+            self.axis2.lines[-1].remove()
         for i in range(len(a12)):
-            axis2.plot(p2, a12[i], color="black")
+            self.axis2.plot(p2, a12[i], color="black")
 
         self.canvas.draw()
         self.canvas2.draw()

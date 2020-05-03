@@ -33,60 +33,129 @@ class PatternClassification(NNDLayout):
         self.make_plot(2, (255, 400, 260, 260))
         self.figure2.subplots_adjust(left=0.15, bottom=0.175, right=0.95)
 
+        self.axis3d = Axes3D(self.figure)
+        self.axis3d.set_xlim(-5, 5)
+        self.axis3d.set_ylim(-5, 5)
+        self.axis3d.set_zlim(-2, 1)
+        self.axis3d.set_xlabel("$p1$")
+        self.axis3d.set_ylabel("$p2$")
+        self.axis3d.set_zlabel("$a$")
+
+        x_0_surf, y_0_surf = np.linspace(-5, 5, 100), np.linspace(-5, 5, 100)
+        xx_0_surf, yy_0_surf = np.meshgrid(x_0_surf, y_0_surf)
+        self.axis3d.plot_surface(xx_0_surf, yy_0_surf, np.zeros((100, 100)), color="gray", alpha=0.5)
+        self.axis3d.set_xticks([-5, 0, 5])
+        self.axis3d.set_yticks([-5, 0, 5])
+        self.axis3d.set_zticks([-2, -1, 0, 1])
+        self.axis3d.set_xlabel("$p1$")
+        self.axis3d.set_ylabel("$p2$")
+
+        self.axis = self.figure2.add_subplot(1, 1, 1)
+        self.axis.scatter([1, -1], [1, -1], marker="*")
+        self.axis.scatter([1, -1], [-1, 1], marker="o")
+        self.axis.set_xticks([-5, 0, 5])
+        self.axis.set_yticks([-5, 0, 5])
+
+        self.axis.set_xlabel("$p1$")
+        self.axis.set_ylabel("$p2$")
+
         self.make_slider("slider_w1_1", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, 10,
                          (10, 115, 150, 50), self.graph, "label_w1_1", "W1(1,1)", (50, 115 - 25, 100, 50))
+        self.slider_w1_1.valueChanged.connect(self.slider_update)
         self.slider_w1_1.sliderPressed.connect(self.slider_disconnect)
         self.slider_w1_1.sliderReleased.connect(self.slider_reconnect)
 
         self.make_slider("slider_w1_2", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, -10,
                          (10, 360, 150, 50), self.graph, "label_w1_2", "W1(2,1)", (50, 360 - 25, 100, 50))
+        self.slider_w1_2.valueChanged.connect(self.slider_update)
         self.slider_w1_2.sliderPressed.connect(self.slider_disconnect)
         self.slider_w1_2.sliderReleased.connect(self.slider_reconnect)
 
         self.make_slider("slider_b1_1", QtCore.Qt.Horizontal, (-10, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
                          (170, 115, 150, 50), self.graph, "label_b1_1", "b1(1):", (210, 115 - 25, 100, 50))
+        self.slider_b1_1.valueChanged.connect(self.slider_update)
         self.slider_b1_1.sliderPressed.connect(self.slider_disconnect)
         self.slider_b1_1.sliderReleased.connect(self.slider_reconnect)
 
         self.make_slider("slider_b1_2", QtCore.Qt.Horizontal, (-10, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
                          (170, 360, 150, 50), self.graph, "label_b1_2", "b1(2):", (210, 360 - 25, 100, 50))
+        self.slider_b1_2.valueChanged.connect(self.slider_update)
         self.slider_b1_2.sliderPressed.connect(self.slider_disconnect)
         self.slider_b1_2.sliderReleased.connect(self.slider_reconnect)
 
         self.make_slider("slider_w2_1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 20,
                          (330, 115, 150, 50), self.graph, "label_w2_1", "W2(1,1):", (370, 115 - 25, 100, 50))
+        self.slider_w2_1.valueChanged.connect(self.slider_update)
         self.slider_w2_1.sliderPressed.connect(self.slider_disconnect)
         self.slider_w2_1.sliderReleased.connect(self.slider_reconnect)
 
         self.make_slider("slider_w2_2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 20,
                          (330, 360, 150, 50), self.graph, "label_w2_2", "W2(1,2):", (370, 360 - 25, 100, 50))
+        self.slider_w2_2.valueChanged.connect(self.slider_update)
         self.slider_w2_2.sliderPressed.connect(self.slider_disconnect)
         self.slider_w2_2.sliderReleased.connect(self.slider_reconnect)
 
         self.make_slider("slider_b2", QtCore.Qt.Horizontal, (-10, 10), QtWidgets.QSlider.TicksBelow, 1, -10,
                          (self.x_chapter_usual, 380, self.w_chapter_slider, 50), self.graph, "label_b2", "b2: -1.0")
+        self.slider_b2.valueChanged.connect(self.slider_update)
         self.slider_b2.sliderPressed.connect(self.slider_disconnect)
         self.slider_b2.sliderReleased.connect(self.slider_reconnect)
 
         self.make_slider("slider_w1_12", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, -10,
                          (self.x_chapter_usual, 450, self.w_chapter_slider, 50), self.graph, "label_w1_12", "W1(1,2): 1")
+        self.slider_w1_12.valueChanged.connect(self.slider_update)
         self.slider_w1_12.sliderPressed.connect(self.slider_disconnect)
         self.slider_w1_12.sliderReleased.connect(self.slider_reconnect)
 
         self.make_slider("slider_w1_22", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, 10,
                          (self.x_chapter_usual, 520, self.w_chapter_slider, 50), self.graph, "label_w1_22", "W1(2,2): 1")
+        self.slider_w1_22.valueChanged.connect(self.slider_update)
         self.slider_w1_22.sliderPressed.connect(self.slider_disconnect)
         self.slider_w1_22.sliderReleased.connect(self.slider_reconnect)
 
+        self.weight1_1 = self.slider_w1_1.value() / 10
+        self.weight1_2 = self.slider_w1_2.value() / 10
+        self.bias1_1 = self.slider_b1_1.value() / 10
+        self.bias1_2 = self.slider_b1_2.value() / 10
+        self.weight2_1 = self.slider_w2_1.value() / 10
+        self.weight2_2 = self.slider_w2_2.value() / 10
+        self.bias2 = self.slider_b2.value() / 10
+        self.weight1_12 = self.slider_w1_12.value() / 10
+        self.weight1_22 = self.slider_w1_22.value() / 10
+
         self.make_button("random_button", "Random", (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.on_random)
         self.make_button("random_button", "Reset", (self.x_chapter_button, 610, self.w_chapter_button, self.h_chapter_button), self.on_reset)
+
+        self.slider_update()
 
         self.do_graph = True
         self.graph()
         self.do_graph = False
 
+    def slider_update(self):
+
+        self.weight1_1 = self.slider_w1_1.value() / 10
+        self.weight1_2 = self.slider_w1_2.value() / 10
+        self.bias1_1 = self.slider_b1_1.value() / 10
+        self.bias1_2 = self.slider_b1_2.value() / 10
+        self.weight2_1 = self.slider_w2_1.value() / 10
+        self.weight2_2 = self.slider_w2_2.value() / 10
+        self.bias2 = self.slider_b2.value() / 10
+        self.weight1_12 = self.slider_w1_12.value() / 10
+        self.weight1_22 = self.slider_w1_22.value() / 10
+
+        self.label_w1_1.setText("W1(1,1): " + str(self.weight1_1))
+        self.label_w1_2.setText("W1(2,1): " + str(self.weight1_2))
+        self.label_b1_1.setText("b1(1): " + str(self.bias1_1))
+        self.label_b1_2.setText("b1(2): " + str(self.bias1_2))
+        self.label_w2_1.setText("W2(1,1): " + str(self.weight2_1))
+        self.label_w2_2.setText("W2(1,2): " + str(self.weight2_2))
+        self.label_b2.setText("b2: " + str(self.bias2))
+        self.label_w1_12.setText("W1(1,2): " + str(self.weight1_12))
+        self.label_w1_22.setText("W1(2,2): " + str(self.weight1_22))
+
     def slider_disconnect(self):
-        self.sender().valueChanged.disconnect()
+        self.sender().valueChanged.disconnect(self.graph)
 
     def slider_reconnect(self):
         self.do_graph = True
@@ -129,83 +198,20 @@ class PatternClassification(NNDLayout):
         if not self.do_graph:
             return
 
-        a = Axes3D(self.figure)
-        a.clear()
-        a.set_xlim(-5, 5)
-        a.set_ylim(-5, 5)
-        a.set_zlim(-2, 1)
-        a.set_xlabel("$p1$")
-        a.set_ylabel("$p2$")
-        a.set_zlabel("$a$")
-
-        weight1_1 = self.slider_w1_1.value() / 10
-        weight1_2 = self.slider_w1_2.value() / 10
-        bias1_1 = self.slider_b1_1.value() / 10
-        bias1_2 = self.slider_b1_2.value() / 10
-        weight2_1 = self.slider_w2_1.value() / 10
-        weight2_2 = self.slider_w2_2.value() / 10
-        bias2 = self.slider_b2.value() / 10
-        weight1_12 = self.slider_w1_12.value() / 10
-        weight1_22 = self.slider_w1_22.value() / 10
-
-        self.label_w1_1.setText("W1(1,1): " + str(weight1_1))
-        self.label_w1_2.setText("W1(2,1): " + str(weight1_2))
-        self.label_b1_1.setText("b1(1): " + str(bias1_1))
-        self.label_b1_2.setText("b1(2): " + str(bias1_2))
-        self.label_w2_1.setText("W2(1,1): " + str(weight2_1))
-        self.label_w2_2.setText("W2(1,2): " + str(weight2_2))
-        self.label_b2.setText("b2: " + str(bias2))
-        self.label_w1_12.setText("W1(1,2): " + str(weight1_12))
-        self.label_w1_22.setText("W1(2,2): " + str(weight1_22))
-
-        weight_1, bias_1 = np.array([[weight1_1, weight1_2]]), np.array([[bias1_1, bias1_2]])
-        weight_2, bias_2 = np.array([[weight2_1], [weight2_2]]), np.array([[bias2]])
+        weight_1, bias_1 = np.array([[self.weight1_1, self.weight1_2]]), np.array([[self.bias1_1, self.bias1_2]])
+        weight_2, bias_2 = np.array([[self.weight2_1], [self.weight2_2]]), np.array([[self.bias2]])
 
         # a = W2(1)*exp(-((p-W1(1)).*b1(1)).^2) + W2(2)*exp(-((p-W1(2)).*b1(2)).^2) + b2
-        out = weight_2[0, 0] * np.exp(-((self.pp1 - weight_1[0, 0]) * bias_1[0, 0]) ** 2 - ((self.pp2 - weight1_12) * bias_1[0, 0]) ** 2)
-        out += weight_2[1, 0] * np.exp(-((self.pp1 - weight_1[0, 1]) * bias_1[0, 1]) ** 2 - ((self.pp2 - weight1_22) * bias_1[0, 0]) ** 2) + bias_2[0, 0]
+        out = weight_2[0, 0] * np.exp(-((self.pp1 - weight_1[0, 0]) * bias_1[0, 0]) ** 2 - ((self.pp2 - self.weight1_12) * bias_1[0, 0]) ** 2)
+        out += weight_2[1, 0] * np.exp(-((self.pp1 - weight_1[0, 1]) * bias_1[0, 1]) ** 2 - ((self.pp2 - self.weight1_22) * bias_1[0, 0]) ** 2) + bias_2[0, 0]
 
-        x_0_surf, y_0_surf = np.linspace(-5, 5, 100), np.linspace(-5, 5, 100)
-        xx_0_surf, yy_0_surf = np.meshgrid(x_0_surf, y_0_surf)
-        a.plot_surface(xx_0_surf, yy_0_surf, np.zeros((100, 100)), color="gray", alpha=0.5)
-        a.plot_surface(self.pp1, self.pp2, out, color="cyan")
-        a.set_xticks([-5, 0, 5])
-        a.set_yticks([-5, 0, 5])
-        a.set_zticks([-2, -1, 0, 1])
-        a.set_xlabel("$p1$")
-        a.set_ylabel("$p2$")
+        if len(self.axis3d.collections) > 1:
+            self.axis3d.collections[1].remove()
+        self.axis3d.plot_surface(self.pp1, self.pp2, out, color="cyan")
         self.canvas.draw()
 
-        b = self.figure2.add_subplot(1, 1, 1)
-        b.clear()
-        b.scatter([1, -1], [1, -1], marker="*")
-        b.scatter([1, -1], [-1, 1], marker="o")
-        b.set_xticks([-5, 0, 5])
-        b.set_yticks([-5, 0, 5])
         out_gray = 1 * (out >= 0)
-        """row_start, row_end = 0, 0
-        for row_idx in range(len(out_gray)):
-            if not row_start:
-                if sum(out_gray[row_idx]) > 0:
-                    row_start = row_idx
-            else:
-                if sum(out_gray[row_idx]) == 0:
-                    row_end = row_idx
-                    break
-        if row_start and not row_end:
-            row_end = len(out_gray)
-        col_start, col_end = 0, 0
-        for col_idx in range(len(out_gray)):
-            if not col_start:
-                if sum(out_gray[:, col_idx]) > 0:
-                    col_start = col_idx
-            else:
-                if sum(out_gray[:, col_idx]) == 0:
-                    col_end = col_idx
-                    break
-        if col_start and not col_end:
-            col_end = len(out_gray)"""
-        b.contourf(self.pp1, self.pp2, out_gray, cmap=plt.cm.Paired, alpha=0.6)
-        b.set_xlabel("$p1$")
-        b.set_ylabel("$p2$")
+        while len(self.axis.collections) > 2:
+            self.axis.collections[-1].remove()
+        self.axis.contourf(self.pp1, self.pp2, out_gray, cmap=plt.cm.Paired, alpha=0.6)
         self.canvas2.draw()
