@@ -377,6 +377,13 @@ class NNDLayout(QMainWindow):
         slider_label.setText(slider_label.text()[:slider_label.text().find(":") + 2] + str(round(value, round_pos)))
         return value
 
+    def closeEvent(self, event):
+        super().closeEvent(event)
+        # Stops all running matplotlib animations
+        for attr in dir(self):
+            if type(getattr(self, attr)) == matplotlib.animation.FuncAnimation:
+                getattr(self, attr).event_source.stop()
+
     @staticmethod
     def logsigmoid(n):
         return 1 / (1 + np.exp(-n))

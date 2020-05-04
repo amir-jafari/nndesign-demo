@@ -105,6 +105,7 @@ from nndesigndemos.book2.chapter2.Cascaded_function import CascadedFunction
 # ------ Chapter 3 --------
 from nndesigndemos.book2.chapter3.Gradient_descent import GradientDescent
 from nndesigndemos.book2.chapter3.Gradient_descent_stochastic import GradientDescentStochastic
+from nndesigndemos.book2.chapter3.Normalization_and_initialization_effects import NormAndInitEffects
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -143,7 +144,7 @@ BOOK1_CHAPTERS_DEMOS = {
 
 BOOK2_CHAPTERS_DEMOS = {
     2: ["Multilayer Networks", "Chapter 2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
-    3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Gradient Descent Stochastic"]
+    3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Gradient Descent Stochastic", "Normalization & Initialization Effects"]
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -540,8 +541,8 @@ class MainWindowNN(NNDLayout):
     def chapter21(self, idx):
         self.comboBox4.setCurrentIndex(0)
         if idx == 1:
-            self.chapter20_window1 = HopfieldNetwork(self.w_ratio, self.h_ratio, self.dpi)
-            self.chapter20_window1.show()
+            self.chapter21_window1 = HopfieldNetwork(self.w_ratio, self.h_ratio, self.dpi)
+            self.chapter21_window1.show()
 
 
 class MainWindowDL(NNDLayout):

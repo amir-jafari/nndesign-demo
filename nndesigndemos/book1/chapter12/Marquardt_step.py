@@ -25,7 +25,7 @@ class MarquardtStep(NNDLayout):
         A1 = self.logsigmoid(np.dot(self.W1, self.P) + self.b1)
         self.T = self.logsigmoid(np.dot(self.W2, A1) + self.b2)
 
-        self.make_plot(1, (20, 280, 480, 400))
+        self.make_plot(1, (65, 285, 390, 390))
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.path, = self.axes.plot([], label="Gradient Descent Path", color="blue")
         self.x_data, self.y_data = [], []
@@ -48,8 +48,6 @@ class MarquardtStep(NNDLayout):
         self.canvas.draw()
 
     def change_pair_of_params(self, idx):
-        if self.ani:
-            self.ani.event_source.stop()
         self.pair_of_params = idx + 1
         self.init_params()
         self.plot_data()
@@ -117,6 +115,8 @@ class MarquardtStep(NNDLayout):
         dist = np.sqrt(gx ** 2 + gy ** 2)
         self.v2 = self.axes.quiver([self.Lx], [self.Ly], [gx], [gy], units="xy", scale=1, color="black")
         Lx1, Ly1 = self.Lx + gx, self.Ly + gy
+        self.x_data.append(Lx1.item())
+        self.y_data.append(Ly1.item())
 
         dw = -je
         gx, gy = dw[0], dw[1]
@@ -124,66 +124,44 @@ class MarquardtStep(NNDLayout):
         gy1 = dist * gy / np.sqrt(gx ** 2 + gy ** 2)
         self.v1 = self.axes.quiver([self.Lx], [self.Ly], [gx1], [gy1], units="xy", scale=1, color="r")
 
-        W1, b1, W2, b2 = np.copy(self.W1), np.copy(self.b1), np.copy(self.W2), np.copy(self.b2)
-        if self.pair_of_params == 1:
-            self.x, self.y = self.W1[0, 0] + dw[0], self.W2[0, 0] + dw[1]
-            W1[0, 0], W2[0, 0] = self.x, self.y
-        elif self.pair_of_params == 2:
-            self.x, self.y = self.W1[0, 0] + dw[0], self.b1[0] + dw[1]
-            W1[0, 0], b1[0] = self.x, self.y
-        elif self.pair_of_params == 3:
-            self.x, self.y = self.b1[0] + dw[0], self.b1[1] + dw[1]
-            b1[0], b1[1] = self.x, self.y
+        while True:
 
-        self.a1 = self.logsigmoid_stable(np.dot(W1, self.P) + b1)
-        self.a2 = self.logsigmoid_stable(np.dot(W2, self.a1) + b2)
-        self.e = self.T - self.a2
-        error = np.dot(self.e, self.e.T).item()
+            dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+            W1, b1, W2, b2 = np.copy(self.W1), np.copy(self.b1), np.copy(self.W2), np.copy(self.b2)
+            if self.pair_of_params == 1:
+                self.x, self.y = self.W1[0, 0] + dw[0], self.W2[0, 0] + dw[1]
+                W1[0, 0], W2[0, 0] = self.x, self.y
+            elif self.pair_of_params == 2:
+                self.x, self.y = self.W1[0, 0] + dw[0], self.b1[0] + dw[1]
+                W1[0, 0], b1[0] = self.x, self.y
+            elif self.pair_of_params == 3:
+                self.x, self.y = self.b1[0] + dw[0], self.b1[1] + dw[1]
+                b1[0], b1[1] = self.x, self.y
 
-        while abs(error - self.error_prev) > 0.001 * self.error_prev:
+            Lx1, Ly1 = self.x, self.y
+            self.x_data.append(Lx1.item())
+            self.y_data.append(Ly1.item())
 
-            try:
+            self.a1 = self.logsigmoid_stable(np.dot(W1, self.P) + b1)
+            self.a2 = self.logsigmoid_stable(np.dot(W2, self.a1) + b2)
+            self.e = self.T - self.a2
+            error = np.dot(self.e, self.e.T).item()
 
+            if abs(error - self.error_prev) > 0.001 * self.error_prev:
                 self.mu *= self.nu
                 if self.mu > 1e10:
                     break
-
-                dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
-                W1, b1, W2, b2 = np.copy(self.W1), np.copy(self.b1), np.copy(self.W2), np.copy(self.b2)
-                if self.pair_of_params == 1:
-                    self.x, self.y = self.W1[0, 0] + dw[0], self.W2[0, 0] + dw[1]
-                    W1[0, 0], W2[0, 0] = self.x, self.y
-                elif self.pair_of_params == 2:
-                    self.x, self.y = self.W1[0, 0] + dw[0], self.b1[0] + dw[1]
-                    W1[0, 0], b1[0] = self.x, self.y
-                elif self.pair_of_params == 3:
-                    self.x, self.y = self.b1[0] + dw[0], self.b1[1] + dw[1]
-                    b1[0], b1[1] = self.x, self.y
-
-                Lx1, Ly1 = self.x, self.y
-                self.x_data.append(Lx1.item())
-                self.y_data.append(Ly1.item())
-                self.a1 = self.logsigmoid_stable(np.dot(W1, self.P) + b1)
-                self.a2 = self.logsigmoid_stable(np.dot(W2, self.a1) + b2)
-                self.e = self.T - self.a2
-                error = np.dot(self.e, self.e.T).item()
-
-            except Exception as e:
-                if str(e) == "Singular matrix":
-                    print("The matrix was singular... Increasing mu 10-fold")
-                    self.mu *= self.nu
-                else:
-                    raise e
+            else:
+                break
 
         if error < self.error_prev:
             self.W1, self.b1, self.W2, self.b2 = np.copy(W1), np.copy(b1), np.copy(W2), np.copy(b2)
             self.error_prev = error
 
+
         if self.error_prev <= 0.0000001:
             return
 
-        self.x_data.append(Lx1.item())
-        self.y_data.append(Ly1.item())
         return
 
     def on_mouseclick(self, event):
@@ -208,7 +186,7 @@ class MarquardtStep(NNDLayout):
         self.Lx, self.Ly = self.x, self.y
 
         self.train_step()
-        self.path.set_data(self.x_data[1:][::-1], self.y_data[1:][::-1])
+        self.path.set_data([self.x_data[0]] + self.x_data[1:][::-1], [self.y_data[0]] + self.y_data[1:][::-1])
         self.canvas.draw()
 
     def init_params(self):

@@ -3,4 +3,4 @@ recursive-include nndesigndemos/Chapters *
 recursive-include nndesigndemos/Logo *
 recursive-include nndesigndemos/Figures *
 recursive-include nndesigndemos/Data *
-
+recursive-include nndesigndemos/Sound *
