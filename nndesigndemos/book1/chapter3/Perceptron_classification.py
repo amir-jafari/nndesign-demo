@@ -1,6 +1,7 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore, QtMultimedia
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
+from time import sleep
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -13,6 +14,14 @@ class PerceptronClassification(NNDLayout):
         self.fill_chapter("Perceptron Classification", 3, "Click [Go] to send a fruit\ndown the belt to be\nclassified"
                           " by a perceptron\nnetwork.\n\nThe calculations for the\nperceptron will appear\nbelow.",
                           PACKAGE_PATH + "Logo/Logo_Ch_3.svg", None)
+
+        self.start_sound1 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blip.wav")
+        self.start_sound2 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/bloop.wav")
+        self.wind_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/wind.wav")
+        self.knock_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/knock.wav")
+        self.blp_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blp.wav")
+        self.scan_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/buzz.wav")
+        self.classify_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/classify.wav")
 
         self.make_plot(1, (15, 100, 500, 390))
         self.axis = Axes3D(self.figure)
@@ -91,66 +100,84 @@ class PerceptronClassification(NNDLayout):
         self.idx = 0
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        self.label_p.setText(""); self.label_a_1.setText(""); self.label_a_2.setText(""); self.label_a_3.setText(""); self.label_fruit.setText("")
+        self.p = np.round(np.random.uniform(-1, 1, (1, 3)), 2)
+        self.a = 1 * self.p[0, 0] + 0 * self.p[0, 1] + 0 * self.p[0, 2]
+        self.label = 1 if self.a >= 0 else -1
+        if self.line1:
+            self.line1.pop().remove()
+            self.line2.pop().remove()
+            self.line3.pop().remove()
+            self.canvas.draw()
         self.timer.timeout.connect(self.update_label)
-        self.timer.start(900)
+        self.timer.start(1000)
 
     def update_label(self):
         if self.idx == 0:
-            self.label_p.setText("")
-            self.label_a_1.setText(""); self.label_a_2.setText(""); self.label_a_3.setText("")
-            self.label_fruit.setText("")
-            self.p = np.round(np.random.uniform(-1, 1, (1, 3)), 2)
-            self.a = 1 * self.p[0, 0] + 0 * self.p[0, 1] + 0 * self.p[0, 2]
-            self.label = 1 if self.a >= 0 else -1
-            if self.line1:
-                self.line1.pop().remove()
-                self.line2.pop().remove()
-                self.line3.pop().remove()
-                self.canvas.draw()
+            self.start_sound1.play()
+            sleep(0.5)
+            self.start_sound2.play()
         if self.idx == 1:
+            self.start_sound1.play()
+            sleep(0.5)
+            self.start_sound2.play()
+        if self.idx == 2:
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_2.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_7.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        elif self.idx == 2:
+            self.wind_sound.play()
+        elif self.idx == 3:
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        elif self.idx == 3:
+        elif self.idx == 4:
             self.text_shape, self.text_texture, self.text_weight = str(self.p[0, 0]), str(self.p[0, 1]), str(self.p[0, 2])
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             self.canvas.draw()
-        elif self.idx == 4:
+            self.scan_sound.play()
+        elif self.idx == 5:
             self.line1 = self.axis.plot3D([self.p[0, 0]] * 10, np.linspace(-1, 1, 10), [self.p[0, 2]] * 10, color="g")
             self.line2 = self.axis.plot3D([self.p[0, 0]] * 10, [self.p[0, 1]] * 10, np.linspace(-1, 1, 10), color="g")
             self.line3 = self.axis.plot3D(np.linspace(-1, 1, 10), [self.p[0, 1]] * 10, [self.p[0, 2]] * 10, color="g")
             self.canvas.draw()
-        elif self.idx == 5:
-            self.label_p.setText("p = [{} {} {}]".format(self.p[0, 0], self.p[0, 1], self.p[0, 2]))
+            self.classify_sound.play()
         elif self.idx == 6:
+            self.label_p.setText("p = [{} {} {}]".format(self.p[0, 0], self.p[0, 1], self.p[0, 2]))
+        elif self.idx == 7:
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_4.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_9.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             self.label_a_1.setText("a = hardlims(W * p + b)")
-        elif self.idx == 7:
-            self.label_a_2.setText("a = hardlims({})".format(self.a))
+            self.start_sound1.play()
+            sleep(0.5)
+            self.start_sound2.play()
         elif self.idx == 8:
+            self.label_a_2.setText("a = hardlims({})".format(self.a))
+            self.start_sound1.play()
+            sleep(0.5)
+            self.start_sound2.play()
+        elif self.idx == 9:
             self.label_a_3.setText("a = " + str(self.label))
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_10.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        elif self.idx == 9:
+            self.wind_sound.play()
+        elif self.idx == 10:
             self.label_fruit.setText("Fruit = {}".format("Apple" if self.label == 1 else "Orange"))
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_6.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_11.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.knock_sound.play()
+            sleep(0.5)
+            self.knock_sound.play()
         else:
             pass
         self.idx += 1
