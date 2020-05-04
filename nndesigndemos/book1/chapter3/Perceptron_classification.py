@@ -19,7 +19,6 @@ class PerceptronClassification(NNDLayout):
         self.start_sound2 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/bloop.wav")
         self.wind_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/wind.wav")
         self.knock_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/knock.wav")
-        self.blp_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blp.wav")
         self.scan_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/buzz.wav")
         self.classify_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/classify.wav")
 

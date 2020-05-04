@@ -1,6 +1,7 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore, QtMultimedia
 import numpy as np
 import matplotlib.pyplot as plt
+from time import sleep
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -14,6 +15,13 @@ class HebbWithDecay(NNDLayout):
                                                  "Click [Update] to\napply the Hebb rule.\n\nBecause of weight\n"
                                                  "decay, the weight will\nnever exceed a\nvalue of 2.0.",
                           PACKAGE_PATH + "Logo/Logo_Ch_15.svg", None)
+
+        self.start_sound1 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blip.wav")
+        self.start_sound2 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/bloop.wav")
+        self.wind_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/wind.wav")
+        self.knock_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/knock.wav")
+        self.blp_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blp.wav")
+        self.scan_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/buzz.wav")
 
         self.p, self.a, self.label, self.fruit = None, None, None, None
         self.n_temp, self.banana_temp = None, None
@@ -121,6 +129,7 @@ class HebbWithDecay(NNDLayout):
                 self.icon3.setGeometry(28 * self.w_ratio, 420 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
 
         self.first_scanner_on = True
+        self.start_demo = True
         self.make_checkbox("checkbox_scanner", "First Scanner", (self.x_chapter_button, 360, self.w_chapter_button, self.h_chapter_button),
                            self.checkbox_checked,  self.first_scanner_on)
 
@@ -134,6 +143,12 @@ class HebbWithDecay(NNDLayout):
         str_end = "" if self.first_scanner_on else "_x"
         self.banana_shape, self.banana_smell, self.banana, self.n = "?", "?", "?", "  ?"
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        if not self.start_demo:
+            if self.first_scanner_on:
+                self.start_sound1.play()
+            else:
+                self.start_sound2.play()
+        self.start_demo = False
 
     def paintEvent(self, event):
         super(HebbWithDecay, self).paintEvent(event)
@@ -166,7 +181,7 @@ class HebbWithDecay(NNDLayout):
         self.w1_text = self.axis1.text(33, 70, str(round(self.W1, 1)), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
 
         self.w2_text.remove()
-        self.w2_text = self.axis1.text(32.5 if self.W2 > 0 else 32, 15, str(round(self.W2, 1)), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
+        self.w2_text = self.axis1.text(31.5, 15, str(round(self.W2, 2)), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
 
         self.b_text.remove()
         self.b_text = self.axis1.text(49, 18, str(round(self.b, 1)), fontsize=int(8 * (self.w_ratio + self.h_ratio) / 2))
@@ -186,11 +201,16 @@ class HebbWithDecay(NNDLayout):
         str_end = "" if self.first_scanner_on else "_x"
         if self.update:
             try:
+                W2_prev = self.W2
                 self.W2 = self.W2 + 0.2 * self.banana - 0.1 * self.W2
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
                 self.update = False
                 self.run_button.setText("Fruit")
                 self.checkbox_scanner.setEnabled(True)
+                if W2_prev != self.W2:
+                    self.knock_sound.play()
+                    sleep(0.5)
+                    self.blp_sound.play()
             except Exception as e:
                 if str(e) == "can't multiply sequence by non-int of type 'float'":
                     pass
@@ -201,12 +221,6 @@ class HebbWithDecay(NNDLayout):
             self.idx = 0
             self.banana_shape, self.banana_smell, self.banana, self.n = "?", "?", "?", "  ?"
             self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.timer.timeout.connect(self.update_label)
-            self.timer.start(900)
-
-    def update_label(self):
-        str_end = "" if self.first_scanner_on else "_x"
-        if self.idx == 0:
             self.checkbox_scanner.setEnabled(False)
             if np.random.uniform() > 0.35:
                 p1, p2, self.fruit = 1, 1, "banana"
@@ -219,6 +233,15 @@ class HebbWithDecay(NNDLayout):
                 self.n_temp += self.W1 * p1
             self.banana_temp = self.hardlim(self.n_temp)
             self.label = 1 if self.banana_temp == 1 else -1
+            self.timer.timeout.connect(self.update_label)
+            self.timer.start(900)
+
+    def update_label(self):
+        str_end = "" if self.first_scanner_on else "_x"
+        if self.idx == 0:
+            self.start_sound1.play()
+            sleep(0.5)
+            self.start_sound2.play()
         if self.idx == 1:
             if self.fruit == "banana":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_4{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -226,6 +249,7 @@ class HebbWithDecay(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_3{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_2{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.wind_sound.play()
         elif self.idx == 2:
             if self.fruit == "banana":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_7{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -242,6 +266,8 @@ class HebbWithDecay(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_6{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_5{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            if self.first_scanner_on:
+                self.scan_sound.play()
         elif self.idx == 4:
             if self.fruit == "banana":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_10{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -257,6 +283,7 @@ class HebbWithDecay(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_9{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_8{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.scan_sound.play()
         elif self.idx == 6:
             if self.fruit == "banana":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_13{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -272,6 +299,9 @@ class HebbWithDecay(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_12{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_11{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.start_sound1.play()
+            sleep(0.5)
+            self.start_sound2.play()
         elif self.idx == 8:
             self.banana = self.banana_temp
             if self.fruit == "banana":
@@ -280,6 +310,7 @@ class HebbWithDecay(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_15{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_14{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.wind_sound.play()
         elif self.idx == 9:
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_19{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -290,6 +321,9 @@ class HebbWithDecay(NNDLayout):
                     self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_17{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             self.run_button.setText("Update")
             self.update = True
+            self.knock_sound.play()
+            sleep(0.5)
+            self.knock_sound.play()
         else:
             pass
         self.idx += 1
