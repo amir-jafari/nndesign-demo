@@ -34,6 +34,8 @@ nndtoc()
 
 After doing so, a window will pop up, and you will be able to navigate the demos listed by book and then by chapter.
 
+There are some demos that have sound, so if you want to mute them just run `nndtoc(play_sound=False)` instead.
+
 The original software for these demos runs on MATLAB, so for every section of the 
 [Neural Network Design](https://hagan.okstate.edu/NNDesign.pdf) book where you see the MATLAB logo, 
 there will be a corresponding Python demo in this package. The second book is in progress.
