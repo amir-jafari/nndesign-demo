@@ -23,11 +23,12 @@ class EigenvectorGame(NNDLayout):
         self.make_plot(2, (150, 95, 210, 210))
         self.ax = self.figure2.add_subplot(1, 1, 1)
 
-        self.start_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/dk-a2600_walk.wav")
-        self.miss_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/smb_bump.wav")
-        self.win_1_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/mb_coin.wav")
-        self.win_2_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/npc-yc_mario-win.wav")
-        self.lose_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/mb_die.wav")
+        if self.play_sound:
+            self.start_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/dk-a2600_walk.wav")
+            self.miss_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/smb_bump.wav")
+            self.win_1_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/mb_coin.wav")
+            self.win_2_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/npc-yc_mario-win.wav")
+            self.lose_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/mb_die.wav")
 
         self.make_plot(1, (75, 300, 370, 370))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
@@ -112,7 +113,8 @@ class EigenvectorGame(NNDLayout):
 
     def random_transform(self):
         if self.play_start_sound:
-            self.start_sound.play()
+            if self.play_sound:
+                self.start_sound.play()
         self.label_message.setText("")
         self.label_message1.setText("")
         self.n_tries = 10
@@ -190,10 +192,12 @@ class EigenvectorGame(NNDLayout):
                 self.axes_1.set_title("First eigenvector found! 1 left!")
                 # self.label_message1.setText("First eigenvector found!")
                 self.axes1_v1.set_color("black")
-                self.win_1_sound.play()
+                if self.play_sound:
+                    self.win_1_sound.play()
             else:
                 self.axes1_v1.set_color("red")
-                self.miss_sound.play()
+                if self.play_sound:
+                    self.miss_sound.play()
         else:
             if (1.2 < abs(slope_v1 / self.slope1) or abs(slope_v1 / self.slope1) < 0.8) and 1.2 > abs(slope_v1 / slope_v1_t) > 0.8:
                 self.axes1_eig2.set_UVC(x_trimmed1, y_trimmed1)
@@ -204,13 +208,16 @@ class EigenvectorGame(NNDLayout):
                 # self.label_message.setText("You won :D. Click Restart to play again")
                 self.axes1_v1.set_color("black")
                 self.save_show_face(draw_win=True)
-                self.win_2_sound.play()
+                if self.play_sound:
+                    self.win_2_sound.play()
             else:
                 self.axes1_v1.set_color("red")
-                self.miss_sound.play()
+                if self.play_sound:
+                    self.miss_sound.play()
         if not self.eig2_found and self.n_tries == 0:
             self.axes_1.set_title("You lost :(. Click Restart to try again")
-            self.lose_sound.play()
+            if self.play_sound:
+                self.lose_sound.play()
             # self.label_message.setText("You lost :(. Click Restart to try again")
         self.canvas.draw()
 

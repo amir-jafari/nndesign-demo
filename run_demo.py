@@ -1,3 +1,3 @@
 from nndesigndemos.nndesign import nndtoc
 
-nndtoc()
+nndtoc(play_sound=True)

@@ -1,3 +1,4 @@
+import os
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow
 # import warnings
@@ -49,6 +50,7 @@ class NNDLayout(QMainWindow):
         self.setMouseTracking(print_mouse_coords)
 
         self.dpi = dpi
+        self.play_sound = True if os.environ["NNDESIGNDEMOS_PLAY_SOUND"] == "1" else False
 
         if do_not_scale:
             self.w_ratio, self.h_ratio = 1, 1
@@ -379,10 +381,13 @@ class NNDLayout(QMainWindow):
 
     def closeEvent(self, event):
         super().closeEvent(event)
-        # Stops all running matplotlib animations
         for attr in dir(self):
+            # Stops all running matplotlib animations
             if type(getattr(self, attr)) == matplotlib.animation.FuncAnimation:
                 getattr(self, attr).event_source.stop()
+            # Stops all running PyQt5 timers
+            elif type(getattr(self, attr)) == QtCore.QTimer:
+                getattr(self, attr).stop()
 
     @staticmethod
     def logsigmoid(n):

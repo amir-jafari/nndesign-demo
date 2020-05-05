@@ -15,12 +15,13 @@ class HopfieldClassification(NNDLayout):
                           " by a Hopfield\nnetwork.\n\nThe calculations for the\nHopfield network will\nappear below.",
                           PACKAGE_PATH + "Logo/Logo_Ch_3.svg", None)
 
-        self.start_sound1 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blip.wav")
-        self.start_sound2 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/bloop.wav")
-        self.wind_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/wind.wav")
-        self.knock_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/knock.wav")
-        self.scan_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/buzz.wav")
-        self.classify_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/classify.wav")
+        if self.play_sound:
+            self.start_sound1 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blip.wav")
+            self.start_sound2 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/bloop.wav")
+            self.wind_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/wind.wav")
+            self.knock_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/knock.wav")
+            self.scan_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/buzz.wav")
+            self.classify_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/classify.wav")
 
         self.make_plot(1, (15, 100, 500, 390))
         self.axis = Axes3D(self.figure)
@@ -119,19 +120,22 @@ class HopfieldClassification(NNDLayout):
 
     def update_label(self):
         if self.idx == 0:
-            self.start_sound1.play()
-            sleep(0.5)
-            self.start_sound2.play()
+            if self.play_sound:
+                self.start_sound1.play()
+                sleep(0.5)
+                self.start_sound2.play()
         if self.idx == 1:
-            self.start_sound1.play()
-            sleep(0.5)
-            self.start_sound2.play()
+            if self.play_sound:
+                self.start_sound1.play()
+                sleep(0.5)
+                self.start_sound2.play()
         if self.idx == 2:
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_2.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_7.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.wind_sound.play()
+            if self.play_sound:
+                self.wind_sound.play()
         elif self.idx == 3:
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -143,13 +147,15 @@ class HopfieldClassification(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.scan_sound.play()
+            if self.play_sound:
+                self.scan_sound.play()
         elif self.idx == 5:
             self.line1 = self.axis.plot3D([self.p[0, 0]] * 10, np.linspace(-1, 1, 10), [self.p[0, 2]] * 10, color="g")
             self.line2 = self.axis.plot3D([self.p[0, 0]] * 10, [self.p[0, 1]] * 10, np.linspace(-1, 1, 10), color="g")
             self.line3 = self.axis.plot3D(np.linspace(-1, 1, 10), [self.p[0, 1]] * 10, [self.p[0, 2]] * 10, color="g")
             self.canvas.draw()
-            self.classify_sound.play()
+            if self.play_sound:
+                self.classify_sound.play()
         elif self.idx == 6:
             self.label_p.setText("p = [{} {} {}]".format(self.p[0, 0], self.p[0, 1], self.p[0, 2]))
         elif self.idx == 7:
@@ -158,25 +164,28 @@ class HopfieldClassification(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_4.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_9.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.start_sound1.play()
-            sleep(0.5)
-            self.start_sound2.play()
+            if self.play_sound:
+                self.start_sound1.play()
+                sleep(0.5)
+                self.start_sound2.play()
         elif self.idx == 8:
             self.label_a_12.setText("a1 = [{} {} {}]".format(self.a1[0, 0], self.a1[1, 0], self.a1[2, 0]))
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_10.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.wind_sound.play()
+            if self.play_sound:
+                self.wind_sound.play()
         elif self.idx == 9:
             self.label_fruit.setText("Fruit = {}".format(self.fruit))
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_6.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_11.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.knock_sound.play()
-            sleep(0.5)
-            self.knock_sound.play()
+            if self.play_sound:
+                self.knock_sound.play()
+                sleep(0.5)
+                self.knock_sound.play()
         else:
             pass
         self.idx += 1

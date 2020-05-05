@@ -17,12 +17,13 @@ class OutStar(NNDLayout):
                                          " with the\nfirst scanner off.",
                           PACKAGE_PATH + "Logo/Logo_Ch_15.svg", None)
 
-        self.start_sound1 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blip.wav")
-        self.start_sound2 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/bloop.wav")
-        self.wind_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/wind.wav")
-        self.knock_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/knock.wav")
-        self.blp_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blp.wav")
-        self.scan_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/buzz.wav")
+        if self.play_sound:
+            self.start_sound1 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blip.wav")
+            self.start_sound2 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/bloop.wav")
+            self.wind_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/wind.wav")
+            self.knock_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/knock.wav")
+            self.blp_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blp.wav")
+            self.scan_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/buzz.wav")
 
         self.p, self.a, self.label, self.fruit = None, None, None, None
         self.n_temp, self.banana_temp = None, None
@@ -210,9 +211,11 @@ class OutStar(NNDLayout):
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_1{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         if not self.start_demo:
             if self.first_scanner_on:
-                self.start_sound1.play()
+                if self.play_sound:
+                    self.start_sound1.play()
             else:
-                self.start_sound2.play()
+                if self.play_sound:
+                    self.start_sound2.play()
         self.start_demo = False
 
     def paintEvent(self, event):
@@ -281,9 +284,10 @@ class OutStar(NNDLayout):
                 self.run_button.setText("Fruit")
                 self.checkbox_scanner.setEnabled(True)
                 if W2_prev[0, 0] != self.W2[0, 0] or W2_prev[1, 0] != self.W2[1, 0] or W2_prev[2, 0] != self.W2[2, 0]:
-                    self.knock_sound.play()
-                    sleep(0.5)
-                    self.blp_sound.play()
+                    if self.play_sound:
+                        self.knock_sound.play()
+                        sleep(0.5)
+                        self.blp_sound.play()
             except Exception as e:
                 if str(e) == "can't multiply sequence by non-int of type 'float'":
                     pass
@@ -315,9 +319,10 @@ class OutStar(NNDLayout):
     def update_label(self):
         str_end = "" if self.first_scanner_on else "_x"
         if self.idx == 0:
-            self.start_sound1.play()
-            sleep(0.5)
-            self.start_sound2.play()
+            if self.play_sound:
+                self.start_sound1.play()
+                sleep(0.5)
+                self.start_sound2.play()
         if self.idx == 1:
             if self.fruit == "apple":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_2{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -327,7 +332,8 @@ class OutStar(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_14{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_20{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.wind_sound.play()
+            if self.play_sound:
+                self.wind_sound.play()
         elif self.idx == 2:
             if self.fruit == "apple":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_3{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -349,7 +355,8 @@ class OutStar(NNDLayout):
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_21{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             if self.first_scanner_on:
-                self.scan_sound.play()
+                if self.play_sound:
+                    self.scan_sound.play()
         elif self.idx == 4:
             if self.fruit == "apple":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_4{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -369,7 +376,8 @@ class OutStar(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_16{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_22{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.scan_sound.play()
+            if self.play_sound:
+                self.scan_sound.play()
         elif self.idx == 6:
             if self.fruit == "apple":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_5{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -389,9 +397,10 @@ class OutStar(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_17{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_23{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.start_sound1.play()
-            sleep(0.5)
-            self.start_sound2.play()
+            if self.play_sound:
+                self.start_sound1.play()
+                sleep(0.5)
+                self.start_sound2.play()
         elif self.idx == 8:
             if self.fruit == "apple":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_6{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -401,7 +410,8 @@ class OutStar(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_18{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_24{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.wind_sound.play()
+            if self.play_sound:
+                self.wind_sound.play()
         elif self.idx == 9:
             if self.fruit == "apple":
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_7{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
@@ -413,9 +423,10 @@ class OutStar(NNDLayout):
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d2_25{}.svg".format(str_end)).pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
             self.run_button.setText("Update")
             self.update = True
-            self.knock_sound.play()
-            sleep(0.5)
-            self.knock_sound.play()
+            if self.play_sound:
+                self.knock_sound.play()
+                sleep(0.5)
+                self.knock_sound.play()
         else:
             pass
         self.idx += 1

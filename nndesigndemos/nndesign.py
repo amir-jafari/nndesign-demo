@@ -1,3 +1,4 @@
+import os
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication
 
@@ -82,7 +83,8 @@ class MainWindow(NNDLayout):
         self.button2_win.show()
 
 
-def nndtoc():
+def nndtoc(play_sound=True):
+    os.environ["NNDESIGNDEMOS_PLAY_SOUND"] = "1" if play_sound else "0"
     import sys
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     app = QApplication(sys.argv)
