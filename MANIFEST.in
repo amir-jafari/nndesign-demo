@@ -4,3 +4,7 @@ recursive-include nndesigndemos/Logo *
 recursive-include nndesigndemos/Figures *
 recursive-include nndesigndemos/Data *
 recursive-include nndesigndemos/Sound *
+recursive-include nndesigndemos/book1 *
+recursive-include nndesigndemos/book2 *
+recursive-include nndesigndemos/old *
+
