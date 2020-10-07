@@ -85,5 +85,5 @@ class DirectionalDerivatives(NNDLayout):
             grad = self.b + np.dot(self.a, xnorm)
             dir_der = np.dot(p.T, grad) / np.sqrt(np.dot(p.T, p))
             self.dir_der = dir_der
-            self.slider_dirder.setValue(self.dir_der * 10)
+            self.slider_dirder.setValue(self.dir_der.item() * 10)
             self.label_dirder.setText("Directional Derivative: {}".format(round(self.dir_der.item(), 2)))
