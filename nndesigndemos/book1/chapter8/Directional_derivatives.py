@@ -49,7 +49,7 @@ class DirectionalDerivatives(NNDLayout):
             self.make_label("scale_{}".format(i), str(6 - i * 3) + "  -", (self.x_chapter_slider_label - 15, 155 + 62 * i, 50, 50))
 
     def freeze(self):
-        self.slider_dirder.setValue(self.dir_der * 10)
+        self.slider_dirder.setValue(self.dir_der.item() * 10)
 
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:
