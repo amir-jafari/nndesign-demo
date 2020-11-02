@@ -83,7 +83,7 @@ class IIRNetwork(NNDLayout):
 
         a0, a_1, t, t1 = 0, 0, list(range(1, len(p) + 1)), list(range(len(p) + 1))
         num = np.array([weight_0])
-        den = np.array([1, weight_1])
+        den = np.array([1, -weight_1])
         zi = np.array([a0])
         A = lfilter(num, den, p, zi=zi)
 
