@@ -13,7 +13,7 @@ class GradientDescentStochastic(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(GradientDescentStochastic, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Gradient Descent Stochastic", 3, "\nClick anywhere on the\ngraph to start an initial guess."
+        self.fill_chapter("Gradient Descent Stochastic", 2, "\nClick anywhere on the\ngraph to start an initial guess."
                                                             "\nThen the steepest descent\ntrajectory will be shown.\n\n"
                                                             "Modify the learning rate\nby moving the slide bar.\n\n"
                                                             "Experiment with different\ninitial guesses and\nlearning rates.",

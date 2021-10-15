@@ -3,31 +3,26 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from mpl_toolkits.mplot3d import Axes3D
 import ast
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
-class PoslinDecisionRegions3D(NNDLayout):
+class PoslinDecisionRegions2D(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
-        super(PoslinDecisionRegions3D, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
+        super(PoslinDecisionRegions2D, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Poslin Decision Regions 3D", 2, "\nAlter the network's\nparameters by clicking\nthe "
+        self.fill_chapter("Poslin Decision Regions 2D", 1, "\nAlter the network's\nparameters by clicking\nthe "
                                                            "buttons and\nmodifying the input text.\n\n"
                                                            "Choose the output transfer\nfunction f below.",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Figures/poslinNet2Ddemo.svg",
                           icon_move_left=120, description_coords=(535, 100, 450, 200))
 
         self.make_plot(1, (85, 300, 370, 370))
-        self.axis = Axes3D(self.figure)
 
-        self.make_label("label_w1", "W1: [[1, 1], [-1, -1],\n         [-1, 1], [1, -1]]",
-                        (self.x_chapter_button + 20, 320 + 30, 150, 50))
-        self.make_button("button_w1", "Change W1",
-                         (self.x_chapter_button, 365 + 30, self.w_chapter_button, self.h_chapter_button),
-                         self.change_w1)
+        self.make_label("label_w1", "W1: [[1, 1], [-1, -1],\n         [-1, 1], [1, -1]]", (self.x_chapter_button + 20, 320 + 30, 150, 50))
+        self.make_button("button_w1", "Change W1", (self.x_chapter_button, 365 + 30, self.w_chapter_button, self.h_chapter_button), self.change_w1)
         self.w1 = np.array([[1, 1], [-1, - 1], [-1, 1], [1, - 1]])
 
         self.make_label("label_w2", "W2: [[-1], [-1], [-1], [-1]]", (self.x_chapter_button + 15, 390 + 30, 150, 50))
@@ -106,8 +101,9 @@ class PoslinDecisionRegions3D(NNDLayout):
 
     def graph(self):
 
-        ax = self.axis
-        ax.clear()
+        a = self.figure.add_subplot(111)
+        a.clear()
+        a.grid(True, which='both')
 
         p1 = np.linspace(-1, 3, 41)
         p2 = np.linspace(-1, 3, 41)
@@ -119,13 +115,12 @@ class PoslinDecisionRegions3D(NNDLayout):
         p = np.concatenate((pp1.reshape(-1, 1).T, pp2.reshape(-1, 1).T), axis=0)
         func = np.vectorize(self.func1, otypes=[np.float])
 
-        a1 = np.dot(self.w2.T, func(np.dot(self.w1, p) + np.dot(self.b1, np.ones((1, nump))))) + np.dot(self.b2, np.ones((1, nump)))
+        a1 = np.dot(self.w2.T, func(np.dot(self.w1, p) + np.dot(self.b1, np.ones((1, nump))))) + np.dot(self.b2, np.ones( (1, nump)))
         aa = np.reshape(a1, (n1, n2), order='F')
-        z11 = 0 * aa
 
-        ax.plot_surface(P1, P2, aa)
-        ax.plot_wireframe(P1, P2, z11, rcount=10, ccount=10)
+        a.contourf(P1, P2, aa, [0, 1000])
 
-        ax.grid(True, which='both')
-
+        a.grid(True, which='both')
+        a.axhline(y=0, color='k')
+        a.axvline(x=0, color='k')
         self.canvas.draw()

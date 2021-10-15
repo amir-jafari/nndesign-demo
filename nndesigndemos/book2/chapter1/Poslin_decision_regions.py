@@ -14,7 +14,7 @@ class PoslinDecisionRegions(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(PoslinDecisionRegions, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Poslin Decision Regions", 2, "\nAlter the network's\nparameters by clicking\nthe "
+        self.fill_chapter("Poslin Decision Regions", 1, "\nAlter the network's\nparameters by clicking\nthe "
                                                         "buttons and\nmodifying the input text.\n\n"
                                                         "Choose the output transfer\nfunction f below.",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Figures/poslinNet2Ddemo.svg",

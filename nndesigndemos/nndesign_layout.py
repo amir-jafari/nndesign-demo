@@ -356,10 +356,12 @@ class NNDLayout(QMainWindow):
         self.set_layout(checkbox_coords, checkbox)
         checkbox.setChecked(1 if checked else 0)
 
-    def make_input_box(self, input_box_attr_name, input_box_text, input_box_coords):
+    def make_input_box(self, input_box_attr_name, input_box_text, input_box_coords, func_text_changed=None):
         setattr(self, input_box_attr_name, QtWidgets.QLineEdit())
         input_box = getattr(self, input_box_attr_name)
         input_box.setText(input_box_text)
+        if func_text_changed is not None:
+            input_box.textChanged[str].connect(func_text_changed)
         # font = input_box.font()
         # font.setPointSize(int(20 * (self.w_ratio + self.h_ratio) / 2))
         # input_box.setFont(font)
