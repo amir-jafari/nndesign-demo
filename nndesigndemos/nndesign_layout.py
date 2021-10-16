@@ -38,8 +38,8 @@ x_chapter = 560
 
 
 class NNDLayout(QMainWindow):
-    def __init__(self, w_ratio, h_ratio, dpi, chapter_window=True, main_menu=False, draw_vertical=True, print_mouse_coords=False,
-                 fixed_size=False, do_not_scale=False):
+    def __init__(self, w_ratio, h_ratio, dpi, chapter_window=True, main_menu=False, draw_vertical=True,
+                 draw_horizontal=True, print_mouse_coords=False, fixed_size=False, do_not_scale=False):
 
         super(NNDLayout, self).__init__()
 
@@ -79,6 +79,7 @@ class NNDLayout(QMainWindow):
         self.label3, self.label4, self.label5, self.icon1, self.icon2 = None, None, None, None, None
 
         self.draw_vertical = draw_vertical
+        self.draw_horizontal = draw_horizontal
         if main_menu == 1:
             self.setWindowTitle("Neural Network Design Demos")
             self.make_label("label1", "Neural Network", (xlabel, ylabel, wlabel, hlabel), font_size=18, italics=True)
@@ -98,11 +99,12 @@ class NNDLayout(QMainWindow):
         qp.end()
 
     def draw_lines(self, qp):
-        pen = QtGui.QPen(QtCore.Qt.darkBlue, 4, QtCore.Qt.SolidLine)
-        qp.setPen(pen)
-        # qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio)
-        qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, xl2 * self.w_ratio, yl1 * self.h_ratio)
-        qp.drawLine(xl3 * self.w_ratio, yl4 * self.h_ratio, xl4 * self.w_ratio, yl4 * self.h_ratio)
+        if self.draw_horizontal:
+            pen = QtGui.QPen(QtCore.Qt.darkBlue, 4, QtCore.Qt.SolidLine)
+            qp.setPen(pen)
+            # qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio)
+            qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, xl2 * self.w_ratio, yl1 * self.h_ratio)
+            qp.drawLine(xl3 * self.w_ratio, yl4 * self.h_ratio, xl4 * self.w_ratio, yl4 * self.h_ratio)
 
         if self.draw_vertical:
             pen = QtGui.QPen(QtCore.Qt.darkBlue, 4, QtCore.Qt.SolidLine)
