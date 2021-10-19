@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from PyQt5 import QtWidgets, QtCore
 import numpy as np
 import warnings
@@ -9,13 +8,13 @@ from mpl_toolkits.mplot3d import Axes3D
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
 
-# TODO: Pretty up plots
+
 class NormAndInitEffects(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(NormAndInitEffects, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
         self.fill_chapter("Normalization & Initialization Effects", 3,
-                          "\nChoose a initialization\nscheme and whether to\nuse BatchNorm or not"
+                          "\nChoose a initialization\nscheme and whether to\nuse BatchNorm or not."
                           "\n\nThe distribution of input,\nnet input and output\nis shown on the left.\n\n",
                           PACKAGE_PATH + "Chapters/4_D/Logo_Ch_4.svg", None,
                           icon_move_left=120, description_coords=(535, 105, 450, 250))
@@ -106,11 +105,14 @@ class NormAndInitEffects(NNDLayout):
 
         if self.displayed_var == 'Input':
             if pop_up is True:
-                setattr(self, "pop_up_plot" + str(self.n_pop_up_plots), PopUpPlot(self.w_ratio, self.h_ratio, self.dpi,
-                                                                                  hist_data=self.p[dim, :]))
+                setattr(self, "pop_up_plot" + str(self.n_pop_up_plots), PopUpPlot(
+                    self.w_ratio, self.h_ratio, self.dpi, hist_data=self.p[dim, :],
+                    title=f'Input histogram (dimension {dim + 1})'),
+                        )
                 getattr(self, "pop_up_plot" + str(self.n_pop_up_plots)).show()
             else:
                 self.a.hist(self.p[dim, :], bins=25)
+                self.a.set_title(f'Input histogram (dimension {dim + 1})')
                 self.canvas.draw()
             return
 
@@ -121,11 +123,14 @@ class NormAndInitEffects(NNDLayout):
 
         if self.displayed_var == 'Norm Input':
             if pop_up is True:
-                setattr(self, "pop_up_plot" + str(self.n_pop_up_plots), PopUpPlot(self.w_ratio, self.h_ratio, self.dpi,
-                                                                                  hist_data=p[dim, :]))
+                setattr(self, "pop_up_plot" + str(self.n_pop_up_plots), PopUpPlot(
+                    self.w_ratio, self.h_ratio, self.dpi, hist_data=p[dim, :],
+                    title=f'Normalized Input histogram (dimension {dim + 1})')
+                        )
                 getattr(self, "pop_up_plot" + str(self.n_pop_up_plots)).show()
             else:
                 self.a.hist(p[dim, :], bins=25)
+                self.a.set_title(f'Normalized Input histogram (dimension {dim + 1})')
                 self.canvas.draw()
             return
 
@@ -145,21 +150,27 @@ class NormAndInitEffects(NNDLayout):
         net_input = w.dot(p) + b * np.ones((1, self.n_examples))
         if self.displayed_var == 'Net Input':
             if pop_up is True:
-                setattr(self, "pop_up_plot" + str(self.n_pop_up_plots), PopUpPlot(self.w_ratio, self.h_ratio, self.dpi,
-                                                                                  hist_data=net_input[dim, :]))
+                setattr(self, "pop_up_plot" + str(self.n_pop_up_plots), PopUpPlot(
+                    self.w_ratio, self.h_ratio, self.dpi, hist_data=net_input[dim, :],
+                    title=f'Net Input histogram (dimension {dim + 1})'
+                ))
                 getattr(self, "pop_up_plot" + str(self.n_pop_up_plots)).show()
             else:
                 self.a.hist(net_input[dim, :], bins=25)
+                self.a.set_title(f'Net Input histogram (dimension {dim + 1})')
                 self.canvas.draw()
             return
         output = self.act(net_input)
         if self.displayed_var == 'Output (hist)':
             if pop_up is True:
-                setattr(self, "pop_up_plot" + str(self.n_pop_up_plots), PopUpPlot(self.w_ratio, self.h_ratio, self.dpi,
-                                                                                  hist_data=output[dim, :]))
+                setattr(self, "pop_up_plot" + str(self.n_pop_up_plots), PopUpPlot(
+                    self.w_ratio, self.h_ratio, self.dpi, hist_data=output[dim, :],
+                    title=f'Output histogram (dimension {dim + 1})'
+                ))
                 getattr(self, "pop_up_plot" + str(self.n_pop_up_plots)).show()
             else:
                 self.a.hist(output[dim, :], bins=25)
+                self.a.set_title(f'Output histogram (dimension {dim + 1})')
                 self.canvas.draw()
             return
 
@@ -171,11 +182,13 @@ class NormAndInitEffects(NNDLayout):
             AA = self.act(w.dot(PP) + b * np.ones((1, 400)))
             if pop_up:
                 setattr(self, "pop_up_plot" + str(self.n_pop_up_plots), PopUpPlot(
-                    self.w_ratio, self.h_ratio, self.dpi,three_d_data=(XX, YY, AA[dim].reshape(20, 20))
+                    self.w_ratio, self.h_ratio, self.dpi, three_d_data=(XX, YY, AA[dim].reshape(20, 20)),
+                    title=f'Output (dimension {dim + 1}) wrt. input'
                 ))
                 getattr(self, "pop_up_plot" + str(self.n_pop_up_plots)).show()
             else:
                 self.a.plot_surface(XX, YY, AA[dim].reshape(20, 20))
+                self.a.set_title(f'Output (dimension {dim + 1}) wrt. input')
                 self.canvas.draw()
             return
 
@@ -217,31 +230,26 @@ class NormAndInitEffects(NNDLayout):
         r = p_range.shape[0]
 
         wMag = 0.7 * self.n_neurons ** (1 / r)
-        # TODO
-        raise Exception("Check wDir, could not find what function it's actually doing...")
         np.random.seed(self.random_seed)
         wDir = np.random.normal(size=(self.n_neurons, r))
         w = wMag * wDir
 
-        # TODO
-        raise Exception("Check all of this math!!")
-
         if self.n_neurons == 1:
             b = 0
         else:
-            b = wMag * np.linspace(1, -1, self.n_neurons).T * np.sign(w[:, 0])
+            b = wMag * np.multiply(np.linspace(1, -1, self.n_neurons), np.sign(w[:, 0]))
 
         x, y = 0.5 * (n[1] - n[0]), 0.5 * (n[1] + n[0])
         w *= x
         b = x * b + y
 
-        x = 2 / (p_range[:, 1] - p_range[:, 0])
-        y = 1 - p_range[:, 1] * x
+        x = np.divide(2, p_range[:, 1] - p_range[:, 0])
+        y = 1 - np.multiply(p_range[:, 1], x)
         xp = x.T
-        b = w * y + b
-        w = w * xp[np.ones((1, self.n_neurons)), :]
+        b = w.dot(y) + b
+        w = np.multiply(w, np.repeat(xp.reshape(1, -1), 4, axis=0))
 
-        return w, b
+        return w, b.reshape(-1, 1)
 
     def change_random_seed(self):
         self.random_seed = np.random.randint(100000000)
@@ -261,17 +269,18 @@ class NormAndInitEffects(NNDLayout):
 
 
 class PopUpPlot(NNDLayout):
-    # TODO: Make these plots smaller
-    def __init__(self, w_ratio, h_ratio, dpi, hist_data=None, three_d_data=None):
-        super(PopUpPlot, self).__init__(w_ratio, h_ratio, dpi, main_menu=None, draw_vertical=False, draw_horizontal=False)
+    def __init__(self, w_ratio, h_ratio, dpi, hist_data=None, three_d_data=None, title=None):
+        super(PopUpPlot, self).__init__(w_ratio, h_ratio, dpi, main_menu=None, draw_vertical=False,
+                                        draw_horizontal=False, overwrite_size=(400, 400))
+        self.setWindowTitle(title)
 
-        self.make_plot(1, (10, 10, 650, 650))
+        self.make_plot(1, (10, 10, 380, 380))
         self.figure.set_tight_layout(True)
         if hist_data is not None:
             self.a = self.figure.add_subplot(111)
             self.a.hist(hist_data, bins=25)
-            self.canvas.draw()
         elif three_d_data is not None:
             self.a = Axes3D(self.figure)
             self.a.plot_surface(three_d_data[0], three_d_data[1], three_d_data[2])
-            self.canvas.draw()
+        self.a.set_title(title)
+        self.canvas.draw()
