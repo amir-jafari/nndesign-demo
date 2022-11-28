@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMainWindow
 # import warnings
 import numpy as np
 import matplotlib
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import math
 
