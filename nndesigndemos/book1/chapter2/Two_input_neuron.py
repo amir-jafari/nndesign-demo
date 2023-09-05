@@ -59,10 +59,10 @@ class TwoInputNeuron(NNDLayout):
         w_2 = float(self.slider_w2.value() / 10)
         b = float(self.slider_b.value() / 10)
         n = w_1 * p_1 + w_2 * p_2 + b
-        self.slider_n.setValue(n * 10)
+        self.slider_n.setValue(int(n * 10))
         self.label_n.setText("n: {}".format(round(n, 2)))
         a = self.func(n)
-        self.slider_a.setValue(a * 10)
+        self.slider_a.setValue(int(a * 10))
         self.label_a.setText("a: {}".format(round(a, 2)))
 
     def change_transfer_function(self, idx):
