@@ -252,7 +252,7 @@ class NNDLayout(QMainWindow):
             label.setFont(QtGui.QFont(font_name, int(font_size * 0.78 * (self.w_ratio + self.h_ratio) / 2), italic=italics))
         else:
             label.setFont(QtGui.QFont(font_name, int(font_size * (self.w_ratio + self.h_ratio) / 2), italic=italics))
-        label.setGeometry(label_coords[0] * self.w_ratio, label_coords[1] * self.h_ratio,
+        label.setGeometry(int(label_coords[0]) * self.w_ratio, label_coords[1] * self.h_ratio,
                           label_coords[2] * self.w_ratio, label_coords[3] * self.h_ratio)
 
     def make_plot(self, plot_number, plot_coords=(90, 300, 370, 370)):
