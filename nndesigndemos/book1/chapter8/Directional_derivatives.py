@@ -49,7 +49,7 @@ class DirectionalDerivatives(NNDLayout):
             self.make_label("scale_{}".format(i), str(6 - i * 3) + "  -", (self.x_chapter_slider_label - 15, 155 + 62 * i, 50, 50))
 
     def freeze(self):
-        self.slider_dirder.setValue(self.dir_der.item() * 10)
+        self.slider_dirder.setValue(round(self.dir_der.item() * 10))
 
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:
@@ -85,5 +85,5 @@ class DirectionalDerivatives(NNDLayout):
             grad = self.b + np.dot(self.a, xnorm)
             dir_der = np.dot(p.T, grad) / np.sqrt(np.dot(p.T, p))
             self.dir_der = dir_der
-            self.slider_dirder.setValue(self.dir_der.item() * 10)
+            self.slider_dirder.setValue(round(self.dir_der.item() * 10))
             self.label_dirder.setText("Directional Derivative: {}".format(round(self.dir_der.item(), 2)))

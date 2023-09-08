@@ -98,8 +98,8 @@ class LinearTransformations(NNDLayout):
             self.canvas.mpl_disconnect(self.cid2)
         self.vectors = []
         self.line_data_x, self.line_data_y = [], []
-        while self.axes_1.lines:
-            self.axes_1.lines.pop()
+        for line in self.axes_1.lines:
+            line.remove()
         self.axes_1.plot([0] * 20, np.linspace(-1, 1, 20), linestyle="dashed", linewidth=0.5, color="gray")
         self.axes_1.plot(np.linspace(-1, 1, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
         while self.axes_1.collections:
@@ -174,11 +174,11 @@ class LinearTransformations(NNDLayout):
         if event.xdata != None and event.ydata != None:
             self.line_data_x2.append(event.xdata)
             self.line_data_y2.append(event.ydata)
-            while self.axes_1.lines:
-                self.axes_1.lines.pop()
+            for line in self.axes_1.lines:
+                line.remove()
             self.axes_1.plot([0] * 20, np.linspace(-1, 1, 20), linestyle="dashed", linewidth=0.5, color="gray")
             self.axes_1.plot(np.linspace(-1, 1, 20), [0] * 20, linestyle="dashed", linewidth=0.5, color="gray")
-            self.axes_1.lines.append(self.line)
+            self.axes_1.add_line(self.line)
             self.axes_1.plot(self.line_data_x2, self.line_data_y2, linestyle="--", color="gray")
             self.canvas.draw()
             self.line_data_x2.pop()

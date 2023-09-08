@@ -77,8 +77,7 @@ class Momentum(NNDLayout):
         self.dW1, self.db1, self.dW2, self.db2 = 0, 0, 0, 0
 
     def slider_update(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.lr = float(self.slider_lr.value() / 10)
         self.label_lr.setText("lr: " + str(self.lr))
         self.momentum = float(self.slider_momentum.value() / 100)
@@ -94,8 +93,7 @@ class Momentum(NNDLayout):
         self.do_slide = False
 
     def change_pair_of_params(self, idx):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.pair_of_params = idx + 1
         self.end_point_1.set_data([], [])
         self.init_point_1.set_data([], [])
@@ -137,8 +135,7 @@ class Momentum(NNDLayout):
         self.canvas.draw()
 
     def slide(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         if not self.do_slide:
             return
         # self.animation_speed = int(self.slider_anim_speed.value()) * 100
@@ -192,11 +189,13 @@ class Momentum(NNDLayout):
         self.path.set_data(self.x_data, self.y_data)
         return self.path, self.end_point_1
 
+    def ani_stop(self):
+        if self.ani and self.ani.event_source:
+            self.ani.event_source.stop()
     def on_mouseclick(self, event):
         self.init_params()
         self.event = event
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []
         self.init_point_1.set_data([event.xdata], [event.ydata])

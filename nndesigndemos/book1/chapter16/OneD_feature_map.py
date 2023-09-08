@@ -175,8 +175,8 @@ class OneDFeatureMap(NNDLayout):
             self.lr = (self.lr - 0.01) * 0.998 + 0.01
             self.nei = (self.nei - 1) * self.NDEC + 1
             self.do_slide = False
-            self.slider_lr.setValue(self.lr * 100)
-            self.slider_nei.setValue(self.nei * 10)
+            self.slider_lr.setValue(round(self.lr * 100))
+            self.slider_nei.setValue(round(self.nei * 10))
             self.label_lr.setText("Learning rate: " + str(round(self.lr, 2)))
             self.label_nei.setText("Neighborhood: " + str(round(self.nei, 2)))
             self.do_slide = True
@@ -188,7 +188,7 @@ class OneDFeatureMap(NNDLayout):
             self.lines_anim[i].set_data([self.W[from_, 0], self.W[to_, 0]], [self.W[from_, 1], self.W[to_, 1]])
 
     def on_run_2(self):
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         self.n_runs += 1
         self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init,

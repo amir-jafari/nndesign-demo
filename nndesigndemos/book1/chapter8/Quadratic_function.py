@@ -134,8 +134,8 @@ class QuadraticFunction(NNDLayout):
         while self.axes_1.collections:
             for collection in self.axes_1.collections:
                 collection.remove()
-        while self.axes_1.lines:
-            self.axes_1.lines.pop()
+        for line in self.axes_1.lines:
+            line.remove()
         while self.axes_2.collections:
             for collection in self.axes_2.collections:
                 collection.remove()

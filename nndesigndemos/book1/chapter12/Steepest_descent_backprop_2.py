@@ -63,9 +63,12 @@ class SteepestDescentBackprop2(NNDLayout):
 
         self.canvas.draw()
 
-    def slider_update(self):
-        if self.ani:
+    def ani_stop(self):
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
+
+    def slider_update(self):
+        self.ani_stop()
         self.lr = float(self.slider_lr.value() / 10)
         self.label_lr.setText("lr: " + str(self.lr))
 
@@ -79,8 +82,7 @@ class SteepestDescentBackprop2(NNDLayout):
         self.do_slide = False
 
     def change_pair_of_params(self, idx):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.pair_of_params = idx + 1
         self.end_point_1.set_data([], [])
         self.init_point_1.set_data([], [])
@@ -122,8 +124,7 @@ class SteepestDescentBackprop2(NNDLayout):
         self.canvas.draw()
 
     def slide(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         if not self.do_slide:
             return
         # self.animation_speed = int(self.slider_anim_speed.value()) * 100
@@ -180,8 +181,7 @@ class SteepestDescentBackprop2(NNDLayout):
     def on_mouseclick(self, event):
         self.init_params()
         self.event = event
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []
         self.init_point_1.set_data([event.xdata], [event.ydata])

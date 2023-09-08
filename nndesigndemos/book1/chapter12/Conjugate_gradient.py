@@ -58,7 +58,7 @@ class ConjugateGradient(NNDLayout):
         self.canvas.draw()
 
     def change_pair_of_params(self, idx):
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         self.pair_of_params = idx + 1
         self.end_point_1.set_data([], [])
@@ -326,7 +326,7 @@ class ConjugateGradient(NNDLayout):
     def on_mouseclick(self, event):
         self.init_params()
         self.event = event
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []

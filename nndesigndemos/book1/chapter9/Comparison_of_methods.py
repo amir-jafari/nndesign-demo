@@ -73,9 +73,9 @@ class ComparisonOfMethods(NNDLayout):
 
     def on_mouseclick(self, event):
         self.event = event
-        if self.ani_1:
+        if self.ani_1 and self.ani_1.event_source:
             self.ani_1.event_source.stop()
-        if self.ani_2:
+        if self.ani_2 and self.ani_2.event_source:
             self.ani_2.event_source.stop()
         self.path_1.set_data([], [])
         self.path_2.set_data([], [])

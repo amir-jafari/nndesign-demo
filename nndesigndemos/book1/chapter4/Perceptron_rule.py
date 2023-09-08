@@ -148,14 +148,17 @@ class PerceptronRule(NNDLayout):
         self.decision.set_data([], [])
         # self.canvas.draw()
 
+    def ani_stop(self):
+        if self.ani1 and self.ani1.event_source:
+            self.ani1.event_source.stop()
+        if self.ani2 and self.ani2.event_source:
+            self.ani2.event_source.stop()
+
     def on_mouseclick(self, event):
         """Add an item to the plot"""
         if event.xdata != None and event.xdata != None:
             self.data.append((event.xdata, event.ydata, 1 if event.button == 1 else 0))
-            if self.ani1:
-                self.ani1.event_source.stop()
-            if self.ani2:
-                self.ani2.event_source.stop()
+            self.ani_stop()
             self.data_missclasified, error = [], 0
             for xy in self.data:
                 t_hat = self.run_forward(np.array(xy[0:2]))
@@ -168,10 +171,7 @@ class PerceptronRule(NNDLayout):
             self.canvas.draw()
 
     def on_clear(self):
-        if self.ani1:
-            self.ani1.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
+        self.ani_stop()
         self.data = []
         # self.clear_decision_boundary()
         self.initialize_weights()
@@ -189,10 +189,7 @@ class PerceptronRule(NNDLayout):
 
     def on_run(self):
 
-        if self.ani1:
-            self.ani1.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
+        self.ani_stop()
 
         self.use_bias = self.comboBox2.currentText() == "Yes"
         if not self.use_bias:
@@ -255,20 +252,14 @@ class PerceptronRule(NNDLayout):
             self.canvas.draw()
 
     def on_run_2(self):
-        if self.ani1:
-            self.ani1.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
+        self.ani_stop()
         self.learn = False
         self.ani1 = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=len(self.data) * 2 + 1,
                                   interval=1000, repeat=False, blit=False)
         self.canvas.draw()
 
     def on_run_3(self):
-        if self.ani1:
-            self.ani1.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
+        self.ani_stop()
         self.learn = True
         random.shuffle(self.data)
         self.ani2 = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=3,
@@ -363,10 +354,7 @@ class PerceptronRule(NNDLayout):
                 return self.pos_line, self.neg_line, self.miss_line_pos, self.miss_line_neg, self.decision, self.highlight_data, self.highlight_data_miss
 
     def on_reset(self):
-        if self.ani1:
-            self.ani1.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
+        self.ani_stop()
         self.warning_label.setText("")
         self.initialize_weights()
         # self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(round(self.Weights[0], 2), round(self.Weights[1], 2)), 10))
@@ -390,10 +378,7 @@ class PerceptronRule(NNDLayout):
         self.canvas.draw()
 
     def on_undo_mouseclick(self):
-        if self.ani1:
-            self.ani1.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
+        self.ani_stop()
         if self.data:
             self.data.pop()
             self.draw_data()
@@ -423,9 +408,6 @@ class PerceptronRule(NNDLayout):
                (self.Weights[1] if self.Weights[1] != 0 else .000001)
 
     def initialize_weights(self):
-        if self.ani1:
-            self.ani1.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
+        self.ani_stop()
         self.Weights = (np.random.random(self.R) - 0.5) * 20
         self.bias = (np.random.random(self.S) - 0.5) * 20

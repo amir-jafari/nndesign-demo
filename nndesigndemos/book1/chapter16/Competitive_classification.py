@@ -58,7 +58,7 @@ class CompetitiveClassification(NNDLayout):
         self.make_label("label_fruit", "", (550, 480, 150, 25))
 
         if self.dpi > 113.5:
-            self.figure_w, self.figure_h = 575 / (self.dpi / 113.5), 190 / (self.dpi / 113.5)
+            self.figure_w, self.figure_h = round(575 / (self.dpi / 113.5)), round(190 / (self.dpi / 113.5))
         else:
             self.figure_w, self.figure_h = 575, 190
         self.icon3 = QtWidgets.QLabel(self)
@@ -71,8 +71,8 @@ class CompetitiveClassification(NNDLayout):
                 self.icon3.setGeometry(28 * self.h_ratio, 485 * self.h_ratio, self.figure_w * self.h_ratio, self.figure_h * self.h_ratio)
         else:
             if self.dpi > 113.5:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5), QtGui.QIcon.Normal, QtGui.QIcon.On))
-                self.icon3.setGeometry(28 * self.w_ratio * (self.dpi / 113.5), 485 * self.h_ratio, self.figure_w * self.w_ratio / (self.dpi / 113.5), self.figure_h * self.h_ratio / (self.dpi / 113.5))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(round(self.figure_w * self.w_ratio / (self.dpi / 113.5)), round(self.figure_h * self.h_ratio / (self.dpi / 113.5)), QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setGeometry(round(28 * self.w_ratio * (self.dpi / 113.5)), 485 * self.h_ratio, round(self.figure_w * self.w_ratio / (self.dpi / 113.5)), round(self.figure_h * self.h_ratio / (self.dpi / 113.5)))
             else:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
                 self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
@@ -90,7 +90,7 @@ class CompetitiveClassification(NNDLayout):
             w_ratio, h_ratio = self.h_ratio, self.h_ratio
         else:
             w_ratio, h_ratio = self.w_ratio, self.h_ratio
-        painter.setFont(QtGui.QFont("times", 12 * (w_ratio + h_ratio) / 2))
+        painter.setFont(QtGui.QFont("times", 12 * (w_ratio + h_ratio) // 2))
         painter.drawText(QtCore.QPoint(100 * w_ratio, 28 * h_ratio), self.text_shape)
         painter.drawText(QtCore.QPoint(245 * w_ratio, 28 * h_ratio), self.text_texture)
         painter.drawText(QtCore.QPoint(410 * w_ratio, 28 * h_ratio), self.text_weight)

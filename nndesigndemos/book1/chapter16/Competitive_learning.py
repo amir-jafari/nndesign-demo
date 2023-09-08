@@ -61,9 +61,12 @@ class CompetitiveLearning(NNDLayout):
         self.make_button("run_button", "Train", (self.x_chapter_button, 395, self.w_chapter_button, self.h_chapter_button), self.on_run)
         self.make_button("run_button", "Random", (self.x_chapter_button, 425, self.w_chapter_button, self.h_chapter_button), self.init_weights)
 
-    def slide(self):
-        if self.ani:
+    def ani_stop(self):
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
+
+    def slide(self):
+        self.ani_stop()
         self.alpha = float(self.slider_lr.value() / 10)
         self.label_lr.setText("Learning Rate: {}".format(self.alpha))
         self.update_plot()
@@ -71,8 +74,7 @@ class CompetitiveLearning(NNDLayout):
         # self.on_run()
 
     def init_weights(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.W_1 = [np.random.uniform(-1, 1), np.random.uniform(-1, 1)]
         self.W_1 /= np.linalg.norm(self.W_1)
         self.W_2 = [np.random.uniform(-1, 1), np.random.uniform(-1, 1)]
@@ -138,8 +140,7 @@ class CompetitiveLearning(NNDLayout):
         np.random.seed(seed)
         np.random.shuffle(self.p_y)
         self.update_plot()
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=2 * self.P.shape[1],
                                  interval=500, repeat=False, blit=False)
         self.update_plot()
@@ -151,8 +152,7 @@ class CompetitiveLearning(NNDLayout):
         np.random.shuffle(self.p_x)
         np.random.seed(seed)
         np.random.shuffle(self.p_y)
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=2,
                                  interval=500, repeat=False, blit=False)
         self.update_plot()
@@ -161,8 +161,7 @@ class CompetitiveLearning(NNDLayout):
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:
 
-            if self.ani:
-                self.ani.event_source.stop()
+            self.ani_stop()
 
             # https://stackoverflow.com/questions/39840030/distance-between-point-and-a-line-from-two-points/39840218
             d_w_1 = np.linalg.norm(np.cross(

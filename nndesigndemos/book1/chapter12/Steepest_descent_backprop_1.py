@@ -63,7 +63,7 @@ class SteepestDescentBackprop1(NNDLayout):
     #     print(self.axes2.elev, self.axes2.azim)
 
     def change_pair_of_params(self, idx):
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         self.pair_of_params = idx + 1
         self.init_point_1.set_data([], [])
@@ -169,7 +169,7 @@ class SteepestDescentBackprop1(NNDLayout):
     def on_mouseclick(self, event):
         self.init_params()
         self.event = event
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []

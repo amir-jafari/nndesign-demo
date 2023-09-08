@@ -76,9 +76,12 @@ class VariableLearningRate(NNDLayout):
         self.mc = 0.8
         self.slider_do = True
 
-    def change_pair_of_params(self, idx):
-        if self.ani:
+    def ani_stop(self):
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
+
+    def change_pair_of_params(self, idx):
+        self.ani_stop()
         self.pair_of_params = idx + 1
         self.end_point_1.set_data([], [])
         self.init_point_1.set_data([], [])
@@ -131,8 +134,7 @@ class VariableLearningRate(NNDLayout):
             # self.animation_speed = int(self.slider_anim_speed.value()) * 100
             # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
             if self.x_data:
-                if self.ani:
-                    self.ani.event_source.stop()
+                self.ani_stop()
                 self.path.set_data([], [])
                 self.x_data, self.y_data = [self.x_data[0]], [self.y_data[0]]
                 self.canvas.draw()
@@ -184,14 +186,14 @@ class VariableLearningRate(NNDLayout):
             self.lr *= self.decrease_rate
             self.mc = 0
             self.slider_do = False
-            self.slider_lr.setValue(self.lr * 10)
+            self.slider_lr.setValue(round(self.lr * 10))
             self.label_lr.setText("lr: " + str(round(self.lr, 2)))
             self.x, self.y = self.x_data[-1], self.y_data[-1]
         else:
             if np.sum(e_new * e_new) < np.sum(self.e * self.e):
                 self.lr *= self.increase_rate
                 self.slider_do = False
-                self.slider_lr.setValue(self.lr * 10)
+                self.slider_lr.setValue(round(self.lr * 10))
                 self.label_lr.setText("lr: " + str(round(self.lr, 2)))
             self.W1, self.b1, self.W2, self.b2 = np.copy(W1), np.copy(b1), np.copy(W2), np.copy(b2)
             self.a1, self.a2 = a1_new, a2_new
@@ -211,8 +213,7 @@ class VariableLearningRate(NNDLayout):
     def on_mouseclick(self, event):
         self.init_params()
         self.event = event
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []
         self.init_point_1.set_data([event.xdata], [event.ydata])

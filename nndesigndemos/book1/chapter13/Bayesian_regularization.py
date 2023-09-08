@@ -65,8 +65,8 @@ class BayesianRegularization(NNDLayout):
         # self.axes_2.set_ylim(0.1, 1000)
         # self.axes_2.set_xticks([1, 10, 100])
         # self.axes_2.set_yticks([0.1, 0, 10, 100, 1000])
-        while self.axes_2.lines:
-            self.axes_2.lines.pop()
+        for line in self.axes_2.lines:
+            line.remove()
         self.figure2.set_tight_layout(True)
         self.canvas2.draw()
 

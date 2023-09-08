@@ -214,7 +214,7 @@ class Regularization(NNDLayout):
 
     def on_run(self):
         self.clicked = True
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         self.run_animation()
 
@@ -227,7 +227,7 @@ class Regularization(NNDLayout):
         self.train_points.set_data(self.pp, self.tt)
 
     def slide(self):
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         # np.random.seed(self.random_state)
         self.nsd = float(self.slider_nsd.value() / 10)

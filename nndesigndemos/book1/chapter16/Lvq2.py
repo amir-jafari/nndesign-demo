@@ -132,11 +132,14 @@ class LVQ2(NNDLayout):
         self.miss_line_pos.set_data(miss_pos_points_x, miss_pos_points_y)
         self.miss_line_neg.set_data(miss_neg_points_x, miss_neg_points_y)
 
-    def slide(self):
-        if self.ani:
+    def ani_stop(self):
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
+
+    def slide(self):
+        self.ani_stop()
         if self.axes_1.collections:
-            self.axes_1.collections.pop()
+            self.axes_1.collections[-1].remove()
         self.alpha = float(self.slider_lr.value() / 10)
         self.label_lr.setText("Learning_rate: {}".format(self.alpha))
         self.update_plot()
@@ -144,15 +147,14 @@ class LVQ2(NNDLayout):
         # self.on_run()
 
     def init_weights(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.W = 2 * np.random.uniform(0, 1, (4, 2)) - 1
         self.update_plot()
         self.canvas.draw()
 
     def animate_init_train(self):
         if self.axes_1.collections:
-            self.axes_1.collections.pop()
+            self.axes_1.collections[-1].remove()
         return self.pos_line, self.neg_line, self.pos_weight, self.neg_weight, self.miss_line_pos, self.miss_line_neg, self.p_point_higlight
 
     def on_animate_train(self, idx):
@@ -207,7 +209,7 @@ class LVQ2(NNDLayout):
             self.update_v = self.axes_1.quiver([self.W[i, :][0]], [self.W[i, :][1]], [w1_new[0] - self.W[i, :][0]], [w1_new[1] - self.W[i, :][1]], units="xy", scale=1, color=self.color)
             self.W[i, :] = np.copy(w1_new)
         elif idx in list(np.arange(2, 1000, 6)):
-            self.axes_1.collections.pop()
+            self.axes_1.collections[-1].remove()
             self.update_plot()
         elif idx in list(np.arange(3, 10000, 6)):
             if sum(self.e == 0) > 0:
@@ -221,14 +223,13 @@ class LVQ2(NNDLayout):
                 self.W[i, :] = np.copy(w1_new)
         elif idx in list(np.arange(5, 1000, 6)):
             if sum(self.e == 0) > 0:
-                self.axes_1.collections.pop()
+                self.axes_1.collections[-1].remove()
                 self.update_plot()
 
         return self.pos_line, self.neg_line, self.pos_weight, self.neg_weight, self.miss_line_pos, self.miss_line_neg, self.p_point_higlight
 
     def on_learn(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         if len(self.P) > 0:
             self.warning_label.setText("")
             self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=6,
@@ -239,8 +240,7 @@ class LVQ2(NNDLayout):
         self.canvas.draw()
 
     def on_run(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         if len(self.P) > 0:
             self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=6 * self.P.shape[1],
                                      interval=1000, repeat=False, blit=False)
@@ -251,8 +251,7 @@ class LVQ2(NNDLayout):
 
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:
-            if self.ani:
-                self.ani.event_source.stop()
+            self.ani_stop()
             if len(self.P) > 0:
                 self.P = np.hstack((self.P, np.array([[event.xdata], [event.ydata]])))
                 if event.button == 1:
@@ -279,8 +278,7 @@ class LVQ2(NNDLayout):
         self.canvas.draw()
 
     def on_undo_mouseclick(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         if len(self.P) > 0:
             self.P = self.P[:, :-1]
             self.T = self.T[:, :-1]
@@ -288,8 +286,7 @@ class LVQ2(NNDLayout):
             self.canvas.draw()
 
     def on_clear(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         if len(self.P) > 0:
             self.P = []
             self.T = []

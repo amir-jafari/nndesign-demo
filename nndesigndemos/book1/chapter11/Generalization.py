@@ -77,19 +77,19 @@ class Generalization(NNDLayout):
 
     def on_stop(self):
         if self.pause:
-            if self.ani:
+            if self.ani and self.ani.event_source:
                 self.ani.event_source.stop()
             self.pause_button.setText("Unpause")
             self.pause = False
         else:
-            if self.ani:
+            if self.ani and self.ani.event_source:
                 self.ani.event_source.start()
             self.pause_button.setText("Pause")
             self.pause = True
 
     def slide(self):
         self.error_prev = 1000
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         slider_s1 = self.slider_s1.value()
         if self.S1 != slider_s1:
@@ -135,7 +135,7 @@ class Generalization(NNDLayout):
     def on_run(self):
         self.pause_button.setText("Pause")
         self.pause = True
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         n_epochs = 100
         self.ani = FuncAnimation(self.figure, self.on_animate_v2, init_func=self.animate_init_v2, frames=n_epochs,

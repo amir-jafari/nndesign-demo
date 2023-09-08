@@ -125,9 +125,9 @@ class AdaptiveNoiseCancellation(NNDLayout):
         self.on_mouseclick(event)
 
     def slider_update(self):
-        if self.ani_1:
+        if self.ani_1 and self.ani_1.event_source:
             self.ani_1.event_source.stop()
-        if self.ani_2:
+        if self.ani_2 and self.ani_2.event_source:
             self.ani_2.event_source.stop()
         self.lr = float(self.slider_lr.value() / 10)
         self.label_lr.setText("lr: " + str(self.lr))
@@ -143,9 +143,9 @@ class AdaptiveNoiseCancellation(NNDLayout):
 
     def change_plot_type(self, idx):
         self.plot_idx = idx
-        if self.ani_1:
+        if self.ani_1 and self.ani_1.event_source:
             self.ani_1.event_source.stop()
-        if self.ani_2:
+        if self.ani_2 and self.ani_2.event_source:
             self.ani_2.event_source.stop()
         self.path_2.set_data([], [])
         self.w1_data, self.w2_data = [self.w1_data[0]], [self.w2_data[0]]
@@ -168,9 +168,9 @@ class AdaptiveNoiseCancellation(NNDLayout):
         self.canvas2.draw()
 
     def slide(self):
-        if self.ani_1:
+        if self.ani_1 and self.ani_1.event_source:
             self.ani_1.event_source.stop()
-        if self.ani_2:
+        if self.ani_2 and self.ani_2.event_source:
             self.ani_2.event_source.stop()
         if not self.do_slide:
             return
@@ -228,9 +228,9 @@ class AdaptiveNoiseCancellation(NNDLayout):
             self.w = np.array([event.xdata, event.ydata])
             self.e = np.zeros((int(self.ts),))
             self.event = event
-            if self.ani_1:
+            if self.ani_1 and self.ani_1.event_source:
                 self.ani_1.event_source.stop()
-            if self.ani_2:
+            if self.ani_2 and self.ani_2.event_source:
                 self.ani_2.event_source.stop()
             self.signal_approx.set_data([], [])
             self.path_2.set_data([], [])

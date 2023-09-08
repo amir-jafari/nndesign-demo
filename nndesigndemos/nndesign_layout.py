@@ -391,7 +391,8 @@ class NNDLayout(QMainWindow):
         for attr in dir(self):
             # Stops all running matplotlib animations
             if type(getattr(self, attr)) == matplotlib.animation.FuncAnimation:
-                getattr(self, attr).event_source.stop()
+                if getattr(self, attr).event_source:
+                    getattr(self, attr).event_source.stop()
             # Stops all running PyQt5 timers
             elif type(getattr(self, attr)) == QtCore.QTimer:
                 getattr(self, attr).stop()

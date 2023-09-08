@@ -145,8 +145,8 @@ class SupervisedHebb(NNDLayout):
             d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
             d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
             xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
-            while self.axis1.patches:
-                self.axis1.patches.pop()
+            for patch in self.axis1.patches:
+                patch.remove()
             if self.pattern11[yyy, xxx] == 1:
                 self.pattern11[yyy, xxx] = 0
             else:
@@ -167,8 +167,8 @@ class SupervisedHebb(NNDLayout):
             d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
             d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
             xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
-            while self.axis2.patches:
-                self.axis2.patches.pop()
+            for patch in self.axis2.patches:
+                patch.remove()
             if self.pattern22[yyy, xxx] == 1:
                 self.pattern22[yyy, xxx] = 0
             else:
@@ -189,8 +189,8 @@ class SupervisedHebb(NNDLayout):
             d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
             d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
             xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
-            while self.axis3.patches:
-                self.axis3.patches.pop()
+            for patch in self.axis3.patches:
+                patch.remove()
             if self.pattern33[yyy, xxx] == 1:
                 self.pattern33[yyy, xxx] = 0
             else:
@@ -211,8 +211,8 @@ class SupervisedHebb(NNDLayout):
             d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
             d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
             xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
-            while self.axis4.patches:
-                self.axis4.patches.pop()
+            for patch in self.axis4.patches:
+                patch.remove()
             if self.pattern44[yyy, xxx] == 1:
                 self.pattern44[yyy, xxx] = 0
             else:
@@ -236,8 +236,8 @@ class SupervisedHebb(NNDLayout):
         elif self.rule == 1:
             w = np.dot(pattern, np.linalg.pinv(pattern))
         a = np.flip(np.dot(w, p).reshape(self.ncols_up, self.nrows_up).T, axis=0)
-        while self.axis5.patches:
-            self.axis5.patches.pop()
+        for patch in self.axis5.patches:
+            patch.remove()
         for xi in range(len(self.xx_up)):
             for yi in range(len(self.yy_up)):
                 if a[yi, xi] > 0:

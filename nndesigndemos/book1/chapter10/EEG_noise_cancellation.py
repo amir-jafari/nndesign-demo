@@ -106,7 +106,7 @@ class EEGNoiseCancellation(NNDLayout):
         self.on_run()
 
     def slider_update(self):
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         self.lr = float(self.slider_lr.value() / 100)
         self.label_lr.setText("lr: " + str(self.lr))
@@ -124,7 +124,7 @@ class EEGNoiseCancellation(NNDLayout):
 
     def change_plot_type(self, idx):
         self.plot_idx = idx
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         if idx == 0:
             self.axes_1.set_title("Original (blue) and Estimated (red) Signals", fontdict={'fontsize': 10})
@@ -141,12 +141,12 @@ class EEGNoiseCancellation(NNDLayout):
         self.canvas.draw()
 
     def on_run(self):
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         self.run_animation()
 
     def slide(self):
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         if not self.do_slide:
             return

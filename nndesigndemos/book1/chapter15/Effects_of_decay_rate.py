@@ -71,6 +71,6 @@ class EffectsOfDecayRate(NNDLayout):
 
     def on_random(self):
         self.do_graph = False
-        self.slider_lr.setValue(np.random.uniform(0, 1) * 100)
+        self.slider_lr.setValue(round(np.random.uniform(0, 1) * 100))
         self.do_graph = True
-        self.slider_dr.setValue(np.random.uniform(0, 1) * 100)
+        self.slider_dr.setValue(round(np.random.uniform(0, 1) * 100))

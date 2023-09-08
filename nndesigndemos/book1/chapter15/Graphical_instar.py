@@ -84,7 +84,7 @@ class GraphicalInstar(NNDLayout):
 
     def compute(self):
         if len(self.axes_2.collections) == 3:
-            self.axes_2.collections.pop()
+            self.axes_2.lines[-1].remove()
         self.v = self.w + self.lr * (self.input.T - self.w)
         self.axes2_line.set_data([self.w[0, 0], self.input[0, 0]], [self.w[0, 1], self.input[1, 0]])
         self.axes2_v = self.axes_2.quiver([self.w[0, 0]], [self.w[0, 1]], [self.v[0, 0] - self.w[0, 0]], [self.v[0, 1] - self.w[0, 1]], units="xy", scale=1, color="black")
