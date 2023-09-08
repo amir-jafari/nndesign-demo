@@ -98,7 +98,7 @@ class LinearLeastSquares(NNDLayout):
         delta = (2 - -2) / (S1 - 1)
         if self.auto_bias:
             bias = 1.6652 / delta
-            self.slider_b.setValue(bias * 100)
+            self.slider_b.setValue(round(bias * 100))
             self.label_b.setText("b: " + str(round(bias, 2)))
         total = 2 - -2
         W1 = (np.arange(-2, 2 + 0.0001, delta) + w1_1 - -2).T.reshape(-1, 1)
