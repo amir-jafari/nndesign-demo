@@ -275,7 +275,7 @@ class OrthogonalLeastSquares(NNDLayout):
             for j in list(range(i + 1, nn))[::-1]:
                 xx[i] = xx[i] - rr[i, j] * xx[j]
 
-        if len(indf) != 0:
+        if isinstance(indf, list) and len(indf) != 0:
             w1 = c[indf.astype(int)]
             b1 = b[indf.astype(int)]
         else:
