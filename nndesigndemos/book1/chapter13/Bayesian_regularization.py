@@ -65,8 +65,8 @@ class BayesianRegularization(NNDLayout):
         # self.axes_2.set_ylim(0.1, 1000)
         # self.axes_2.set_xticks([1, 10, 100])
         # self.axes_2.set_yticks([0.1, 0, 10, 100, 1000])
-        for line in self.axes_2.lines:
-            line.remove()
+        # for line in self.axes_2.lines:
+        #     line.remove()
         self.figure2.set_tight_layout(True)
         self.canvas2.draw()
 
@@ -160,12 +160,15 @@ class BayesianRegularization(NNDLayout):
         self.net_approx.set_data(self.pp0, nn_output)
         return self.net_approx,
 
+    def ani_stop(self):
+        if self.ani_1 and self.ani_1.event_source:
+            self.ani_1.event_source.stop()
+        if self.ani_2 and self.ani_2.event_source:
+            self.ani_2.event_source.stop()
+
     def on_run(self):
         self.init_params()
-        if self.ani_1:
-            self.ani_1.event_source.stop()
-        if self.ani_2:
-            self.ani_2.event_source.stop()
+        self.ani_stop()
         self.net_approx.set_data([], [])
         self.train_error, self.test_error, self.gamma_list = [], [], []
         self.canvas.draw()
@@ -173,10 +176,7 @@ class BayesianRegularization(NNDLayout):
         self.run_animation()
 
     def run_animation(self):
-        if self.ani_1:
-            self.ani_1.event_source.stop()
-        if self.ani_2:
-            self.ani_2.event_source.stop()
+        self.ani_stop()
         self.ani_1 = FuncAnimation(self.figure2, self.on_animate_1, init_func=self.animate_init_1, frames=self.max_epoch,
                                    interval=self.animation_speed, repeat=False, blit=True)
         self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=self.max_epoch,
@@ -196,10 +196,7 @@ class BayesianRegularization(NNDLayout):
         self.label_n_points.setText("# Data Points: " + str(self.n_points))
         self.freq = int(self.slider_freq.value()) / 100
         self.label_freq.setText("Frequency: " + str(self.freq))
-        if self.ani_1:
-            self.ani_1.event_source.stop()
-        if self.ani_2:
-            self.ani_2.event_source.stop()
+        self.ani_stop()
         self.train_error, self.test_error, self.gamma_list = [], [], []
         self.net_approx.set_data([], [])
         self.canvas.draw()

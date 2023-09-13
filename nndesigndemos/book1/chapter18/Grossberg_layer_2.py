@@ -167,6 +167,6 @@ class GrossbergLayer2(NNDLayout):
 
     def on_random(self):
         self.do_graph = False
-        self.slider_input_pos.setValue(np.random.uniform(0, 1) * 100)
+        self.slider_input_pos.setValue(round(np.random.uniform(0, 1) * 100))
         self.do_graph = True
-        self.slider_input_neg.setValue(np.random.uniform(0, 1) * 100)
+        self.slider_input_neg.setValue(round(np.random.uniform(0, 1) * 100))

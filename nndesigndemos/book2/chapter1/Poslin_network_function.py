@@ -95,11 +95,11 @@ class PoslinNetworkFunction(NNDLayout):
         self.graph()
 
     def on_random(self):
-        self.slider_w1_1.setValue(np.random.uniform(-100, 100))
-        self.slider_w1_2.setValue(np.random.uniform(-100, 100))
-        self.slider_b1_1.setValue(np.random.uniform(-100, 100))
-        self.slider_b1_2.setValue(np.random.uniform(-100, 100))
-        self.slider_w2_1.setValue(np.random.uniform(-20, 20))
-        self.slider_w2_2.setValue(np.random.uniform(-20, 20))
-        self.slider_b2.setValue(np.random.uniform(-20, 20))
+        self.slider_w1_1.setValue(round(np.random.uniform(-100, 100)))
+        self.slider_w1_2.setValue(round(np.random.uniform(-100, 100)))
+        self.slider_b1_1.setValue(round(np.random.uniform(-100, 100)))
+        self.slider_b1_2.setValue(round(np.random.uniform(-100, 100)))
+        self.slider_w2_1.setValue(round(np.random.uniform(-20, 20)))
+        self.slider_w2_2.setValue(round(np.random.uniform(-20, 20)))
+        self.slider_b2.setValue(round(np.random.uniform(-20, 20)))
         self.graph()

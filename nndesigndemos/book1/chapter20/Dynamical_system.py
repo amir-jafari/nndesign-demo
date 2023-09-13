@@ -89,17 +89,20 @@ class DynamicalSystem(NNDLayout):
 
         self.make_button("run_button", "Go", (self.x_chapter_button, 265, self.w_chapter_button, self.h_chapter_button), self.run_animation)
 
+    def ani_stop(self):
+        if self.ani and self.ani.event_source:
+            self.ani.event_source.stop()
+        if self.ani2 and self.ani2.event_source:
+            self.ani2.event_source.stop()
+        if self.ani3 and self.ani3.event_source:
+            self.ani3.event_source.stop()
+
     def on_mouseclick(self, event):
         # d_angle_click_pendulum_point = abs(self.angle - (event.xdata + 90) * np.pi / 180)
         # d_r_click_pendulum_point = abs(1.51 - event.ydata)
         # if (d_angle_click_pendulum_point + d_r_click_pendulum_point) / 2 < 0.05:
         #     print("!")
-        if self.ani:
-            self.ani.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
-        if self.ani3:
-            self.ani3.event_source.stop()
+        self.ani_stop()
         self.angle = event.xdata
         self.draw_pendulum()
         self.energy_plot.set_data([], [])
@@ -116,12 +119,7 @@ class DynamicalSystem(NNDLayout):
         # d_r_click_pendulum_point = abs(1.51 - event.ydata)
         # if (d_angle_click_pendulum_point + d_r_click_pendulum_point) / 2 < 0.05:
         #     print("!")
-        if self.ani:
-            self.ani.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
-        if self.ani3:
-            self.ani3.event_source.stop()
+        self.ani_stop()
         self.angle, self.velocity = event.xdata, event.ydata
         self.draw_pendulum()
         self.energy_plot.set_data([], [])
@@ -134,12 +132,7 @@ class DynamicalSystem(NNDLayout):
         self.canvas10.draw()
 
     def run_animation(self):
-        if self.ani:
-            self.ani.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
-        if self.ani3:
-            self.ani3.event_source.stop()
+        self.ani_stop()
         self.ani = FuncAnimation(self.figure9, self.on_animate, init_func=self.animate_init,
                                  frames=800, interval=0, repeat=False, blit=False)
         self.ani2 = FuncAnimation(self.figure8, self.on_animate_2, init_func=self.animate_init_2,

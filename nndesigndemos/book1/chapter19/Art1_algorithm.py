@@ -206,8 +206,8 @@ class ART1Algorithm(NNDLayout):
         self.label_rho.setText("Vigilance (rho): " + str(self.rho))
 
     def change_squares(self, axis, canvas, k):
-        while axis.patches:
-            axis.patches.pop()
+        for patch in axis.patches:
+            patch.remove()
         for xi in range(len(self.xx_up)):
             for yi in range(len(self.yy_up)):
                 if np.flip(self.w21[:, k].reshape((self.ncols_up, self.nrows_up)), axis=1)[xi, yi] > 0:
@@ -277,8 +277,8 @@ class ART1Algorithm(NNDLayout):
             d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
             d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
             xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
-            while self.axis1.patches:
-                self.axis1.patches.pop()
+            for patch in self.axis1.patches:
+                patch.remove()
             if self.pattern11[yyy, xxx] == 0:
                 self.pattern11[yyy, xxx] = 1
             else:
@@ -298,8 +298,8 @@ class ART1Algorithm(NNDLayout):
             d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
             d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
             xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
-            while self.axis2.patches:
-                self.axis2.patches.pop()
+            for patch in self.axis2.patches:
+                patch.remove()
             if self.pattern22[yyy, xxx] == 0:
                 self.pattern22[yyy, xxx] = 1
             else:
@@ -319,8 +319,8 @@ class ART1Algorithm(NNDLayout):
             d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
             d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
             xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
-            while self.axis3.patches:
-                self.axis3.patches.pop()
+            for patch in self.axis3.patches:
+                patch.remove()
             if self.pattern33[yyy, xxx] == 0:
                 self.pattern33[yyy, xxx] = 1
             else:
@@ -340,8 +340,8 @@ class ART1Algorithm(NNDLayout):
             d_x = [abs(event.xdata - xx - 0.5) for xx in self.xx_up]
             d_y = [abs(event.ydata - yy - 0.5) for yy in self.yy_up]
             xxx, yyy = list(range(len(self.xx_up)))[np.argmin(d_x)], list(range(len(self.yy_up)))[np.argmin(d_y)]
-            while self.axis31.patches:
-                self.axis31.patches.pop()
+            for patch in self.axis31.patches:
+                patch.remove()
             if self.pattern331[yyy, xxx] == 0:
                 self.pattern331[yyy, xxx] = 1
             else:

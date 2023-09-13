@@ -471,8 +471,8 @@ class NonlinearOptimization(NNDLayout):
                 xx[i] = xx[i] - rr[i, j] * xx[j]
 
         if len(indf) != 0:
-            w1 = c[indf.astype(np.int)]
-            b1 = b[indf.astype(np.int)]
+            w1 = c[indf.astype(int)]
+            b1 = b[indf.astype(int)]
         else:
             w1, b1 = [], []
         if bindex:
@@ -490,4 +490,4 @@ class NonlinearOptimization(NNDLayout):
             b2 = 0
             w2 = xx.T
             # uu = uo[:, np.int(indf)]
-        return w1, b1, w2, np.array(b2).astype(np.float), mf, of, indf
+        return w1, b1, w2, np.array(b2).astype(float), mf, of, indf

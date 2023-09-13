@@ -65,8 +65,8 @@ class EarlyStopping(NNDLayout):
         # self.axes_2.set_ylim(0.1, 1000)
         # self.axes_2.set_xticks([1, 10, 100])
         # self.axes_2.set_yticks([0.1, 0, 10, 100, 1000])
-        for line in self.axes_2.lines:
-            line.remove()
+        # for line in self.axes_2.lines:
+        #     line.remove()
         self.figure2.set_tight_layout(True)
         self.canvas2.draw()
 
@@ -90,19 +90,19 @@ class EarlyStopping(NNDLayout):
         self.init_params()
         self.full_batch = False
 
+    def ani_stop(self):
+        if self.ani_1 and self.ani_1.event_source:
+            self.ani_1.event_source.stop()
+        if self.ani_2 and self.ani_2.event_source:
+            self.ani_2.event_source.stop()
+
     def on_stop(self):
         if self.pause:
-            if self.ani_1:
-                self.ani_1.event_source.stop()
-            if self.ani_2:
-                self.ani_2.event_source.stop()
+            self.ani_stop()
             self.pause_button.setText("Unpause")
             self.pause = False
         else:
-            if self.ani_1:
-                self.ani_1.event_source.start()
-            if self.ani_2:
-                self.ani_2.event_source.start()
+            self.ani_stop()
             self.pause_button.setText("Pause")
             self.pause = True
 
@@ -151,10 +151,7 @@ class EarlyStopping(NNDLayout):
         self.pause_button.setText("Pause")
         self.pause = True
         self.init_params()
-        if self.ani_1:
-            self.ani_1.event_source.stop()
-        if self.ani_2:
-            self.ani_2.event_source.stop()
+        self.ani_stop()
         self.net_approx.set_data([], [])
         self.train_error, self.test_error = [], []
         self.canvas.draw()
@@ -162,10 +159,7 @@ class EarlyStopping(NNDLayout):
         self.run_animation()
 
     def run_animation(self):
-        if self.ani_1:
-            self.ani_1.event_source.stop()
-        if self.ani_2:
-            self.ani_2.event_source.stop()
+        self.ani_stop()
         self.ani_1 = FuncAnimation(self.figure2, self.on_animate_1, init_func=self.animate_init_1, frames=self.max_epoch,
                                    interval=self.animation_speed, repeat=False, blit=True)
         self.ani_2 = FuncAnimation(self.figure, self.on_animate_2, init_func=self.animate_init_2, frames=self.max_epoch,
@@ -183,10 +177,7 @@ class EarlyStopping(NNDLayout):
         self.plot_train_test_data()
         # self.animation_speed = int(self.slider_anim_speed.value()) * 100
         # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
-        if self.ani_1:
-            self.ani_1.event_source.stop()
-        if self.ani_2:
-            self.ani_2.event_source.stop()
+        self.ani_stop()
         self.train_error, self.test_error = [], []
         self.net_approx.set_data([], [])
         self.canvas.draw()

@@ -156,7 +156,7 @@ class HopfieldNetwork(NNDLayout):
 
     def on_mouseclick(self, event):
         if event.xdata != None and event.xdata != None:
-            if self.ani:
+            if self.ani and self.ani.event_source:
                 self.ani.event_source.stop()
             self.x_data, self.y_data = [event.xdata], [event.ydata]
             self.x, self.y = event.xdata, event.ydata

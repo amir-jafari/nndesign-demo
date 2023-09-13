@@ -317,6 +317,11 @@ class ConjugateGradient(NNDLayout):
             nrm = np.sqrt(self.db1_old[0] ** 2 + self.db1_old[1] ** 2)
         self.dW1, self.db1, self.dW2, self.db2 = self.dW1_old / nrm, self.db1_old / nrm, self.dW2_old / nrm, self.db2_old / nrm
 
+        if self.pair_of_params in [2, 3]:
+            self.y_data = [(y[0] if isinstance(y, np.ndarray) else y) for y in self.y_data]
+            if self.pair_of_params == 3:
+                self.x_data = [(x[0] if isinstance(x, np.ndarray) else x) for x in self.x_data]
+
         if idx == 14:
             self.end_point_1.set_data([self.x_data[-1], self.y_data[-1]])
 

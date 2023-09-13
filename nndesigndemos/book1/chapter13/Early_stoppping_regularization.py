@@ -98,6 +98,10 @@ class EarlyStoppingRegularization(NNDLayout):
         self.axes_2_ro_pos.set_data([sol[0]], [sol[1]])
         self.axes_2.plot(sol[0], sol[1], ".", color="blue")
         self.axes_2.plot(sol1[0], sol1[1], ".", color="blue")
+
+        self.ro_path_x = [(x[0] if isinstance(x, np.ndarray) else x) for x in self.ro_path_x]
+        self.ro_path_y = [(y[0] if isinstance(y, np.ndarray) else y) for y in self.ro_path_y]
+
         self.axes_2.plot(self.ro_path_x, self.ro_path_y, color="blue")
         self.canvas2.draw()
 

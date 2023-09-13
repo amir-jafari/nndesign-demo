@@ -117,7 +117,7 @@ class PoslinDecisionRegions3D(NNDLayout):
         pp1 = np.reshape(P1, nump, order='F')
         pp2 = np.reshape(P2, nump, order='F')
         p = np.concatenate((pp1.reshape(-1, 1).T, pp2.reshape(-1, 1).T), axis=0)
-        func = np.vectorize(self.func1, otypes=[np.float])
+        func = np.vectorize(self.func1, otypes=[float])
 
         a1 = np.dot(self.w2.T, func(np.dot(self.w1, p) + np.dot(self.b1, np.ones((1, nump))))) + np.dot(self.b2, np.ones((1, nump)))
         aa = np.reshape(a1, (n1, n2), order='F')

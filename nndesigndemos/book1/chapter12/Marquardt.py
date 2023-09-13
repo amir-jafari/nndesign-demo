@@ -76,9 +76,12 @@ class Marquardt(NNDLayout):
         self.dW1, self.db1, self.dW2, self.db2 = 0, 0, 0, 0
         self.mc = 0.8
 
-    def slider_update(self):
-        if self.ani:
+    def ani_stop(self):
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
+
+    def slider_update(self):
+        self.ani_stop()
         self.mu = float(self.slider_mu.value() / 100)
         self.label_mu.setText("Initial Mu: " + str(round(self.mu, 2)))
         self.nu = float(self.slider_nu.value() / 10)
@@ -94,8 +97,7 @@ class Marquardt(NNDLayout):
         self.do_slide = False
 
     def change_pair_of_params(self, idx):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.pair_of_params = idx + 1
         self.end_point_1.set_data([], [])
         self.init_point_1.set_data([], [])
@@ -137,8 +139,7 @@ class Marquardt(NNDLayout):
         self.canvas.draw()
 
     def slide(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         if not self.do_slide:
             return
         # self.animation_speed = int(self.slider_anim_speed.value()) * 100
@@ -253,6 +254,10 @@ class Marquardt(NNDLayout):
 
         self.x_data.append(self.x)
         self.y_data.append(self.y)
+
+        self.y_data = [(y[0] if isinstance(y, np.ndarray) else y) for y in self.y_data]
+        self.x_data = [(x[0] if isinstance(x, np.ndarray) else x) for x in self.x_data]
+
         self.path.set_data(self.x_data, self.y_data)
 
         if idx == 11:
@@ -264,8 +269,7 @@ class Marquardt(NNDLayout):
         self.mu = float(self.slider_mu.value()) / 100
         self.init_params()
         self.event = event
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []
         self.init_point_1.set_data([event.xdata], [event.ydata])

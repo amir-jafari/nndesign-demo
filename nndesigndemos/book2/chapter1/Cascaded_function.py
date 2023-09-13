@@ -57,7 +57,8 @@ class CascadedFunction(NNDLayout):
 
     def slide(self):
         if self.do_graph and self.ani:
-            self.ani.event_source.stop()
+            if self.ani.event_source:
+                self.ani.event_source.stop()
             self.do_graph = True
         self.last_idx = self.sliderval.value()
         self.label_iter.setText("Input value: {}".format(self.last_idx))
@@ -116,11 +117,14 @@ class CascadedFunction(NNDLayout):
         yy = np.array([])
         x = p
         x1 = p
+        print('p, nr', p, nr)
         for i in range(int(nr)):
             out1 = self.net1(x)
             out1 = float(out1)
-            xx = np.concatenate(np.array([xx, [x, x, x, out1]]))
-            yy = np.concatenate(np.array([yy, [x, out1, out1, out1]]))
+            # print('xx, yy, x, out1', xx, yy, x, out1)
+            xx = np.concatenate((xx, [x, x, x, out1]))
+            yy = np.concatenate((yy, [x, out1, out1, out1]))
+            # print('xx, yy', xx, yy)
             x = out1
         yy[0] = np.array([0])
         xx[-1] = x1
@@ -133,7 +137,7 @@ class CascadedFunction(NNDLayout):
                 b1 = np.array([[-0.25*15, -(1-0.25)*15]]).reshape(-1, 1)
                 w2 = np.array([[1, -1]])
                 b2 = np.array([0])
-                func3 = np.vectorize(self.func, otypes=[np.float])
+                func3 = np.vectorize(self.func, otypes=[float])
                 a1 = func3(w1 * x + b1 * np.ones((1, 1)))
                 y = np.dot(w2, a1) + b2*np.ones((1, 1))
                 y1 = y.flatten()
@@ -142,7 +146,7 @@ class CascadedFunction(NNDLayout):
                 b1 = np.array([[0, -0.5]]).reshape(-1, 1)
                 w2 = np.array([[2, -4]])
                 b2 = np.array([0])
-                func = np.vectorize(self.func, otypes=[np.float])
+                func = np.vectorize(self.func, otypes=[float])
                 a1 = func(w1 * x + b1 * np.ones((1, 1)))
                 y = np.dot(w2, a1) + b2 * np.ones((1, 1))
                 y1 = y.flatten()
@@ -151,7 +155,7 @@ class CascadedFunction(NNDLayout):
             b1 = np.array([[0, -0.5]]).reshape(-1, 1)
             w2 = np.array([[2, -4]])
             b2 = np.array([0])
-            func = np.vectorize(self.Poslin, otypes=[np.float])
+            func = np.vectorize(self.Poslin, otypes=[float])
             a1 = func(w1 * x + b1 * np.ones((1, 1)))
             y = np.dot(w2, a1) + b2*np.ones((1, 1))
             y1 = y.flatten()

@@ -363,6 +363,19 @@ class ConjugateGradientLineSearch(NNDLayout):
         self.dW1_old, self.db1_old, self.dW2_old, self.db2_old = self.gW1, self.gb1, self.gW2, self.gb2
         self.dW1, self.db1, self.dW2, self.db2 = self.gW1 / self.nrmrt, self.gb1 / self.nrmrt, self.gW2 / self.nrmrt, self.gb2 / self.nrmrt
         self.train_step()
+
+        if self.pair_of_params in [2, 3]:
+            self.y_data_k = [y[0] for y in self.y_data_k]
+            self.y_data = [(y[0] if isinstance(y, np.ndarray) else y) for y in self.y_data]
+            self.y_data_r = [y[0] for y in self.y_data_r]
+            self.y_data_circ = [y[0] for y in self.y_data_circ]
+
+            if self.pair_of_params == 3:
+                self.x_data_k = [x[0] for x in self.x_data_k]
+                self.x_data = [(x[0] if isinstance(x, np.ndarray) else x) for x in self.x_data]
+                self.x_data_r = [x[0] for x in self.x_data_r]
+                self.x_data_circ = [x[0] for x in self.x_data_circ]
+
         self.path_k.set_data(self.x_data_k, self.y_data_k)
         self.path.set_data(self.x_data, self.y_data)
         self.path_r.set_data(self.x_data_r, self.y_data_r)

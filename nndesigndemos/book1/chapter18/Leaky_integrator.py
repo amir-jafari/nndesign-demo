@@ -75,6 +75,6 @@ class LeakyIntegrator(NNDLayout):
 
     def on_random(self):
         self.do_graph = False
-        self.slider_input.setValue(np.random.uniform(0, 1) * 100)
+        self.slider_input.setValue(round(np.random.uniform(0, 1) * 100))
         self.do_graph = True
-        self.slider_tcte.setValue(np.random.uniform(0, 1) * 50)
+        self.slider_tcte.setValue(round(np.random.uniform(0, 1) * 50))
