@@ -52,9 +52,8 @@ class PoslinNetworkFunction(NNDLayout):
         self.graph()
 
     def graph(self):
-
+        self.figure.clf()  # clear the old figure, and prepare for new one
         a = self.figure.add_subplot(1, 1, 1)
-        a.clear()
         a.set_xlim(-2, 2)
         # a.set_ylim(-2, 2)
         # a.plot([0] * 10, np.linspace(-2, 2, 10), color="black", linestyle="--", linewidth=0.2)

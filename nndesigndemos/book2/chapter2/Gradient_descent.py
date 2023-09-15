@@ -52,10 +52,10 @@ class GradientDescent(NNDLayout):
     def graph(self):
 
         aa = self.axis
-        aa.clear()  # Clear the plot
+        # aa.clear()  # Clear the plot
 
+        self.figure2.clf()  # clear the old figure, and prepare for new one
         self.a1 = self.figure2.add_subplot(111)
-        self.a1.clear()  # Clear the plot
 
         # self.a1.set_xlim([-3, 3])
         # self.a1.set_ylim([-3, 3])

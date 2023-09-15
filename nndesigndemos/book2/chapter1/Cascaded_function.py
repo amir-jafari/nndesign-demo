@@ -56,7 +56,9 @@ class CascadedFunction(NNDLayout):
             self.graph()
 
     def slide(self):
+        # print('self.do_graph', self.do_graph, self.last_idx)
         if self.do_graph and self.ani:
+        #     print('self.do_graph and self.ani')
             if self.ani.event_source:
                 self.ani.event_source.stop()
             self.do_graph = True
@@ -66,9 +68,10 @@ class CascadedFunction(NNDLayout):
             self.graph()
 
     def graph(self):
+        self.figure.clf()  # clear the old figure, and prepare for new one
 
-        a = self.figure.add_subplot(111)
-        a.clear()  # Clear the plot
+        a = self.figure.add_subplot(1, 1, 1)
+
         p1 = np.arange(0, 1, 0.01)
         a2 = self.net1(p1)
 
@@ -98,16 +101,19 @@ class CascadedFunction(NNDLayout):
             xx, yy = self.getxx((self.last_idx / 100), self.func1())
             a.plot(xx, yy, 'ko-')
 
-            self.canvas.draw()
+            if self.do_graph:
+                self.canvas.draw()
 
     def on_animate(self, idx):  # This idx is needed, even if it's not being used explicitly!
-        if self.last_idx < len(self.aaa):
+        # print(idx)
+        if self.last_idx < 100:
             xx, yy = self.getxx(self.aaa[self.last_idx], self.func1())
             self.last_idx += 1
             self.plot_1.set_data(xx, yy)
-            self.figure.add_subplot(111).plot(xx[-1], yy[-1], 'ro')
+
             self.label_iter.setText("Number of iterations: {}".format(self.last_idx))
             self.do_graph = False
+            self.graph()
             self.sliderval.setValue(self.last_idx)
             self.do_graph = True
             # self.canvas.draw()
@@ -117,7 +123,7 @@ class CascadedFunction(NNDLayout):
         yy = np.array([])
         x = p
         x1 = p
-        print('p, nr', p, nr)
+        # print('p, nr', p, nr)
         for i in range(int(nr)):
             out1 = self.net1(x)
             out1 = float(out1)
