@@ -55,7 +55,7 @@ class SteepestDescentQuadratic(NNDLayout):
         self.canvas.draw()
 
     def slider_update(self):
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         self.lr = float(self.slider_lr.value() / 200)
         self.label_lr.setText("lr: " + str(self.lr))
@@ -70,7 +70,7 @@ class SteepestDescentQuadratic(NNDLayout):
         self.do_slide = False
 
     def slide(self):
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         if not self.do_slide:
             return
@@ -98,7 +98,7 @@ class SteepestDescentQuadratic(NNDLayout):
 
     def on_mouseclick(self, event):
         self.event = event
-        if self.ani:
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
         # self.ani = None
         self.path.set_data([], [])

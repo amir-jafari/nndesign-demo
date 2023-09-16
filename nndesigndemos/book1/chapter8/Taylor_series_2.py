@@ -1,7 +1,6 @@
 import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
-from mpl_toolkits.mplot3d import Axes3D
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -61,14 +60,14 @@ class TaylorSeries2(NNDLayout):
         self.axes2_point1, = self.axes_2.plot([], "o", fillstyle="none", markersize=11, color="k")
         self.canvas2.draw()
 
-        self.axis1 = Axes3D(self.figure3)
+        self.axis1 = self.figure3.add_subplot(projection='3d')
         self.axis1.set_title("Function", fontdict={'fontsize': 10}, pad=3)
         self.axis1.plot_surface(self.XX, self.YY, FF)
         self.axis1.view_init(30, -30)
         self.axis1.autoscale()
         self.canvas3.draw()
 
-        self.axis2 = Axes3D(self.figure4)
+        self.axis2 = self.figure4.add_subplot(projection='3d')
         self.axis2.set_title("Approximation", fontdict={'fontsize': 10}, pad=3)
         self.axis2.view_init(30, -30)
         self.canvas4.draw()

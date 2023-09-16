@@ -3,7 +3,6 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
 from scipy.integrate import ode
 
@@ -47,7 +46,7 @@ class HopfieldNetwork(NNDLayout):
         self.path, = self.axes_1.plot([], color="blue")
         self.r = None
 
-        self.axes_2 = Axes3D(self.figure2)
+        self.axes_2 = self.figure2.add_subplot(projection='3d')
         self.axes_2.set_title("Lyapunov Function", fontdict={'fontsize': 10})
         # self.axes_2.set_xticks([-1, -0.5, 0, 0.5])
         # self.axes_2.set_yticks([-1, -0.5, 0, 0.5])

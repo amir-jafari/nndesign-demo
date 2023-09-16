@@ -5,7 +5,6 @@ import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 from matplotlib.animation import FuncAnimation
 from matplotlib.ticker import FormatStrFormatter
-from mpl_toolkits.mplot3d import Axes3D
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -40,7 +39,7 @@ class SteepestDescentBackprop1(NNDLayout):
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.ani, self.event = None, None
-        self.axes2 = Axes3D(self.figure2)
+        self.axes2 = self.figure2.add_subplot(projection='3d')
         self.axes2.view_init(30, -30)
         self.axes2.zaxis.set_major_formatter(FormatStrFormatter('%.0f'))
         # self.canvas2.mpl_connect("motion_notify_event", self.print_view)

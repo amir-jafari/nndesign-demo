@@ -1,6 +1,5 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtMultimedia
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
 from time import sleep
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -24,7 +23,7 @@ class PerceptronClassification(NNDLayout):
             self.classify_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/classify.wav")
 
         self.make_plot(1, (15, 100, 500, 390))
-        self.axis = Axes3D(self.figure)
+        self.axis = self.figure.add_subplot(projection='3d')
         ys = np.linspace(-1, 1, 100)
         zs = np.linspace(-1, 1, 100)
         Y, Z = np.meshgrid(ys, zs)

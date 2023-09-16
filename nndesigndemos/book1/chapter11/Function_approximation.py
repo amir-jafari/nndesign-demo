@@ -61,11 +61,14 @@ class FunctionApproximation(NNDLayout):
 
         self.make_button("run_button", "Train", (self.x_chapter_button, 315, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
+    def ani_stop(self):
+        if self.ani and self.ani.event_source:
+            self.ani.event_source.stop()
+
     def slide(self):
         self.error_goal_reached = False
         self.error_prev = 1000
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         slider_s1 = self.slider_s1.value()
         if self.S1 != slider_s1:
             self.S1 = slider_s1
@@ -93,8 +96,7 @@ class FunctionApproximation(NNDLayout):
 
     # https://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/
     def on_run(self):
-        if self.ani:
-            self.ani.event_source.stop()
+        self.ani_stop()
         n_epochs = 5000
         self.ani = FuncAnimation(self.figure, self.on_animate_v2, init_func=self.animate_init_v2, frames=n_epochs,
                                  interval=20, repeat=False, blit=True)
@@ -141,7 +143,7 @@ class FunctionApproximation(NNDLayout):
         grad = np.sqrt(np.dot(je.T, je)).item()
         if grad < self.mingrad:
             self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
-            self.ani.event_source.stop()
+            self.ani_stop()
             # return self.net_approx,
 
         jj = np.dot(jac.T, jac)
@@ -195,7 +197,7 @@ class FunctionApproximation(NNDLayout):
                 print("Error goal reached!")
                 self.error_goal_reached = None
             self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))
-            self.ani.event_source.stop()
+            self.ani_stop()
             # return self.net_approx,
 
         self.net_approx.set_data(self.p.reshape(-1), self.a2.reshape(-1))

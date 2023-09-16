@@ -100,9 +100,9 @@ class PoslinDecisionRegions2D(NNDLayout):
             self.graph()
 
     def graph(self):
-
+        self.figure.clf()
         a = self.figure.add_subplot(111)
-        a.clear()
+
         a.grid(True, which='both')
 
         p1 = np.linspace(-1, 3, 41)

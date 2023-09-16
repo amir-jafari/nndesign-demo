@@ -3,7 +3,6 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from mpl_toolkits.mplot3d import Axes3D
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -99,7 +98,7 @@ class NormAndInitEffects(NNDLayout):
 
         self.figure.clear()  # Clear the plot
         if self.displayed_var == 'Output':
-            self.a = Axes3D(self.figure)
+            self.a = self.figure.add_subplot(projection='3d')
         else:
             self.a = self.figure.add_subplot(111)
 
@@ -280,7 +279,7 @@ class PopUpPlot(NNDLayout):
             self.a = self.figure.add_subplot(111)
             self.a.hist(hist_data, bins=25)
         elif three_d_data is not None:
-            self.a = Axes3D(self.figure)
+            self.a = self.figure.add_subplot(projection='3d')
             self.a.plot_surface(three_d_data[0], three_d_data[1], three_d_data[2])
         self.a.set_title(title)
         self.canvas.draw()

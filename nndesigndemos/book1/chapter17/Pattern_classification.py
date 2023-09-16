@@ -3,7 +3,6 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -33,7 +32,7 @@ class PatternClassification(NNDLayout):
         self.make_plot(2, (255, 400, 260, 260))
         self.figure2.subplots_adjust(left=0.15, bottom=0.175, right=0.95)
 
-        self.axis3d = Axes3D(self.figure)
+        self.axis3d = self.figure.add_subplot(projection='3d')
         self.axis3d.set_xlim(-5, 5)
         self.axis3d.set_ylim(-5, 5)
         self.axis3d.set_zlim(-2, 1)

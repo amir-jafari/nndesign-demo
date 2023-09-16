@@ -1,7 +1,6 @@
 import numpy as np
 import warnings
 import matplotlib.cbook
-from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.ticker import FormatStrFormatter
 from matplotlib.animation import FuncAnimation
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
@@ -43,7 +42,7 @@ class RecurrentNetworkTraining(NNDLayout):
 
         self.a = self.figure.add_subplot(1, 1, 1)
         self.a2 = self.figure2.add_subplot(1, 1, 1)
-        self.a3 = Axes3D(self.figure3)
+        self.a3 = self.figure3.add_subplot(projection='3d')
         self.a.clear()  # Clear the plot
         self.a2.clear()
         self.a3.clear()
@@ -142,9 +141,9 @@ class RecurrentNetworkTraining(NNDLayout):
             self.run_animation()
 
     def run_animation(self):
-        if self.ani1:
+        if self.ani1 and self.ani1.event_source:
             self.ani1.event_source.stop()
-        if self.ani2:
+        if self.ani2 and self.ani2.event_source:
             self.ani2.event_source.stop()
         self.ani2 = FuncAnimation(self.figure2, self.on_animate, init_func=self.animate_init, frames=100,
                                   interval=self.animation_speed, repeat=False, blit=False)

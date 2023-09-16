@@ -3,7 +3,6 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from mpl_toolkits.mplot3d import Axes3D
 import ast
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -22,7 +21,6 @@ class PoslinDecisionRegions(NNDLayout):
 
         self.make_plot(1, (10, 300, 250, 250))
         self.make_plot(2, (260, 300, 250, 250))
-        self.axis = Axes3D(self.figure)
 
         self.make_label("label_w1", "W1: [[1, 1], [-1, -1], [-1, 1], [1, -1]]", (35, 535, 200, 50))
         self.make_button("button_w1", "Change W1", (25, 570, 220, self.h_chapter_button), self.change_w1)
@@ -101,10 +99,11 @@ class PoslinDecisionRegions(NNDLayout):
 
     def graph(self):
 
-        ax = self.axis
-        ax.clear()
+        self.figure.clf()
+        ax = self.figure.add_subplot(projection='3d')
+
+        self.figure2.clf()
         ax1 = self.figure2.add_subplot(111)
-        ax1.clear()
 
         p1 = np.linspace(-1, 3, 41)
         p2 = np.linspace(-1, 3, 41)

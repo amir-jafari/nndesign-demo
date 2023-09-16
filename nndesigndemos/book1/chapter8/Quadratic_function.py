@@ -3,7 +3,6 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from mpl_toolkits.mplot3d import Axes3D
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -32,7 +31,7 @@ class QuadraticFunction(NNDLayout):
         # self.axes_1.set_ylim(-2, 2)
         # self.axes1_point, = self.axes_1.plot([], "*")
 
-        self.axes_2 = Axes3D(self.figure2)
+        self.axes_2 = self.figure2.add_subplot(projection='3d')
         self.axes_2.set_title("Function F", fontdict={'fontsize': 10}, pad=2)
         # self.axes_2.set_xlim(-2, 2)
         # self.axes_2.set_ylim(-2, 2)

@@ -1,6 +1,5 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtMultimedia
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
 from time import sleep
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -24,7 +23,7 @@ class HopfieldClassification(NNDLayout):
             self.classify_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/classify.wav")
 
         self.make_plot(1, (15, 100, 500, 390))
-        self.axis = Axes3D(self.figure)
+        self.axis = self.figure.add_subplot(projection='3d')
         ys = np.linspace(-1, 1, 100)
         zs = np.linspace(-1, 1, 100)
         Y, Z = np.meshgrid(ys, zs)
@@ -100,7 +99,7 @@ class HopfieldClassification(NNDLayout):
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
         self.label_p.setText("")
-        self.label_a_11.setText("");
+        self.label_a_11.setText("")
         self.label_a_12.setText("")
         self.label_fruit.setText("")
         self.p = np.round(np.random.uniform(-1, 1, (1, 3)), 2)

@@ -76,11 +76,14 @@ class NonlinearOptimization(NNDLayout):
     def plot_f(self):
         self.data_to_approx.set_data(self.p, 1 + np.sin(np.pi * self.p * self.diff / 4))
 
-    def change_init(self, idx):
-        if self.ani:
+    def ani_stop(self):
+        if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
-        if self.ani2:
+        if self.ani2 and self.ani2.event_source:
             self.ani2.event_source.stop()
+
+    def change_init(self, idx):
+        self.ani_stop()
         self.idx = idx
         self.init_params()
 
@@ -112,10 +115,7 @@ class NonlinearOptimization(NNDLayout):
     def slide(self):
         self.error_goal_reached = False
         self.error_prev = 1000
-        if self.ani:
-            self.ani.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
+        self.ani_stop()
         slider_s1 = self.slider_s1.value()
         if self.S1 != slider_s1:
             self.S1 = slider_s1
@@ -129,10 +129,7 @@ class NonlinearOptimization(NNDLayout):
         self.f_to_approx = lambda p: 1 + np.sin(np.pi * p * self.diff / 4)
 
     def on_run(self):
-        if self.ani:
-            self.ani.event_source.stop()
-        if self.ani2:
-            self.ani2.event_source.stop()
+        self.ani_stop()
         n_epochs = 200
         self.ani = FuncAnimation(self.figure, self.on_animate, init_func=self.animate_init, frames=n_epochs,
                                  interval=0, repeat=False, blit=False)
@@ -200,8 +197,7 @@ class NonlinearOptimization(NNDLayout):
         # grad = np.sqrt(np.dot(je.T, je)).item()
         # if grad < self.mingrad:
         #     self.net_approx.set_data(self.p_.reshape(-1), self.a2.reshape(-1))
-        #     self.ani.event_source.stop()
-        #     self.ani2.event_source.stop()
+        #     self.ani_stop()
         #     return
             # return self.net_approx,
 
@@ -268,8 +264,7 @@ class NonlinearOptimization(NNDLayout):
                 print("Error goal reached!")
                 self.error_goal_reached = None
             self.net_approx.set_data(self.p_.reshape(-1), self.a2.reshape(-1))
-            self.ani.event_source.stop()
-            self.ani2.event_source.stop()
+            self.ani_stop()
             return
             # return self.net_approx,
 

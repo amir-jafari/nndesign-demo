@@ -3,7 +3,6 @@ import numpy as np
 import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-from mpl_toolkits.mplot3d import Axes3D
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -27,8 +26,6 @@ class GradientDescentStochastic(NNDLayout):
         self.figure.set_tight_layout(True)
         self.figure2.set_tight_layout(True)
 
-        self.axis = Axes3D(self.figure)
-
         self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 1,
                          (self.x_chapter_usual, 360, self.w_chapter_slider, 50), self.slider, "label_lr",
                          "Learning rate: 0.01", (self.x_chapter_usual + 40, 360 - 25, self.w_chapter_slider, 50))
@@ -51,8 +48,8 @@ class GradientDescentStochastic(NNDLayout):
 
     def graph(self):
 
-        aa = self.axis
-        aa.clear()  # Clear the plot
+        self.figure.clf()
+        aa = self.figure.add_subplot(projection='3d')
 
         self.figure2.clf()
         self.a1 = self.figure2.add_subplot(111)

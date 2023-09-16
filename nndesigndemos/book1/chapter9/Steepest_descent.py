@@ -70,11 +70,14 @@ class SteepestDescent(NNDLayout):
         # self.make_slider("slider_anim_speed", QtCore.Qt.Horizontal, (0, 6), QtWidgets.QSlider.TicksBelow, 1, 2,
         #                  (self.x_chapter_usual, 380, self.w_chapter_slider, 100), self.slide, "label_anim_speed", "Animation Delay: 200 ms")
 
-    def slider_update(self):
-        if self.ani_1:
+    def ani_stop(self):
+        if self.ani_1 and self.ani_1.event_source:
             self.ani_1.event_source.stop()
-        if self.ani_2:
+        if self.ani_2 and self.ani_2.event_source:
             self.ani_2.event_source.stop()
+
+    def slider_update(self):
+        self.ani_stop()
         self.lr = float(self.slider_lr.value() / 100)
         self.label_lr.setText("lr: " + str(self.lr))
 
@@ -144,10 +147,7 @@ class SteepestDescent(NNDLayout):
             self.axes_2.contour(self.X, self.Y, Fa)
 
             self.event = event
-            if self.ani_1:
-                self.ani_1.event_source.stop()
-            if self.ani_2:
-                self.ani_2.event_source.stop()
+            self.ani_stop()
             self.path_1.set_data([], [])
             self.path_2.set_data([], [])
             self.x_data, self.y_data = [], []
@@ -166,10 +166,7 @@ class SteepestDescent(NNDLayout):
                                        interval=self.animation_speed, repeat=False, blit=True)
 
     def slide(self):
-        if self.ani_1:
-            self.ani_1.event_source.stop()
-        if self.ani_2:
-            self.ani_2.event_source.stop()
+        self.ani_stop()
         if not self.do_slide:
             return
         # self.animation_speed = int(self.slider_anim_speed.value()) * 100
