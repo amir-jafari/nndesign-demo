@@ -90,7 +90,7 @@ def nndtoc(play_sound=True):
     app = QApplication(sys.argv)
     dimensions = QtWidgets.QDesktopWidget().screenGeometry(-1)
     w_screen, h_screen = dimensions.width(), dimensions.height()
-    w_ratio, h_ratio = w_screen / 1280, h_screen / 800
+    w_ratio, h_ratio = w_screen / 1000, h_screen / 800
     dpi = round(app.screens()[0].physicalDotsPerInch(), 1)
     win = MainWindow(int(w_ratio), int(h_ratio), int(dpi))
     win.show()
