@@ -7,7 +7,7 @@ __pycache__
 # Pip package
 build/
 dist/
-nndesign.egg-info/
+nndesigndemos.egg-info/
 
 # General
 .DS_Store

@@ -4,12 +4,12 @@ with open("README.md", "r") as s:
     description = s.read()
 
 setuptools.setup(
-    author="Amir Jafari, Martin Hagan, Pedro Uría",
+    author="Amir Jafari, Martin Hagan, Pedro Uría, Xiao Qi",
     author_email="nndesign.demo@gmail.com",
     name='nndesigndemos',
     license="MIT",
     description='Demos for the Neural Network Design & Deep Learning books',
-    version='v1.0.2',
+    version='v1.0.4',
     long_description_content_type="text/markdown",
     # long_description="This is a set of demonstrations paired with the Neural Network Design & Deep Learning books.\n"
     #                  "Each demo is linked to a chapter section of the books. You can find more info at "
@@ -23,7 +23,7 @@ setuptools.setup(
     # },
     packages=["nndesigndemos"],
     include_package_data=True,
-    python_requires=">=3.5",
+    python_requires=">=3.9",
     install_requires=["PyQt5", "numpy", "scipy", "matplotlib"],
     classifiers=[
         # Trove classifiers
@@ -31,7 +31,7 @@ setuptools.setup(
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.9',
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
