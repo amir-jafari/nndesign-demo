@@ -63,8 +63,9 @@ class FIRNetwork(NNDLayout):
     def graph(self):
 
         if self.autoscale:
+            self.figure.clf()
             self.axis = self.figure.add_subplot(1, 1, 1)
-            self.axis.clear()
+
             self.axis.plot(np.linspace(0, 25, 50), [0] * 50, color="red", linestyle="--", linewidth=0.2)
 
         if self.func1 == "square":
@@ -113,8 +114,10 @@ class FIRNetwork(NNDLayout):
 
     def change_autoscale(self, idx):
         self.autoscale = True if idx == 1 else False
+
+        self.figure.clf()
         self.axis = self.figure.add_subplot(1, 1, 1)
-        self.axis.clear()
+
         if not self.autoscale:
             self.axis.set_xlim(0, 25)
             self.axis.set_ylim(-6, 6)

@@ -93,17 +93,17 @@ class EigenvectorGame(NNDLayout):
         circle = plt.Circle((0.7, 0.65), 0.05, color="black", fill=True)
         self.ax.add_artist(circle)
         if draw_win:
-            arc = patches.Arc((0.5, 0.35), 15 / 50, 0.6, 90, 90, 270, color="black", linewidth=3)
+            arc = patches.Arc((0.5, 0.35), 15 / 50, 0.6, angle=90, theta1=90, theta2=270, color="black", linewidth=3)
         else:
             if self.n_tries > 5:
-                arc = patches.Arc((0.5, 0.35), self.n_tries / 50, 0.6, 90, 90, 270, color="black", linewidth=3)
+                arc = patches.Arc((0.5, 0.35), self.n_tries / 50, 0.6, angle=90, theta1=90, theta2=270, color="black", linewidth=3)
             elif self.n_tries < 5:
                 if self.n_tries == 0:
-                    arc = patches.Arc((0.5, 0.35), 1 / (1 * 3), 0.6, 90, 270, 90, color="black", linewidth=3)
+                    arc = patches.Arc((0.5, 0.35), 1 / (1 * 3), 0.6, angle=90, theta1=270, theta2=90, color="black", linewidth=3)
                 else:
-                    arc = patches.Arc((0.5, 0.35), 1 / (self.n_tries * 5), 0.6, 90, 270, 90, color="black", linewidth=3)
+                    arc = patches.Arc((0.5, 0.35), 1 / (self.n_tries * 5), 0.6, angle=90, theta1=270, theta2=90, color="black", linewidth=3)
             else:
-                arc = patches.Arc((0.5, 0.35), 0.01, 0.6, 90, 270, 90, color="black", linewidth=3)
+                arc = patches.Arc((0.5, 0.35), 0.01, 0.6, angle=90, theta1=270, theta2=90, color="black", linewidth=3)
         self.ax.add_artist(arc)
         self.canvas2.draw()
 

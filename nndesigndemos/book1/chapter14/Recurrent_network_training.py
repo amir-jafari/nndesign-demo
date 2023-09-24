@@ -39,13 +39,14 @@ class RecurrentNetworkTraining(NNDLayout):
     #     print(self.a3.elev, self.a3.azim)
 
     def graph(self):
+        self.figure.clf()  # Clear the plot
+        self.figure2.clf()
+        self.figure3.clf()
 
         self.a = self.figure.add_subplot(1, 1, 1)
         self.a2 = self.figure2.add_subplot(1, 1, 1)
         self.a3 = self.figure3.add_subplot(projection='3d')
-        self.a.clear()  # Clear the plot
-        self.a2.clear()
-        self.a3.clear()
+
         self.a.set_xlim(0, 20)
         # self.a2.set_xlim(-2, 2)
         self.a3.set_xlim(-2, 2)

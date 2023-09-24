@@ -56,14 +56,16 @@ class DynamicDerivatives(NNDLayout):
 
     def graph(self):
 
+        self.figure.clf()
+        self.figure2.clf()
+        self.figure3.clf()
+        self.figure4.clf()
+
         a = self.figure.add_subplot(1, 1, 1)
         a4 = self.figure2.add_subplot(1, 1, 1)
         a2 = self.figure3.add_subplot(1, 1, 1)
         a3 = self.figure4.add_subplot(1, 1, 1)
-        a.clear()  # Clear the plot
-        a2.clear()
-        a3.clear()
-        a4.clear()
+
         a.set_xlim(0, 25)
         a2.set_xlim(0, 25)
         a3.set_xlim(0, 25)

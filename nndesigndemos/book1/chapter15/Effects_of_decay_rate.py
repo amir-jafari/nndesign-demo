@@ -44,6 +44,7 @@ class EffectsOfDecayRate(NNDLayout):
         if self.do_graph:
             lr = self.slider_lr.value() / 10
             dr = self.slider_dr.value() / 10
+            # print(lr, dr, self.slider_lr, self.slider_dr)
             self.label_lr.setText("Learning Rate: " + str(round(lr, 2)))
             self.label_dr.setText("Decay Rate: " + str(round(dr, 2)))
             w = 0
@@ -72,5 +73,7 @@ class EffectsOfDecayRate(NNDLayout):
     def on_random(self):
         self.do_graph = False
         self.slider_lr.setValue(round(np.random.uniform(0, 1) * 100))
+        # print('aaaaaa')
         self.do_graph = True
         self.slider_dr.setValue(round(np.random.uniform(0, 1) * 100))
+        # print('bbbbbb')

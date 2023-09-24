@@ -49,7 +49,7 @@ class PoslinDecisionRegions2D(NNDLayout):
         self.graph()
 
     def change_w1(self):
-        weight1, ok = QtWidgets.QInputDialog.getText(self, 'Change Weight', 'Change W1:', QtWidgets.QLineEdit.Normal, str(self.w1.tolist()))
+        weight1, ok = QtWidgets.QInputDialog.getText(self, 'Change Weight', 'Change W1:', QtWidgets.QLineEdit.EchoMode.Normal, str(self.w1.tolist()))
         if ok:
             try:
                 w1 = ast.literal_eval(weight1)
@@ -64,7 +64,7 @@ class PoslinDecisionRegions2D(NNDLayout):
             self.graph()
 
     def change_w2(self):
-        weight2, ok = QtWidgets.QInputDialog.getText(self, 'Change Weight', 'Change W2:', QtWidgets.QLineEdit.Normal, str(self.w2.tolist()))
+        weight2, ok = QtWidgets.QInputDialog.getText(self, 'Change Weight', 'Change W2:', QtWidgets.QLineEdit.EchoMode.Normal, str(self.w2.tolist()))
         if ok:
             try:
                 w2 = ast.literal_eval(weight2)
@@ -76,7 +76,7 @@ class PoslinDecisionRegions2D(NNDLayout):
             self.graph()
 
     def change_b1(self):
-        bias1, ok = QtWidgets.QInputDialog.getText(self, 'Change Bias', 'Change b1:', QtWidgets.QLineEdit.Normal, str(self.b1.tolist()))
+        bias1, ok = QtWidgets.QInputDialog.getText(self, 'Change Bias', 'Change b1:', QtWidgets.QLineEdit.EchoMode.Normal, str(self.b1.tolist()))
         if ok:
             try:
                 b1 = ast.literal_eval(bias1)
@@ -88,7 +88,7 @@ class PoslinDecisionRegions2D(NNDLayout):
             self.graph()
 
     def change_b2(self):
-        bias2, ok = QtWidgets.QInputDialog.getText(self, 'Change Bias', 'Change b2:', QtWidgets.QLineEdit.Normal, str(self.b2.tolist()))
+        bias2, ok = QtWidgets.QInputDialog.getText(self, 'Change Bias', 'Change b2:', QtWidgets.QLineEdit.EchoMode.Normal, str(self.b2.tolist()))
         if ok:
             try:
                 b2 = ast.literal_eval(bias2)

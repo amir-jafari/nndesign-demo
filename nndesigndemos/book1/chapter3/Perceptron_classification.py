@@ -81,7 +81,12 @@ class PerceptronClassification(NNDLayout):
 
     def paintEvent(self, event):
         super(PerceptronClassification, self).paintEvent(event)
-        painter = QtGui.QPainter(self.icon3.pixmap())
+
+        # This is caused by a change in Qt6, which returns a copy of the pixmap, not a pointer to the actual one. Due to this, using label.pixmap() requires keeping a reference, otherwise it will be destroyed by the garbage collection. Just create a temporary variable: pixmap = self.label.pixmap() and painter = QPainter(pixmap).
+        # https://stackoverflow.com/questions/74330672/creating-qpainter-object-by-passing-pixmap-via-pixmap-causes-qpaintdevice
+        # https://www.reddit.com/r/learnpython/comments/zqwc89/pyqt6_program_problems/
+        pixmap = self.icon3.pixmap()
+        painter = QtGui.QPainter(pixmap)
         if self.running_on_windows:
             w_ratio, h_ratio = self.h_ratio, self.h_ratio
         else:
@@ -90,9 +95,11 @@ class PerceptronClassification(NNDLayout):
             w_ratio = round(w_ratio / (self.dpi / 113.5))
             h_ratio = round(h_ratio / (self.dpi / 113.5))
         painter.setFont(QtGui.QFont("times", 12 * (w_ratio + h_ratio) // 2))
-        painter.drawText(QtCore.QPoint(100 * w_ratio, 28 * h_ratio), self.text_shape)
-        painter.drawText(QtCore.QPoint(245 * w_ratio, 28 * h_ratio), self.text_texture)
-        painter.drawText(QtCore.QPoint(410 * w_ratio, 28 * h_ratio), self.text_weight)
+        painter.drawText(QtCore.QPoint(100 * w_ratio, 26 * h_ratio), self.text_shape)
+        painter.drawText(QtCore.QPoint(230 * w_ratio, 26 * h_ratio), self.text_texture)
+        painter.drawText(QtCore.QPoint(370 * w_ratio, 26 * h_ratio), self.text_weight)
+        painter.end()
+        self.icon3.setPixmap(pixmap)
 
     def on_run(self):
         self.timer = QtCore.QTimer()

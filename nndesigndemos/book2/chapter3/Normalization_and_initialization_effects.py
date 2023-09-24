@@ -96,7 +96,7 @@ class NormAndInitEffects(NNDLayout):
             print('Please select a dimension less or equal than the number of neurons')
             return
 
-        self.figure.clear()  # Clear the plot
+        self.figure.clf()  # Clear the plot
         if self.displayed_var == 'Output':
             self.a = self.figure.add_subplot(projection='3d')
         else:
@@ -136,6 +136,7 @@ class NormAndInitEffects(NNDLayout):
         p_range = np.array([np.min(p, axis=1).tolist(), np.max(p, axis=1).tolist()]).T
         if self.weight_init == "Nguyen - Widrow":
             n = np.array([-1, 1])
+            # print('p_range, n', p_range, n, self.weight_init)
             w, b = self.nw_init(p_range, n)
         else:
             if self.weight_init == 'Xavier':
@@ -246,7 +247,7 @@ class NormAndInitEffects(NNDLayout):
         y = 1 - np.multiply(p_range[:, 1], x)
         xp = x.T
         b = w.dot(y) + b
-        w = np.multiply(w, np.repeat(xp.reshape(1, -1), 4, axis=0))
+        w = np.multiply(w, np.repeat(xp.reshape(1, -1), len(w), axis=0))
 
         return w, b.reshape(-1, 1)
 

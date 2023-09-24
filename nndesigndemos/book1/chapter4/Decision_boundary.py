@@ -103,6 +103,9 @@ class DecisionBoundaries(NNDLayout):
         elif self.closest_point == "2":
             self.point_2 = (event.xdata, event.ydata)
         self.prev_x_diff, self.prev_y_diff = self.current_x_diff, self.current_y_diff
+        # print(self.point_1, self.point_2)
+        if not self.point_1[0] or not self.point_2[0]:
+            return
         self.current_x_diff, self.current_y_diff = self.point_1[0] - self.point_2[0], self.point_1[1] - self.point_2[1]
         self.find_parameters()
         self.draw_decision_boundary()
