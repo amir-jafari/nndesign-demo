@@ -1,9 +1,9 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 from scipy.io import loadmat
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -52,13 +52,13 @@ class Momentum(NNDLayout):
         self.lr = 3.5
         self.make_label("label_lr1", "0.0", (self.x_chapter_usual + 10, 590, self.w_chapter_slider, 50))
         self.make_label("label_lr2", "20.0", (self.x_chapter_usual + 150, 590, self.w_chapter_slider, 50))
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 200), QtWidgets.QSlider.TicksBelow, 1, 100,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 200), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 100,
                          (self.x_chapter_usual, 560, self.w_chapter_slider, 50), self.slide, "label_lr", "lr: 10.0")
 
         self.momentum = 0.9
         self.make_label("label_momentum1", "0.0", (self.x_chapter_usual + 10, 500, self.w_chapter_slider, 50))
         self.make_label("label_momentum2", "1.0", (self.x_chapter_usual + 150, 500, self.w_chapter_slider, 50))
-        self.make_slider("slider_momentum", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 90,
+        self.make_slider("slider_momentum", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 90,
                          (self.x_chapter_usual, 470, self.w_chapter_slider, 50), self.slide,
                          "label_momentum", "Momentum: 0.9", (self.x_chapter_usual + 50, 440, self.w_chapter_slider, 50))
 

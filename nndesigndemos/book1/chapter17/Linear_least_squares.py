@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -50,24 +50,24 @@ class LinearLeastSquares(NNDLayout):
                            "label_f", "Auto Bias", (self.x_chapter_usual + 60, 515 - 20, 100, 50))
         self.auto_bias = True
 
-        self.make_slider("slider_w1_1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, -20,
+        self.make_slider("slider_w1_1", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, -20,
                          (self.x_chapter_usual, 375, self.w_chapter_slider, 50), self.graph,
                          "label_w1_1", "W1(1,1): -2", (self.x_chapter_usual + 55, 375 - 30, 100, 50))
-        self.make_slider("slider_b", QtCore.Qt.Horizontal, (10, 1000), QtWidgets.QSlider.TicksBelow, 1, 167,
+        self.make_slider("slider_b", QtCore.Qt.Orientation.Horizontal, (10, 1000), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 167,
                          (self.x_chapter_usual, 450, self.w_chapter_slider, 50), self.graph, "label_b", "b: 1.67")
 
-        self.make_slider("slider_w1_2", QtCore.Qt.Horizontal, (2, 9), QtWidgets.QSlider.TicksBelow, 1, 5,
+        self.make_slider("slider_w1_2", QtCore.Qt.Orientation.Horizontal, (2, 9), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 5,
                          (20, 560, 150, 50), self.graph, "label_w1_2", "Hidden Neurons: 5", (45, 530, 150, 50))
-        self.make_slider("slider_b1_2", QtCore.Qt.Horizontal, (2, 20), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_b1_2", QtCore.Qt.Orientation.Horizontal, (2, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (170, 560, 150, 50), self.graph, "label_b1_2", "Number of Points: 10", (180, 530, 150, 50))
-        self.make_slider("slider_w2_1", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 0,
+        self.make_slider("slider_w2_1", QtCore.Qt.Orientation.Horizontal, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 0,
                          (320, 560, 150, 50), self.graph, "label_w2_1", "Regularization: 0.0", (340, 530, 150, 50))
 
-        self.make_slider("slider_w2_2", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 0,
+        self.make_slider("slider_w2_2", QtCore.Qt.Orientation.Horizontal, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 0,
                          (20, 630, 150, 50), self.graph, "label_w2_2", "Stdev Noise: 0.0", (50, 600, 150, 50))
-        self.make_slider("slider_b2", QtCore.Qt.Horizontal, (25, 100), QtWidgets.QSlider.TicksBelow, 1, 50,
+        self.make_slider("slider_b2", QtCore.Qt.Orientation.Horizontal, (25, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 50,
                          (170, 630, 150, 50), self.graph, "label_b2", "Function Frequency: 0.50", (175, 600, 150, 50))
-        self.make_slider("slider_fp", QtCore.Qt.Horizontal, (0, 360), QtWidgets.QSlider.TicksBelow, 1, 90,
+        self.make_slider("slider_fp", QtCore.Qt.Orientation.Horizontal, (0, 360), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 90,
                          (320, 630, 150, 50), self.graph, "label_fp", "Function Phase: 90", (340, 600, 150, 50))
 
         self.graph()

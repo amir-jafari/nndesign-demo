@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -21,9 +21,9 @@ class OneInputNeuron(NNDLayout):
 
         self.make_label("label_eq", "a = purelin(w * p + b)", (self.x_chapter_slider_label - 40, 340, 150, 100))
 
-        self.make_slider("slider_w", QtCore.Qt.Horizontal, (-30, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_w", QtCore.Qt.Orientation.Horizontal, (-30, 30), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (self.x_chapter_usual, 430, self.w_chapter_slider, 50), self.graph, "label_w", "w: 1.0")
-        self.make_slider("slider_b", QtCore.Qt.Horizontal, (-30, 30), QtWidgets.QSlider.TicksBelow, 1, 0,
+        self.make_slider("slider_b", QtCore.Qt.Orientation.Horizontal, (-30, 30), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 0,
                          (self.x_chapter_usual, 500, self.w_chapter_slider, 50), self.graph, "label_b", "b: 0.0")
 
         self.comboBox1_functions_str = ["purelin", "poslin", 'hardlim', 'hardlims', 'satlin', 'satlins', 'logsig', 'tansig']

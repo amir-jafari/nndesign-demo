@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -105,10 +105,10 @@ class EarlyStoppingRegularization(NNDLayout):
         self.axes_2.plot(self.ro_path_x, self.ro_path_y, color="blue")
         self.canvas2.draw()
 
-        self.make_slider("slider_epoch", QtCore.Qt.Horizontal, (0, max_epoch), QtWidgets.QSlider.TicksBelow, 1, 1,
+        self.make_slider("slider_epoch", QtCore.Qt.Orientation.Horizontal, (0, max_epoch), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 1,
                          (self.x_chapter_usual, 320, self.w_chapter_slider, 50), self.slide, "label_epoch", "Epoch: 1")
 
-        self.make_slider("slider_ro", QtCore.Qt.Horizontal, (0, max_epoch), QtWidgets.QSlider.TicksBelow, 1, 0,
+        self.make_slider("slider_ro", QtCore.Qt.Orientation.Horizontal, (0, max_epoch), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 0,
                          (self.x_chapter_usual, 390, self.w_chapter_slider, 50), self.slide, "label_ro", "ro: 0.00")
 
     def slide(self):

@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -28,12 +28,12 @@ class NormAndInitEffects(NNDLayout):
         self.make_button('button_pop_plot', "Pop-up plot", (20, 95, 100, 45), self.pop_up_plot)
         self.n_pop_up_plots = 0
 
-        self.make_slider("slider_n_examples", QtCore.Qt.Horizontal, (1, 100), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_n_examples", QtCore.Qt.Orientation.Horizontal, (1, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (self.x_chapter_usual, 310, self.w_chapter_slider, 50), self.graph, "label_n_examples",
                          "Number of examples: 1000", (self.x_chapter_usual + 20, 310 - 25, self.w_chapter_slider, 50))
         self.n_examples = int(self.slider_n_examples.value() * 100)
 
-        self.make_slider("slider_n_neurons", QtCore.Qt.Horizontal, (1, 100), QtWidgets.QSlider.TicksBelow, 1, 4,
+        self.make_slider("slider_n_neurons", QtCore.Qt.Orientation.Horizontal, (1, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 4,
                          (self.x_chapter_usual, 360, self.w_chapter_slider, 50), self.graph, "label_n_neurons",
                          "Number of neurons: 1000", (self.x_chapter_usual + 20, 360 - 25, self.w_chapter_slider, 50))
         self.n_neurons = int(self.slider_n_neurons.value())

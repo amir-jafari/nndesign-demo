@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -26,7 +26,7 @@ class GradientDescentStochastic(NNDLayout):
         self.figure.set_tight_layout(True)
         self.figure2.set_tight_layout(True)
 
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 1,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 30), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 1,
                          (self.x_chapter_usual, 360, self.w_chapter_slider, 50), self.slider, "label_lr",
                          "Learning rate: 0.01", (self.x_chapter_usual + 40, 360 - 25, self.w_chapter_slider, 50))
         self.lr = float(self.slider_lr.value() / 100)

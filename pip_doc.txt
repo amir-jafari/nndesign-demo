@@ -46,7 +46,7 @@ Mac:
 
 virtualenv venv -p python3
 source venv/bin/activate
-python -m pip install PyQt5
+python -m pip install PyQt6
 python -m pip install matplotlib
 python -m pip install pip-capstone-test
 
@@ -60,7 +60,7 @@ Ubuntu:
 
 virtualenv venv -p python3.7
 source venv/bin/activate
-python -m pip install PyQt5
+python -m pip install PyQt6
 python -m pip install matplotlib
 python -m pip install pip-capstone-test
 
@@ -88,15 +88,15 @@ sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt install python3.7
 
 python3.7 -m pip install pip-capstone-test
-Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-build-sgrexbox/PyQt5/
-python3.7 -m pip install PyQt5
-Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-build-sgrexbox/PyQt5/
+Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-build-sgrexbox/PyQt6/
+python3.7 -m pip install PyQt6
+Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-build-sgrexbox/PyQt6/
 python3.7 -m pip install --upgrade setuptools
 python3.7 -m pip install pip-capstone-test
-Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-build-3jwbn2k0/PyQt5/
+Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-build-3jwbn2k0/PyQt6/
 sudo apt-get install libpcap-dev libpq-dev
 
-sudo apt install python3-pyqt5
+sudo apt install python3-PyQt6
 
 
 

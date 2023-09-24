@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore, QtMultimedia
+from PyQt6 import QtWidgets, QtGui, QtCore
 import numpy as np
 from time import sleep
 
@@ -15,12 +15,12 @@ class HammingClassification(NNDLayout):
                           PACKAGE_PATH + "Logo/Logo_Ch_3.svg", None)
 
         if self.play_sound:
-            self.start_sound1 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/blip.wav")
-            self.start_sound2 = QtMultimedia.QSound(PACKAGE_PATH + "Sound/bloop.wav")
-            self.wind_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/wind.wav")
-            self.knock_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/knock.wav")
-            self.scan_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/buzz.wav")
-            self.classify_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/classify.wav")
+            self.initial_sound('start_sound1', "Sound/blip.wav")
+            self.initial_sound('start_sound2', "Sound/bloop.wav")
+            self.initial_sound('wind_sound', "Sound/wind.wav")
+            self.initial_sound('knock_sound', "Sound/knock.wav")
+            self.initial_sound('scan_sound', "Sound/buzz.wav")
+            self.initial_sound('classify_sound', "Sound/classify.wav")
 
         self.make_plot(1, (15, 100, 500, 390))
         self.axis = self.figure.add_subplot(projection='3d')
@@ -64,21 +64,21 @@ class HammingClassification(NNDLayout):
         self.icon3 = QtWidgets.QLabel(self)
         if self.running_on_windows:
             if self.dpi > 113.5:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
                 self.icon3.setGeometry(round(28 * self.h_ratio * (self.dpi / 113.5)), 485 * self.h_ratio, self.figure_w * self.h_ratio, self.figure_h * self.h_ratio)
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.h_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
                 self.icon3.setGeometry(28 * self.h_ratio, 485 * self.h_ratio, self.figure_w * self.h_ratio, self.figure_h * self.h_ratio)
         else:
             if self.dpi > 113.5:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(round(self.figure_w * self.w_ratio / (self.dpi / 113.5)), round(self.figure_h * self.h_ratio / (self.dpi / 113.5)), QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(round(self.figure_w * self.w_ratio / (self.dpi / 113.5)), round(self.figure_h * self.h_ratio / (self.dpi / 113.5)), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
                 self.icon3.setGeometry(round(28 * self.w_ratio * (self.dpi / 113.5)), 485 * self.h_ratio, round(self.figure_w * self.w_ratio / (self.dpi / 113.5)), round(self.figure_h * self.h_ratio / (self.dpi / 113.5)))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
                 self.icon3.setGeometry(28 * self.w_ratio, 485 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
 
-        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         self.make_button("run_button", "Go", (self.x_chapter_button, 577, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
     def paintEvent(self, event):
@@ -100,7 +100,7 @@ class HammingClassification(NNDLayout):
         self.timer = QtCore.QTimer()
         self.idx = 0
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
-        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         self.label_p.setText("")
         self.label_a_11.setText("")
         self.label_a_12.setText("")
@@ -135,22 +135,22 @@ class HammingClassification(NNDLayout):
                 self.start_sound2.play()
         elif self.idx == 2:
             if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_2.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_2.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_7.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_7.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             if self.play_sound:
                 self.wind_sound.play()
         elif self.idx == 3:
             if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         elif self.idx == 4:
             self.text_shape, self.text_texture, self.text_weight = str(self.p[0, 0]), str(self.p[0, 1]), str(self.p[0, 2])
             if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             if self.play_sound:
                 self.scan_sound.play()
         elif self.idx == 5:
@@ -164,9 +164,9 @@ class HammingClassification(NNDLayout):
             self.label_p.setText("p = [{} {} {}]".format(self.p[0, 0], self.p[0, 1], self.p[0, 2]))
         elif self.idx == 7:
             if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_4.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_4.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_9.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_9.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             self.label_a_11.setText("a1 = purelin(W1 * p + b)")
             if self.play_sound:
                 self.start_sound1.play()
@@ -183,17 +183,17 @@ class HammingClassification(NNDLayout):
         elif self.idx == 10:
             self.label_a_22.setText("a2 = [{} {}]".format(self.a2[0, 0], self.a2[1, 0]))
             if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_10.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_10.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             if self.play_sound:
                 self.wind_sound.play()
         elif self.idx == 11:
             self.label_fruit.setText("Fruit = {}".format(self.fruit))
             if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_6.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_6.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_11.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_11.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             if self.play_sound:
                 self.knock_sound.play()
                 sleep(0.5)

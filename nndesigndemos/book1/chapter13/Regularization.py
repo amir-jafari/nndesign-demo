@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -43,7 +43,7 @@ class Regularization(NNDLayout):
         self.canvas.draw()
 
         self.nsd = 1
-        self.make_slider("slider_nsd", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_nsd", QtCore.Qt.Orientation.Horizontal, (0, 30), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (20, 580, 470, 50), self.slide,
                          "label_nsd", "Noise standard deviation: 1.0",
                          (180, 555, 200, 50))
@@ -51,7 +51,7 @@ class Regularization(NNDLayout):
         self.animation_speed = 0
 
         self.regularization_ratio = 0.25
-        self.make_slider("slider_rer", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 25,
+        self.make_slider("slider_rer", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 25,
                          (20, 640, 470, 50), self.slide,
                          "label_rer", "Regularization Ratio: 0.25",
                          (200, 615, 200, 50))

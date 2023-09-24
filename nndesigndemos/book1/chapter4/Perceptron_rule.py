@@ -1,9 +1,9 @@
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets
 import random
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout

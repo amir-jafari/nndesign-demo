@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -30,11 +30,11 @@ class LeakyIntegrator(NNDLayout):
         self.axis.set_title("Response")
         self.lines = []
 
-        self.make_slider("slider_input", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksAbove, 1, 10,
+        self.make_slider("slider_input", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 10,
                          (20, 575, 480, 50), self.graph, "label_input", "Input p: 1.00", (230, 550, 150, 50))
         self.slider_input.sliderPressed.connect(self.slider_disconnect)
         self.slider_input.sliderReleased.connect(self.slider_reconnect)
-        self.make_slider("slider_tcte", QtCore.Qt.Horizontal, (1, 50), QtWidgets.QSlider.TicksAbove, 1, 10,
+        self.make_slider("slider_tcte", QtCore.Qt.Orientation.Horizontal, (1, 50), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 10,
                          (20, 635, 480, 50), self.graph, "label_tcte", "Time Constant: 1.00", (210, 610, 150, 50))
         self.slider_tcte.sliderPressed.connect(self.slider_disconnect)
         self.slider_tcte.sliderReleased.connect(self.slider_reconnect)

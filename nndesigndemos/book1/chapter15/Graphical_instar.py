@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -36,7 +36,7 @@ class GraphicalInstar(NNDLayout):
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
         self.lr = 0.5
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 5,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 5,
                          (self.x_chapter_usual, 470, self.w_chapter_slider, 50), self.slide,
                          "label_lr", "Learning Rate: 0.5", (self.x_chapter_slider_label - 30, 440, 150, 50))
 

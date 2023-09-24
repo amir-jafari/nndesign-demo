@@ -1,6 +1,6 @@
 import os
-from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QMainWindow
+from PyQt6 import QtWidgets, QtGui, QtCore, QtMultimedia
+from PyQt6.QtWidgets import QMainWindow, QApplication
 # import warnings
 import numpy as np
 import matplotlib
@@ -103,14 +103,14 @@ class NNDLayout(QMainWindow):
 
     def draw_lines(self, qp):
         if self.draw_horizontal:
-            pen = QtGui.QPen(QtCore.Qt.darkBlue, 4, QtCore.Qt.SolidLine)
+            pen = QtGui.QPen(QtGui.QColor("darkblue"), 4, QtCore.Qt.PenStyle.SolidLine)
             qp.setPen(pen)
             # qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio)
             qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, xl2 * self.w_ratio, yl1 * self.h_ratio)
             qp.drawLine(xl3 * self.w_ratio, yl4 * self.h_ratio, xl4 * self.w_ratio, yl4 * self.h_ratio)
 
         if self.draw_vertical:
-            pen = QtGui.QPen(QtCore.Qt.darkBlue, 4, QtCore.Qt.SolidLine)
+            pen = QtGui.QPen(QtGui.QColor("darkblue"), 4, QtCore.Qt.PenStyle.SolidLine)
             qp.setPen(pen)
             # qp.drawLine(self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio + 35, self.wm - xl1 * self.w_ratio, 750 * self.h_ratio)
             qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, yl4 * self.h_ratio)
@@ -137,7 +137,7 @@ class NNDLayout(QMainWindow):
             #     y_pos += (n_lines * 10 + 20) * self.h_ratio
 
         self.icon1 = QtWidgets.QLabel(self)
-        self.icon1.setPixmap(QtGui.QIcon(logo_path).pixmap(wp_pic2_1 * self.w_ratio, hp_pic2_1 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        self.icon1.setPixmap(QtGui.QIcon(logo_path).pixmap(wp_pic2_1 * self.w_ratio, hp_pic2_1 * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         self.icon1.setGeometry(x_pic2_1 * self.w_ratio, y_pic2_1 * self.h_ratio, w_pic2_1 * self.w_ratio, h_pic2_1 * self.h_ratio)
 
         if icon_path:
@@ -145,9 +145,9 @@ class NNDLayout(QMainWindow):
             icon_coords[0] -= icon_move_left
             self.icon2 = QtWidgets.QLabel(self)
             if icon_rescale:
-                pixmap = QtGui.QIcon(icon_path).pixmap(icon_coords[2] * self.w_ratio, icon_coords[3] * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On)
+                pixmap = QtGui.QIcon(icon_path).pixmap(icon_coords[2] * self.w_ratio, icon_coords[3] * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
             else:
-                pixmap = QtGui.QIcon(icon_path).pixmap(wp_pic2_2 * self.w_ratio, hp_pic2_2 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On)
+                pixmap = QtGui.QIcon(icon_path).pixmap(wp_pic2_2 * self.w_ratio, hp_pic2_2 * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
             # if icon_rescale:
             #     pixmap = pixmap.scaled(icon_coords[2] * self.w_ratio, icon_coords[3] * self.h_ratio)
             self.icon2.setPixmap(pixmap)
@@ -158,7 +158,10 @@ class NNDLayout(QMainWindow):
 
     def center(self):
         qr = self.frameGeometry()
-        cp = QtWidgets.QDesktopWidget().availableGeometry().center()
+        app = QApplication.instance()
+
+        cp = app.primaryScreen().availableGeometry().center()
+        # cp = QtWidgets.QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
@@ -236,7 +239,7 @@ class NNDLayout(QMainWindow):
 
     def set_layout(self, layout_coords, widget):
         wid = QtWidgets.QWidget(self)
-        layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
         wid.setGeometry(layout_coords[0] * self.w_ratio, layout_coords[1] * self.h_ratio,
                         layout_coords[2] * self.w_ratio, layout_coords[3] * self.h_ratio)
         layout.addWidget(widget)
@@ -318,7 +321,7 @@ class NNDLayout(QMainWindow):
             if not label_coords:
                 label_coords = (slider_coords[0] + 80, slider_coords[1] - 30, slider_coords[2], slider_coords[3])
             self.make_label(label_attr_name, label_str, label_coords, label_font_name, label_font_size, label_italics)
-        # if slider_coords[-1] > 50 * self.h_ratio and slider_type == QtCore.Qt.Horizontal:
+        # if slider_coords[-1] > 50 * self.h_ratio and slider_type == QtCore.Qt.Orientation.Horizontal:
         #     warnings.warn("Setting horizontal slider {} with too much height ({}).".format(
         #         slider_attr_name, slider_coords[-1] * self.h_ratio
         #     ) + " This may result in interactive problems")
@@ -393,7 +396,7 @@ class NNDLayout(QMainWindow):
             if type(getattr(self, attr)) == matplotlib.animation.FuncAnimation:
                 if getattr(self, attr).event_source:
                     getattr(self, attr).event_source.stop()
-            # Stops all running PyQt5 timers
+            # Stops all running PyQt6 timers
             elif type(getattr(self, attr)) == QtCore.QTimer:
                 getattr(self, attr).stop()
 
@@ -508,3 +511,7 @@ class NNDLayout(QMainWindow):
 
     def nndtansig(self, x):
         a = self.tansig(x)
+
+    def initial_sound(self, sound_name, left_path):
+        setattr(self, sound_name, QtMultimedia.QSoundEffect())
+        getattr(self, sound_name).setSource(QtCore.QUrl.fromLocalFile(PACKAGE_PATH + left_path))

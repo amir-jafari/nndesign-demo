@@ -1,9 +1,9 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 from scipy.io import loadmat
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -51,20 +51,20 @@ class VariableLearningRate(NNDLayout):
         self.lr = 14
         self.make_label("label_lr1", "0.0", (self.x_chapter_usual + 10, 610, self.w_chapter_slider, 50))
         self.make_label("label_lr2", "20.0", (self.x_chapter_usual + 150, 610, self.w_chapter_slider, 50))
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 200), QtWidgets.QSlider.TicksBelow, 1, 140,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 200), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 140,
                          (self.x_chapter_usual, 580, self.w_chapter_slider, 50), self.slide, "label_lr", "lr: 14.0")
 
         self.increase_rate = 1.05
         self.make_label("label_increase1", "1.00", (self.x_chapter_usual + 10, 460, self.w_chapter_slider, 50))
         self.make_label("label_increase2", "1.20", (self.x_chapter_usual + 150, 460, self.w_chapter_slider, 50))
-        self.make_slider("slider_increase", QtCore.Qt.Horizontal, (100, 120), QtWidgets.QSlider.TicksBelow, 1, 105,
+        self.make_slider("slider_increase", QtCore.Qt.Orientation.Horizontal, (100, 120), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 105,
                          (self.x_chapter_usual, 430, self.w_chapter_slider, 50), self.slide, "label_increase", "Increase rate: 1.05",
                          (self.x_chapter_usual + 50, 400, self.w_chapter_slider, 50))
 
         self.decrease_rate = 0.7
         self.make_label("label_decrease1", "0.50", (self.x_chapter_usual + 10, 540, self.w_chapter_slider, 50))
         self.make_label("label_decrease2", "1.00", (self.x_chapter_usual + 150, 540, self.w_chapter_slider, 50))
-        self.make_slider("slider_decrease", QtCore.Qt.Horizontal, (50, 100), QtWidgets.QSlider.TicksBelow, 1, 70,
+        self.make_slider("slider_decrease", QtCore.Qt.Orientation.Horizontal, (50, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 70,
                          (self.x_chapter_usual, 510, self.w_chapter_slider, 50), self.slide, "label_decrease",
                          "Decrease rate: 0.70", (self.x_chapter_usual + 50, 480, self.w_chapter_slider, 50))
 

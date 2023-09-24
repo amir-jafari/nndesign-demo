@@ -1,9 +1,9 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 from scipy.io import loadmat
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -50,14 +50,14 @@ class Marquardt(NNDLayout):
         self.mu = 0.01
         self.make_label("label_mu1", "0.01", (self.x_chapter_usual + 10, 590, self.w_chapter_slider, 50))
         self.make_label("label_mu2", "0.10", (self.x_chapter_usual + 150, 590, self.w_chapter_slider, 50))
-        self.make_slider("slider_mu", QtCore.Qt.Horizontal, (1, 10), QtWidgets.QSlider.TicksBelow, 1, 1,
+        self.make_slider("slider_mu", QtCore.Qt.Orientation.Horizontal, (1, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 1,
                          (self.x_chapter_usual, 560, self.w_chapter_slider, 50), self.slide,
                          "label_mu", "Initial Mu: 0.01", (self.x_chapter_usual + 50, 530, self.w_chapter_slider, 50))
 
         self.nu = 5
         self.make_label("label_nu1", "1.0", (self.x_chapter_usual + 10, 500, self.w_chapter_slider, 50))
         self.make_label("label_nu2", "10.0", (self.x_chapter_usual + 150, 500, self.w_chapter_slider, 50))
-        self.make_slider("slider_nu", QtCore.Qt.Horizontal, (10, 100), QtWidgets.QSlider.TicksBelow, 1, 50,
+        self.make_slider("slider_nu", QtCore.Qt.Orientation.Horizontal, (10, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 50,
                          (self.x_chapter_usual, 470, self.w_chapter_slider, 50), self.slide,
                          "label_nu", "Constant NU: 5.0", (self.x_chapter_usual + 50, 440, self.w_chapter_slider, 50))
 

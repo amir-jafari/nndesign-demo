@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -39,7 +39,7 @@ class SteepestDescentQuadratic(NNDLayout):
         self.ani, self.event = None, None
 
         self.lr = 0.03
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 12), QtWidgets.QSlider.TicksBelow, 1, 6,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 12), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 6,
                          (25, 600, 480, 50), self.slide, "label_lr", "lr: 0.03", (245, 570, 100, 50))
         self.make_label("label_lr1", "0.00", (35, 640, 100, 20))
         self.make_label("label_lr2", "0.06", (470, 640, 100, 20))
@@ -49,7 +49,7 @@ class SteepestDescentQuadratic(NNDLayout):
         self.do_slide = False
 
         self.animation_speed = 100
-        # self.make_slider("slider_anim_speed", QtCore.Qt.Horizontal, (0, 6), QtWidgets.QSlider.TicksBelow, 1, 2,
+        # self.make_slider("slider_anim_speed", QtCore.Qt.Orientation.Horizontal, (0, 6), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 2,
         #                  (self.x_chapter_usual, 380, self.w_chapter_slider, 100), self.slide, "label_anim_speed", "Animation Delay: 200 ms")
 
         self.canvas.draw()

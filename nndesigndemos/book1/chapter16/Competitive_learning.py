@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt6 import QtWidgets, QtGui, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -53,7 +53,7 @@ class CompetitiveLearning(NNDLayout):
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
         self.cid, self.w_change = None, None
 
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 4,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 4,
                          (15, 610, 500, 50), self.slide, "label_lr", "Learning Rate: 0.4", (225, 585, 200, 50))
         self.alpha = float(self.slider_lr.value() / 10)
 

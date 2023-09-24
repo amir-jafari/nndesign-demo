@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -56,8 +56,8 @@ class FunctionApproximation(NNDLayout):
         self.make_label("label_diff1", "1", (40, 610, 20, 50))
         self.make_label("label_diff2", "9", (475, 610, 20, 50))
         self.make_label("label_diff", "Difficulty index: 1", (210, 610, 200, 50))
-        self.make_slider("slider_s1", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 4, (20, 580, 480, 50), self.slide)
-        self.make_slider("slider_diff", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 1, (20, 635, 480, 50), self.slide)
+        self.make_slider("slider_s1", QtCore.Qt.Orientation.Horizontal, (1, 9), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 4, (20, 580, 480, 50), self.slide)
+        self.make_slider("slider_diff", QtCore.Qt.Orientation.Horizontal, (1, 9), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 1, (20, 635, 480, 50), self.slide)
 
         self.make_button("run_button", "Train", (self.x_chapter_button, 315, self.w_chapter_button, self.h_chapter_button), self.on_run)
 

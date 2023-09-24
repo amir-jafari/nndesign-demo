@@ -3,7 +3,7 @@ import warnings
 import matplotlib.cbook
 from matplotlib.ticker import FormatStrFormatter
 from matplotlib.animation import FuncAnimation
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -26,9 +26,9 @@ class RecurrentNetworkTraining(NNDLayout):
         self.make_plot(2, (245, 300, 270, 380))
         self.make_plot(3, (10, 480, 250, 200))
 
-        # self.make_slider("slider_w0", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 5,
+        # self.make_slider("slider_w0", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 5,
         #                  (self.x_chapter_usual, 380, self.w_chapter_slider, 50), None, "label_w0", "iW(0): 0.5")
-        # self.make_slider("slider_w1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 5,
+        # self.make_slider("slider_w1", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 5,
         #                  (self.x_chapter_usual, 450, self.w_chapter_slider, 50), None, "label_w1", "lW(1): 0.5")
 
         self.animation_speed = 100

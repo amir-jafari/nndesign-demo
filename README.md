@@ -5,7 +5,7 @@ This is a set of demonstrations paired with the [Neural Network Design](https://
 
 ## Installation
 
-nndesigndemos is supported on macOS, Linux and Windows. It uses PyQt5, so your OS version needs to be compatible with it.
+nndesigndemos is supported on macOS, Linux and Windows. It uses PyQt6, so your OS version needs to be compatible with it.
  If you get an installation error, this is most likely the reason.
 
 ### Installing via pip
@@ -48,7 +48,7 @@ These are the packages needed to run all the demos. These specific versions are 
 older or newer versions will cause any issues.
 
 - Python 3.10+
-- PyQt5 5.15.7
+- PyQt6 6.5.2
 - NumPy 1.25.2
 - SciPy 1.11.1
 - Matplotlib 3.7.2

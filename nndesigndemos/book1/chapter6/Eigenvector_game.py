@@ -1,8 +1,7 @@
-from PyQt5 import QtWidgets, QtCore, QtMultimedia
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
-import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 import matplotlib.pyplot as plt
 from matplotlib import patches
 
@@ -24,11 +23,11 @@ class EigenvectorGame(NNDLayout):
         self.ax = self.figure2.add_subplot(1, 1, 1)
 
         if self.play_sound:
-            self.start_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/dk-a2600_walk.wav")
-            self.miss_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/smb_bump.wav")
-            self.win_1_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/mb_coin.wav")
-            self.win_2_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/npc-yc_mario-win.wav")
-            self.lose_sound = QtMultimedia.QSound(PACKAGE_PATH + "Sound/mb_die.wav")
+            self.initial_sound('start_sound', "Sound/dk-a2600_walk.wav")
+            self.initial_sound('miss_sound', "Sound/smb_bump.wav")
+            self.initial_sound('win_1_sound', "Sound/mb_coin.wav")
+            self.initial_sound('win_2_sound', "Sound/npc-yc_mario-win.wav")
+            self.initial_sound('lose_sound', "Sound/mb_die.wav")
 
         self.make_plot(1, (75, 300, 370, 370))
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
@@ -53,7 +52,7 @@ class EigenvectorGame(NNDLayout):
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick1)
 
-        self.make_slider("slider_n_tries", QtCore.Qt.Vertical, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_n_tries", QtCore.Qt.Orientation.Vertical, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (590, 430, 100, 180), self.freeze, "label_n_tries", "Number of Tries Left: 10",
                          (540, 400, 150, 50))
         self.make_label("label_message", "", (150, 100, 400, 150))

@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -56,12 +56,12 @@ class Generalization(NNDLayout):
         self.make_label("label_diff1", "1", (40, 610, 20, 50))
         self.make_label("label_diff2", "9", (475, 610, 20, 50))
         self.make_label("label_diff", "Difficulty index: 1", (210, 610, 200, 50))
-        self.make_slider("slider_s1", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 4,
+        self.make_slider("slider_s1", QtCore.Qt.Orientation.Horizontal, (1, 9), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 4,
                          (20, 580, 480, 50), self.slide)
-        self.make_slider("slider_diff", QtCore.Qt.Horizontal, (1, 9), QtWidgets.QSlider.TicksAbove, 1, 1,
+        self.make_slider("slider_diff", QtCore.Qt.Orientation.Horizontal, (1, 9), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 1,
                          (20, 635, 480, 50), self.slide)
 
-        self.make_slider("slider_delay", QtCore.Qt.Horizontal, (0, 50), QtWidgets.QSlider.TicksAbove, 1, 2,
+        self.make_slider("slider_delay", QtCore.Qt.Orientation.Horizontal, (0, 50), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 2,
                          (self.x_chapter_usual, 390, self.w_chapter_slider, 50), self.slide, "label_delay", "Animation Delay: 20",
                          (self.x_chapter_usual + 20, 390 - 25, self.w_chapter_slider, 50))
         self.anim_delay = 20

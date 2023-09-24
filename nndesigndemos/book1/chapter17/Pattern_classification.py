@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 import matplotlib.pyplot as plt
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -58,55 +58,55 @@ class PatternClassification(NNDLayout):
         self.axis.set_xlabel("$p1$")
         self.axis.set_ylabel("$p2$")
 
-        self.make_slider("slider_w1_1", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_w1_1", QtCore.Qt.Orientation.Horizontal, (-40, 40), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (10, 115, 150, 50), self.graph, "label_w1_1", "W1(1,1)", (50, 115 - 25, 100, 50))
         self.slider_w1_1.valueChanged.connect(self.slider_update)
         self.slider_w1_1.sliderPressed.connect(self.slider_disconnect)
         self.slider_w1_1.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_w1_2", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, -10,
+        self.make_slider("slider_w1_2", QtCore.Qt.Orientation.Horizontal, (-40, 40), QtWidgets.QSlider.TickPosition.TicksBelow, 1, -10,
                          (10, 360, 150, 50), self.graph, "label_w1_2", "W1(2,1)", (50, 360 - 25, 100, 50))
         self.slider_w1_2.valueChanged.connect(self.slider_update)
         self.slider_w1_2.sliderPressed.connect(self.slider_disconnect)
         self.slider_w1_2.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_b1_1", QtCore.Qt.Horizontal, (-10, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_b1_1", QtCore.Qt.Orientation.Horizontal, (-10, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (170, 115, 150, 50), self.graph, "label_b1_1", "b1(1):", (210, 115 - 25, 100, 50))
         self.slider_b1_1.valueChanged.connect(self.slider_update)
         self.slider_b1_1.sliderPressed.connect(self.slider_disconnect)
         self.slider_b1_1.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_b1_2", QtCore.Qt.Horizontal, (-10, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_b1_2", QtCore.Qt.Orientation.Horizontal, (-10, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (170, 360, 150, 50), self.graph, "label_b1_2", "b1(2):", (210, 360 - 25, 100, 50))
         self.slider_b1_2.valueChanged.connect(self.slider_update)
         self.slider_b1_2.sliderPressed.connect(self.slider_disconnect)
         self.slider_b1_2.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_w2_1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 20,
+        self.make_slider("slider_w2_1", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 20,
                          (330, 115, 150, 50), self.graph, "label_w2_1", "W2(1,1):", (370, 115 - 25, 100, 50))
         self.slider_w2_1.valueChanged.connect(self.slider_update)
         self.slider_w2_1.sliderPressed.connect(self.slider_disconnect)
         self.slider_w2_1.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_w2_2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 20,
+        self.make_slider("slider_w2_2", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 20,
                          (330, 360, 150, 50), self.graph, "label_w2_2", "W2(1,2):", (370, 360 - 25, 100, 50))
         self.slider_w2_2.valueChanged.connect(self.slider_update)
         self.slider_w2_2.sliderPressed.connect(self.slider_disconnect)
         self.slider_w2_2.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_b2", QtCore.Qt.Horizontal, (-10, 10), QtWidgets.QSlider.TicksBelow, 1, -10,
+        self.make_slider("slider_b2", QtCore.Qt.Orientation.Horizontal, (-10, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, -10,
                          (self.x_chapter_usual, 380, self.w_chapter_slider, 50), self.graph, "label_b2", "b2: -1.0")
         self.slider_b2.valueChanged.connect(self.slider_update)
         self.slider_b2.sliderPressed.connect(self.slider_disconnect)
         self.slider_b2.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_w1_12", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, -10,
+        self.make_slider("slider_w1_12", QtCore.Qt.Orientation.Horizontal, (-40, 40), QtWidgets.QSlider.TickPosition.TicksBelow, 1, -10,
                          (self.x_chapter_usual, 450, self.w_chapter_slider, 50), self.graph, "label_w1_12", "W1(1,2): 1")
         self.slider_w1_12.valueChanged.connect(self.slider_update)
         self.slider_w1_12.sliderPressed.connect(self.slider_disconnect)
         self.slider_w1_12.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_w1_22", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_w1_22", QtCore.Qt.Orientation.Horizontal, (-40, 40), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (self.x_chapter_usual, 520, self.w_chapter_slider, 50), self.graph, "label_w1_22", "W1(2,2): 1")
         self.slider_w1_22.valueChanged.connect(self.slider_update)
         self.slider_w1_22.sliderPressed.connect(self.slider_disconnect)

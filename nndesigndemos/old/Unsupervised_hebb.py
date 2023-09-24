@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt6 import QtWidgets, QtGui, QtCore
 import numpy as np
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -25,12 +25,12 @@ class UnsupervisedHebb(NNDLayout):
             self.icon4.setPixmap(
                 QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.h_ratio,
                                                                            self.figure2_h * self.h_ratio,
-                                                                           QtGui.QIcon.Normal, QtGui.QIcon.On))
+                                                                           QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             self.icon4.setGeometry(28 * self.h_ratio, 100 * self.h_ratio, self.figure2_w * self.h_ratio,
                                    self.figure2_h * self.h_ratio)
 
         else:
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             self.icon4.setGeometry(28 * self.w_ratio, 100 * self.h_ratio, self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio)
 
         self.figure_w, self.figure_h = 575, 190
@@ -39,12 +39,12 @@ class UnsupervisedHebb(NNDLayout):
             self.icon3.setPixmap(
                 QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.h_ratio,
                                                                            self.figure_h * self.h_ratio,
-                                                                           QtGui.QIcon.Normal, QtGui.QIcon.On))
+                                                                           QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             self.icon3.setGeometry(28 * self.h_ratio, 420 * self.h_ratio, self.figure_w * self.h_ratio,
                                    self.figure_h * self.h_ratio)
 
         else:
-            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             self.icon3.setGeometry(28 * self.w_ratio, 420 * self.h_ratio, self.figure_w * self.w_ratio, self.figure_h * self.h_ratio)
 
         self.W2, self.W1, self.b, self.n = 0.0, 1, -0.5, "  ?"
@@ -62,8 +62,8 @@ class UnsupervisedHebb(NNDLayout):
             self.timer.stop()
         self.first_scanner_on = self.checkbox_scanner.isChecked()
         self.banana_shape, self.banana_smell, self.banana, self.n = "?", "?", "?", "  ?"
-        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-        self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+        self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
+        self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
 
     def paintEvent(self, event):
         super(UnsupervisedHebb, self).paintEvent(event)
@@ -77,7 +77,7 @@ class UnsupervisedHebb(NNDLayout):
         else:
             painter.drawLine(170 * self.h_ratio, 80 * self.h_ratio, 185 * self.h_ratio, 95 * self.h_ratio)
             painter.drawLine(170 * self.h_ratio, 95 * self.h_ratio, 185 * self.h_ratio, 80 * self.h_ratio)
-        pen = QtGui.QPen(QtCore.Qt.black, 1)
+        pen = QtGui.QPen(QtGui.QColor("black"), 1)
         painter.setPen(pen)
         if self.running_on_windows:
             painter.setFont(QtGui.QFont("times", 12 * (self.h_ratio + self.h_ratio) / 2))
@@ -125,8 +125,8 @@ class UnsupervisedHebb(NNDLayout):
         if self.update:
             try:
                 self.W2 += 0.2 * self.banana
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-                self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
+                self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
                 self.update = False
                 self.run_button.setText("Fruit")
             except Exception as e:
@@ -138,8 +138,8 @@ class UnsupervisedHebb(NNDLayout):
             self.timer = QtCore.QTimer()
             self.idx = 0
             self.banana_shape, self.banana_smell, self.banana, self.n = "?", "?", "?", "  ?"
-            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
+            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             self.timer.timeout.connect(self.update_label)
             self.timer.start(900)
 
@@ -158,77 +158,77 @@ class UnsupervisedHebb(NNDLayout):
             self.label = 1 if self.banana_temp == 1 else -1
         if self.idx == 1:
             if self.fruit == "banana":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_4.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_4.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             elif self.fruit == "orange":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_3.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_2.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_2.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         elif self.idx == 2:
             if self.fruit == "banana":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_7.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_7.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             elif self.fruit == "orange":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_6.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_6.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         elif self.idx == 3:
             if self.first_scanner_on:
                 self.banana_shape = 1 if self.fruit == "banana" else 0
             if self.fruit == "banana":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_7.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_7.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             elif self.fruit == "orange":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_6.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_6.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
+            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         elif self.idx == 4:
             if self.fruit == "banana":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_10.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_10.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             elif self.fruit == "orange":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_9.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_9.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         elif self.idx == 5:
             self.banana_smell = 1 if self.fruit == "banana" else 0
             if self.fruit == "banana":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_10.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_10.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             elif self.fruit == "orange":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_9.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_9.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_8.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
+            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         elif self.idx == 6:
             if self.fruit == "banana":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_13.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_13.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             elif self.fruit == "orange":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_12.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_12.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_11.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_11.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         elif self.idx == 7:
             self.n = self.n_temp
             if self.fruit == "banana":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_13.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_13.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             elif self.fruit == "orange":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_12.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_12.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_11.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_11.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
+            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         elif self.idx == 8:
             self.banana = self.banana_temp
             if self.fruit == "banana":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_16.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_16.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             elif self.fruit == "orange":
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_15.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_15.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_14.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
-            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_14.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
+            self.icon4.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15dfig.svg").pixmap(self.figure2_w * self.w_ratio, self.figure2_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         elif self.idx == 9:
             if self.label == 1:
-                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_19.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_19.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
                 if self.fruit == "orange":
-                    self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_18.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                    self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_18.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
                 else:
-                    self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_17.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                    self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd15d1_17.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             self.run_button.setText("Update")
             self.update = True
         else:

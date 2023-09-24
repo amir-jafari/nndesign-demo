@@ -1,9 +1,9 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt6 import QtWidgets, QtGui, QtCore
 import math
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -32,7 +32,7 @@ class CascadedFunction(NNDLayout):
                            (self.x_chapter_slider_label - 40, 370, self.w_chapter_slider, 50))
         self.func1 = self.two
 
-        self.make_slider("sliderval", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 1, 0,
+        self.make_slider("sliderval", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 0,
                          (self.x_chapter_usual, 460, self.w_chapter_slider, 50), self.slide, "label_iter",
                          "Input value: 0", (self.x_chapter_usual + 40, 460 - 25, 150, 50))
         self.last_idx = 0
@@ -44,15 +44,15 @@ class CascadedFunction(NNDLayout):
     def combo_bbox2(self, idx):
         if idx == 0:
             self.func1 = self.two
-            self.icon2.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Chapters/2_D/2f_1.svg").pixmap(500 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon2.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Chapters/2_D/2f_1.svg").pixmap(500 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             self.graph()
         elif idx == 1:
             self.func1 = self.three
-            self.icon2.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Chapters/2_D/3f_1.svg").pixmap(500 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon2.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Chapters/2_D/3f_1.svg").pixmap(500 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             self.graph()
         if idx == 2:
             self.func1 = self.four
-            self.icon2.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Chapters/2_D/4f_1.svg").pixmap(500 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+            self.icon2.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Chapters/2_D/4f_1.svg").pixmap(500 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             self.graph()
 
     def slide(self):

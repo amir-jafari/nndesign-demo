@@ -24,7 +24,7 @@ setuptools.setup(
     packages=["nndesigndemos"],
     include_package_data=True,
     python_requires=">=3.9",
-    install_requires=["PyQt5", "numpy", "scipy", "matplotlib"],
+    install_requires=["PyQt6", "numpy", "scipy", "matplotlib"],
     classifiers=[
         # Trove classifiers
         # (https://pypi.python.org/pypi?%3Aaction=list_classifiers)

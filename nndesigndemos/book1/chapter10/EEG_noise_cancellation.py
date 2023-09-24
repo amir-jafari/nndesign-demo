@@ -1,9 +1,9 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 from scipy.io import loadmat
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -64,11 +64,11 @@ class EEGNoiseCancellation(NNDLayout):
         self.canvas.draw()
 
         self.lr = 0.02
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 20), QtWidgets.QSlider.TicksBelow, 1, 2,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 2,
                          (25, 410, 480, 50), self.slide, "label_lr", "lr: 0.02", (245, 380, 100, 50))
 
         self.delays = 10
-        self.make_slider("slider_delays", QtCore.Qt.Horizontal, (0, 20), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_delays", QtCore.Qt.Orientation.Horizontal, (0, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (25, 500, 480, 50), self.slide, "label_delays", "Delays: 10", (235, 470, 100, 50))
 
         self.slider_lr.sliderPressed.connect(self.slider_disconnect)
@@ -85,13 +85,13 @@ class EEGNoiseCancellation(NNDLayout):
         self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 450 * self.h_ratio,
                                           self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.slider_anim_speed.setRange(0, 6)
-        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TickPosition.TicksBelow)
         self.slider_anim_speed.setTickInterval(1)
         self.slider_anim_speed.setValue(1)
         self.wid_anim_speed = QtWidgets.QWidget(self)
-        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
         self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 480 * self.h_ratio,
                                         self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout_anim_speed.addWidget(self.slider_anim_speed)

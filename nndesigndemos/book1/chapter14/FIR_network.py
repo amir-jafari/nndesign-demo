@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from scipy.signal import lfilter
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -45,15 +45,15 @@ class FIRNetwork(NNDLayout):
                            "label_div", "frequency", (self.x_chapter_slider_label, 570, 150, 50))
         self.freq = None
 
-        self.make_slider("slider_w0", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 3,
+        self.make_slider("slider_w0", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 3,
                          (self.x_chapter_usual, 270, self.w_chapter_slider, 50), self.graph,
                          "label_w0", "iW(0): 0.3",
                          (self.x_chapter_slider_label, 240, 150, 50))
-        self.make_slider("slider_w1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 3,
+        self.make_slider("slider_w1", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 3,
                          (self.x_chapter_usual, 340, self.w_chapter_slider, 50), self.graph,
                          "label_w1", "iW(1): 0.3",
                          (self.x_chapter_slider_label, 310, 150, 50))
-        self.make_slider("slider_w2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 3,
+        self.make_slider("slider_w2", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 3,
                          (self.x_chapter_usual, 410, self.w_chapter_slider, 50), self.graph,
                          "label_w2", "iW(2): 0.3",
                          (self.x_chapter_slider_label, 380, 150, 50))

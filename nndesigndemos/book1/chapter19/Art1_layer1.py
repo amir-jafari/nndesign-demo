@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt6 import QtWidgets, QtCore, QtGui
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from scipy.integrate import ode
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -35,16 +35,16 @@ class ART1Layer1(NNDLayout):
         self.axis.plot(np.linspace(0, 0.2, 100), [0] * 100, linestyle="dashed", linewidth=0.5, color="gray")
         self.lines1, self.lines2 = [], []
 
-        self.make_slider("slider_input_pos", QtCore.Qt.Horizontal, (0, 1), QtWidgets.QSlider.TicksAbove, 1, 0,
+        self.make_slider("slider_input_pos", QtCore.Qt.Orientation.Horizontal, (0, 1), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 0,
                          (self.x_chapter_usual, 335, self.w_chapter_slider, 50), self.slide,
                          "label_input_pos", "Input p(1): 0", (self.x_chapter_usual + 60, 335 - 25, 150, 50))
-        self.make_slider("slider_input_neg", QtCore.Qt.Horizontal, (0, 1), QtWidgets.QSlider.TicksAbove, 1, 1,
+        self.make_slider("slider_input_neg", QtCore.Qt.Orientation.Horizontal, (0, 1), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 1,
                          (self.x_chapter_usual, 395, self.w_chapter_slider, 50), self.slide,
                          "label_input_neg", "Input p(2): 1", (self.x_chapter_usual + 60, 395 - 25, 150, 50))
-        self.make_slider("slider_bias_pos", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksAbove, 1, 10,
+        self.make_slider("slider_bias_pos", QtCore.Qt.Orientation.Horizontal, (0, 30), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 10,
                          (self.x_chapter_usual, 460, self.w_chapter_slider, 50), self.slide,
                          "label_bias_pos", "Bias b+: 1.00", (self.x_chapter_usual + 70, 460 - 25, 150, 50))
-        self.make_slider("slider_bias_neg", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksAbove, 1, 15,
+        self.make_slider("slider_bias_neg", QtCore.Qt.Orientation.Horizontal, (0, 30), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 15,
                          (self.x_chapter_usual, 520, self.w_chapter_slider, 50), self.slide,
                          "label_bias_neg", "Bias b-: 1.50", (self.x_chapter_usual + 70, 520 - 25, 150, 50))
 
@@ -69,7 +69,7 @@ class ART1Layer1(NNDLayout):
         super(ART1Layer1, self).paintEvent(event)
         painter = QtGui.QPainter()
         painter.begin(self)
-        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        pen = QtGui.QPen(QtGui.QColor("black"), 2, QtCore.Qt.PenStyle.SolidLine)
         painter.setPen(pen)
         self.paint_bracket(painter, 238, 558, 650, 118)
         painter.end()

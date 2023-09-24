@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from scipy.integrate import ode
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -33,19 +33,19 @@ class ART1Layer2(NNDLayout):
         self.axis.plot(np.linspace(0, 0.2, 100), [0] * 100, linestyle="dashed", linewidth=0.5, color="gray")
         self.lines1, self.lines2 = [], []
 
-        self.make_slider("slider_input_pos", QtCore.Qt.Horizontal, (0, 1), QtWidgets.QSlider.TicksAbove, 1, 0,
+        self.make_slider("slider_input_pos", QtCore.Qt.Orientation.Horizontal, (0, 1), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 0,
                          (self.x_chapter_usual, 330, self.w_chapter_slider, 50), self.slide,
                          "label_input_pos", "Input a(1): 0", (self.x_chapter_usual + 60, 330 - 25, 150, 50))
-        self.make_slider("slider_input_neg", QtCore.Qt.Horizontal, (0, 1), QtWidgets.QSlider.TicksAbove, 1, 1,
+        self.make_slider("slider_input_neg", QtCore.Qt.Orientation.Horizontal, (0, 1), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 1,
                          (self.x_chapter_usual, 390, self.w_chapter_slider, 50), self.slide,
                          "label_input_neg", "Input a(2): 1", (self.x_chapter_usual + 60, 390 - 25, 150, 50))
-        self.make_slider("slider_bias_pos", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksAbove, 1, 10,
+        self.make_slider("slider_bias_pos", QtCore.Qt.Orientation.Horizontal, (0, 30), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 10,
                          (self.x_chapter_usual, 450, self.w_chapter_slider, 50), self.slide,
                          "label_bias_pos", "Bias b+: 1.00", (self.x_chapter_usual + 70, 450 - 25, 150, 50))
-        self.make_slider("slider_bias_neg", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksAbove, 1, 10,
+        self.make_slider("slider_bias_neg", QtCore.Qt.Orientation.Horizontal, (0, 30), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 10,
                          (self.x_chapter_usual, 510, self.w_chapter_slider, 50), self.slide,
                          "label_bias_neg", "Bias b-: 1.00", (self.x_chapter_usual + 70, 510 - 25, 150, 50))
-        self.make_slider("slider_tcte", QtCore.Qt.Horizontal, (1, 200), QtWidgets.QSlider.TicksAbove, 1, 100,
+        self.make_slider("slider_tcte", QtCore.Qt.Orientation.Horizontal, (1, 200), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 100,
                          (20, 600, 480, 50), self.slide, "label_tcte", "Time Constant: 10.00", (200, 575, 170, 50))
 
         self.make_button("clear_button", "Clear", (self.x_chapter_button, 575, self.w_chapter_button, self.h_chapter_button), self.on_clear)

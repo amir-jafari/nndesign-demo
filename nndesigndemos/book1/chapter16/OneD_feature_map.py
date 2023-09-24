@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -72,11 +72,11 @@ class OneDFeatureMap(NNDLayout):
 
         self.make_label("label_presentations", "Presentations: 0", (535, 290, 150, 100))
 
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksBelow, 10, 100,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 100,
                          (15, 610, 250, 50), self.slide, "label_lr", "Learning Rate: 1.0", (90, 585, 150, 50))
         self.lr = 1
 
-        self.make_slider("slider_nei", QtCore.Qt.Horizontal, (0, 210), QtWidgets.QSlider.TicksBelow, 10, 210,
+        self.make_slider("slider_nei", QtCore.Qt.Orientation.Horizontal, (0, 210), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 210,
                          (265, 610, 250, 50), self.slide, "label_nei", "Neighborhood: 21.00", (335, 585, 150, 50))
         self.nei = 21
 

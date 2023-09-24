@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 import matplotlib.patches as patches
 from matplotlib.animation import FuncAnimation
 

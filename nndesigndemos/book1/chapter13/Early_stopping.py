@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -71,7 +71,7 @@ class EarlyStopping(NNDLayout):
         self.canvas2.draw()
 
         self.nsd = 1
-        self.make_slider("slider_nsd", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_nsd", QtCore.Qt.Orientation.Horizontal, (0, 30), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (self.x_chapter_usual, 410, self.w_chapter_slider, 100), self.slide,
                          "label_nsd", "Noise standard deviation: 1.0", (self.x_chapter_usual + 10, 380, self.w_chapter_slider, 100))
 

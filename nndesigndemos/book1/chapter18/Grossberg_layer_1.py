@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from scipy.integrate import ode
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -30,31 +30,31 @@ class GrossbergLayer1(NNDLayout):
         self.axis.set_title("Response")
         self.lines1, self.lines2 = [], []
 
-        self.make_slider("slider_input_pos", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksAbove, 1, 10,
+        self.make_slider("slider_input_pos", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 10,
                          (self.x_chapter_usual, 320, self.w_chapter_slider, 50), self.graph,
                          "label_input_pos", "Input p(1): 1.00", (self.x_chapter_usual + 60, 320 - 25, 150, 50))
         self.slider_input_pos.sliderPressed.connect(self.slider_disconnect)
         self.slider_input_pos.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_input_neg", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksAbove, 1, 0,
+        self.make_slider("slider_input_neg", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 0,
                          (self.x_chapter_usual, 380, self.w_chapter_slider, 50), self.graph,
                          "label_input_neg", "Input p(2): 0.00", (self.x_chapter_usual + 60, 380 - 25, 150, 50))
         self.slider_input_neg.sliderPressed.connect(self.slider_disconnect)
         self.slider_input_neg.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_bias_pos", QtCore.Qt.Horizontal, (0, 50), QtWidgets.QSlider.TicksAbove, 1, 10,
+        self.make_slider("slider_bias_pos", QtCore.Qt.Orientation.Horizontal, (0, 50), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 10,
                          (self.x_chapter_usual, 440, self.w_chapter_slider, 50), self.graph,
                          "label_bias_pos", "Bias b+: 1.00", (self.x_chapter_usual + 70, 440 - 25, 150, 50))
         self.slider_bias_pos.sliderPressed.connect(self.slider_disconnect)
         self.slider_bias_pos.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_bias_neg", QtCore.Qt.Horizontal, (0, 50), QtWidgets.QSlider.TicksAbove, 1, 0,
+        self.make_slider("slider_bias_neg", QtCore.Qt.Orientation.Horizontal, (0, 50), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 0,
                          (self.x_chapter_usual, 500, self.w_chapter_slider, 50), self.graph,
                          "label_bias_neg", "Bias b-: 0.00", (self.x_chapter_usual + 70, 500 - 25, 150, 50))
         self.slider_bias_neg.sliderPressed.connect(self.slider_disconnect)
         self.slider_bias_neg.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_tcte", QtCore.Qt.Horizontal, (1, 50), QtWidgets.QSlider.TicksAbove, 1, 10,
+        self.make_slider("slider_tcte", QtCore.Qt.Orientation.Horizontal, (1, 50), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 10,
                          (20, 600, 480, 50), self.graph, "label_tcte", "Time Constant: 1.00", (210, 575, 150, 50))
         self.slider_tcte.sliderPressed.connect(self.slider_disconnect)
         self.slider_tcte.sliderReleased.connect(self.slider_reconnect)

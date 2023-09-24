@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -28,9 +28,9 @@ class EffectsOfDecayRate(NNDLayout):
         self.axis.set_title("Hebb Learning")
         self.lines = []
 
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (20, 580, 470, 50), self.graph, "label_lr", "Learning Rate: 1.00", (210, 555, 200, 50))
-        self.make_slider("slider_dr", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_dr", QtCore.Qt.Orientation.Horizontal, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (20, 640, 470, 50), self.graph, "label_dr", "Decay Rate: 1.00", (220, 615, 200, 50))
 
         self.make_button("clear_button", "Clear", (self.x_chapter_button, 320, self.w_chapter_button, self.h_chapter_button), self.on_clear)

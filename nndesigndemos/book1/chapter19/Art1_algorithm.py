@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 import matplotlib.patches as patches
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -141,7 +141,7 @@ class ART1Algorithm(NNDLayout):
 
         self.on_clear()
 
-        self.make_slider("slider_rho", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksAbove, 1, 60,
+        self.make_slider("slider_rho", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 60,
                          (20, 560, 480, 50), self.slide, "label_rho", "Vigilance (rho): 0.6", (200, 535, 170, 50))
         self.rho = 0.6
 

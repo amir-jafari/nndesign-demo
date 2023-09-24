@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 from scipy.integrate import ode
 
@@ -106,7 +106,7 @@ class DynamicalSystem(NNDLayout):
         self.angle = event.xdata
         self.draw_pendulum()
         self.energy_plot.set_data([], [])
-        if self.angle < -np.pi:
+        if self.angle and self.angle < -np.pi:
             self.angle += 2 * np.pi
         self.energy_initial.set_data([self.angle], [self.velocity])
         self.energy_path.set_data([], [])

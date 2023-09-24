@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -25,25 +25,25 @@ class NetworkFunctionRadial(NNDLayout):
                           PACKAGE_PATH + "Logo/Logo_Ch_17.svg", PACKAGE_PATH + "Figures/nnd17_1.svg",
                           icon_move_left=120, icon_coords=(130, 150, 500, 200), description_coords=(535, 120, 450, 160))
 
-        self.make_slider("slider_w1_1", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, -10,
+        self.make_slider("slider_w1_1", QtCore.Qt.Orientation.Horizontal, (-40, 40), QtWidgets.QSlider.TickPosition.TicksBelow, 10, -10,
                          (10, 115, 150, 50), self.graph, "label_w1_1", "W1(1,1)", (50, 115 - 25, 100, 50))
 
-        self.make_slider("slider_w1_2", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, 10,
+        self.make_slider("slider_w1_2", QtCore.Qt.Orientation.Horizontal, (-40, 40), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 10,
                          (10, 360, 150, 50), self.graph, "label_w1_2", "W1(2,1)", (50, 360 - 25, 100, 50))
 
-        self.make_slider("slider_b1_1", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, 20,
+        self.make_slider("slider_b1_1", QtCore.Qt.Orientation.Horizontal, (-40, 40), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 20,
                          (170, 115, 150, 50), self.graph, "label_b1_1", "b1(1):", (210, 115 - 25, 100, 50))
 
-        self.make_slider("slider_b1_2", QtCore.Qt.Horizontal, (-40, 40), QtWidgets.QSlider.TicksBelow, 10, 20,
+        self.make_slider("slider_b1_2", QtCore.Qt.Orientation.Horizontal, (-40, 40), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 20,
                          (170, 360, 150, 50), self.graph, "label_b1_2", "b1(2):", (210, 360 - 25, 100, 50))
 
-        self.make_slider("slider_w2_1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 10, 10,
+        self.make_slider("slider_w2_1", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 10,
                          (330, 115, 150, 50), self.graph, "label_w2_1", "W2(1,1):", (370, 115 - 25, 100, 50))
 
-        self.make_slider("slider_w2_2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 10, 10,
+        self.make_slider("slider_w2_2", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 10,
                          (330, 360, 150, 50), self.graph, "label_w2_2", "W2(1,2):", (370, 360 - 25, 100, 50))
 
-        self.make_slider("slider_b2", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 10, 0,
+        self.make_slider("slider_b2", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 0,
                          (self.x_chapter_usual, 290, self.w_chapter_slider, 50), self.graph, "label_b2", "b2: 0.0")
 
         self.make_button("random_button", "Random", (self.x_chapter_button, 350, self.w_chapter_button, self.h_chapter_button), self.on_random)

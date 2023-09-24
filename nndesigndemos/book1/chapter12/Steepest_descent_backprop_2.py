@@ -1,9 +1,9 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 from scipy.io import loadmat
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -52,7 +52,7 @@ class SteepestDescentBackprop2(NNDLayout):
         self.lr = 3.5
         self.make_label("label_lr1", "0.0", (self.x_chapter_usual + 10, 510, self.w_chapter_slider, 50))
         self.make_label("label_lr2", "20.0", (self.x_chapter_usual + 150, 510, self.w_chapter_slider, 50))
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 200), QtWidgets.QSlider.TicksBelow, 1, 35,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 200), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 35,
                          (self.x_chapter_usual, 480, self.w_chapter_slider, 50), self.slide, "label_lr", "lr: 3.5")
         self.slider_lr.valueChanged.connect(self.slider_update)
         self.slider_lr.sliderPressed.connect(self.slider_disconnect)

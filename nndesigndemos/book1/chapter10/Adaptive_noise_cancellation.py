@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -79,7 +79,7 @@ class AdaptiveNoiseCancellation(NNDLayout):
         self.canvas2.draw()
 
         self.lr = 0.2
-        self.make_slider("slider_lr", QtCore.Qt.Horizontal, (0, 15), QtWidgets.QSlider.TicksBelow, 1, 2,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 15), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 2,
                          (self.x_chapter_slider_label - 70, 370, self.w_chapter_slider, 50), self.slide,
                          "label_lr", "lr: 0.2")
         self.slider_lr.sliderPressed.connect(self.slider_disconnect)
@@ -89,7 +89,7 @@ class AdaptiveNoiseCancellation(NNDLayout):
 
         self.mc = 0
         """self.mc = 0
-        self.make_slider("slider_mc", QtCore.Qt.Horizontal, (0, 10), QtWidgets.QSlider.TicksBelow, 1, 0,
+        self.make_slider("slider_mc", QtCore.Qt.Orientation.Horizontal, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 0,
                          (self.x_chapter_slider_label - 70, 440, self.w_chapter_slider, 50), self.slide,
                          "label_mc", "mc: 0")"""
 
@@ -103,13 +103,13 @@ class AdaptiveNoiseCancellation(NNDLayout):
         self.label_anim_speed.setFont(QtGui.QFont("Times New Roman", 12, italic=True))
         self.label_anim_speed.setGeometry((self.x_chapter_slider_label - 40) * self.w_ratio, 350 * self.h_ratio,
                                           self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
-        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.slider_anim_speed = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.slider_anim_speed.setRange(0, 6)
-        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.slider_anim_speed.setTickPosition(QtWidgets.QSlider.TickPosition.TicksBelow)
         self.slider_anim_speed.setTickInterval(1)
         self.slider_anim_speed.setValue(1)
         self.wid_anim_speed = QtWidgets.QWidget(self)
-        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.layout_anim_speed = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
         self.wid_anim_speed.setGeometry(self.x_chapter_usual * self.w_ratio, 380 * self.h_ratio,
                                         self.w_chapter_slider * self.w_ratio, 100 * self.h_ratio)
         self.layout_anim_speed.addWidget(self.slider_anim_speed)

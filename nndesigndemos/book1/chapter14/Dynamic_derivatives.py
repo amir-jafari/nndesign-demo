@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from scipy.signal import lfilter
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -46,10 +46,10 @@ class DynamicDerivatives(NNDLayout):
                            "label_div", "frequency", (self.x_chapter_slider_label, 580, 150, 50))
         self.freq = 1 / 12
 
-        self.make_slider("slider_w0", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, 5,
+        self.make_slider("slider_w0", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 5,
                          (self.x_chapter_usual, 420, self.w_chapter_slider, 50), self.graph, "label_w0", "iW(0): 0.5")
 
-        self.make_slider("slider_w1", QtCore.Qt.Horizontal, (-20, 20), QtWidgets.QSlider.TicksBelow, 1, -5,
+        self.make_slider("slider_w1", QtCore.Qt.Orientation.Horizontal, (-20, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, -5,
                          (self.x_chapter_usual, 490, self.w_chapter_slider, 50), self.graph, "label_w1", "lW(1): -0.5")
 
         self.comboBox2.setCurrentIndex(2)

@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -32,9 +32,9 @@ class OneInputNeuron(NNDLayout):
         self.axis.yaxis.set_label_coords(-0.025, 1)
         self.axis_output, = self.axis.plot([], [], markersize=3, color="red")
 
-        self.make_slider("slider_w", QtCore.Qt.Horizontal, (-30, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_w", QtCore.Qt.Orientation.Horizontal, (-30, 30), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (self.x_chapter_usual, 340, self.w_chapter_slider, 50), self.graph, "label_w", "w: 1.0")
-        self.make_slider("slider_b", QtCore.Qt.Horizontal, (-30, 30), QtWidgets.QSlider.TicksBelow, 1, 0,
+        self.make_slider("slider_b", QtCore.Qt.Orientation.Horizontal, (-30, 30), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 0,
                          (self.x_chapter_usual, 410, self.w_chapter_slider, 50), self.graph, "label_b", "b: 0.0")
 
         self.comboBox1_functions_str = ["purelin", "poslin", 'hardlim', 'hardlims', 'satlin', 'satlins', 'logsig', 'tansig']

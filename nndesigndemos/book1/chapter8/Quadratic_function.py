@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt6 import QtWidgets, QtGui, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -41,8 +41,8 @@ class QuadraticFunction(NNDLayout):
         # self.make_label("label_eq", "F(x) = 1/2 x.T A x + d x.T + c", (50, 310, 440, 200))
 
         self.eq = QtWidgets.QLabel(self)
-        pixmap = QtGui.QIcon(PACKAGE_PATH + "Figures/equation1.svg").pixmap(350 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Normal,
-                                               QtGui.QIcon.On)
+        pixmap = QtGui.QIcon(PACKAGE_PATH + "Figures/equation1.svg").pixmap(350 * self.w_ratio, 200 * self.h_ratio, QtGui.QIcon.Mode.Normal,
+                                               QtGui.QIcon.State.On)
         self.eq.setPixmap(pixmap)
         self.eq.setGeometry(100 * self.w_ratio, 320 * self.h_ratio,
                             440 * self.w_ratio, 200 * self.h_ratio)
@@ -69,8 +69,8 @@ class QuadraticFunction(NNDLayout):
         self.make_input_box("a_22", "1.0", (165, 490 + 30, 55, 100))
         # self.matrix = QtWidgets.QLabel(self)
         # pixmap = QtGui.QIcon(PACKAGE_PATH + "Figures/matrix.svg").pixmap(300 * self.w_ratio, 100 * self.h_ratio,
-        #                                                                     QtGui.QIcon.Normal,
-        #                                                                     QtGui.QIcon.On)
+        #                                                                     QtGui.QIcon.Mode.Normal,
+        #                                                                     QtGui.QIcon.State.On)
         # self.matrix.setPixmap(pixmap)
         # self.matrix.setGeometry(43 * self.w_ratio, 445 * self.h_ratio, 440 * self.w_ratio, 200 * self.h_ratio)
         # self.paint_latex_string("latex_d1", "$d =$", 16, (230, 415 + 30, 500, 200))
@@ -103,7 +103,7 @@ class QuadraticFunction(NNDLayout):
         super(QuadraticFunction, self).paintEvent(event)
         painter = QtGui.QPainter()
         painter.begin(self)
-        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        pen = QtGui.QPen(QtGui.QColor("black"), 2, QtCore.Qt.PenStyle.SolidLine)
         painter.setPen(pen)
         self.paint_bracket(painter, 100, 500, 590, 118)
         self.paint_bracket(painter, 320, 500, 590, 65)

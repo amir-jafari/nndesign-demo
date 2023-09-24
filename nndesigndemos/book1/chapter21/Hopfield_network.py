@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt6 import QtWidgets, QtCore, QtGui
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 from scipy.integrate import ode
 
@@ -83,7 +83,7 @@ class HopfieldNetwork(NNDLayout):
         self.make_input_box("d_1", "0", (243, 510, 60, 100))
         self.make_input_box("d_2", "0", (243, 560, 60, 100))
 
-        self.make_slider("slider_b", QtCore.Qt.Horizontal, (0, 20), QtWidgets.QSlider.TicksAbove, 1, 14,
+        self.make_slider("slider_b", QtCore.Qt.Orientation.Horizontal, (0, 20), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 14,
                          (self.x_chapter_usual, 320, self.w_chapter_slider, 50), self.on_run,
                          "label_b", "Finite Value Gain: 1.4", (self.x_chapter_usual + 30, 320 - 25, 150, 50))
 
@@ -100,7 +100,7 @@ class HopfieldNetwork(NNDLayout):
         super(HopfieldNetwork, self).paintEvent(event)
         painter = QtGui.QPainter()
         painter.begin(self)
-        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        pen = QtGui.QPen(QtGui.QColor("black"), 2, QtCore.Qt.PenStyle.SolidLine)
         painter.setPen(pen)
         self.paint_bracket(painter, 201, 390, 478, 119)
         self.paint_bracket(painter, 241, 539, 630, 64)

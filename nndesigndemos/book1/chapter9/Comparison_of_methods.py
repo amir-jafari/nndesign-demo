@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -53,7 +53,7 @@ class ComparisonOfMethods(NNDLayout):
         self.canvas2.draw()
 
         self.animation_speed = 500
-        # self.make_slider("slider_anim_speed", QtCore.Qt.Horizontal, (0, 6), QtWidgets.QSlider.TicksBelow, 1, 2,
+        # self.make_slider("slider_anim_speed", QtCore.Qt.Orientation.Horizontal, (0, 6), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 2,
         #                  (self.x_chapter_usual, 380, self.w_chapter_slider, 100), self.slide, "label_anim_speed", "Animation Delay: 200 ms")
 
     # def slide(self):

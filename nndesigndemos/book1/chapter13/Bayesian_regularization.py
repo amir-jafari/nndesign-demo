@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -71,7 +71,7 @@ class BayesianRegularization(NNDLayout):
         self.canvas2.draw()
 
         self.nsd = 1
-        self.make_slider("slider_nsd", QtCore.Qt.Horizontal, (0, 30), QtWidgets.QSlider.TicksBelow, 1, 10,
+        self.make_slider("slider_nsd", QtCore.Qt.Orientation.Horizontal, (0, 30), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
                          (self.x_chapter_usual, 360, self.w_chapter_slider, 50), self.slide,
                          "label_nsd", "Noise standard deviation: 1.0",
                          (self.x_chapter_usual + 10, 330, self.w_chapter_slider, 50))
@@ -79,19 +79,19 @@ class BayesianRegularization(NNDLayout):
         self.animation_speed = 100
 
         self.S1 = 20
-        self.make_slider("slider_S1", QtCore.Qt.Horizontal, (2, 40), QtWidgets.QSlider.TicksBelow, 1, 20,
+        self.make_slider("slider_S1", QtCore.Qt.Orientation.Horizontal, (2, 40), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 20,
                          (self.x_chapter_usual, 430, self.w_chapter_slider, 50), self.slide,
                          "label_S1", "# Hidden Neurons: 20",
                          (self.x_chapter_usual + 30, 400, self.w_chapter_slider, 50))
 
         self.n_points = 21
-        self.make_slider("slider_n_points", QtCore.Qt.Horizontal, (10, 40), QtWidgets.QSlider.TicksBelow, 1, 21,
+        self.make_slider("slider_n_points", QtCore.Qt.Orientation.Horizontal, (10, 40), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 21,
                          (self.x_chapter_usual, 500, self.w_chapter_slider, 50), self.slide,
                          "label_n_points", "# Data Points: 21",
                          (self.x_chapter_usual + 40, 470, self.w_chapter_slider, 50))
 
         self.freq = 1
-        self.make_slider("slider_freq", QtCore.Qt.Horizontal, (50, 400), QtWidgets.QSlider.TicksBelow, 1, 100,
+        self.make_slider("slider_freq", QtCore.Qt.Orientation.Horizontal, (50, 400), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 100,
                          (self.x_chapter_usual, 570, self.w_chapter_slider, 50), self.slide,
                          "label_freq", "Frequency: 1.00",
                          (self.x_chapter_usual + 50, 540, self.w_chapter_slider, 50))

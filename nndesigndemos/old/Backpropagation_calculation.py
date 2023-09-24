@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt6 import QtWidgets, QtGui, QtCore
 import numpy as np
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -27,7 +27,7 @@ class BackpropagationCalculation(NNDLayout):
         self.p_box.setText("1")
         self.p_box.setGeometry(315 * self.w_ratio, 260 * self.h_ratio, 50 * self.w_ratio, 100 * self.h_ratio)
         self.wid3 = QtWidgets.QWidget(self)
-        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.TopToBottom)
+        self.layout3 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
         self.wid3.setGeometry(315 * self.w_ratio, 260 * self.h_ratio, 50 * self.w_ratio, 100 * self.h_ratio)
         self.layout3.addWidget(self.p_box)
         self.wid3.setLayout(self.layout3)

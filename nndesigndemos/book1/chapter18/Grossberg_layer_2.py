@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt6 import QtWidgets, QtCore, QtGui
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from scipy.integrate import ode
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -34,13 +34,13 @@ class GrossbergLayer2(NNDLayout):
         self.axis.set_title("Response")
         self.lines1, self.lines2 = [], []
 
-        self.make_slider("slider_input_pos", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksAbove, 1, 10,
+        self.make_slider("slider_input_pos", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 10,
                          (self.x_chapter_usual, 330, self.w_chapter_slider, 50), self.graph,
                          "label_input_pos", "Input p(1): 1.00", (self.x_chapter_usual + 60, 330 - 25, 150, 50))
         self.slider_input_pos.sliderPressed.connect(self.slider_disconnect)
         self.slider_input_pos.sliderReleased.connect(self.slider_reconnect)
 
-        self.make_slider("slider_input_neg", QtCore.Qt.Horizontal, (0, 100), QtWidgets.QSlider.TicksAbove, 1, 0,
+        self.make_slider("slider_input_neg", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksAbove, 1, 0,
                          (self.x_chapter_usual, 390, self.w_chapter_slider, 50), self.graph,
                          "label_input_neg", "Input p(2): 0.00", (self.x_chapter_usual + 60, 390 - 25, 150, 50))
         self.slider_input_neg.sliderPressed.connect(self.slider_disconnect)
@@ -76,7 +76,7 @@ class GrossbergLayer2(NNDLayout):
         super(GrossbergLayer2, self).paintEvent(event)
         painter = QtGui.QPainter()
         painter.begin(self)
-        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        pen = QtGui.QPen(QtGui.QColor("black"), 2, QtCore.Qt.PenStyle.SolidLine)
         painter.setPen(pen)
         self.paint_bracket(painter, 203, 560, 650, 115)
         painter.end()

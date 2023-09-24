@@ -1,6 +1,6 @@
 import os
-from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QApplication
+from PyQt6 import QtWidgets, QtGui, QtCore
+from PyQt6.QtWidgets import QApplication
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.Window import MainWindowNN, MainWindowDL
@@ -56,7 +56,7 @@ class MainWindow(NNDLayout):
 
         self.button1 = QtWidgets.QPushButton("Neural Network Design", self)
         self.button1.setGeometry(x_left * self.w_ratio, y_button * self.h_ratio, w * self.w_ratio, h_button * self.h_ratio)
-        self.button1.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
+        self.button1.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Weight.Bold.value))
         self.button1.clicked.connect(self.new_window1)
         self.button1.setStyleSheet("background-color: rgb(88, 157, 212);\nborder:3px solid rgb(88, 157, 212);"
                                    "\nfont-size:{}px".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
@@ -64,7 +64,7 @@ class MainWindow(NNDLayout):
 
         self.button2 = QtWidgets.QPushButton("Neural Network Design: Deep Learning", self)
         self.button2.setGeometry(x_right * self.w_ratio, y_button * self.h_ratio, w * self.w_ratio, h_button * self.h_ratio)
-        self.button2.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Bold))
+        self.button2.setFont(QtGui.QFont("Times New Roman", 12, QtGui.QFont.Weight.Bold.value))
         self.button2.clicked.connect(self.new_window2)
         self.button2.setStyleSheet("background-color: rgb(147, 197, 209);\nborder:3px solid rgb(147, 197, 209);"
                                    "\nfont-size:{}px;\ncolor: white;".format(str(int(13 * (self.w_ratio + self.h_ratio) / 2))))
@@ -86,15 +86,15 @@ class MainWindow(NNDLayout):
 def nndtoc(play_sound=True):
     os.environ["NNDESIGNDEMOS_PLAY_SOUND"] = "1" if play_sound else "0"
     import sys
-    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+    # QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     app = QApplication(sys.argv)
-    dimensions = QtWidgets.QDesktopWidget().screenGeometry(-1)
+    dimensions = app.primaryScreen().geometry()
     w_screen, h_screen = dimensions.width(), dimensions.height()
     w_ratio, h_ratio = w_screen / 1000, h_screen / 800
     dpi = round(app.screens()[0].physicalDotsPerInch(), 1)
     win = MainWindow(int(w_ratio), int(h_ratio), int(dpi))
     win.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

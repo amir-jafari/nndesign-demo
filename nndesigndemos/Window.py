@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui
+from PyQt6 import QtWidgets, QtGui
 from functools import partial
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -252,7 +252,7 @@ class MainWindowNN(NNDLayout):
         idx = 0
         for icon in [self.icon1, self.icon2, self.icon3, self.icon4]:
             icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/book_logos/{}.svg".format(chapter_numbers[idx])).pixmap(
-                w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio)
             icon.repaint()
             idx += 1
@@ -619,7 +619,7 @@ class MainWindowDL(NNDLayout):
         idx = 0
         for icon in [self.icon1, self.icon2, self.icon3]:  # TODO: Change logo path when we have them
             icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/Logo_Ch_{}.svg".format(chapter_numbers[idx] + 1)).pixmap(
-                w_Logo1, h_Logo1, QtGui.QIcon.Normal, QtGui.QIcon.On))
+                w_Logo1, h_Logo1, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, w_Logo1, h_Logo1)
             icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio)
             icon.repaint()

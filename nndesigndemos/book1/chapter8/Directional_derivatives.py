@@ -1,8 +1,8 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
@@ -41,7 +41,7 @@ class DirectionalDerivatives(NNDLayout):
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
 
-        self.make_slider("slider_dirder", QtCore.Qt.Vertical, (-60, 60), QtWidgets.QSlider.NoTicks, 1, 0,
+        self.make_slider("slider_dirder", QtCore.Qt.Orientation.Vertical, (-60, 60), QtWidgets.QSlider.TickPosition.NoTicks, 1, 0,
                          (self.x_chapter_usual + 70, 150, self.w_chapter_slider, 310), self.freeze,
                          "label_dirder", "Directional Derivative", (self.x_chapter_slider_label - 40, 430, 200, 100))
         self.dir_der = 0

@@ -1,8 +1,8 @@
-from PyQt5 import QtGui, QtCore
+from PyQt6 import QtGui, QtCore
 import numpy as np
 import warnings
 import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from scipy.integrate import ode
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -77,7 +77,7 @@ class AdaptiveWeights(NNDLayout):
         super(AdaptiveWeights, self).paintEvent(event)
         painter = QtGui.QPainter()
         painter.begin(self)
-        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        pen = QtGui.QPen(QtGui.QColor("black"), 2, QtCore.Qt.PenStyle.SolidLine)
         painter.setPen(pen)
         self.paint_bracket(painter, 161, 559, 646, 60)
         self.paint_bracket(painter, 426, 559, 646, 60)
