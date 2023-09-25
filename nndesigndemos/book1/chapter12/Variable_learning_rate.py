@@ -92,9 +92,10 @@ class VariableLearningRate(NNDLayout):
         self.x_data = []
         self.y_data = []
         self.path.set_data(self.x_data, self.y_data)
-        while self.axes.collections:
-            for collection in self.axes.collections:
-                collection.remove()
+
+        for collection in self.axes.collections:
+            collection.remove()
+
         f_data = loadmat(PACKAGE_PATH + "Data/nndbp_new_{}.mat".format(self.pair_of_params))
         x1, y1 = np.meshgrid(f_data["x1"], f_data["y1"])
         self.axes.contour(x1, y1, f_data["E1"], list(f_data["levels"].reshape(-1)))
@@ -217,6 +218,7 @@ class VariableLearningRate(NNDLayout):
         self.path.set_data([], [])
         self.x_data, self.y_data = [], []
         self.init_point_1.set_data([event.xdata], [event.ydata])
+        self.end_point_1.set_data([], [])
         self.canvas.draw()
         self.run_animation(event)
 

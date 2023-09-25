@@ -85,29 +85,29 @@ class TaylorSeries1(NNDLayout):
             self.draw_taylor()
 
     def draw_taylor(self):
-        if self.function_cbx.checkState():
+        if self.function_cbx.checkState().value:
             self.axes2_function.set_data(self.x_points, np.cos(self.x_points))
-        if self.order0_cbx.checkState():
+        if self.order0_cbx.checkState().value:
             self.axes2_approx_0.set_data(self.x_points, self.f0)
-        if self.order1_cbx.checkState():
+        if self.order1_cbx.checkState().value:
             self.axes2_approx_1.set_data(self.x_points, self.f1)
-        if self.order2_cbx.checkState():
+        if self.order2_cbx.checkState().value:
             self.axes2_approx_2.set_data(self.x_points, self.f2)
-        if self.order3_cbx.checkState():
+        if self.order3_cbx.checkState().value:
             self.axes2_approx_3.set_data(self.x_points, self.f3)
-        if self.order4_cbx.checkState():
+        if self.order4_cbx.checkState().value:
             self.axes2_approx_4.set_data(self.x_points, self.f4)
         self.canvas2.draw()
 
     def function_checked(self, state):
-        if state == QtCore.Qt.CheckState.Checked:
+        if state == QtCore.Qt.CheckState.Checked.value:
             self.axes2_function.set_data(self.x_points, np.cos(self.x_points))
         else:
             self.axes2_function.set_data([], [])
         self.canvas2.draw()
 
     def order0_checked(self, state):
-        if state == QtCore.Qt.CheckState.Checked:
+        if state == QtCore.Qt.CheckState.Checked.value:
             if self.f0 is not None:
                 self.axes2_approx_0.set_data(self.x_points, self.f0)
         else:
@@ -115,7 +115,7 @@ class TaylorSeries1(NNDLayout):
         self.canvas2.draw()
 
     def order1_checked(self, state):
-        if state == QtCore.Qt.CheckState.Checked:
+        if state == QtCore.Qt.CheckState.Checked.value:
             if self.f1 is not None:
                 self.axes2_approx_1.set_data(self.x_points, self.f1)
         else:
@@ -123,7 +123,7 @@ class TaylorSeries1(NNDLayout):
         self.canvas2.draw()
 
     def order2_checked(self, state):
-        if state == QtCore.Qt.CheckState.Checked:
+        if state == QtCore.Qt.CheckState.Checked.value:
             if self.f2 is not None:
                 self.axes2_approx_2.set_data(self.x_points, self.f2)
         else:
@@ -131,7 +131,7 @@ class TaylorSeries1(NNDLayout):
         self.canvas2.draw()
 
     def order3_checked(self, state):
-        if state == QtCore.Qt.CheckState.Checked:
+        if state == QtCore.Qt.CheckState.Checked.value:
             if self.f3 is not None:
                 self.axes2_approx_3.set_data(self.x_points, self.f3)
         else:
@@ -139,7 +139,7 @@ class TaylorSeries1(NNDLayout):
         self.canvas2.draw()
 
     def order4_checked(self, state):
-        if state == QtCore.Qt.CheckState.Checked:
+        if state == QtCore.Qt.CheckState.Checked.value:
             if self.f4 is not None:
                 self.axes2_approx_4.set_data(self.x_points, self.f4)
         else:

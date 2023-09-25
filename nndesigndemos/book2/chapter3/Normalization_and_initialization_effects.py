@@ -256,10 +256,10 @@ class NormAndInitEffects(NNDLayout):
         self.change_input_distrib(self.combobox_input_distrib.index(self.input_distrib))
 
     def select_bn(self):
-        if self.checkbox_batch_norm.checkState() == 2 and not self.batch_norm:
+        if self.checkbox_batch_norm.checkState().value == 2 and not self.batch_norm:
             self.batch_norm = True
             self.graph()
-        if self.checkbox_batch_norm.checkState() == 0 and self.batch_norm:
+        if self.checkbox_batch_norm.checkState().value == 0 and self.batch_norm:
             self.batch_norm = False
             self.graph()
 

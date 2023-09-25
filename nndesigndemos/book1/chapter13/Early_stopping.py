@@ -1,7 +1,6 @@
 from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
-import matplotlib.cbook
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
@@ -96,13 +95,19 @@ class EarlyStopping(NNDLayout):
         if self.ani_2 and self.ani_2.event_source:
             self.ani_2.event_source.stop()
 
+    def ani_start(self):
+        if self.ani_1 and self.ani_1.event_source:
+            self.ani_1.event_source.start()
+        if self.ani_2 and self.ani_2.event_source:
+            self.ani_2.event_source.start()
+
     def on_stop(self):
         if self.pause:
             self.ani_stop()
             self.pause_button.setText("Unpause")
             self.pause = False
         else:
-            self.ani_stop()
+            self.ani_start()
             self.pause_button.setText("Pause")
             self.pause = True
 
