@@ -8,6 +8,23 @@ This is a set of demonstrations paired with the [Neural Network Design](https://
 nndesigndemos is supported on macOS, Linux and Windows. It uses PyQt6, so your OS version needs to be compatible with it.
  If you get an installation error, this is most likely the reason.
 
+* For **Linux** platform, if you meet the following problem when you run the code after installing it:
+ 
+     ```
+     qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
+     This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+     
+     Available platform plugins are: eglfs, offscreen, wayland, wayland-egl, linuxfb, minimal, xcb, minimalegl, vkkhrdisplay, vnc.
+     
+     Aborted (core dumped)
+     ```
+
+    you need to install a plugin first using command line:
+
+   ```
+   sudo apt-get install -y libxcb-cursor-dev
+   ```
+
 ### Installing via pip
 
 The quick way is simply to install via `pip install nndesigndemos`, which works in most cases.
