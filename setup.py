@@ -9,7 +9,7 @@ setuptools.setup(
     name='nndesigndemos',
     license="MIT",
     description='Demos for the Neural Network Design & Deep Learning books',
-    version='v1.1.0',
+    version='v1.1.2',
     long_description_content_type="text/markdown",
     # long_description="This is a set of demonstrations paired with the Neural Network Design & Deep Learning books.\n"
     #                  "Each demo is linked to a chapter section of the books. You can find more info at "
@@ -23,7 +23,7 @@ setuptools.setup(
     # },
     packages=["nndesigndemos"],
     include_package_data=True,
-    python_requires=">=3.9",
+    python_requires=">=3.8",
     install_requires=["PyQt6", "numpy", "scipy", "matplotlib"],
     classifiers=[
         # Trove classifiers
@@ -31,7 +31,7 @@ setuptools.setup(
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.8',
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',

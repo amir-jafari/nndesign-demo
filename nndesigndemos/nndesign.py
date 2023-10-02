@@ -17,7 +17,7 @@ class MainWindow(NNDLayout):
         x_left, y_img, w, h_img, x_right = 20, 110, 230, 284, 20 + 260
         y_button, h_button = 415, 50
         y_text, h_text = 435, 200
-        x_authors, y_authors, w_authors, h_authors = 285, 650, 300, 20
+        x_authors, y_authors, w_authors, h_authors = 230, 650, 300, 20
 
         self.setWindowTitle("Neural Network Design & Deep Learning Demos")
 
@@ -27,7 +27,7 @@ class MainWindow(NNDLayout):
         self.make_label("label3", "Neural Network", (x_title + add_x, y_title, w_title, h_title), font_size=18, italics=True)
         self.make_label("label4", "DESIGN: DEEP LEARNING", (x_title + add_x, y_title + add_y, w_title, h_title), font_size=18)
 
-        self.make_label("label5", "By Amir Jafari, Martin Hagan, Pedro Uría", (x_authors, y_authors, w_authors, h_authors))
+        self.make_label("label5", "By Amir Jafari, Martin Hagan, Pedro Uría, Xiao Qi", (x_authors, y_authors, w_authors, h_authors))
 
         # self.statusBar()
         # self.main_menu = self.menuBar()
