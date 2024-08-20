@@ -14,26 +14,17 @@ color_dic = {
 
 class Convol(NNDLayout):
     class PatternPlot:
-        def __init__(self, axis1, nrows_up, pattern=None):
+        def __init__(self, axis, nrows_up, pattern=None, response=False):
             self.wid_up = 1
             self.nrows_up = nrows_up
             inbetween_up = 0.1
             self.xx_up = np.arange(0, self.nrows_up, (self.wid_up + inbetween_up))
             self.yy_up = np.arange(0, self.nrows_up, (self.wid_up + inbetween_up))
 
-            # make_label("label_pattern1", "Input Pattern", (75, 105, 150, 50))
-            # make_plot(1, (15, 130, 170, 170))
-            self.axis1 = axis1
-
-            if pattern is not None:
-                self.pattern11 = pattern
-                self.response = True
-                self.color_lst = color_dic[3]
-
-            else:
-                self.pattern11 = np.random.randint(0, 2, size=(self.nrows_up, self.nrows_up))
-                self.response = False
-                self.color_lst = ['khaki', 'green']
+            self.axis1 = axis
+            self.pattern11 = pattern if pattern is not None else np.random.randint(0, 2, size=(self.nrows_up, self.nrows_up))
+            self.response = response
+            self.color_lst = color_dic[3] if response else ['khaki', 'green']
 
             self.texts = []
             self.aaaabbbb(self.pattern11)
@@ -59,6 +50,14 @@ class Convol(NNDLayout):
                                     str(pattern11[yi, xi]), color="black", ha='center', va='center', fontsize=12)
                         self.texts.append(text)
 
+        def remove_patch(self):
+            for patch in self.axis1.patches:
+                patch.remove()
+
+        def remove_text(self):
+            for text in self.axis1.texts:
+                text.remove()
+
 
     def __init__(self, w_ratio, h_ratio, dpi):
         super(Convol, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
@@ -72,61 +71,59 @@ class Convol(NNDLayout):
         self.make_label("label_pattern1", "Input Pattern", (75, 105, 150, 50))
         self.make_plot(1, (15, 130, 170, 170))
         self.axis1 = self.figure.add_axes([0, 0, 1, 1])
-        self.n = 8
-        self.pattern = self.PatternPlot(self.axis1, self.n)
-
-        # self.wid_up = 1
-        # self.nrows_up = 8
-        # inbetween_up = 0.1
-        # self.xx_up = np.arange(0, self.nrows_up, (self.wid_up + inbetween_up))
-        # self.yy_up = np.arange(0, self.nrows_up, (self.wid_up + inbetween_up))
-        #
-
-        #
-        # self.pattern11 = np.random.randint(0, 2, size=(self.nrows_up, self.nrows_up))
-        #
-        # for xi in range(len(self.xx_up)):
-        #     for yi in range(len(self.yy_up)):
-        #         color = "green" if self.pattern11[yi, xi] == 1 else "khaki"
-        #         sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.wid_up, fill=True, color=color)
-        #         self.axis1.add_patch(sq)
-        # self.axis1.axis([-0.1, self.nrows_up + 0.1 * self.nrows_up, -0.1, self.nrows_up + 0.1 * self.nrows_up])
-        # self.axis1.axis("off")
+        self.size1 = 6
+        self.pattern1 = self.PatternPlot(self.axis1, self.size1)
         self.canvas.show()
         self.canvas.mpl_connect("button_press_event", self.on_mouseclick1)
-
 
         self.make_label("label_pattern2", "Kernel", (235, 105, 150, 50))
         self.make_plot(2, (175, 130, 170, 170))
         self.axis2 = self.figure2.add_axes([0, 0, 1, 1])
-        self.m = 3
-        self.pattern2 = self.PatternPlot(self.axis2, self.m)
+        self.size2 = 2
+        self.pattern2 = self.PatternPlot(self.axis2, self.size2)
         self.canvas2.show()
         self.canvas2.mpl_connect("button_press_event", self.on_mouseclick2)
 
+        self.make_label("label_pattern3", "Response Pattern", (320, 305, 150, 50))
+        self.make_plot(3, (250, 330, 240, 240))
+        self.axis3 = self.figure3.add_axes([0, 0, 1, 1])
+        self.output = self.size1 - self.size2 + 1
+        self.pattern3 = self.PatternPlot(self.axis3, self.output, self.calculate(), True)
+        self.canvas3.show()
+        print('self.axis2', self.axis2)
 
-        self.make_label("label_pattern5", "Response Pattern", (320, 305, 150, 50))
-        self.make_plot(5, (250, 330, 240, 240))
-        self.axis5 = self.figure5.add_axes([0, 0, 1, 1])
-        self.output = self.n - self.m + 1
-        self.pattern5 = self.PatternPlot(self.axis5, self.output, self.calculate())
-        self.canvas5.show()
+        # Shape of the feature map
+        # size of input
+        # size of kernel
+        # Stripe
+        # Padding
+        # animation run train blur or focus
+        # No number and numbers options
+        # train option. Focus on changes
 
-        self.calculate()
+        self.make_combobox(1, ['Diamond', 'Slash', 'Square'], (self.x_chapter_usual, 300, self.w_chapter_slider, 100),
+                           self.change_shape, "label_combobox", "Learning Rule", (self.x_chapter_usual + 50, 300, 100, 50))
 
-        # for xi in range(len(self.xx_up)):
-        #     for yi in range(len(self.yy_up)):
-        #         if self.pattern11[yi, xi] == 1:
-        #             sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="red")
-        #         else:
-        #             sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
-        #         self.axis5.add_patch(sq)
-        # self.axis5.axis([-0.1, self.ncols_up + 0.5, -0.1, self.nrows_up + 0.6])
-        # self.axis5.axis("off")
-        # self.canvas5.draw()
+        # x, y, width, height
+        self.size1_lst = ['6', '7', '8']
+        self.make_combobox(2, self.size1_lst, (self.x_chapter_usual, 380, self.w_chapter_slider, 100),
+                           self.change_input_size, "label_combobox", "Learning Rule2", (self.x_chapter_usual + 50, 380, 100, 50))
+
+        self.size2_lst = ['2', '3', '4']
+        self.make_combobox(3, self.size2_lst, (self.x_chapter_usual, 460, self.w_chapter_slider, 100),
+                           self.change_kernel_size, "label_combobox", "Learning Rule3", (self.x_chapter_usual + 50, 460, 100, 50))
+
+        self.batch_norm = True
+        self.make_checkbox('checkbox_batch_norm', 'Padding', (self.x_chapter_usual, 500, self.w_chapter_slider, 100),
+                           self.use_pad, True)
+
+        self.batch_norm = True
+        self.make_checkbox('checkbox_batch_norm', 'Stride', (self.x_chapter_usual, 500, self.w_chapter_slider, 100),
+                           self.use_stride, True)
+
 
     def calculate(self):
-        P = self.pattern.pattern11
+        P = self.pattern1.pattern11
         kernel = self.pattern2.pattern11
 
         output = np.zeros((self.output, self.output), dtype=int)
@@ -134,10 +131,9 @@ class Convol(NNDLayout):
         # Perform the convolution
         for i in range(self.output):
             for j in range(self.output):
-                output[i, j] = np.sum(P[i:i + self.m, j:j + self.m] * kernel)
+                output[i, j] = np.sum(P[i:i + self.size2, j:j + self.size2] * kernel)
 
         return output
-
 
     def on_mouseclick_base(self, event, pattern, canvas, axis1):
         if event.xdata != None and event.xdata != None:
@@ -157,79 +153,114 @@ class Convol(NNDLayout):
             self.response()
 
     def on_mouseclick1(self, event):
-        self.on_mouseclick_base(event, self.pattern, self.canvas, self.axis1)
+        self.on_mouseclick_base(event, self.pattern1, self.canvas, self.axis1)
 
     def on_mouseclick2(self, event):
         self.on_mouseclick_base(event, self.pattern2, self.canvas2, self.axis2)
 
     def response(self):
-        for patch in self.axis5.patches:
+        for patch in self.axis3.patches:
             patch.remove()
-        number = self.axis5.patches
-        print('self.axis5.patches', number)
+        number = self.axis3.patches
+        print('self.axis3.patches', number)
         new_result = self.calculate()
 
         # print(pattern.pattern11)
         # print('len(self.axis1.patches)', len(axis1.patches))
 
-        self.pattern5.aaaabbbb(new_result)
-        self.canvas5.draw()
-        # self.pattern5 = self.PatternPlot(self.axis5, 7, self.calculate())
-        # self.canvas5.show()
+        self.pattern3.aaaabbbb(new_result)
+        self.canvas3.draw()
+        # self.pattern3 = self.PatternPlot(self.axis3, 7, self.calculate())
+        # self.canvas3.show()
 
-        # pattern = np.array([self.pattern1, self.pattern2, self.pattern3]).T * 2 - 1
-        # p = np.array(self.pattern4).T * 2 - 1
-        # if self.rule == 0:
-        #     w = np.dot(pattern, pattern.T)
-        # elif self.rule == 1:
-        #     w = np.dot(pattern, np.linalg.pinv(pattern))
-        # a = np.flip(np.dot(w, p).reshape(self.ncols_up, self.nrows_up).T, axis=0)
-        # for patch in self.axis5.patches:
-        #     patch.remove()
-        # for xi in range(len(self.xx_up)):
-        #     for yi in range(len(self.yy_up)):
-        #         if a[yi, xi] > 0:
-        #             sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="red")
-        #         else:
-        #             sq = patches.Rectangle((self.xx_up[xi], self.yy_up[yi]), self.wid_up, self.hei_up, fill=True, color="khaki")
-        #         self.axis5.add_patch(sq)
-        # self.canvas5.draw()
+    def change_shape(self, idx):
+        if idx == 0:
+            pattern = generate_diamond(self.size1)
+        elif idx == 1:
+            pattern = generate_slash(self.size1)
+        else:
+            pattern = generate_square(self.size1, self.size1-2)
 
-# import numpy as np
-#
-#
-# def convolution(P, kernel):
-#     # Get the dimensions of the input image and the kernel
-#     n = P.shape[0]  # Assuming P is square with shape (n, n)
-#     m = kernel.shape[0]  # Assuming kernel is square with shape (m, m)
-#
-#     # Calculate the size of the output
-#     output_size = n - m + 1
-#     output = np.zeros((output_size, output_size), dtype=int)
-#
-#     # Perform the convolution
-#     for i in range(output_size):
-#         for j in range(output_size):
-#             output[i, j] = np.sum(P[i:i + m, j:j + m] * kernel)
-#
-#     return output
-#
-#
-# # Example usage
-# n = 8  # Size of the input image P
-# m = 3  # Size of the kernel
-#
-# # Generate random input image and kernel
-# P = np.random.randint(0, 2, size=(n, n))
-# kernel = np.random.randint(0, 2, size=(m, m))
-#
-# # Perform the convolution
-# output = convolution(P, kernel)
-#
-# # Display the result
-# print("Input Image (P):")
-# print(P)
-# print("\nKernel:")
-# print(kernel)
-# print("\nOutput after Convolution:")
-# print(output)
+        self.pattern1.remove_text()
+        self.pattern1.remove_patch()
+
+        self.pattern1 = self.PatternPlot(self.axis1, self.size1, pattern)
+        self.canvas.draw()
+
+        self.pattern3.remove_text()
+        self.pattern3.remove_patch()
+        self.output = self.size1 - self.size2 + 1
+        self.pattern3 = self.PatternPlot(self.axis3, self.output, self.calculate(), True)
+        self.canvas3.draw()
+
+    # def change_size_base(self, idx, size_lst):
+    #     new_size = int(size_lst[idx])
+
+    def change_input_size(self, idx):
+        self.size1 = int(self.size1_lst[idx])
+        self.pattern1.remove_text()
+        self.pattern1.remove_patch()
+
+        self.pattern1 = self.PatternPlot(self.axis1, self.size1)
+        self.canvas.draw()
+
+        self.pattern3.remove_text()
+        self.pattern3.remove_patch()
+        self.output = self.size1 - self.size2 + 1
+        self.pattern3 = self.PatternPlot(self.axis3, self.output, self.calculate(), True)
+        self.canvas3.draw()
+
+    def change_kernel_size(self, idx):
+        self.size2 = int(self.size2_lst[idx])
+        self.pattern2.remove_text()
+        self.pattern2.remove_patch()
+
+        self.pattern2 = self.PatternPlot(self.axis2, self.size2)
+        self.canvas2.draw()
+
+        self.pattern3.remove_text()
+        self.pattern3.remove_patch()
+        self.output = self.size1 - self.size2 + 1
+        self.pattern3 = self.PatternPlot(self.axis3, self.output, self.calculate(), True)
+        self.canvas3.draw()
+
+    def use_pad(self):
+        if self.checkbox_batch_norm.checkState().value == 2 and not self.batch_norm:
+            self.batch_norm = True
+            self.graph()
+        if self.checkbox_batch_norm.checkState().value == 0 and self.batch_norm:
+            self.batch_norm = False
+            self.graph()
+
+    def use_stride(self):
+        pass
+
+
+def generate_diamond(n):
+    diamond = np.zeros((n, n), dtype=int)
+    center = n // 2
+    for i in range(n):
+        for j in range(n):
+            if abs(i - center) + abs(j - center) == center:
+                diamond[i, j] = 1
+    return diamond
+
+
+def generate_square(n, size):
+    square = np.zeros((n, n), dtype=int)
+    start = (n - size) // 2
+    end = start + size
+
+    # Create the boundary
+    square[start:end, start] = 1  # Left side
+    square[start:end, end - 1] = 1  # Right side
+    square[start, start:end] = 1  # Top side
+    square[end - 1, start:end] = 1  # Bottom side
+
+    return square
+
+def generate_slash(n):
+    slash = np.zeros((n, n), dtype=int)
+    for i in range(n):
+        slash[i, n - i - 1] = 1
+    return slash
