@@ -5,6 +5,7 @@ import matplotlib.patches as patches
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
+from PyQt6.QtCore import Qt
 
 color_dic = {
     2: ['khaki', 'green', 'olive', 'orange', 'red'],
@@ -22,7 +23,8 @@ class Convol(NNDLayout):
             self.yy_up = np.arange(0, self.nrows_up, (self.wid_up + inbetween_up))
 
             self.axis1 = axis
-            self.pattern11 = pattern if pattern is not None else np.random.randint(0, 2, size=(self.nrows_up, self.nrows_up))
+            matrix = pattern if pattern is not None else np.random.randint(0, 2, size=(self.nrows_up, self.nrows_up))
+            self.pattern11 = matrix
             self.response = response
             self.color_lst = color_dic[3] if response else ['khaki', 'green']
 
@@ -76,6 +78,9 @@ class Convol(NNDLayout):
         self.canvas.show()
         self.canvas.mpl_connect("button_press_event", self.on_mouseclick1)
 
+        self.padding_top_left = 0
+        self.padding_bottom_right = 0
+
         self.make_label("label_pattern2", "Kernel", (235, 105, 150, 50))
         self.make_plot(2, (175, 130, 170, 170))
         self.axis2 = self.figure2.add_axes([0, 0, 1, 1])
@@ -87,8 +92,8 @@ class Convol(NNDLayout):
         self.make_label("label_pattern3", "Response Pattern", (320, 305, 150, 50))
         self.make_plot(3, (250, 330, 240, 240))
         self.axis3 = self.figure3.add_axes([0, 0, 1, 1])
-        self.output = self.size1 - self.size2 + 1
-        self.pattern3 = self.PatternPlot(self.axis3, self.output, self.calculate(), True)
+        self.size3 = self.size1 - self.size2 + 1
+        self.pattern3 = self.PatternPlot(self.axis3, self.size3, self.calculate(), True)
         self.canvas3.show()
         print('self.axis2', self.axis2)
 
@@ -101,37 +106,39 @@ class Convol(NNDLayout):
         # No number and numbers options
         # train option. Focus on changes
 
-        self.make_combobox(1, ['Diamond', 'Slash', 'Square'], (self.x_chapter_usual, 300, self.w_chapter_slider, 100),
-                           self.change_shape, "label_combobox", "Learning Rule", (self.x_chapter_usual + 50, 300, 100, 50))
+        self.make_combobox(1, ['Diamond', 'Slash', 'Square'], (self.x_chapter_usual, 240, self.w_chapter_slider, 100),
+                           self.change_shape, "label_combobox", "Shape of Input", (self.x_chapter_usual + 50, 240, 100, 50))
 
         # x, y, width, height
         self.size1_lst = ['6', '7', '8']
-        self.make_combobox(2, self.size1_lst, (self.x_chapter_usual, 380, self.w_chapter_slider, 100),
-                           self.change_input_size, "label_combobox", "Learning Rule2", (self.x_chapter_usual + 50, 380, 100, 50))
+        self.make_combobox(2, self.size1_lst, (self.x_chapter_usual, 320, self.w_chapter_slider, 100),
+                           self.change_input_size, "label_combobox", "Input Size", (self.x_chapter_usual + 50, 320, 100, 50))
 
         self.size2_lst = ['2', '3', '4']
-        self.make_combobox(3, self.size2_lst, (self.x_chapter_usual, 460, self.w_chapter_slider, 100),
-                           self.change_kernel_size, "label_combobox", "Learning Rule3", (self.x_chapter_usual + 50, 460, 100, 50))
+        self.make_combobox(3, self.size2_lst, (self.x_chapter_usual, 400, self.w_chapter_slider, 100),
+                           self.change_kernel_size, "label_combobox", "Kernel Size", (self.x_chapter_usual + 50, 400, 100, 50))
 
-        self.batch_norm = True
-        self.make_checkbox('checkbox_batch_norm', 'Padding', (self.x_chapter_usual, 500, self.w_chapter_slider, 100),
-                           self.use_pad, True)
+        self.make_checkbox('checkbox_pad', 'Padding', (self.x_chapter_usual, 480, self.w_chapter_slider, 40),
+                           self.use_pad, False)
 
-        self.batch_norm = True
-        self.make_checkbox('checkbox_batch_norm', 'Stride', (self.x_chapter_usual, 500, self.w_chapter_slider, 100),
-                           self.use_stride, True)
+        self.make_checkbox('checkbox_stride', 'Stride', (self.x_chapter_usual, 520, self.w_chapter_slider, 40),
+                           self.use_stride, False)
 
+        self.make_checkbox('checkbox_label', 'Show Label', (self.x_chapter_usual, 580, self.w_chapter_slider, 40),
+                           self.use_label, False)
 
-    def calculate(self):
+    def calculate(self, stride=1):
         P = self.pattern1.pattern11
         kernel = self.pattern2.pattern11
 
-        output = np.zeros((self.output, self.output), dtype=int)
+        self.size3 = (self.size1 - self.size2) // stride + 1
+        output = np.zeros((self.size3, self.size3), dtype=int)
 
-        # Perform the convolution
-        for i in range(self.output):
-            for j in range(self.output):
-                output[i, j] = np.sum(P[i:i + self.size2, j:j + self.size2] * kernel)
+        for i in range(0, self.size3 * stride, stride):
+            for j in range(0, self.size3 * stride, stride):
+                output[i // stride, j // stride] = np.sum(
+                    P[i:i + self.size2, j:j + self.size2] * kernel
+                )
 
         return output
 
@@ -189,8 +196,8 @@ class Convol(NNDLayout):
 
         self.pattern3.remove_text()
         self.pattern3.remove_patch()
-        self.output = self.size1 - self.size2 + 1
-        self.pattern3 = self.PatternPlot(self.axis3, self.output, self.calculate(), True)
+        self.size3 = self.size1 - self.size2 + 1
+        self.pattern3 = self.PatternPlot(self.axis3, self.size3, self.calculate(), True)
         self.canvas3.draw()
 
     # def change_size_base(self, idx, size_lst):
@@ -206,8 +213,8 @@ class Convol(NNDLayout):
 
         self.pattern3.remove_text()
         self.pattern3.remove_patch()
-        self.output = self.size1 - self.size2 + 1
-        self.pattern3 = self.PatternPlot(self.axis3, self.output, self.calculate(), True)
+        self.size3 = self.size1 - self.size2 + 1
+        self.pattern3 = self.PatternPlot(self.axis3, self.size3, self.calculate(), True)
         self.canvas3.draw()
 
     def change_kernel_size(self, idx):
@@ -220,29 +227,93 @@ class Convol(NNDLayout):
 
         self.pattern3.remove_text()
         self.pattern3.remove_patch()
-        self.output = self.size1 - self.size2 + 1
-        self.pattern3 = self.PatternPlot(self.axis3, self.output, self.calculate(), True)
+        self.size3 = self.size1 - self.size2 + 1
+        self.pattern3 = self.PatternPlot(self.axis3, self.size3, self.calculate(), True)
         self.canvas3.draw()
 
     def use_pad(self):
-        if self.checkbox_batch_norm.checkState().value == 2 and not self.batch_norm:
-            self.batch_norm = True
-            self.graph()
-        if self.checkbox_batch_norm.checkState().value == 0 and self.batch_norm:
-            self.batch_norm = False
-            self.graph()
+        print('self.checkbox_pad.checkState()', self.checkbox_pad.checkState() == Qt.CheckState.Checked, self.checkbox_pad.checkState(), type(self.checkbox_pad.checkState()))
+
+        # checked
+        if self.checkbox_pad.checkState().value == 2:
+            self.padding_top_left = (self.size2 - 1) // 2
+            self.padding_bottom_right = self.size2 // 2
+            self.size1 += self.padding_top_left + self.padding_bottom_right
+            print((
+                    (self.padding_top_left, self.padding_bottom_right),
+                    (self.padding_top_left, self.padding_bottom_right)
+                ))
+            print('before', self.pattern1.pattern11)
+            new_input = np.pad(
+                self.pattern1.pattern11,
+                pad_width=(
+                    (self.padding_bottom_right, self.padding_top_left), # reverse the order because the display is upside down
+                    (self.padding_top_left, self.padding_bottom_right)
+                ),
+                mode='constant',
+                constant_values=0,
+            )
+            print('after', new_input)
+        else:
+            new_input = self.pattern1.pattern11[
+                  self.padding_bottom_right:self.size1 - self.padding_top_left,
+                  self.padding_top_left:self.size1 - self.padding_bottom_right
+            ]
+            self.size1 -= (self.padding_top_left + self.padding_bottom_right)
+            self.padding_top_left = 0
+            self.padding_bottom_right = 0
+
+        self.pattern1.remove_text()
+        self.pattern1.remove_patch()
+
+        self.pattern1 = self.PatternPlot(self.axis1, self.size1, new_input)
+        self.canvas.draw()
+
+        self.pattern3.remove_text()
+        self.pattern3.remove_patch()
+        self.size3 = self.size1 - self.size2 + 1
+        self.pattern3 = self.PatternPlot(self.axis3, self.size3, self.calculate(), True)
+        self.canvas3.draw()
+
 
     def use_stride(self):
-        pass
+        if self.checkbox_stride.checkState().value == 2:
+            stride = self.size2
+        else:
+            stride = 1
+
+        self.pattern3.remove_text()
+        self.pattern3.remove_patch()
+        pattern3 = self.calculate(stride)
+        self.pattern3 = self.PatternPlot(self.axis3, self.size3, pattern3, True)
+        self.canvas3.draw()
+        print('self.checkbox_stride.checkState()', self.checkbox_stride.checkState())
+
+    def use_label(self):
+        if self.checkbox_stride.checkState().value == 2:
+            pass
+
 
 
 def generate_diamond(n):
     diamond = np.zeros((n, n), dtype=int)
     center = n // 2
-    for i in range(n):
-        for j in range(n):
-            if abs(i - center) + abs(j - center) == center:
-                diamond[i, j] = 1
+    if n % 2 == 0:
+        for i in range(center):
+            left = center - i - 1
+            right = center + i
+            bottom = n - i - 1
+
+            diamond[left, i] = 1
+            diamond[right, i] = 1
+            diamond[left, bottom] = 1
+            diamond[right, bottom] = 1
+    else:
+        for i in range(n):
+            for j in range(n):
+                if abs(i - center) + abs(j - center) == center:
+                    diamond[i, j] = 1
+
     return diamond
 
 
