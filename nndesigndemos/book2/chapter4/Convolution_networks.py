@@ -85,7 +85,6 @@ class PatternPlot:
         inbetween_up = 0.1
         self.xx_up = np.arange(0, self.size+0.1, (self.wid_up + inbetween_up))
         self.yy_up = np.arange(0, self.size+0.1, (self.wid_up + inbetween_up))
-        print('self.xx_up', self.size, self.xx_up)
 
         self.label_on = label_on
         self.texts = []
@@ -138,10 +137,7 @@ class Convol(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(Convol, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
-        self.fill_chapter("Convolution", 4, "Choose the kernel shape \n"
-                                            "from the list.\n\n"
-                                                "Choose the input pattern"
-                                            "\nsize from the list.\n\n",
+        self.fill_chapter("Convolution", 4, "Change the input shape, \ninput size and kernel size\nfrom the lists.\n\nUse checkboxs to change\npadding, stride and label\nstatus.\n\n",
                           PACKAGE_PATH + "Logo/Logo_Ch_7.svg", None)
 
         self.stride = 1
@@ -151,33 +147,33 @@ class Convol(NNDLayout):
         self.label_on = False
         self.shape_idx = 0
 
-        self.make_label("label_pattern1", "Input Pattern", (75, 105, 150, 50))
-        self.make_plot(1, (15, 130, 170, 170))
+        self.make_label("label_pattern1", "Input Pattern", (115, 105, 150, 50))
+        self.make_plot(1, (15, 130, 270, 270))
         self.axis1 = self.figure.add_axes([0, 0, 1, 1])
         self.pattern1 = PatternPlot(self.axis1, gen_shape_matrix(6, self.shape_idx), self.label_on)
         self.canvas.show()
         self.canvas.mpl_connect("button_press_event", self.on_mouseclick1)
 
-        self.make_label("label_pattern2", "Kernel", (235, 105, 150, 50))
-        self.make_plot(2, (175, 130, 170, 170))
+        self.make_label("label_pattern2", "Kernel", (380, 180, 150, 50))
+        self.make_plot(2, (340, 205, 120, 120))
         self.axis2 = self.figure2.add_axes([0, 0, 1, 1])
         self.pattern2 = PatternPlot(self.axis2, gen_random_matrix(2), self.label_on)
         self.canvas2.show()
         self.canvas2.mpl_connect("button_press_event", self.on_mouseclick2)
 
-        self.make_label("label_pattern3", "Response Pattern", (320, 305, 150, 50))
-        self.make_plot(3, (250, 330, 240, 240))
+        self.make_label("label_pattern3", "Response Pattern", (210, 405, 150, 50))
+        self.make_plot(3, (150, 430, 220, 220))
         self.axis3 = self.figure3.add_axes([0, 0, 1, 1])
         self.pattern3 = PatternPlot(self.axis3, self.get_response_matrix(), self.label_on, True)
         self.canvas3.show()
 
         # coords meaning: x, y, width, height
-        self.make_combobox(1, ['Diamond', 'Slash', 'Square'], (self.x_chapter_usual, 240, self.w_chapter_slider, 100),
-                           self.change_input_shape, "label_combobox", "Shape of Input", (self.x_chapter_usual + 50, 240, 100, 50))
+        self.make_combobox(1, ['Diamond', 'Slash', 'Square'], (self.x_chapter_usual, 270, self.w_chapter_slider, 100),
+                           self.change_input_shape, "label_combobox", "Input Shape", (self.x_chapter_usual + 50, 270, 100, 50))
 
         self.size1_lst = ['6', '7', '8']
-        self.make_combobox(2, self.size1_lst, (self.x_chapter_usual, 320, self.w_chapter_slider, 100),
-                           self.change_input_size, "label_combobox", "Input Size", (self.x_chapter_usual + 50, 320, 100, 50))
+        self.make_combobox(2, self.size1_lst, (self.x_chapter_usual, 335, self.w_chapter_slider, 100),
+                           self.change_input_size, "label_combobox", "Input Size", (self.x_chapter_usual + 50, 335, 100, 50))
 
         self.size2_lst = ['2', '3', '4']
         self.make_combobox(3, self.size2_lst, (self.x_chapter_usual, 400, self.w_chapter_slider, 100),
@@ -186,7 +182,7 @@ class Convol(NNDLayout):
         self.make_checkbox('checkbox_pad', 'Padding', (self.x_chapter_usual, 480, self.w_chapter_slider, 40),
                            self.use_pad, False)
 
-        self.make_checkbox('checkbox_stride', 'Stride', (self.x_chapter_usual, 520, self.w_chapter_slider, 40),
+        self.make_checkbox('checkbox_stride', 'Stride', (self.x_chapter_usual, 530, self.w_chapter_slider, 40),
                            self.use_stride, False)
 
         self.make_checkbox('checkbox_label', 'Show Label', (self.x_chapter_usual, 580, self.w_chapter_slider, 40),
@@ -210,36 +206,26 @@ class Convol(NNDLayout):
 
         return output
 
-    def on_mouseclick_base(self, event, pattern, canvas, axis1):
+    def on_mouseclick_base(self, event, pattern, canvas, axis):
         if event.xdata is not None and event.ydata is not None:
-            print('event', event, 'event.xdata', event.xdata)
+            # print('event', event, 'event.xdata', event.xdata)
             d_x = [abs(event.xdata - xx - 0.5) for xx in pattern.xx_up]
             d_y = [abs(event.ydata - yy - 0.5) for yy in pattern.yy_up]
             xxx, yyy = list(range(len(pattern.xx_up)))[np.argmin(d_x)], list(range(len(pattern.yy_up)))[np.argmin(d_y)]
 
             pattern.matrix[yyy, xxx] = 1 - pattern.matrix[yyy, xxx]
+
             position = xxx * pattern.get_size() + yyy
 
             new_color = color_dic['input'][pattern.matrix[yyy, xxx]]
 
-            axis1.patches[position].set_facecolor(new_color)
+            axis.patches[position].set_facecolor(new_color)
             if pattern.label_on:
                 pattern.texts[position].set_text(str(pattern.matrix[yyy, xxx]))
 
             canvas.draw()
 
-            for patch in self.axis3.patches:
-                patch.remove()
-
-            # number = self.axis3.patches
-            # print('self.axis3.patches', number)
-            new_result = self.get_response_matrix()
-
-            # print(pattern.matrix)
-            # print('len(self.axis1.patches)', len(axis1.patches))
-
-            self.pattern3.plot(new_result)
-            self.canvas3.draw()
+            self.draw_pattern3()
 
     def on_mouseclick1(self, event):
         self.on_mouseclick_base(event, self.pattern1, self.canvas, self.axis1)
