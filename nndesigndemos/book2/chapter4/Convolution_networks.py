@@ -11,7 +11,9 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 
 color_dic = {
     'input': ['khaki', 'green'],
-    'output': ['#c3b091', '#cba36d', '#d39649', '#dc8926', '#e37c12', '#e96409', '#f04b06', '#f63104', '#fb1602', '#ff0000'],
+    # 'output': ['#c3b091', '#cba36d', '#d39649', '#dc8926', '#e37c12', '#e96409', '#f04b06', '#f63104', '#fb1602', '#ff0000'],
+    'output': ['#c3b091', '#c89f7f', '#cd8e6e', '#d27d5c', '#d76c4b', '#dc5b39', '#e14a28', '#e63916', '#eb2805', '#f01700', '#f30f00', '#f60800', '#f90000', '#fc0000', '#ff0000', '#ff1010', '#ff2020'],
+
 }
 
 
