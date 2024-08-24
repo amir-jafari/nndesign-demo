@@ -133,6 +133,28 @@ class PatternPlot:
             patch.remove()
 
 
+def matrix_size_down(old_matrix, padding_bottom_right, padding_top_left):
+    old_len = len(old_matrix)
+    matrix = old_matrix[
+        padding_bottom_right:old_len - padding_top_left,
+        padding_top_left:old_len - padding_bottom_right
+    ]
+    return matrix
+
+
+def matrix_size_up(old_matrix, padding_bottom_right, padding_top_left):
+    matrix = np.pad(
+        old_matrix,
+        pad_width=(
+            (padding_bottom_right, padding_top_left), # reverse the order because the display is upside down
+            (padding_top_left, padding_bottom_right)
+        ),
+        mode='constant',
+        constant_values=0,
+    )
+    return matrix
+
+
 class Convol(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(Convol, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
@@ -206,7 +228,7 @@ class Convol(NNDLayout):
 
         return output
 
-    def on_mouseclick_base(self, event, pattern, canvas, axis):
+    def on_mouseclick_base(self, event, pattern, canvas, axis, pattern_idx):
         if event.xdata is not None and event.ydata is not None:
             # print('event', event, 'event.xdata', event.xdata)
             d_x = [abs(event.xdata - xx - 0.5) for xx in pattern.xx_up]
@@ -215,23 +237,19 @@ class Convol(NNDLayout):
 
             pattern.matrix[yyy, xxx] = 1 - pattern.matrix[yyy, xxx]
 
-            position = xxx * pattern.get_size() + yyy
-
-            new_color = color_dic['input'][pattern.matrix[yyy, xxx]]
-
-            axis.patches[position].set_facecolor(new_color)
-            if pattern.label_on:
-                pattern.texts[position].set_text(str(pattern.matrix[yyy, xxx]))
-
-            canvas.draw()
+            new_pattern = self.draw_pattern12(pattern, axis, pattern.matrix, canvas)
+            if pattern_idx == 1:
+                self.pattern1 = new_pattern
+            else:
+                self.pattern2 = new_pattern
 
             self.draw_pattern3()
 
     def on_mouseclick1(self, event):
-        self.on_mouseclick_base(event, self.pattern1, self.canvas, self.axis1)
+        self.on_mouseclick_base(event, self.pattern1, self.canvas, self.axis1, 1)
 
     def on_mouseclick2(self, event):
-        self.on_mouseclick_base(event, self.pattern2, self.canvas2, self.axis2)
+        self.on_mouseclick_base(event, self.pattern2, self.canvas2, self.axis2, 2)
 
     def draw_pattern12(self, pattern, axis, matrix, canvas):
         pattern.remove_text()
@@ -275,30 +293,36 @@ class Convol(NNDLayout):
             matrix1_new = self.gen_padding_matrix(matrix1_reverse, new_kernel_size)
             self.pattern1 = self.draw_pattern12(self.pattern1, self.axis1, matrix1_new, self.canvas)
 
-        matrix2 = gen_random_matrix(new_kernel_size)
+        # The following is just boring activity to make the change more elegant.
+        # The simplest method to get matrix2 is just one line:
+        # matrix2 = gen_random_matrix(new_kernel_size)
+        old_matrix = self.pattern2.matrix
+        old_kernel_size = self.pattern2.get_size()
+        if abs(new_kernel_size-old_kernel_size) == 2:
+            padding_top_left = 1
+            padding_bottom_right = 1
+        elif old_kernel_size == 2 or new_kernel_size == 2:
+            padding_top_left = 0
+            padding_bottom_right = 1
+        else:
+            padding_top_left = 1
+            padding_bottom_right = 0
+        if new_kernel_size > old_kernel_size:
+            matrix2 = matrix_size_up(old_matrix, padding_bottom_right, padding_top_left)
+        else:
+            matrix2 = matrix_size_down(old_matrix, padding_bottom_right, padding_top_left)
+
         self.pattern2 = self.draw_pattern12(self.pattern2, self.axis2, matrix2, self.canvas2)
 
         self.draw_pattern3()
 
     def gen_padding_matrix(self, old_matrix, kernel_size):
-        old_len = len(old_matrix)
         if self.pad_on:
             self.padding_top_left = (kernel_size - 1) // 2
             self.padding_bottom_right = kernel_size // 2
-            matrix = np.pad(
-                old_matrix,
-                pad_width=(
-                    (self.padding_bottom_right, self.padding_top_left), # reverse the order because the display is upside down
-                    (self.padding_top_left, self.padding_bottom_right)
-                ),
-                mode='constant',
-                constant_values=0,
-            )
+            matrix = matrix_size_up(old_matrix, self.padding_bottom_right, self.padding_top_left)
         else:
-            matrix = old_matrix[
-                  self.padding_bottom_right:old_len - self.padding_top_left,
-                  self.padding_top_left:old_len - self.padding_bottom_right
-            ]
+            matrix = matrix_size_down(old_matrix, self.padding_bottom_right, self.padding_top_left)
             self.padding_top_left = 0
             self.padding_bottom_right = 0
 
