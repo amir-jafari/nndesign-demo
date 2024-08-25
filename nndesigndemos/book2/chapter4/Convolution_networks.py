@@ -1,24 +1,28 @@
 import numpy as np
 import warnings
+
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 import matplotlib.patches as patches
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
 
-# animation run train blur or focus
-# train option. Focus on changes
+# input 6-20 slider
+# kernel 2-6 silder
+# stride slider 1,2,3
+# try draw a box. apply the changes to the image
 
 color_dic = {
     'input': ['khaki', 'green'],
     # 'output': ['#c3b091', '#cba36d', '#d39649', '#dc8926', '#e37c12', '#e96409', '#f04b06', '#f63104', '#fb1602', '#ff0000'],
-    'output': ['#c3b091', '#c89f7f', '#cd8e6e', '#d27d5c', '#d76c4b', '#dc5b39', '#e14a28', '#e63916', '#eb2805', '#f01700', '#f30f00', '#f60800', '#f90000', '#fc0000', '#ff0000', '#ff1010', '#ff2020'],
+    'output': ['#c3b091', '#c89f7f', '#cd8e6e', '#d27d5c', '#d76c4b', '#dc5b39', '#e14a28', '#e63916', '#eb2805',
+               '#f01700', '#f30f00', '#f60800', '#f90000', '#fc0000', '#ff0000', '#ff1010', '#ff2020'],
 
 }
 
 
 def generate_diamond(n):
-    diamond = np.zeros((n, n), dtype=int)
+    diamond = gen_zero_matrix(n)
     center = n // 2
     if n % 2 == 0:
         for i in range(center):
@@ -40,7 +44,7 @@ def generate_diamond(n):
 
 
 def generate_square(n, size):
-    square = np.zeros((n, n), dtype=int)
+    square = gen_zero_matrix(n)
     start = (n - size) // 2
     end = start + size
 
@@ -54,9 +58,9 @@ def generate_square(n, size):
 
 
 def generate_slash(n):
-    slash = np.zeros((n, n), dtype=int)
+    slash = gen_zero_matrix(n)
     for i in range(n):
-        slash[i, n - i - 1] = 1
+        slash[i, i] = 1
     return slash
 
 
@@ -64,13 +68,19 @@ def gen_random_matrix(size):
     return np.random.randint(0, 2, size=(size, size))
 
 
+def gen_zero_matrix(size):
+    return np.zeros((size, size), dtype=int)
+
+
 def gen_shape_matrix(size, idx):
     if idx == 0:
         matrix = generate_diamond(size)
     elif idx == 1:
-        matrix = generate_slash(size)
+        matrix = generate_square(size, size - 2)
+    elif idx == 2:
+        matrix = gen_random_matrix(size)
     else:
-        matrix = generate_square(size, size-2)
+        matrix = gen_zero_matrix(size)
 
     return matrix
 
@@ -85,8 +95,8 @@ class PatternPlot:
 
         self.wid_up = 1
         inbetween_up = 0.1
-        self.xx_up = np.arange(0, self.size+0.1, (self.wid_up + inbetween_up))
-        self.yy_up = np.arange(0, self.size+0.1, (self.wid_up + inbetween_up))
+        self.xx_up = np.arange(0, self.size + 0.1, (self.wid_up + inbetween_up))
+        self.yy_up = np.arange(0, self.size + 0.1, (self.wid_up + inbetween_up))
 
         self.label_on = label_on
         self.texts = []
@@ -120,7 +130,7 @@ class PatternPlot:
                 self.axis.add_patch(sq)
 
         if self.label_on:
-            self.remove_text() # remove old and add new
+            self.remove_text()  # remove old and add new
             self.add_text()
 
     def label_display(self, label_on):
@@ -138,9 +148,9 @@ class PatternPlot:
 def matrix_size_down(old_matrix, padding_bottom_right, padding_top_left):
     old_len = len(old_matrix)
     matrix = old_matrix[
-        padding_bottom_right:old_len - padding_top_left,
-        padding_top_left:old_len - padding_bottom_right
-    ]
+             padding_bottom_right:old_len - padding_top_left,
+             padding_top_left:old_len - padding_bottom_right
+             ]
     return matrix
 
 
@@ -148,7 +158,7 @@ def matrix_size_up(old_matrix, padding_bottom_right, padding_top_left):
     matrix = np.pad(
         old_matrix,
         pad_width=(
-            (padding_bottom_right, padding_top_left), # reverse the order because the display is upside down
+            (padding_bottom_right, padding_top_left),  # reverse the order because the display is upside down
             (padding_top_left, padding_bottom_right)
         ),
         mode='constant',
@@ -161,7 +171,8 @@ class Convol(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(Convol, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
-        self.fill_chapter("Convolution", 4, "Change the input shape, \ninput size and kernel size\nfrom the lists.\n\nUse checkboxs to change\npadding, stride and label\nstatus.\n\n",
+        self.fill_chapter("Convolution", 4,
+                          "Change the input shape, \ninput size and kernel size\nfrom the lists.\n\nUse checkboxs to change\npadding, stride and label\nstatus.\n\n",
                           PACKAGE_PATH + "Logo/Logo_Ch_7.svg", None)
 
         self.stride = 1
@@ -181,7 +192,7 @@ class Convol(NNDLayout):
         self.make_label("label_pattern2", "Kernel", (380, 180, 150, 50))
         self.make_plot(2, (340, 205, 120, 120))
         self.axis2 = self.figure2.add_axes([0, 0, 1, 1])
-        self.pattern2 = PatternPlot(self.axis2, gen_random_matrix(2), self.label_on)
+        self.pattern2 = PatternPlot(self.axis2, generate_slash(2), self.label_on)
         self.canvas2.show()
         self.canvas2.mpl_connect("button_press_event", self.on_mouseclick2)
 
@@ -192,16 +203,20 @@ class Convol(NNDLayout):
         self.canvas3.show()
 
         # coords meaning: x, y, width, height
-        self.make_combobox(1, ['Diamond', 'Slash', 'Square'], (self.x_chapter_usual, 270, self.w_chapter_slider, 100),
-                           self.change_input_shape, "label_combobox", "Input Shape", (self.x_chapter_usual + 50, 270, 100, 50))
+        self.make_combobox(1, ['Diamond', 'Square', 'Random', 'Custom'],
+                           (self.x_chapter_usual, 270, self.w_chapter_slider, 100),
+                           self.change_input_shape, "label_combobox", "Input Shape",
+                           (self.x_chapter_usual + 50, 270, 100, 50))
 
         self.size1_lst = ['6', '7', '8']
         self.make_combobox(2, self.size1_lst, (self.x_chapter_usual, 335, self.w_chapter_slider, 100),
-                           self.change_input_size, "label_combobox", "Input Size", (self.x_chapter_usual + 50, 335, 100, 50))
+                           self.change_input_size, "label_combobox", "Input Size",
+                           (self.x_chapter_usual + 50, 335, 100, 50))
 
         self.size2_lst = ['2', '3', '4']
         self.make_combobox(3, self.size2_lst, (self.x_chapter_usual, 400, self.w_chapter_slider, 100),
-                           self.change_kernel_size, "label_combobox", "Kernel Size", (self.x_chapter_usual + 50, 400, 100, 50))
+                           self.change_kernel_size, "label_combobox", "Kernel Size",
+                           (self.x_chapter_usual + 50, 400, 100, 50))
 
         self.make_checkbox('checkbox_pad', 'Padding', (self.x_chapter_usual, 480, self.w_chapter_slider, 40),
                            self.use_pad, False)
@@ -220,7 +235,7 @@ class Convol(NNDLayout):
         size2 = pattern2.get_size()
 
         size3 = (size1 - size2) // stride + 1
-        output = np.zeros((size3, size3), dtype=int)
+        output = gen_zero_matrix(size3)
 
         for i in range(0, size3 * stride, stride):
             for j in range(0, size3 * stride, stride):
@@ -300,7 +315,7 @@ class Convol(NNDLayout):
         # matrix2 = gen_random_matrix(new_kernel_size)
         old_matrix = self.pattern2.matrix
         old_kernel_size = self.pattern2.get_size()
-        if abs(new_kernel_size-old_kernel_size) == 2:
+        if abs(new_kernel_size - old_kernel_size) == 2:
             padding_top_left = 1
             padding_bottom_right = 1
         elif old_kernel_size == 2 or new_kernel_size == 2:
