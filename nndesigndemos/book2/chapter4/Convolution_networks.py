@@ -6,6 +6,7 @@ import matplotlib.patches as patches
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
+from PyQt6 import QtWidgets, QtCore
 
 # input 6-20 slider
 # kernel 2-6 silder
@@ -79,8 +80,10 @@ def gen_shape_matrix(size, idx):
         matrix = generate_square(size, size - 2)
     elif idx == 2:
         matrix = gen_random_matrix(size)
-    else:
+    elif idx == 3:
         matrix = gen_zero_matrix(size)
+    else:
+        raise Exception('Not possible')
 
     return matrix
 
@@ -208,21 +211,20 @@ class Convol(NNDLayout):
                            self.change_input_shape, "label_combobox", "Input Shape",
                            (self.x_chapter_usual + 50, 270, 100, 50))
 
-        self.size1_lst = ['6', '7', '8']
-        self.make_combobox(2, self.size1_lst, (self.x_chapter_usual, 335, self.w_chapter_slider, 100),
-                           self.change_input_size, "label_combobox", "Input Size",
-                           (self.x_chapter_usual + 50, 335, 100, 50))
+        self.make_slider("slider_n_input", QtCore.Qt.Orientation.Horizontal, (6, 8), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 6,
+                         (self.x_chapter_usual, 360, self.w_chapter_slider, 50), self.change_input_size, "label_n_input",
+                         "Number of input size: 6", (self.x_chapter_usual + 20, 360 - 25, self.w_chapter_slider, 50))
 
-        self.size2_lst = ['2', '3', '4']
-        self.make_combobox(3, self.size2_lst, (self.x_chapter_usual, 400, self.w_chapter_slider, 100),
-                           self.change_kernel_size, "label_combobox", "Kernel Size",
-                           (self.x_chapter_usual + 50, 400, 100, 50))
+        self.make_slider("slider_n_kernel", QtCore.Qt.Orientation.Horizontal, (2, 4), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 2,
+                         (self.x_chapter_usual, 420, self.w_chapter_slider, 50), self.change_kernel_size, "label_n_kernel",
+                         "Number of kernel size: 2", (self.x_chapter_usual + 20, 420 - 25, self.w_chapter_slider, 50))
 
-        self.make_checkbox('checkbox_pad', 'Padding', (self.x_chapter_usual, 480, self.w_chapter_slider, 40),
+        self.make_slider("slider_n_strides", QtCore.Qt.Orientation.Horizontal, (1, 3), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 1,
+                         (self.x_chapter_usual, 480, self.w_chapter_slider, 50), self.use_stride, "label_n_strides",
+                         "Number of strides: 1", (self.x_chapter_usual + 20, 480 - 25, self.w_chapter_slider, 50))
+
+        self.make_checkbox('checkbox_pad', 'Padding', (self.x_chapter_usual, 530, self.w_chapter_slider, 40),
                            self.use_pad, False)
-
-        self.make_checkbox('checkbox_stride', 'Stride', (self.x_chapter_usual, 530, self.w_chapter_slider, 40),
-                           self.use_stride, False)
 
         self.make_checkbox('checkbox_label', 'Show Label', (self.x_chapter_usual, 580, self.w_chapter_slider, 40),
                            self.use_label, False)
@@ -237,13 +239,16 @@ class Convol(NNDLayout):
         size3 = (size1 - size2) // stride + 1
         output = gen_zero_matrix(size3)
 
+        matrix1 = pattern1.matrix[::-1]
+        matrix2 = pattern2.matrix[::-1]
+
         for i in range(0, size3 * stride, stride):
             for j in range(0, size3 * stride, stride):
                 output[i // stride, j // stride] = np.sum(
-                    pattern1.matrix[i:i + size2, j:j + size2] * pattern2.matrix
+                    matrix1[i:i + size2, j:j + size2] * matrix2
                 )
 
-        return output
+        return output[::-1]
 
     def on_mouseclick_base(self, event, pattern, canvas, axis, pattern_idx):
         if event.xdata is not None and event.ydata is not None:
@@ -281,8 +286,12 @@ class Convol(NNDLayout):
         self.pattern3 = PatternPlot(self.axis3, self.get_response_matrix(), self.label_on, True)
         self.canvas3.draw()
 
-    def change_input(self, size, shape_idx):
-        matrix1 = gen_shape_matrix(size, shape_idx)
+    def change_input(self, size):
+        # if self.shape_idx == 3:
+        #     matrix2 = gen_zero_matrix(self.pattern2.get_size())
+        #     self.pattern2 = self.draw_pattern12(self.pattern2, self.axis2, matrix2, self.canvas2)
+
+        matrix1 = gen_shape_matrix(size, self.shape_idx)
         if self.pad_on:
             matrix1 = self.gen_padding_matrix(matrix1, self.pattern2.get_size())
 
@@ -291,14 +300,16 @@ class Convol(NNDLayout):
 
     def change_input_shape(self, idx):
         self.shape_idx = idx
-        self.change_input(self.pattern1.get_size(), self.shape_idx)
+        self.change_input(self.pattern1.get_size())
 
-    def change_input_size(self, idx):
-        new_size = int(self.size1_lst[idx])
-        self.change_input(new_size, self.shape_idx)
+    def change_input_size(self):
+        new_size = self.slider_n_input.value()
+        self.label_n_input.setText(f"Number of input size: {new_size}")
+        self.change_input(new_size)
 
-    def change_kernel_size(self, idx):
-        new_kernel_size = int(self.size2_lst[idx])
+    def change_kernel_size(self):
+        new_kernel_size = self.slider_n_kernel.value()
+        self.label_n_kernel.setText(f"Number of kernel size: {new_kernel_size}")
 
         # Changing kernel size causes response pattern size changes. To keep response size
         # as the same as input, we need to recalculate the input if it's in the padding status.
@@ -310,24 +321,7 @@ class Convol(NNDLayout):
             matrix1_new = self.gen_padding_matrix(matrix1_reverse, new_kernel_size)
             self.pattern1 = self.draw_pattern12(self.pattern1, self.axis1, matrix1_new, self.canvas)
 
-        # The following is just boring activity to make the change more elegant.
-        # The simplest method to get matrix2 is just one line:
-        # matrix2 = gen_random_matrix(new_kernel_size)
-        old_matrix = self.pattern2.matrix
-        old_kernel_size = self.pattern2.get_size()
-        if abs(new_kernel_size - old_kernel_size) == 2:
-            padding_top_left = 1
-            padding_bottom_right = 1
-        elif old_kernel_size == 2 or new_kernel_size == 2:
-            padding_top_left = 0
-            padding_bottom_right = 1
-        else:
-            padding_top_left = 1
-            padding_bottom_right = 0
-        if new_kernel_size > old_kernel_size:
-            matrix2 = matrix_size_up(old_matrix, padding_bottom_right, padding_top_left)
-        else:
-            matrix2 = matrix_size_down(old_matrix, padding_bottom_right, padding_top_left)
+        matrix2 = generate_slash(new_kernel_size)
 
         self.pattern2 = self.draw_pattern12(self.pattern2, self.axis2, matrix2, self.canvas2)
 
@@ -353,7 +347,8 @@ class Convol(NNDLayout):
         self.draw_pattern3()
 
     def use_stride(self):
-        self.stride = self.pattern2.get_size() if self.checkbox_stride.checkState().value == 2 else 1
+        self.stride = self.slider_n_strides.value()
+        self.label_n_strides.setText(f"Number of strides: {self.stride}")
         self.draw_pattern3()
 
     def use_label(self):
