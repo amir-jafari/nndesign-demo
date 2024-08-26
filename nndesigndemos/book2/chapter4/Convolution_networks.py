@@ -8,17 +8,46 @@ from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
 from PyQt6 import QtWidgets, QtCore
 
-# input 6-20 slider
-# kernel 2-6 silder
-# stride slider 1,2,3
+# To do:
 # try draw a box. apply the changes to the image
+
+
+KERNEL_SIZE_MAX = 6
+
+
+# Dynamically generate color ranges for the response pattern.
+def interpolate_colors(start_hex, end_hex, steps):
+    # Convert hex to RGB
+    def hex_to_rgb(hex_color):
+        hex_color = hex_color.lstrip('#')
+        return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+    # Convert RGB to hex
+    def rgb_to_hex(rgb_color):
+        return '#{:02x}{:02x}{:02x}'.format(*rgb_color)
+
+    start_rgb = hex_to_rgb(start_hex)
+    end_rgb = hex_to_rgb(end_hex)
+
+    # Calculate the difference
+    r_diff = (end_rgb[0] - start_rgb[0]) / steps
+    g_diff = (end_rgb[1] - start_rgb[1]) / steps
+    b_diff = (end_rgb[2] - start_rgb[2]) / steps
+
+    # Generate the colors
+    colors = []
+    for i in range(steps + 1):
+        r = int(start_rgb[0] + (r_diff * i))
+        g = int(start_rgb[1] + (g_diff * i))
+        b = int(start_rgb[2] + (b_diff * i))
+        colors.append(rgb_to_hex((r, g, b)))
+
+    return colors
+
 
 color_dic = {
     'input': ['khaki', 'green'],
-    # 'output': ['#c3b091', '#cba36d', '#d39649', '#dc8926', '#e37c12', '#e96409', '#f04b06', '#f63104', '#fb1602', '#ff0000'],
-    'output': ['#c3b091', '#c89f7f', '#cd8e6e', '#d27d5c', '#d76c4b', '#dc5b39', '#e14a28', '#e63916', '#eb2805',
-               '#f01700', '#f30f00', '#f60800', '#f90000', '#fc0000', '#ff0000', '#ff1010', '#ff2020'],
-
+    'output': interpolate_colors('#c3b091', '#ff2020', KERNEL_SIZE_MAX * KERNEL_SIZE_MAX),  # Generate color ranges
 }
 
 
@@ -98,8 +127,8 @@ class PatternPlot:
 
         self.wid_up = 1
         inbetween_up = 0.1
-        self.xx_up = np.arange(0, self.size + 0.1, (self.wid_up + inbetween_up))
-        self.yy_up = np.arange(0, self.size + 0.1, (self.wid_up + inbetween_up))
+        self.xx_up = np.arange(0, self.size * 1.1, (self.wid_up + inbetween_up))
+        self.yy_up = np.arange(0, self.size * 1.1, (self.wid_up + inbetween_up))
 
         self.label_on = label_on
         self.texts = []
@@ -211,11 +240,11 @@ class Convol(NNDLayout):
                            self.change_input_shape, "label_combobox", "Input Shape",
                            (self.x_chapter_usual + 50, 270, 100, 50))
 
-        self.make_slider("slider_n_input", QtCore.Qt.Orientation.Horizontal, (6, 8), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 6,
+        self.make_slider("slider_n_input", QtCore.Qt.Orientation.Horizontal, (6, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 6,
                          (self.x_chapter_usual, 360, self.w_chapter_slider, 50), self.change_input_size, "label_n_input",
                          "Number of input size: 6", (self.x_chapter_usual + 20, 360 - 25, self.w_chapter_slider, 50))
 
-        self.make_slider("slider_n_kernel", QtCore.Qt.Orientation.Horizontal, (2, 4), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 2,
+        self.make_slider("slider_n_kernel", QtCore.Qt.Orientation.Horizontal, (2, KERNEL_SIZE_MAX), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 2,
                          (self.x_chapter_usual, 420, self.w_chapter_slider, 50), self.change_kernel_size, "label_n_kernel",
                          "Number of kernel size: 2", (self.x_chapter_usual + 20, 420 - 25, self.w_chapter_slider, 50))
 
