@@ -47,7 +47,7 @@ def interpolate_colors(start_hex, end_hex, steps):
 
 color_dic = {
     'input': ['khaki', 'green'],
-    'output': interpolate_colors('#c3b091', '#ff2020', KERNEL_SIZE_MAX * KERNEL_SIZE_MAX),  # Generate color ranges
+    'output': interpolate_colors('#f8f7e2', '#2c2d2a', KERNEL_SIZE_MAX * KERNEL_SIZE_MAX),  # Generate color ranges
 }
 
 
