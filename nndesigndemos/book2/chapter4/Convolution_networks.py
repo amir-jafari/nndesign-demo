@@ -10,7 +10,7 @@ from PyQt6 import QtWidgets, QtCore
 
 # To do:
 # try draw a box. apply the changes to the image
-
+# https://www.color-hex.com
 
 KERNEL_SIZE_MAX = 6
 
@@ -43,6 +43,11 @@ def interpolate_colors(start_hex, end_hex, steps):
         colors.append(rgb_to_hex((r, g, b)))
 
     return colors
+
+
+def pick_items_with_intervals(lst, num_items):
+    indices = np.linspace(0, len(lst) - 1, num_items, dtype=int)
+    return [lst[i] for i in indices]
 
 
 color_dic = {
@@ -118,12 +123,16 @@ def gen_shape_matrix(size, idx):
 
 
 class PatternPlot:
-    def __init__(self, axis, matrix, label_on, response_pattern=False):
+    def __init__(self, axis, matrix, label_on, response_pattern=False, kernel_size=None):
 
         self.axis = axis
         self.matrix = matrix
         self.size = len(matrix)
-        self.color_lst = color_dic[('output' if response_pattern else 'input')]
+        if response_pattern:
+            response_color_range = kernel_size * kernel_size + 1
+            self.color_lst = pick_items_with_intervals(color_dic['output'], response_color_range)
+        else:
+            self.color_lst = color_dic['input']
 
         self.wid_up = 1
         inbetween_up = 0.1
@@ -204,7 +213,7 @@ class Convol(NNDLayout):
         super(Convol, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Convolution", 4,
-                          "Change the input shape, \ninput size and kernel size\nfrom the lists.\n\nUse checkboxs to change\npadding, stride and label\nstatus.\n\n",
+                          "Change the input shape, \ninput size, kernel size,\nand stride below.\n\nUse checkboxs to change\npadding and value status.\n\nClick input or kernel images\nto change the input pattern\nor kernel pattern.",
                           PACKAGE_PATH + "Logo/Logo_Ch_7.svg", None)
 
         self.stride = 1
@@ -213,6 +222,8 @@ class Convol(NNDLayout):
         self.padding_bottom_right = 0
         self.label_on = False
         self.shape_idx = 0
+
+        self.kernel_size = 2
 
         self.make_label("label_pattern1", "Input Pattern", (115, 105, 150, 50))
         self.make_plot(1, (15, 130, 270, 270))
@@ -224,38 +235,38 @@ class Convol(NNDLayout):
         self.make_label("label_pattern2", "Kernel", (380, 180, 150, 50))
         self.make_plot(2, (340, 205, 120, 120))
         self.axis2 = self.figure2.add_axes([0, 0, 1, 1])
-        self.pattern2 = PatternPlot(self.axis2, generate_slash(2), self.label_on)
+        self.pattern2 = PatternPlot(self.axis2, generate_slash(self.kernel_size), self.label_on)
         self.canvas2.show()
         self.canvas2.mpl_connect("button_press_event", self.on_mouseclick2)
 
         self.make_label("label_pattern3", "Response Pattern", (210, 405, 150, 50))
         self.make_plot(3, (150, 430, 220, 220))
         self.axis3 = self.figure3.add_axes([0, 0, 1, 1])
-        self.pattern3 = PatternPlot(self.axis3, self.get_response_matrix(), self.label_on, True)
+        self.pattern3 = PatternPlot(self.axis3, self.get_response_matrix(), self.label_on, True, self.kernel_size)
         self.canvas3.show()
 
         # coords meaning: x, y, width, height
         self.make_combobox(1, ['Diamond', 'Square', 'Random', 'Custom'],
-                           (self.x_chapter_usual, 270, self.w_chapter_slider, 100),
-                           self.change_input_shape, "label_combobox", "Input Shape",
-                           (self.x_chapter_usual + 50, 270, 100, 50))
+                           (self.x_chapter_usual, 310, self.w_chapter_slider, 100),
+                           self.change_input_shape, "label_combobox", "Input shape",
+                           (self.x_chapter_usual + 50, 310, 100, 50))
 
         self.make_slider("slider_n_input", QtCore.Qt.Orientation.Horizontal, (6, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 6,
-                         (self.x_chapter_usual, 360, self.w_chapter_slider, 50), self.change_input_size, "label_n_input",
-                         "Number of input size: 6", (self.x_chapter_usual + 20, 360 - 25, self.w_chapter_slider, 50))
+                         (self.x_chapter_usual, 400, self.w_chapter_slider, 50), self.change_input_size, "label_n_input",
+                         "Input size: 6", (self.x_chapter_usual + 20, 400 - 25, self.w_chapter_slider, 50))
 
         self.make_slider("slider_n_kernel", QtCore.Qt.Orientation.Horizontal, (2, KERNEL_SIZE_MAX), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 2,
-                         (self.x_chapter_usual, 420, self.w_chapter_slider, 50), self.change_kernel_size, "label_n_kernel",
-                         "Number of kernel size: 2", (self.x_chapter_usual + 20, 420 - 25, self.w_chapter_slider, 50))
+                         (self.x_chapter_usual, 460, self.w_chapter_slider, 50), self.change_kernel_size, "label_n_kernel",
+                         "Kernel size: 2", (self.x_chapter_usual + 20, 460 - 25, self.w_chapter_slider, 50))
 
         self.make_slider("slider_n_strides", QtCore.Qt.Orientation.Horizontal, (1, 3), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 1,
-                         (self.x_chapter_usual, 480, self.w_chapter_slider, 50), self.use_stride, "label_n_strides",
-                         "Number of strides: 1", (self.x_chapter_usual + 20, 480 - 25, self.w_chapter_slider, 50))
+                         (self.x_chapter_usual, 520, self.w_chapter_slider, 50), self.use_stride, "label_n_strides",
+                         "Stride(s): 1", (self.x_chapter_usual + 20, 520 - 25, self.w_chapter_slider, 50))
 
-        self.make_checkbox('checkbox_pad', 'Padding', (self.x_chapter_usual, 530, self.w_chapter_slider, 40),
+        self.make_checkbox('checkbox_pad', 'Padding', (self.x_chapter_usual, 560, self.w_chapter_slider, 40),
                            self.use_pad, False)
 
-        self.make_checkbox('checkbox_label', 'Show Label', (self.x_chapter_usual, 580, self.w_chapter_slider, 40),
+        self.make_checkbox('checkbox_label', 'Show values', (self.x_chapter_usual, 595, self.w_chapter_slider, 40),
                            self.use_label, False)
 
     def get_response_matrix(self):
@@ -312,7 +323,7 @@ class Convol(NNDLayout):
     def draw_pattern3(self):
         self.pattern3.remove_text()
         self.pattern3.remove_patch()
-        self.pattern3 = PatternPlot(self.axis3, self.get_response_matrix(), self.label_on, True)
+        self.pattern3 = PatternPlot(self.axis3, self.get_response_matrix(), self.label_on, True, self.kernel_size)
         self.canvas3.draw()
 
     def change_input(self, size):
@@ -333,12 +344,12 @@ class Convol(NNDLayout):
 
     def change_input_size(self):
         new_size = self.slider_n_input.value()
-        self.label_n_input.setText(f"Number of input size: {new_size}")
+        self.label_n_input.setText(f"Input size: {new_size}")
         self.change_input(new_size)
 
     def change_kernel_size(self):
-        new_kernel_size = self.slider_n_kernel.value()
-        self.label_n_kernel.setText(f"Number of kernel size: {new_kernel_size}")
+        self.kernel_size = self.slider_n_kernel.value()
+        self.label_n_kernel.setText(f"Kernel size: {self.kernel_size}")
 
         # Changing kernel size causes response pattern size changes. To keep response size
         # as the same as input, we need to recalculate the input if it's in the padding status.
@@ -347,10 +358,10 @@ class Convol(NNDLayout):
             self.pad_on = False
             matrix1_reverse = self.gen_padding_matrix(self.pattern1.matrix, self.pattern2.get_size())
             self.pad_on = True
-            matrix1_new = self.gen_padding_matrix(matrix1_reverse, new_kernel_size)
+            matrix1_new = self.gen_padding_matrix(matrix1_reverse, self.kernel_size)
             self.pattern1 = self.draw_pattern12(self.pattern1, self.axis1, matrix1_new, self.canvas)
 
-        matrix2 = generate_slash(new_kernel_size)
+        matrix2 = generate_slash(self.kernel_size)
 
         self.pattern2 = self.draw_pattern12(self.pattern2, self.axis2, matrix2, self.canvas2)
 
@@ -377,7 +388,7 @@ class Convol(NNDLayout):
 
     def use_stride(self):
         self.stride = self.slider_n_strides.value()
-        self.label_n_strides.setText(f"Number of strides: {self.stride}")
+        self.label_n_strides.setText(f"Stride(s): {self.stride}")
         self.draw_pattern3()
 
     def use_label(self):
