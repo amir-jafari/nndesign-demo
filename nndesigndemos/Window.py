@@ -107,6 +107,7 @@ from nndesigndemos.book2.chapter2.Gradient_descent import GradientDescent
 from nndesigndemos.book2.chapter2.Gradient_descent_stochastic import GradientDescentStochastic
 # ------ Chapter 3 --------
 from nndesigndemos.book2.chapter3.Normalization_and_initialization_effects import NormAndInitEffects
+from nndesigndemos.book2.chapter3.Normalization_and_initialization_scaling import NormAndInitEffectsScaling
 # ------ Chapter 4 --------
 from nndesigndemos.book2.chapter4.Convolution_networks import Convol
 
@@ -148,7 +149,7 @@ BOOK1_CHAPTERS_DEMOS = {
 BOOK2_CHAPTERS_DEMOS = {
     1: ["Multilayer Networks", "Chapter 1 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
     2: ["Multilayer Network Train", "Chapter 2 demos", "Gradient Descent", "Gradient Descent Stochastic"],
-    3: ["Supplemental Training", "Chapter 3 demos", "Normalization & Initialization Effects"],
+    3: ["Supplemental Training", "Chapter 3 demos", "Normalization & Initialization Effects", 'Normalization & Initialization Scaling'],
     4: ["Convolution Networks", "Chapter 4 demos", "Convolution Networks demo"],
 }
 # -------------------------------------------------------------------------------------------------------------
@@ -688,6 +689,9 @@ class MainWindowDL(NNDLayout):
         if idx == 1:
             self.book2_chapter3_window1 = NormAndInitEffects(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter3_window1.show()
+        elif idx == 2:
+            self.book2_chapter3_window2 = NormAndInitEffectsScaling(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter3_window2.show()
 
     def chapter4(self, idx):
         self.comboBox4.setCurrentIndex(0)
