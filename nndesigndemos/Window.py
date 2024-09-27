@@ -107,7 +107,7 @@ from nndesigndemos.book2.chapter2.Gradient_descent import GradientDescent
 from nndesigndemos.book2.chapter2.Gradient_descent_stochastic import GradientDescentStochastic
 # ------ Chapter 3 --------
 from nndesigndemos.book2.chapter3.Normalization_and_initialization_all_effects import NormAndInitAllEffects
-from nndesigndemos.book2.chapter3.Normalization_and_initialization_scaling import NormAndInitEffectsScaling
+from nndesigndemos.book2.chapter3.Normalization_and_initialization_scaling import NormAndInitScaling
 from nndesigndemos.book2.chapter3.Normalization_and_initialization_effect import NormAndInitEffect
 # ------ Chapter 4 --------
 from nndesigndemos.book2.chapter4.Convolution_networks import Convol
@@ -691,7 +691,7 @@ class MainWindowDL(NNDLayout):
             self.book2_chapter3_window1 = NormAndInitAllEffects(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter3_window1.show()
         elif idx == 2:
-            self.book2_chapter3_window2 = NormAndInitEffectsScaling(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter3_window2 = NormAndInitScaling(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter3_window2.show()
         elif idx == 3:
             self.book2_chapter3_window3 = NormAndInitEffect(self.w_ratio, self.h_ratio, self.dpi)

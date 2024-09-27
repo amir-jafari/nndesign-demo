@@ -8,9 +8,9 @@ from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
 
 
-class NormAndInitEffectsScaling(NNDLayout):
+class NormAndInitScaling(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
-        super(NormAndInitEffectsScaling, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
+        super(NormAndInitScaling, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
         self.fill_chapter("Normalization & Initialization Effects", 3,
                           "\nChoose a initialization\nscheme and whether to\nuse BatchNorm or not."
@@ -22,19 +22,26 @@ class NormAndInitEffectsScaling(NNDLayout):
         self.p_mean = np.array([[0], [0]])
         self.p_std = np.array([[4], [1]])
 
-        self.make_plot('Input', (10, 10, 180, 180))
+        plot_size = 200
+        plot_x1 = 50
+        plot_x2 = 280
+        plot_y1 = 90
+        plot_y2 = 280
+        plot_y3 = 470
+
+        self.make_plot('Input', (plot_x1, plot_y1, plot_size, plot_size))
         self.figureInput.set_tight_layout(True)
 
-        self.make_plot('Output1', (10, 180, 240, 240))
+        self.make_plot('Output1', (plot_x1, plot_y2, plot_size, plot_size))
         self.figureOutput1.set_tight_layout(True)
 
-        self.make_plot('Output2', (250, 180, 240, 240))
+        self.make_plot('Output2', (plot_x2, plot_y2, plot_size, plot_size))
         self.figureOutput2.set_tight_layout(True)
 
-        self.make_plot('Output3', (10, 420, 240, 240))
+        self.make_plot('Output3', (plot_x1, plot_y3, plot_size, plot_size))
         self.figureOutput3.set_tight_layout(True)
 
-        self.make_plot('Output4', (250, 420, 240, 240))
+        self.make_plot('Output4', (plot_x2, plot_y3, plot_size, plot_size))
         self.figureOutput4.set_tight_layout(True)
 
         self.make_slider("slider_n_examples", QtCore.Qt.Orientation.Horizontal, (1, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
@@ -45,7 +52,7 @@ class NormAndInitEffectsScaling(NNDLayout):
         self.n_neurons = 4
 
         self.combobox_input_distrib = ["Normal", "Uniform"]
-        self.make_combobox(2, self.combobox_input_distrib, (self.x_chapter_usual + 10, 360, self.w_chapter_slider - 20, 50),
+        self.make_combobox(2, self.combobox_input_distrib, (self.x_chapter_usual, 360, self.w_chapter_slider, 50),
                            self.change_input_distrib, "label_input_distrib", "Input distribution",
                            (self.x_chapter_usual + 30, 360-20, self.w_chapter_slider, 50))
 
@@ -57,33 +64,33 @@ class NormAndInitEffectsScaling(NNDLayout):
 
         self.weight_init = "Small random"
         self.combobox_weight_inits = ["Small random", "Xavier", "Nguyen - Widrow", "Kaiming"]
-        self.make_combobox(3, self.combobox_weight_inits, (self.x_chapter_usual + 10, 400, self.w_chapter_slider, 50),
+        self.make_combobox(3, self.combobox_weight_inits, (self.x_chapter_usual, 420, self.w_chapter_slider, 50),
                            self.change_weight_init, "label_weight_init", "Weights init",
-                           (self.x_chapter_usual + 30, 400-25, self.w_chapter_slider, 50))
+                           (self.x_chapter_usual + 30, 420-20, self.w_chapter_slider, 50))
 
         self.act = self.tansig
         self.combobox_act_functions = [self.tansig, self.poslin]
-        self.make_combobox(3, ["tansig", "poslin"], (self.x_chapter_usual, 540, self.w_chapter_slider, 50),
+        self.make_combobox(3, ["tansig", "poslin"], (self.x_chapter_usual, 480, self.w_chapter_slider, 50),
                            self.change_act_function, "label_act_function", "Activation function",
-                           (self.x_chapter_usual + 30, 515, self.w_chapter_slider, 50))
+                           (self.x_chapter_usual + 30, 480-20, self.w_chapter_slider, 50))
 
         self.batch_norm = True
-        self.make_checkbox('checkbox_batch_norm', 'Use Batch Norm', (310, 150, self.w_chapter_slider - 20, 50),
+        self.make_checkbox('checkbox_batch_norm', 'Use Batch Norm', (self.x_chapter_usual+10, 525, self.w_chapter_slider, 50),
                            self.select_bn, True)
 
         self.combobox_displayed_inputs = ["Input", "Norm Input", "Net Input"]
-        self.make_combobox(1, self.combobox_displayed_inputs, (self.x_chapter_usual, 420, self.w_chapter_slider, 50),
+        self.make_combobox(1, self.combobox_displayed_inputs, (290, 150, self.w_chapter_slider, 50),
                            self.change_displayed_input, "label_displayed_input", "Displayed input",
-                           (self.x_chapter_usual + 30, 395, self.w_chapter_slider, 50))
+                           (280 + 30, 150-20, self.w_chapter_slider, 50))
         self.displayed_input = 'Input'
 
         self.combobox_displayed_outputs = ["Output (hist)", "Output"]
-        self.make_combobox(1, self.combobox_displayed_outputs, (self.x_chapter_usual, 480, self.w_chapter_slider, 50),
+        self.make_combobox(1, self.combobox_displayed_outputs, (290, 210, self.w_chapter_slider, 50),
                            self.change_displayed_output, "label_displayed_output", "Displayed output",
-                           (self.x_chapter_usual + 30, 455, self.w_chapter_slider, 50))
+                           (280 + 30, 210-20, self.w_chapter_slider, 50))
         self.displayed_output = 'Output (hist)'
 
-        self.make_button('button_random_seed', "Random", (self.x_chapter_usual + 40, 590, 100, 55), self.change_random_seed)
+        self.make_button('button_random_seed', "Random", (self.x_chapter_usual + 40, 580, 100, 55), self.change_random_seed)
 
         self.graph()
 
@@ -94,18 +101,7 @@ class NormAndInitEffectsScaling(NNDLayout):
 
         self.change_input_distrib(self.combobox_input_distrib.index(self.input_distrib), graph=False)
 
-        dim = int(1) - 1
-        print('dim:', dim)
-        if dim <= -1:
-            print("Please select a dimension greater than 0")
-            return
-        if self.displayed_input in ['Input', "Norm Input"] and dim >= self.p_size:
-            print('Please select a dimension less or equal than the number of inputs')
-            return
-        if self.displayed_output in ["Net Input", "Output (hist)", "Output"] and dim >= self.n_neurons:
-            print('Please select a dimension less or equal than the number of neurons')
-            return
-
+        dim = 0
         print('self.p', self.p)
 
         # Clear the plot
@@ -129,7 +125,7 @@ class NormAndInitEffectsScaling(NNDLayout):
 
         if self.displayed_input == 'Input':
             self.plotInput.hist(self.p[0, :], bins=25)
-            self.plotInput.set_title(f'Input histogram (dimension {0 + 1})')
+            self.plotInput.set_title(f'Input hist (dim {0 + 1})')
             self.canvasInput.draw()
             # return
 
@@ -161,7 +157,7 @@ class NormAndInitEffectsScaling(NNDLayout):
         net_input = w.dot(p) + b * np.ones((1, self.n_examples))
         if self.displayed_input == 'Net Input':
             self.plotInput.hist(net_input[dim, :], bins=25)
-            self.plotInput.set_title(f'Net Input histogram (dimension {dim + 1})')
+            self.plotInput.set_title(f'Net Input hist (dim {dim + 1})')
             self.canvasInput.draw()
             # return
 
@@ -169,19 +165,10 @@ class NormAndInitEffectsScaling(NNDLayout):
         print('output:', output)
         print('output.shape:', output.shape)
         if self.displayed_output == 'Output (hist)':
-            self.plotOutput1.hist(output[0, :], bins=25)
-            self.plotOutput1.set_title(f'Output hist (dimension {0 + 1})')
-            self.plotOutput2.hist(output[1, :], bins=25)
-            self.plotOutput2.set_title(f'Output hist (dimension {1 + 1})')
-            self.plotOutput3.hist(output[2, :], bins=25)
-            self.plotOutput3.set_title(f'Output hist (dimension {2 + 1})')
-            self.plotOutput4.hist(output[3, :], bins=25)
-            self.plotOutput4.set_title(f'Output hist (dimension {3 + 1})')
-
-            self.canvasOutput1.draw()
-            self.canvasOutput2.draw()
-            self.canvasOutput3.draw()
-            self.canvasOutput4.draw()
+            self.draw_output_hist(self.plotOutput1, output, 0, self.canvasOutput1)
+            self.draw_output_hist(self.plotOutput2, output, 1, self.canvasOutput2)
+            self.draw_output_hist(self.plotOutput3, output, 2, self.canvasOutput3)
+            self.draw_output_hist(self.plotOutput4, output, 3, self.canvasOutput4)
 
         if self.displayed_output == 'Output':
             p1 = np.linspace(p_range[0, 0], p_range[0, 1], 20)
@@ -195,9 +182,14 @@ class NormAndInitEffectsScaling(NNDLayout):
             self.draw_output(XX, YY, AA, 2, self.plotOutput3, self.canvasOutput3)
             self.draw_output(XX, YY, AA, 3, self.plotOutput4, self.canvasOutput4)
 
+    def draw_output_hist(self, plotOutput, output, dim, canvasOutput):
+        plotOutput.hist(output[dim, :], bins=25)
+        plotOutput.set_title(f'Output hist (dim {dim + 1})')
+        canvasOutput.draw()
+
     def draw_output(self, XX, YY, AA, dim, a, canvas):
         a.plot_surface(XX, YY, AA[dim].reshape(20, 20))
-        a.set_title(f'Output (dimension {dim + 1}) wrt. input')
+        a.set_title(f'Output (dim {dim + 1}) wrt. input')
         canvas.draw()
 
     def change_displayed_input(self, idx):
