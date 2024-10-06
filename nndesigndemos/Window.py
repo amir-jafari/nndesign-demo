@@ -108,6 +108,7 @@ from nndesigndemos.book2.chapter2.Gradient_descent_stochastic import GradientDes
 # ------ Chapter 3 --------
 from nndesigndemos.book2.chapter3.Normalization_and_initialization_all_effects import NormAndInitAllEffects
 from nndesigndemos.book2.chapter3.Normalization_and_initialization_scaling import NormAndInitScaling
+from nndesigndemos.book2.chapter3.Normalization_and_initialization_scaling_new import NormAndInitScalingNew
 from nndesigndemos.book2.chapter3.Normalization_and_initialization_effect import NormAndInitEffect
 # ------ Chapter 4 --------
 from nndesigndemos.book2.chapter4.Convolution_networks import Convol
@@ -150,7 +151,7 @@ BOOK1_CHAPTERS_DEMOS = {
 BOOK2_CHAPTERS_DEMOS = {
     1: ["Multilayer Networks", "Chapter 1 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
     2: ["Multilayer Network Train", "Chapter 2 demos", "Gradient Descent", "Gradient Descent Stochastic"],
-    3: ["Supplemental Training", "Chapter 3 demos", "Normalization & Initialization All Effects", 'Normalization & Initialization Scaling', 'Normalization & Initialization Effect'],
+    3: ["Supplemental Training", "Chapter 3 demos", "Normalization & Initialization All Effects", 'Normalization & Initialization Scaling', 'Normalization & Initialization Effect', 'Normalization & Initialization Scaling New'],
     4: ["Convolution Networks", "Chapter 4 demos", "Convolution Networks demo"],
 }
 # -------------------------------------------------------------------------------------------------------------
@@ -696,6 +697,9 @@ class MainWindowDL(NNDLayout):
         elif idx == 3:
             self.book2_chapter3_window3 = NormAndInitEffect(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter3_window3.show()
+        elif idx == 4:
+            self.book2_chapter3_window2 = NormAndInitScalingNew(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter3_window2.show()
 
     def chapter4(self, idx):
         self.comboBox4.setCurrentIndex(0)

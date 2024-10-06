@@ -125,6 +125,7 @@ class NormAndInitScaling(NNDLayout):
 
         if self.displayed_input == 'Input':
             self.plotInput.hist(self.p[0, :], bins=25)
+            self.plotInput.set_xlim([-10, 10])
             self.plotInput.set_title(f'Input hist (dim {0 + 1})')
             self.canvasInput.draw()
             # return
@@ -184,6 +185,7 @@ class NormAndInitScaling(NNDLayout):
 
     def draw_output_hist(self, plotOutput, output, dim, canvasOutput):
         plotOutput.hist(output[dim, :], bins=25)
+        plotOutput.set_xlim([-1, 1])
         plotOutput.set_title(f'Output hist (dim {dim + 1})')
         canvasOutput.draw()
 
