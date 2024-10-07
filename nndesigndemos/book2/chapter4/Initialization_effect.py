@@ -5,40 +5,21 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
-from nndesigndemos.book2.chapter3.deephist import deephist
+from nndesigndemos.book2.chapter4.deephist import deephist
 
 
-class NormAndInitScalingNew(NNDLayout):
+class InitEffect(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
-        super(NormAndInitScalingNew, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
+        super(InitEffect, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Normalization & Initialization Effects", 3,
+        self.fill_chapter("Normalization & Initialization Effects", 4,
                           "\nChoose a initialization\nscheme and whether to\nuse BatchNorm or not."
                           "\n\nThe distribution of input,\nnet input and output\nis shown on the left.\n\n",
                           PACKAGE_PATH + "Chapters/4_D/Logo_Ch_4.svg", None,
                           icon_move_left=120, description_coords=(535, 105, 450, 250))
 
-        plot_size = 200
-        plot_x1 = 50
-        plot_x2 = 280
-        plot_y1 = 90
-        plot_y2 = 280
-        plot_y3 = 470
-
-        self.make_plot('Input', (plot_x1, plot_y1, plot_size, plot_size))
-        self.figureInput.set_tight_layout(True)
-
-        self.make_plot('Output1', (plot_x1, plot_y2, plot_size, plot_size))
-        self.figureOutput1.set_tight_layout(True)
-
-        self.make_plot('Output2', (plot_x2, plot_y2, plot_size, plot_size))
-        self.figureOutput2.set_tight_layout(True)
-
-        self.make_plot('Output3', (plot_x1, plot_y3, plot_size, plot_size))
-        self.figureOutput3.set_tight_layout(True)
-
-        self.make_plot('Output4', (plot_x2, plot_y3, plot_size, plot_size))
-        self.figureOutput4.set_tight_layout(True)
+        self.make_plot(1, (10, 180, 500, 500))
+        self.figure.set_tight_layout(True)
 
         self.make_slider("slider_n_examples", QtCore.Qt.Orientation.Horizontal, (1, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 20,
                          (self.x_chapter_usual, 310, self.w_chapter_slider, 50), self.change_n_examples, "label_n_examples",
@@ -59,6 +40,12 @@ class NormAndInitScalingNew(NNDLayout):
                            self.change_act_function, "label_act_function", "Activation function",
                            (self.x_chapter_usual + 30, 480-20, self.w_chapter_slider, 50))
 
+        self.max_layers = 100
+        self.n_layers = 4
+        self.make_slider("slider_n_layers", QtCore.Qt.Orientation.Horizontal, (1, self.max_layers), QtWidgets.QSlider.TickPosition.TicksBelow, 1, self.n_layers,
+                         (self.x_chapter_usual, 540, self.w_chapter_slider, 50), self.change_n_layers, "label_n_layers",
+                         f"Number of layers: {self.n_layers}", (self.x_chapter_usual + 20, 540 - 25, self.w_chapter_slider, 50))
+
         self.make_button('button_random_seed', "Random", (self.x_chapter_usual + 40, 580, 100, 55), self.change_random_seed)
 
         self.n_examples = int(self.slider_n_examples.value() * 100)
@@ -66,44 +53,42 @@ class NormAndInitScalingNew(NNDLayout):
         self.input_distrib = self.combobox_input_distrib[0]
         self.act = self.combobox_act_functions[0]
 
+        self.a = []
+
         self.graph()
 
     def graph(self):
         r = 6  # Input dimension
-        layer_size = 4
         print(
             'deephist(r, q, initial, input_distrib, act_func_key, layer_size)',
-            r, self.n_examples, self.weight_init, self.input_distrib, self.act, layer_size
+            r, self.n_examples, self.weight_init, self.input_distrib, self.act, self.max_layers
         )
-        a = deephist(r, self.n_examples, self.weight_init, self.input_distrib, self.act, layer_size)
+        self.a = deephist(r, self.n_examples, self.weight_init, self.input_distrib, self.act, self.max_layers)
 
-        self.draw_hist(self.figureInput, a, 0, self.canvasInput, True)
-        self.draw_hist(self.figureOutput1, a, 1, self.canvasOutput1)
-        self.draw_hist(self.figureOutput2, a, 2, self.canvasOutput2)
-        self.draw_hist(self.figureOutput3, a, 3, self.canvasOutput3)
-        self.draw_hist(self.figureOutput4, a, 4, self.canvasOutput4)
+        print('len(self.a)', len(self.a))
 
-    def draw_hist(self, figure, a, layer, canvas, is_input=False):
-        figure.clf()
-        sub_plot = figure.add_subplot(111)
+        self.draw_graph()
 
-        sub_plot.hist(a[layer].ravel(), bins=25)
+    def draw_graph(self):
+        self.figure.clf()  # Clear the plot
+        self.sub_plot = self.figure.add_subplot(111)
 
-        if is_input:
-            xlim = [-10, 10]
-        else:
-            xlim = [-1, 1]
-
-        # sub_plot.set_xlim(xlim)
-        sub_plot.set_title(
-            'Input layer' if is_input else f'Output layer{layer}'
-        )
-        canvas.draw()
+        self.sub_plot.hist(self.a[self.n_layers].ravel(), bins=25)
+        xlim = [-1, 1]
+        self.sub_plot.set_xlim(xlim)
+        self.sub_plot.set_ylim([0, self.n_examples//2])
+        self.sub_plot.set_title(f'Output layer {self.n_layers}')
+        self.canvas.draw()
 
     def change_n_examples(self):
         self.n_examples = int(self.slider_n_examples.value() * 100)
         self.label_n_examples.setText("Number of examples: {}".format(self.n_examples))
         self.graph()
+
+    def change_n_layers(self):
+        self.n_layers = self.slider_n_layers.value()
+        self.label_n_layers.setText(f"Number of layers: {self.n_layers}")
+        self.draw_graph()
 
     def change_weight_init(self, idx):
         self.weight_init = self.combobox_weight_inits[idx]

@@ -12,7 +12,7 @@ class PoslinNetworkFunction(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(PoslinNetworkFunction, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Poslin Network Function", 1, "\nAlter the network's\nparameters by dragging\nthe slide bars.\n\n"
+        self.fill_chapter("Poslin Network Function", 2, "\nAlter the network's\nparameters by dragging\nthe slide bars.\n\n"
                                                         "Choose the output transfer\nfunction f below.\n\n"
                                                         "Click on [Random] to\nset each parameter\nto a random value.",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg",

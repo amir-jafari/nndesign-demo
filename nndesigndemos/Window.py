@@ -97,21 +97,20 @@ from nndesigndemos.book1.chapter21.Hopfield_network import HopfieldNetwork
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
 # ------ Chapter 1 --------
-from nndesigndemos.book2.chapter1.Poslin_network_function import PoslinNetworkFunction
-from nndesigndemos.book2.chapter1.Poslin_decision_regions import PoslinDecisionRegions
-from nndesigndemos.book2.chapter1.Poslin_decision_regions_2d import PoslinDecisionRegions2D
-from nndesigndemos.book2.chapter1.Poslin_decision_regions_3d import PoslinDecisionRegions3D
-from nndesigndemos.book2.chapter1.Cascaded_function import CascadedFunction
+from nndesigndemos.book2.chapter2.Poslin_network_function import PoslinNetworkFunction
+from nndesigndemos.book2.chapter2.Poslin_decision_regions import PoslinDecisionRegions
+from nndesigndemos.book2.chapter2.Poslin_decision_regions_2d import PoslinDecisionRegions2D
+from nndesigndemos.book2.chapter2.Poslin_decision_regions_3d import PoslinDecisionRegions3D
+from nndesigndemos.book2.chapter2.Cascaded_function import CascadedFunction
 # ------ Chapter 2 --------
-from nndesigndemos.book2.chapter2.Gradient_descent import GradientDescent
-from nndesigndemos.book2.chapter2.Gradient_descent_stochastic import GradientDescentStochastic
+from nndesigndemos.book2.chapter3.Gradient_descent import GradientDescent
+from nndesigndemos.book2.chapter3.Gradient_descent_stochastic import GradientDescentStochastic
 # ------ Chapter 3 --------
-from nndesigndemos.book2.chapter3.Normalization_and_initialization_all_effects import NormAndInitAllEffects
-from nndesigndemos.book2.chapter3.Normalization_and_initialization_scaling import NormAndInitScaling
-from nndesigndemos.book2.chapter3.Normalization_and_initialization_scaling_new import NormAndInitScalingNew
-from nndesigndemos.book2.chapter3.Normalization_and_initialization_effect import NormAndInitEffect
+from nndesigndemos.book2.chapter4.Scaling import Scaling
+from nndesigndemos.book2.chapter4.Initialization_effect import InitEffect
+from nndesigndemos.book2.chapter4.Dropout import Dropout
 # ------ Chapter 4 --------
-from nndesigndemos.book2.chapter4.Convolution_networks import Convol
+from nndesigndemos.book2.chapter8.Convolution_networks import Convol
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -149,10 +148,10 @@ BOOK1_CHAPTERS_DEMOS = {
 }
 
 BOOK2_CHAPTERS_DEMOS = {
-    1: ["Multilayer Networks", "Chapter 1 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
-    2: ["Multilayer Network Train", "Chapter 2 demos", "Gradient Descent", "Gradient Descent Stochastic"],
-    3: ["Supplemental Training", "Chapter 3 demos", "Normalization & Initialization All Effects", 'Normalization & Initialization Scaling', 'Normalization & Initialization Effect', 'Normalization & Initialization Scaling New'],
-    4: ["Convolution Networks", "Chapter 4 demos", "Convolution Networks demo"],
+    2: ["Multilayer Networks", "Chapter 2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
+    3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Gradient Descent Stochastic"],
+    4: ["Supplemental Training", "Chapter 4 demos", 'Normalization & Initialization Scaling', 'Normalization & Initialization Effect', 'Dropout'],
+    5: ["Convolution Networks", "Chapter 5 demos", "Convolution Networks demo"],
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -572,7 +571,7 @@ class MainWindowDL(NNDLayout):
         # ---- Chapter icons and dropdown menus ----
 
         # Creates attributed for each window as None until clicked
-        for i in range(1, len(BOOK2_CHAPTERS_DEMOS)+1):
+        for i in range(2, len(BOOK2_CHAPTERS_DEMOS)+2):
             for j in BOOK2_CHAPTERS_DEMOS[i][2:]:
                 setattr(self, "book2_chapter{}_window{}".format(i, j), None)
 
@@ -616,20 +615,25 @@ class MainWindowDL(NNDLayout):
         # ---- Buttons at the bottom to switch between blocks of chapters ----
 
         self.button1 = QtWidgets.QPushButton(self)
-        self.button1.setText("1-4")
+        self.button1.setText("2-5")
         self.button1.setGeometry(xbtn1 * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
-        self.button1.clicked.connect(partial(self.show_chapters, "1-4"))
+        self.button1.clicked.connect(partial(self.show_chapters, "2-5"))
+
+        # self.button2 = QtWidgets.QPushButton(self)
+        # self.button2.setText("6-9")
+        # self.button2.setGeometry((xbtn1 + add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
+        # self.button2.clicked.connect(partial(self.show_chapters, "6-9"))
 
         self.center()
 
         self.show_chapters()
 
-    def show_chapters(self, chapters="1-4"):
+    def show_chapters(self, chapters="2-5"):
         """ Updates the icons and dropdown menus based on a block of chapters (chapters) """
 
         chapters = chapters.split("-")
         chapter_numbers = list(range(int(chapters[0]), int(chapters[1]) + 1))
-        chapter_functions = [self.chapter1, self.chapter2, self.chapter3, self.chapter4]
+        chapter_functions = [self.chapter2, self.chapter3, self.chapter4, self.chapter5]
 
         idx = 0
         for icon in [self.icon1, self.icon2, self.icon3, self.icon4]:  # TODO: Change logo path when we have them
@@ -649,7 +653,7 @@ class MainWindowDL(NNDLayout):
                 comboBox.currentIndexChanged.disconnect()
             comboBox.clear()
             comboBox.addItems(BOOK2_CHAPTERS_DEMOS[chapter_numbers[idx]][1:])
-            comboBox.currentIndexChanged.connect(chapter_functions[chapter_numbers[idx] - 1])
+            comboBox.currentIndexChanged.connect(chapter_functions[chapter_numbers[idx] - 2])
             comboBox.connected = True
             comboBox.repaint()
             idx += 1
@@ -659,50 +663,47 @@ class MainWindowDL(NNDLayout):
         # QtWidgets.QApplication.processEvents()
         # QtWidgets.QApplication.processEvents()
 
-    def chapter1(self, idx):
+    def chapter2(self, idx):
         self.comboBox1.setCurrentIndex(0)
         if idx == 1:
-            self.book2_chapter1_window1 = PoslinNetworkFunction(self.w_ratio, self.h_ratio, self.dpi)
-            self.book2_chapter1_window1.show()
-        elif idx == 2:
-            self.book2_chapter1_window2 = PoslinDecisionRegions(self.w_ratio, self.h_ratio, self.dpi)
-            self.book2_chapter1_window2.show()
-        elif idx == 3:
-            self.book2_chapter1_window3 = PoslinDecisionRegions2D(self.w_ratio, self.h_ratio, self.dpi)
-            self.book2_chapter1_window3.show()
-        elif idx == 4:
-            self.book2_chapter1_window4 = PoslinDecisionRegions3D(self.w_ratio, self.h_ratio, self.dpi)
-            self.book2_chapter1_window4.show()
-        elif idx == 5:
-            self.book2_chapter1_window5 = CascadedFunction(self.w_ratio, self.h_ratio, self.dpi)
-            self.book2_chapter1_window5.show()
-
-    def chapter2(self, idx):
-        self.comboBox2.setCurrentIndex(0)
-        if idx == 1:
-            self.book2_chapter2_window1 = GradientDescent(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter2_window1 = PoslinNetworkFunction(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter2_window1.show()
         elif idx == 2:
-            self.book2_chapter2_window2 = GradientDescentStochastic(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter2_window2 = PoslinDecisionRegions(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter2_window2.show()
+        elif idx == 3:
+            self.book2_chapter2_window3 = PoslinDecisionRegions2D(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter2_window3.show()
+        elif idx == 4:
+            self.book2_chapter2_window4 = PoslinDecisionRegions3D(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter2_window4.show()
+        elif idx == 5:
+            self.book2_chapter2_window5 = CascadedFunction(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter2_window5.show()
 
     def chapter3(self, idx):
-        self.comboBox3.setCurrentIndex(0)
+        self.comboBox2.setCurrentIndex(0)
         if idx == 1:
-            self.book2_chapter3_window1 = NormAndInitAllEffects(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter3_window1 = GradientDescent(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter3_window1.show()
         elif idx == 2:
-            self.book2_chapter3_window2 = NormAndInitScaling(self.w_ratio, self.h_ratio, self.dpi)
-            self.book2_chapter3_window2.show()
-        elif idx == 3:
-            self.book2_chapter3_window3 = NormAndInitEffect(self.w_ratio, self.h_ratio, self.dpi)
-            self.book2_chapter3_window3.show()
-        elif idx == 4:
-            self.book2_chapter3_window2 = NormAndInitScalingNew(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter3_window2 = GradientDescentStochastic(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter3_window2.show()
 
     def chapter4(self, idx):
+        self.comboBox3.setCurrentIndex(0)
+        if idx == 1:
+            self.book2_chapter4_window1 = Scaling(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter4_window1.show()
+        elif idx == 2:
+            self.book2_chapter4_window2 = InitEffect(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter4_window2.show()
+        elif idx == 3:
+            self.book2_chapter4_window3 = Dropout(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter4_window3.show()
+
+    def chapter5(self, idx):
         self.comboBox4.setCurrentIndex(0)
         if idx == 1:
-            self.book2_chapter4_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
-            self.book2_chapter4_window1.show()
+            self.book2_chapter5_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter5_window1.show()
