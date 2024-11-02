@@ -158,7 +158,7 @@ class SteepestDescentBackprop1(NNDLayout):
             self.x, self.y = self.b1[0, 0], self.b1[1, 0]
 
         if idx == self.epochs - 1:
-            self.end_point_1.set_data(self.x_data[-1], self.y_data[-1])
+            self.end_point_1.set_data([self.x_data[-1]], [self.y_data[-1]])
 
         self.x_data.append(self.x)
         self.y_data.append(self.y)

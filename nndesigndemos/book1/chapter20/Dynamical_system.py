@@ -147,7 +147,7 @@ class DynamicalSystem(NNDLayout):
         r = np.arange(0, 1.5, 0.01)
         theta = [self.angle] * len(r)
         self.pendulum_line.set_data(theta, r)
-        self.pendulum_point.set_data(theta[0], r[-1] + 0.01)
+        self.pendulum_point.set_data([theta[0]], [r[-1] + 0.01])
 
     def draw_energy(self):
         self.energy.append(0.5 * 9.8 ** 2 * self.velocity ** 2 + 9.81 * 9.8 * (1 - np.cos(self.angle)))

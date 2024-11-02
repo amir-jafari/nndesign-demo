@@ -261,7 +261,7 @@ class Marquardt(NNDLayout):
         self.path.set_data(self.x_data, self.y_data)
 
         if idx == 11:
-            self.end_point_1.set_data(self.x_data[-1], self.y_data[-1])
+            self.end_point_1.set_data([self.x_data[-1]], [self.y_data[-1]])
 
         return self.path, self.end_point_1
 

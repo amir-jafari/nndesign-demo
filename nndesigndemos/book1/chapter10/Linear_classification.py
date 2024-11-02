@@ -428,7 +428,7 @@ class LinearClassification(NNDLayout):
     def draw_meter(self):
         r = np.arange(0, 0.9, 0.01)
         theta = self.angle * np.pi / 180
-        self.meter.set_data(theta, r)
+        self.meter.set_data([theta], [r])
 
     def animate_init(self):
         self.angles = [self.angle]

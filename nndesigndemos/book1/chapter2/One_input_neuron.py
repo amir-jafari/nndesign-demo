@@ -57,7 +57,7 @@ class OneInputNeuron(NNDLayout):
         out = func(np.dot(weight, p) + bias)
 
         self.axis_output.set_data(p, out)
-        self.axis.set_title("$a = {}(w \cdot p + b)$".format(self.comboBox1_functions_str[self.func_idx]))
+        self.axis.set_title(r"$a = {}(w \cdot p + b)$".format(self.comboBox1_functions_str[self.func_idx]))
 
         self.canvas.draw()
 

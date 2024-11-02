@@ -93,7 +93,7 @@ class CompetitiveClassification(NNDLayout):
         painter.setFont(QtGui.QFont("times", 12 * (w_ratio + h_ratio) // 2))
         painter.drawText(QtCore.QPoint(100 * w_ratio, 26 * h_ratio), self.text_shape)
         painter.drawText(QtCore.QPoint(230 * w_ratio, 26 * h_ratio), self.text_texture)
-        painter.drawText(QtCore.QPoint(370 * w_ratio, 26 * h_ratio), self.text_weight)
+        painter.drawText(QtCore.QPoint(360 * w_ratio, 26 * h_ratio), self.text_weight)
         painter.end()
         self.icon3.setPixmap(pixmap)
 
