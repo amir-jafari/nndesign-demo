@@ -322,7 +322,7 @@ class ConjugateGradient(NNDLayout):
                 self.x_data = [(x[0] if isinstance(x, np.ndarray) else x) for x in self.x_data]
 
         if idx == 14:
-            self.end_point_1.set_data([self.x_data[-1], self.y_data[-1]])
+            self.end_point_1.set_data([self.x_data[-1]], [self.y_data[-1]])
 
         self.path.set_data(self.x_data, self.y_data)
         return self.path, self.end_point_1

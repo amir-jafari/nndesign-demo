@@ -203,7 +203,7 @@ class VariableLearningRate(NNDLayout):
             self.D1 = self.a1 * (1 - self.a1) * np.dot(self.W2.T, self.D2)
 
         if idx == 99:
-            self.end_point_1.set_data([self.x_data[-1], self.y_data[-1]])
+            self.end_point_1.set_data([self.x_data[-1]], [self.y_data[-1]])
 
         self.x_data.append(self.x)
         self.y_data.append(self.y)
