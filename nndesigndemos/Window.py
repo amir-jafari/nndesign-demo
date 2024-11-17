@@ -96,20 +96,20 @@ from nndesigndemos.book1.chapter20.Dynamical_system import DynamicalSystem
 from nndesigndemos.book1.chapter21.Hopfield_network import HopfieldNetwork
 
 # ----------------------------------------------------- Book 2 ---------------------------------------------------------
-# ------ Chapter 1 --------
+# ------ Chapter 2 --------
 from nndesigndemos.book2.chapter2.Poslin_network_function import PoslinNetworkFunction
 from nndesigndemos.book2.chapter2.Poslin_decision_regions import PoslinDecisionRegions
 from nndesigndemos.book2.chapter2.Poslin_decision_regions_2d import PoslinDecisionRegions2D
 from nndesigndemos.book2.chapter2.Poslin_decision_regions_3d import PoslinDecisionRegions3D
 from nndesigndemos.book2.chapter2.Cascaded_function import CascadedFunction
-# ------ Chapter 2 --------
+# ------ Chapter 3 --------
 from nndesigndemos.book2.chapter3.Gradient_descent import GradientDescent
 from nndesigndemos.book2.chapter3.Gradient_descent_stochastic import GradientDescentStochastic
-# ------ Chapter 3 --------
+# ------ Chapter 4 --------
 from nndesigndemos.book2.chapter4.Scaling import Scaling
 from nndesigndemos.book2.chapter4.Initialization_effect import InitEffect
 from nndesigndemos.book2.chapter4.Dropout import Dropout
-# ------ Chapter 4 --------
+# ------ Chapter 8 --------
 from nndesigndemos.book2.chapter8.Convolution_networks import Convol
 
 
