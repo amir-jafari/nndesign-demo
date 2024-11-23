@@ -151,7 +151,12 @@ BOOK2_CHAPTERS_DEMOS = {
     2: ["Multilayer Networks", "Chapter 2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
     3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Gradient Descent Stochastic"],
     4: ["Supplemental Training", "Chapter 4 demos", 'Normalization & Initialization Scaling', 'Normalization & Initialization Effect', 'Dropout'],
-    5: ["Convolution Networks", "Chapter 5 demos", "Convolution Networks demo"],
+    5: ["Python", "Chapter 5 demos", "Convolution Networks demo"],
+    6: ["TensorFlowIntro", "Chapter 6 demos", "Convolution Networks demo"],
+    7: ["Chapter 7", "Chapter 7 demos", "Convolution Networks demo"],
+    8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
+    9: ["PostTrain", "Chapter 9 demos", "Convolution Networks demo"],
+    # 10: ["Chapter 10", "Chapter 10 demos", "Convolution Networks demo"],
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -619,10 +624,15 @@ class MainWindowDL(NNDLayout):
         self.button1.setGeometry(xbtn1 * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
         self.button1.clicked.connect(partial(self.show_chapters, "2-5"))
 
-        # self.button2 = QtWidgets.QPushButton(self)
-        # self.button2.setText("6-9")
-        # self.button2.setGeometry((xbtn1 + add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
-        # self.button2.clicked.connect(partial(self.show_chapters, "6-9"))
+        self.button2 = QtWidgets.QPushButton(self)
+        self.button2.setText("6-9")
+        self.button2.setGeometry((xbtn1 + add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
+        self.button2.clicked.connect(partial(self.show_chapters, "6-9"))
+
+        # self.button3 = QtWidgets.QPushButton(self)
+        # self.button3.setText("10")
+        # self.button3.setGeometry((xbtn1 + 2 * add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
+        # self.button3.clicked.connect(partial(self.show_chapters, "10"))
 
         self.center()
 
@@ -631,12 +641,22 @@ class MainWindowDL(NNDLayout):
     def show_chapters(self, chapters="2-5"):
         """ Updates the icons and dropdown menus based on a block of chapters (chapters) """
 
-        chapters = chapters.split("-")
-        chapter_numbers = list(range(int(chapters[0]), int(chapters[1]) + 1))
-        chapter_functions = [self.chapter2, self.chapter3, self.chapter4, self.chapter5]
+        if chapters in ["2-5", "6-9"]:
+            icon_lst = [self.icon1, self.icon2, self.icon3, self.icon4]
+            label_lst = [self.label_box1, self.label_box2, self.label_box3, self.label_box4]
+            combo_lst = [self.comboBox1, self.comboBox2, self.comboBox3, self.comboBox4]
+            chapters = chapters.split("-")
+            chapter_numbers = list(range(int(chapters[0]), int(chapters[1]) + 1))
+        elif chapters == '10':
+            icon_lst = [self.icon1]
+            label_lst = [self.label_box1]
+            combo_lst = [self.comboBox1]
+            chapter_numbers = [10]
+
+        chapter_functions = [self.chapter2, self.chapter3, self.chapter4, self.chapter5, self.chapter6, self.chapter7, self.chapter8, self.chapter9]
 
         idx = 0
-        for icon in [self.icon1, self.icon2, self.icon3, self.icon4]:  # TODO: Change logo path when we have them
+        for icon in icon_lst:  # TODO: Change logo path when we have them
             icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/Logo_Ch_{}.svg".format(chapter_numbers[idx] + 1)).pixmap(
                 w_Logo1, h_Logo1, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, w_Logo1, h_Logo1)
@@ -645,8 +665,7 @@ class MainWindowDL(NNDLayout):
             idx += 1
 
         idx = 0
-        for label_box, comboBox in zip([self.label_box1, self.label_box2, self.label_box3, self.label_box4],
-                                       [self.comboBox1, self.comboBox2, self.comboBox3, self.comboBox4]):
+        for label_box, comboBox in zip(label_lst, combo_lst):
             label_box.setText(BOOK2_CHAPTERS_DEMOS[chapter_numbers[idx]][0])
             label_box.repaint()
             if comboBox.connected:
@@ -707,3 +726,34 @@ class MainWindowDL(NNDLayout):
         if idx == 1:
             self.book2_chapter5_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter5_window1.show()
+
+    def chapter6(self, idx):
+        self.comboBox1.setCurrentIndex(0)
+        if idx == 1:
+            self.book2_chapter6_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter6_window1.show()
+
+    def chapter7(self, idx):
+        self.comboBox2.setCurrentIndex(0)
+        if idx == 1:
+            self.book2_chapter7_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter7_window1.show()
+
+    def chapter8(self, idx):
+        self.comboBox3.setCurrentIndex(0)
+        if idx == 1:
+            self.book2_chapter8_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter8_window1.show()
+
+    def chapter9(self, idx):
+        self.comboBox4.setCurrentIndex(0)
+        if idx == 1:
+            self.book2_chapter9_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter9_window1.show()
+
+    # def chapter10(self, idx):
+    #     self.comboBox1.setCurrentIndex(0)
+    #     if idx == 1:
+    #         self.book2_chapter10_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+    #         self.book2_chapter10_window1.show()
+

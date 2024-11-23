@@ -9,9 +9,57 @@ from nndesigndemos.book2.chapter4.DropoutDir.calcperf0 import calcperf0
 from nndesigndemos.book2.chapter4.DropoutDir.setx import setx
 from nndesigndemos.book2.chapter4.DropoutDir.calcgx0 import calcgx0
 from nndesigndemos.book2.chapter4.DropoutDir.cliptr import cliptr
+from nndesigndemos.book2.chapter4.DropoutDir.newmultilay import newmultilay
+from nndesigndemos.book2.chapter4.DropoutDir.softmax0 import softmax0
+from nndesigndemos.book2.chapter4.DropoutDir.crossentr import crossentr
+from nndesigndemos.book2.chapter4.DropoutDir.tansig0 import tansig0
 
 
-def trainscg0(net, Pd=None, Tl=None, VV=[], TV=[]):
+def preProcessing(do_low, S_row, stdv):
+    # stdv: standard deviation for noise
+
+    # Create the network
+    net = newmultilay({
+        'f': [tansig0, softmax0],
+        'R': 2,
+        'S': [S_row, 2],
+        'Init': 'xav',
+        'perf': crossentr,
+        'do': [do_low, 1],
+        'doflag': 0
+    })
+
+    # Training data (inputs P and targets T)
+    Pd = np.array([
+        [0.2, 0.2, 0, 0, -0.35, -0.35, -0.5, 0, 0.25, 0, -0.25, 0, 0.25, -0.15, -0.15, 0.1, 0.1],
+        [-0.75, 0.75, 0.65, -0.65, -0.45, 0.45, 0, -0.5, 0.5, 0.25, 0, -0.25, -0.5, 0.2, -0.2, 0.3, -0.3]
+    ])
+    Tl = np.array([
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ])
+
+    # Adding noise to input data
+    # P = np.hstack([P for _ in range(7)]) # For test
+    Pd = np.hstack([Pd] + [Pd + stdv * (np.random.rand(*Pd.shape) - 0.5) for _ in range(6)])
+    Tl = np.hstack([Tl for _ in range(7)])
+
+    # Train the network using the SCG algorithm (placeholder)
+    net['trainParam'] = {
+        'epochs': 300,
+        'show': 25,
+        'goal': 0,
+        'max_time': float('inf'),
+        'min_grad': 1.0e-6,
+        'max_fail': 5,
+        'sigma': 5.0e-5,
+        'lambda': 5.0e-7
+    }
+
+    return net, Pd, Tl
+
+
+def trainscg0(do_low=0.95, S_row=300, stdv=0.3):
     """
     Scaled conjugate gradient backpropagation algorithm for neural network training.
 
@@ -33,6 +81,8 @@ def trainscg0(net, Pd=None, Tl=None, VV=[], TV=[]):
     tr : dict
         Training record over epochs (perf, vperf, tperf, alphak, deltak).
     """
+    net, Pd, Tl = preProcessing(do_low, S_row, stdv)
+
     this = 'TRAINSCG'
     epochs = net['trainParam']['epochs']
     show = net['trainParam']['show']
@@ -59,6 +109,7 @@ def trainscg0(net, Pd=None, Tl=None, VV=[], TV=[]):
     lambdak = lambda_param
 
     for epoch in range(0, epochs+1):
+        # print('epoch', epoch)
         if epoch == 0:
             if dropout:
                 net['doflag'] = 1
@@ -111,6 +162,7 @@ def trainscg0(net, Pd=None, Tl=None, VV=[], TV=[]):
         # flag_stop = plotperf0(tr, goal, this, epoch)  # Assuming plotperf0 is defined
 
         if stop:
+            yield net, Pd, Tl
             break
 
         if success == 1:
@@ -184,6 +236,9 @@ def trainscg0(net, Pd=None, Tl=None, VV=[], TV=[]):
         tr['alphak'][epoch] = alphak
         tr['deltak'][epoch] = deltak
 
-    tr = cliptr(tr, epoch)
+        # It's not good practice, but it works...
+        # Comment on the following line to make it a regular function
+        yield tr['perf'][epoch],
 
-    return net, tr
+    tr = cliptr(tr, epoch)
+    return net, tr, Pd, Tl
