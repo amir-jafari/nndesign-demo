@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 from nndesigndemos.book2.chapter4.DropoutDir.trainscg0 import trainscg0
 from nndesigndemos.book2.chapter4.DropoutDir.simnet import simnet
 
-def plot_contour(net1, Pd, Tl):
+
+def plot_contour(net1, Pd, Tl, fig, ax):
 
     # Plot decision boundary
     mx = [1.02, 1.02]
@@ -26,31 +27,30 @@ def plot_contour(net1, Pd, Tl):
     F = testOutputs.reshape(X.shape)
 
     # Create a contour plot
-    plt.figure()
-    # plt.contourf(xpts, ypts, F, levels=[0.0, 0.0], colors=['lightblue'])
-    plt.contourf(xpts, ypts, F, levels=[-0.1, 0.0, 0.1], colors=['lightblue', 'lightgreen', 'lightyellow'])
+    contour = ax.contourf(xpts, ypts, F, levels=[-1, 0, 1], colors=['white', 'lightgreen'])
 
-    plt.colorbar()
+    # # Add a colorbar
+    # fig.colorbar(contour, ax=ax)
 
-    # Plot points from P
-    plt.plot(Pd[0, :], Pd[1, :], 'x', label='All P points')
+    # Plot all points from Pd
+    ax.plot(Pd[0, :], Pd[1, :], 'x') # , label='All P points'
 
     # Identify indices where T(1,:) is non-zero
     ind = np.nonzero(Tl[0, :])[0]
 
     # Plot points with condition T(1, :)
-    plt.plot(Pd[0, ind], Pd[1, ind], 'or', label='T(1,:) non-zero points')
+    ax.plot(Pd[0, ind], Pd[1, ind], 'or') # , label='T(1,:) non-zero points'
 
-    # Add reference lines and set axis properties
-    plt.plot([-1, 1], [0, 0], 'k')  # Horizontal line
-    plt.plot([0, 0], [-1, 1], 'k')  # Vertical line
-    plt.axis('square')
-    plt.xlabel("xpts")
-    plt.ylabel("ypts")
+    # Add reference lines
+    ax.plot([-1, 1], [0, 0], 'k')  # Horizontal line
+    ax.plot([0, 0], [-1, 1], 'k')    # Vertical line
 
-    # Show the plot
-    plt.legend()
-    plt.show()
+    # Customize axis properties
+    ax.set_aspect('equal', adjustable='box')  # Equivalent to plt.axis('square')
+    ax.set_xlabel("xpts")
+    ax.set_ylabel("ypts")
+
+    ax.legend()
 
 
 def testTrainSCG():
@@ -73,8 +73,10 @@ def testTrainSCG():
     plt.show()
     # exit()
 
-    plot_contour(net1, Pd, Tl)
-
+    # Create a figure and an axis
+    fig, ax = plt.subplots()
+    plot_contour(net1, Pd, Tl, fig, ax)
+    plt.show()
 
 if __name__ == '__main__':
     # Run the function

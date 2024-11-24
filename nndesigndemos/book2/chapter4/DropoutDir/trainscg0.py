@@ -162,7 +162,6 @@ def trainscg0(do_low=0.95, S_row=300, stdv=0.3):
         # flag_stop = plotperf0(tr, goal, this, epoch)  # Assuming plotperf0 is defined
 
         if stop:
-            yield net, Pd, Tl
             break
 
         if success == 1:
@@ -239,6 +238,8 @@ def trainscg0(do_low=0.95, S_row=300, stdv=0.3):
         # It's not good practice, but it works...
         # Comment on the following line to make it a regular function
         yield tr['perf'][epoch],
+
+    yield net, Pd, Tl
 
     tr = cliptr(tr, epoch)
     return net, tr, Pd, Tl

@@ -1,145 +1,68 @@
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-import numpy as np
 from PyQt6 import QtWidgets, QtCore
 from matplotlib.animation import FuncAnimation
-import matplotlib.pyplot as plt
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
 
 from nndesigndemos.book2.chapter4.DropoutDir.trainscg0 import trainscg0
-from nndesigndemos.book2.chapter4.DropoutDir.simnet import simnet
 from nndesigndemos.book2.chapter4.DropoutDir.testTrainSCG import plot_contour
+
 
 class Dropout(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(Dropout, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Early Stopping", 13, "Use the slider to change the\nNoise Standard Deviation of\nthe training points.\n\n"
-                                                "Click [Train] to train\non the training points.\n\nThe training and validation\n"
-                                                "performance indexes will be\npresented on the right.\n\nYou will notice that\n"
-                                                "without early stopping\nthe validation error\nwill increase.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 120, 450, 300))
-
-        self.max_epoch = 10
-        self.T = 2
-        self.pp0 = np.linspace(-1, 1, 201)
-        self.tt0 = np.sin(2 * np.pi * self.pp0 / self.T)
-
-        self.pp = np.linspace(-0.95, 0.95, 20)
-        self.p = np.linspace(-1, 1, 21)
+        self.fill_chapter("Early Stopping", 4, "Use the slider to change the\nNoise Standard Deviation of\nthe training points.\n\n"
+                                                "Click [Train] to train\non the training points.",
+                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 40, 450, 300))
 
         self.make_plot(1, (100, 90, 300, 300))
         self.make_plot(2, (100, 380, 300, 300))
 
         self.train_error, self.error_train = [], None
         self.ani_1 = None
-        self.W1, self.b1, self.W2, self.b2 = None, None, None, None
-        self.S1, self.random_state = 20, 42
-        # np.random.seed(self.random_state)
-        self.tt, self.t = None, None
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Performance Indexes", fontdict={'fontsize': 10})
         self.train_e, = self.axes_1.plot([], [], linestyle='-', color="b", label="train error")
         self.axes_1.legend()
-        # self.axes_1.plot([1, 1])
         self.axes_1.plot(1, 100, marker="*")
         self.axes_1.plot(300, 100, marker="*")
-        self.axes_1.plot(1, 0.01, marker="*")
-        self.axes_1.plot(300, 0.01, marker="*")
-        # self.axes_1.set_xscale("log")
+        self.axes_1.plot(1, 1, marker="*")
+        self.axes_1.plot(300, 1, marker="*")
         self.axes_1.set_yscale("log")
-        # self.axes_1.set_xlim(1, 100)
-        # self.axes_1.set_ylim(0.1, 1000)
-        # self.axes_1.set_xticks([1, 10, 100])
-        # self.axes_1.set_yticks([0.1, 0, 10, 100, 1000])
-        # for line in self.axes_1.lines:
-        #     line.remove()
         self.figure.set_tight_layout(True)
         self.canvas.draw()
 
-        self.axes_2 = self.figure2.add_subplot(1, 1, 1)
-        self.axes_2.set_title("Function", fontdict={'fontsize': 10})
-        self.axes_2.set_xlim(-1, 1)
-        self.axes_2.set_ylim(-1.5, 1.5)
-        self.axes_2.plot(self.pp0, np.sin(2 * np.pi * self.pp0 / self.T))
-        self.net_approx, = self.axes_2.plot([], linestyle="--")
-        self.train_points, = self.axes_2.plot([], marker='*', label="Train", linestyle="")
-        self.test_points, = self.axes_2.plot([], marker='.', label="Test", linestyle="")
-        self.axes_2.legend()
-        self.canvas2.draw()
+        self.do_low = 0.95
+        self.S_row = 300
+        self.stdv = 0.3
 
+        self.make_slider("slider_do_low", QtCore.Qt.Orientation.Horizontal, (95, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 95,
+                         (self.x_chapter_usual, 230, self.w_chapter_slider, 100), self.slide1,
+                         "label_do_low", "Dropout value: 0.95", (self.x_chapter_usual + 10, 200, self.w_chapter_slider, 100))
 
-        self.nsd = 1
-        self.make_slider("slider_nsd", QtCore.Qt.Orientation.Horizontal, (0, 30), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
-                         (self.x_chapter_usual, 410, self.w_chapter_slider, 100), self.slide,
-                         "label_nsd", "Noise standard deviation: 1.0", (self.x_chapter_usual + 10, 380, self.w_chapter_slider, 100))
+        self.make_slider("slider_srow", QtCore.Qt.Orientation.Horizontal, (30, 50), QtWidgets.QSlider.TickPosition.TicksBelow, 2, 30,
+                         (self.x_chapter_usual, 310, self.w_chapter_slider, 100), self.slide2,
+                         "label_srow", "S value: 300", (self.x_chapter_usual + 10, 280, self.w_chapter_slider, 100))
 
-        self.animation_speed = 10
+        self.make_slider("slider_stdv", QtCore.Qt.Orientation.Horizontal, (3, 5), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 3,
+                         (self.x_chapter_usual, 390, self.w_chapter_slider, 100), self.slide3,
+                         "label_stdv", "Stdv value: 0.3", (self.x_chapter_usual + 10, 360, self.w_chapter_slider, 100))
 
-        self.plot_train_test_data()
+        self.animation_interval = 10
+        self.full_batch = False
 
         self.run_button = QtWidgets.QPushButton("Train", self)
         self.run_button.setStyleSheet("font-size:13px")
         self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 490 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.run_button.clicked.connect(self.on_run)
 
-
         self.make_button("pause_button", "Pause", (self.x_chapter_button, 520, self.w_chapter_button, self.h_chapter_button), self.on_stop)
         self.pause = True
-
-        self.init_params()
-        self.full_batch = False
-
-    def plot_result(self, net1, P, T):
-        # Plot decision boundary
-        mx = [1.02, 1.02]
-        mn = [-1, -1]
-        xlim = [mn[0], mx[0]]
-        ylim = [mn[1], mx[1]]
-
-        dx = (mx[0] - mn[0]) / 101
-        dy = (mx[1] - mn[1]) / 101
-        xpts = np.arange(xlim[0], xlim[1], dx)
-        ypts = np.arange(ylim[0], ylim[1], dy)
-        X, Y = np.meshgrid(xpts, ypts)
-
-        testInput = np.vstack([X.ravel(), Y.ravel()])
-        net1['doflag'] = 0
-        testOutputs = simnet(net1, testInput)
-        testOutputs = testOutputs[1][0, :] - testOutputs[1][1, :]
-
-        F = testOutputs.reshape(X.shape)
-
-        # Create a contour plot
-        plt.figure()
-        # plt.contourf(xpts, ypts, F, levels=[0.0, 0.0], colors=['lightblue'])
-        plt.contourf(xpts, ypts, F, levels=[-0.1, 0.0, 0.1], colors=['lightblue', 'lightgreen', 'lightyellow'])
-
-        plt.colorbar()
-
-        # Plot points from P
-        plt.plot(P[0, :], P[1, :], 'x', label='All P points')
-
-        # Identify indices where T(1,:) is non-zero
-        ind = np.nonzero(T[0, :])[0]
-
-        # Plot points with condition T(1, :)
-        plt.plot(P[0, ind], P[1, ind], 'or', label='T(1,:) non-zero points')
-
-        # Add reference lines and set axis properties
-        plt.plot([-1, 1], [0, 0], 'k')  # Horizontal line
-        plt.plot([0, 0], [-1, 1], 'k')  # Vertical line
-        plt.axis('square')
-        plt.xlabel("xpts")
-        plt.ylabel("ypts")
-
-        # Show the plot
-        plt.legend()
-        plt.show()
 
     def ani_stop(self):
         if self.ani_1 and self.ani_1.event_source:
@@ -166,56 +89,46 @@ class Dropout(NNDLayout):
             epoch = len(self.train_error)
             self.train_e.set_data(list(range(epoch)), self.train_error)
         else:
-            print('net, Pd, Tl', allYieldData[0].keys(), allYieldData[1].shape, allYieldData[2].shape)
-            plot_contour(allYieldData[0], allYieldData[1], allYieldData[2])
+            self.axes_2 = self.figure2.add_subplot(1, 1, 1)
+            # self.axes_2.set_title("Function", fontdict={'fontsize': 10})
+
+            net1, Pd, Tl = allYieldData[0], allYieldData[1], allYieldData[2]
+            plot_contour(net1, Pd, Tl, self.figure2, self.axes_2)
+            self.canvas2.draw()
 
         return self.train_e,
+
+    def fig_clean(self):
+        self.figure2.clf()
+        self.canvas2.draw()
 
     def on_run(self):
         self.pause_button.setText("Pause")
         self.pause = True
-        self.init_params()
         self.ani_stop()
-        self.net_approx.set_data([], [])
         self.train_error = []
         self.train_e.set_data([], [])
         self.canvas.draw()
 
-        print('self.max_epoch', self.max_epoch, self.animation_speed)
+        self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.fig_clean(), frames=trainscg0(self.do_low, self.S_row, self.stdv),
+                                   interval=self.animation_interval, repeat=False, blit=True)
 
-        self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, frames=trainscg0(),
-                                   interval=self.animation_speed, repeat=False, blit=True)
-
-        print('self.max_epoch2222', self.max_epoch, self.animation_speed)
-
-    def slide(self):
-        # if list(self.ani_1.frame_seq):  # If the animation is running
-        #     self.slider_nsd.setValue(self.nsd * 10)
-            # self.ani_1.event_source.start()
-        # else:
-        print('slideslideslideslide')
-        self.init_params()
-        # np.random.seed(self.random_state)
-        self.nsd = float(self.slider_nsd.value() / 10)
-        self.label_nsd.setText("Noise standard deviation: " + str(self.nsd))
-        self.plot_train_test_data()
-        # self.animation_speed = int(self.slider_anim_speed.value()) * 100
-        # self.label_anim_speed.setText("Animation Delay: " + str(self.animation_speed) + " ms")
+    def slide_base(self, label, content):
+        label.setText(content)
         self.ani_stop()
         self.train_error = []
-        self.net_approx.set_data([], [])
         self.canvas.draw()
         self.canvas2.draw()
+        print('self.do_low, self.S_row, self.stdv', self.do_low, self.S_row, self.stdv)
 
-    def plot_train_test_data(self):
-        self.tt = np.sin(2 * np.pi * self.pp / self.T) + np.random.uniform(-2, 2, self.pp.shape) * 0.2 * self.nsd
-        self.train_points.set_data(self.pp, self.tt)
-        self.t = np.sin(2 * np.pi * self.p / self.T) + np.random.uniform(-2, 2, self.p.shape) * 0.2 * self.nsd
-        self.test_points.set_data(self.p, self.t)
+    def slide1(self):
+        self.do_low = self.slider_do_low.value() / 100
+        self.slide_base(self.label_do_low, f"Dropout value: {self.do_low}")
 
-    def init_params(self):
-        # np.random.seed(self.random_state)
-        self.W1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
-        self.b1 = np.random.uniform(-0.5, 0.5, (self.S1, 1))
-        self.W2 = np.random.uniform(-0.5, 0.5, (1, self.S1))
-        self.b2 = np.random.uniform(-0.5, 0.5, (1, 1))
+    def slide2(self):
+        self.S_row = self.slider_srow.value() * 10
+        self.slide_base(self.label_srow, f"S value: {self.S_row}")
+
+    def slide3(self):
+        self.stdv = self.slider_stdv.value() / 10
+        self.slide_base(self.label_stdv, f"Stdv value: {self.stdv}")
