@@ -109,15 +109,14 @@ from nndesigndemos.book2.chapter3.Gradient_descent_stochastic import GradientDes
 from nndesigndemos.book2.chapter4.Scaling import Scaling
 from nndesigndemos.book2.chapter4.Initialization_effect import InitEffect
 from nndesigndemos.book2.chapter4.Dropout import Dropout
-# # ------ Chapter 5 --------
-# from nndesigndemos.book2.chapter5.Cheatsheet5 import Cheatsheet5
+# ------ Chapter 5 --------
+from nndesigndemos.book2.chapter5.Cheatsheet5 import Cheatsheet5
 # ------ Chapter 6 --------
 from nndesigndemos.book2.chapter6.Cheatsheet6 import Cheatsheet6
-# ------ Chapter 10 --------
-# from nndesigndemos.book2.chapter5.Cheatsheet6 import Cheatsheet10
-
 # ------ Chapter 8 --------
 from nndesigndemos.book2.chapter8.Convolution_networks import Convol
+# ------ Chapter 10 --------
+from nndesigndemos.book2.chapter10.Cheatsheet10 import Cheatsheet10
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -732,7 +731,7 @@ class MainWindowDL(NNDLayout):
     def chapter5(self, idx):
         self.comboBox4.setCurrentIndex(0)
         if idx == 1:
-            self.book2_chapter5_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter5_window1 = Cheatsheet5(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter5_window1.show()
 
     def chapter6(self, idx):
@@ -762,6 +761,6 @@ class MainWindowDL(NNDLayout):
     def chapter10(self, idx):
         self.comboBox1.setCurrentIndex(0)
         if idx == 1:
-            self.book2_chapter10_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter10_window1 = Cheatsheet10(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter10_window1.show()
 
