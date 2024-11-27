@@ -109,6 +109,13 @@ from nndesigndemos.book2.chapter3.Gradient_descent_stochastic import GradientDes
 from nndesigndemos.book2.chapter4.Scaling import Scaling
 from nndesigndemos.book2.chapter4.Initialization_effect import InitEffect
 from nndesigndemos.book2.chapter4.Dropout import Dropout
+# # ------ Chapter 5 --------
+# from nndesigndemos.book2.chapter5.Cheatsheet5 import Cheatsheet5
+# ------ Chapter 6 --------
+from nndesigndemos.book2.chapter6.Cheatsheet6 import Cheatsheet6
+# ------ Chapter 10 --------
+# from nndesigndemos.book2.chapter5.Cheatsheet6 import Cheatsheet10
+
 # ------ Chapter 8 --------
 from nndesigndemos.book2.chapter8.Convolution_networks import Convol
 
@@ -151,12 +158,12 @@ BOOK2_CHAPTERS_DEMOS = {
     2: ["Multilayer Networks", "Chapter 2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
     3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Gradient Descent Stochastic"],
     4: ["Supplemental Training", "Chapter 4 demos", 'Normalization & Initialization Scaling', 'Normalization & Initialization Effect', 'Dropout'],
-    5: ["Python", "Chapter 5 demos", "Convolution Networks demo"],
-    6: ["TensorFlowIntro", "Chapter 6 demos", "Convolution Networks demo"],
+    5: ["Python", "Chapter 5 demos", "Cheatsheet"],
+    6: ["TensorFlowIntro", "Chapter 6 demos", "Cheatsheet"],
     7: ["Chapter 7", "Chapter 7 demos", "Convolution Networks demo"],
     8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
-    9: ["PostTrain", "Chapter 9 demos", "Convolution Networks demo"],
-    # 10: ["Chapter 10", "Chapter 10 demos", "Convolution Networks demo"],
+    9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
+    10: ["Chapter 10", "Chapter 10 demos", "Cheatsheet"],
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -629,10 +636,10 @@ class MainWindowDL(NNDLayout):
         self.button2.setGeometry((xbtn1 + add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
         self.button2.clicked.connect(partial(self.show_chapters, "6-9"))
 
-        # self.button3 = QtWidgets.QPushButton(self)
-        # self.button3.setText("10")
-        # self.button3.setGeometry((xbtn1 + 2 * add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
-        # self.button3.clicked.connect(partial(self.show_chapters, "10"))
+        self.button3 = QtWidgets.QPushButton(self)
+        self.button3.setText("10")
+        self.button3.setGeometry((xbtn1 + 2 * add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
+        self.button3.clicked.connect(partial(self.show_chapters, "10"))
 
         self.center()
 
@@ -641,6 +648,7 @@ class MainWindowDL(NNDLayout):
     def show_chapters(self, chapters="2-5"):
         """ Updates the icons and dropdown menus based on a block of chapters (chapters) """
 
+        print('chapters', chapters)
         if chapters in ["2-5", "6-9"]:
             icon_lst = [self.icon1, self.icon2, self.icon3, self.icon4]
             label_lst = [self.label_box1, self.label_box2, self.label_box3, self.label_box4]
@@ -653,7 +661,7 @@ class MainWindowDL(NNDLayout):
             combo_lst = [self.comboBox1]
             chapter_numbers = [10]
 
-        chapter_functions = [self.chapter2, self.chapter3, self.chapter4, self.chapter5, self.chapter6, self.chapter7, self.chapter8, self.chapter9]
+        chapter_functions = [self.chapter2, self.chapter3, self.chapter4, self.chapter5, self.chapter6, self.chapter7, self.chapter8, self.chapter9, self.chapter10]
 
         idx = 0
         for icon in icon_lst:  # TODO: Change logo path when we have them
@@ -730,7 +738,7 @@ class MainWindowDL(NNDLayout):
     def chapter6(self, idx):
         self.comboBox1.setCurrentIndex(0)
         if idx == 1:
-            self.book2_chapter6_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter6_window1 = Cheatsheet6(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter6_window1.show()
 
     def chapter7(self, idx):
@@ -751,9 +759,9 @@ class MainWindowDL(NNDLayout):
             self.book2_chapter9_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter9_window1.show()
 
-    # def chapter10(self, idx):
-    #     self.comboBox1.setCurrentIndex(0)
-    #     if idx == 1:
-    #         self.book2_chapter10_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
-    #         self.book2_chapter10_window1.show()
+    def chapter10(self, idx):
+        self.comboBox1.setCurrentIndex(0)
+        if idx == 1:
+            self.book2_chapter10_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter10_window1.show()
 

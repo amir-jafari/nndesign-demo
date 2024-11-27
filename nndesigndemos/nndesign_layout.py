@@ -515,3 +515,7 @@ class NNDLayout(QMainWindow):
     def initial_sound(self, sound_name, left_path):
         setattr(self, sound_name, QtMultimedia.QSoundEffect())
         getattr(self, sound_name).setSource(QtCore.QUrl.fromLocalFile(PACKAGE_PATH + left_path))
+
+
+def open_link(link_str):
+    QtGui.QDesktopServices.openUrl(QtCore.QUrl(link_str))

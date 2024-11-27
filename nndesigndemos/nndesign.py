@@ -1,8 +1,8 @@
 import os
-from PyQt6 import QtWidgets, QtGui, QtCore
+from PyQt6 import QtWidgets, QtGui
 from PyQt6.QtWidgets import QApplication
 
-from nndesigndemos.nndesign_layout import NNDLayout
+from nndesigndemos.nndesign_layout import NNDLayout, open_link
 from nndesigndemos.Window import MainWindowNN, MainWindowDL
 from nndesigndemos.get_package_path import PACKAGE_PATH
 
@@ -49,7 +49,7 @@ class MainWindow(NNDLayout):
                                       "Design book.\n\nEach demo is linked to a chapter section\nof the book. You can "
                                       "find more info at", (x_left, y_text, w, h_text))
         self.make_label("book1_link", '<a href="https://hagan.okstate.edu/nnd.html">https://hagan.okstate.edu/nnd.html/</a>', (x_left, y_text + 145, w, 30))
-        self.book1_link.linkActivated.connect(self.link_1)
+        self.book1_link.linkActivated.connect(open_link)
 
         self.make_label("book2_info", "Click on the button above to access the\ndemonstrations for the Neural Network\n"
                                       "Design: Deep Learning book.\n\nThis book is in progress.", (x_right, y_text - 8, w, h_text))
@@ -73,10 +73,6 @@ class MainWindow(NNDLayout):
     def new_window1(self):
         self.button1_win = MainWindowNN(self.w_ratio, self.h_ratio, self.dpi)
         self.button1_win.show()
-
-    @staticmethod
-    def link_1(link_str):
-        QtGui.QDesktopServices.openUrl(QtCore.QUrl(link_str))
 
     def new_window2(self):
         self.button2_win = MainWindowDL(self.w_ratio, self.h_ratio, self.dpi)
