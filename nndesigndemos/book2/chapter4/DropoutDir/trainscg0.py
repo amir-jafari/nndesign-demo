@@ -15,7 +15,7 @@ from nndesigndemos.book2.chapter4.DropoutDir.crossentr import crossentr
 from nndesigndemos.book2.chapter4.DropoutDir.tansig0 import tansig0
 
 
-def preProcessing(do_low, S_row, stdv):
+def preProcessing(do_firstlayer, S_row, stdv):
     # stdv: standard deviation for noise
 
     # Create the network
@@ -25,7 +25,7 @@ def preProcessing(do_low, S_row, stdv):
         'S': [S_row, 2],
         'Init': 'xav',
         'perf': crossentr,
-        'do': [do_low, 1],
+        'do': [do_firstlayer, 1],
         'doflag': 0
     })
 
@@ -38,11 +38,12 @@ def preProcessing(do_low, S_row, stdv):
         [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
+    Pd = Pd + stdv * (np.random.rand(*Pd.shape) - 0.5)
 
     # Adding noise to input data
-    # P = np.hstack([P for _ in range(7)]) # For test
-    Pd = np.hstack([Pd] + [Pd + stdv * (np.random.rand(*Pd.shape) - 0.5) for _ in range(6)])
-    Tl = np.hstack([Tl for _ in range(7)])
+    # Pd = np.hstack([P for _ in range(7)]) # For test
+    # Pd = np.hstack([Pd] + [Pd + stdv * (np.random.rand(*Pd.shape) - 0.5) for _ in range(6)])
+    # Tl = np.hstack([Tl for _ in range(7)])
 
     # Train the network using the SCG algorithm (placeholder)
     net['trainParam'] = {
@@ -59,7 +60,7 @@ def preProcessing(do_low, S_row, stdv):
     return net, Pd, Tl
 
 
-def trainscg0(do_low=0.95, S_row=300, stdv=0.3):
+def trainscg0(do_firstlayer=0.98, S_row=500, stdv=0.5):
     """
     Scaled conjugate gradient backpropagation algorithm for neural network training.
 
@@ -81,7 +82,7 @@ def trainscg0(do_low=0.95, S_row=300, stdv=0.3):
     tr : dict
         Training record over epochs (perf, vperf, tperf, alphak, deltak).
     """
-    net, Pd, Tl = preProcessing(do_low, S_row, stdv)
+    net, Pd, Tl = preProcessing(do_firstlayer, S_row, stdv)
 
     this = 'TRAINSCG'
     epochs = net['trainParam']['epochs']

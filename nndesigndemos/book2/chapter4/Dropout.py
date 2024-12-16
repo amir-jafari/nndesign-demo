@@ -10,17 +10,23 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 from nndesigndemos.book2.chapter4.DropoutDir.trainscg0 import trainscg0
 from nndesigndemos.book2.chapter4.DropoutDir.testTrainSCG import plot_contour
 
+'''
+Button Option: No dropout
+'''
+
 
 class Dropout(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(Dropout, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Early Stopping", 4, "Use the slider to change the\nNoise Standard Deviation of\nthe training points.\n\n"
-                                                "Click [Train] to train\non the training points.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 40, 450, 300))
+        self.fill_chapter("Early Stopping", 4, "Use sliders to change the\ndropout value, the number\nof neurons in the hidden\nlayer, the Noise Standard\nDeviation of the training\npoints.\n\n"
+                                                "Use the checkbox to turn\noff and turn on the dropout.\n\n"
+                                               "Click [Train] to train on\nthe training points.\n\n",
+                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 40, 450, 440))
 
         self.make_plot(1, (100, 90, 300, 300))
         self.make_plot(2, (100, 380, 300, 300))
+        self.figure2.subplots_adjust(left=0.225, right=0.975, bottom=0.175, top=0.9)
 
         self.train_error, self.error_train = [], None
         self.ani_1 = None
@@ -37,31 +43,35 @@ class Dropout(NNDLayout):
         self.figure.set_tight_layout(True)
         self.canvas.draw()
 
-        self.do_low = 0.95
-        self.S_row = 300
-        self.stdv = 0.3
+        self.do_low = 0.98
+        self.S_row = 500
+        self.stdv = 0.5
 
-        self.make_slider("slider_do_low", QtCore.Qt.Orientation.Horizontal, (95, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 95,
-                         (self.x_chapter_usual, 230, self.w_chapter_slider, 100), self.slide1,
-                         "label_do_low", "Dropout value: 0.95", (self.x_chapter_usual + 10, 200, self.w_chapter_slider, 100))
+        '''
+        Button Option: No dropout
+        '''
 
-        self.make_slider("slider_srow", QtCore.Qt.Orientation.Horizontal, (30, 50), QtWidgets.QSlider.TickPosition.TicksBelow, 2, 30,
-                         (self.x_chapter_usual, 310, self.w_chapter_slider, 100), self.slide2,
-                         "label_srow", "S value: 300", (self.x_chapter_usual + 10, 280, self.w_chapter_slider, 100))
+        self.make_slider("slider_do_low", QtCore.Qt.Orientation.Horizontal, (90, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 98,
+                         (self.x_chapter_usual, 350, self.w_chapter_slider, 100), self.slide1,
+                         "label_do_low", f"Dropout value: {self.do_low}", (self.x_chapter_usual + 10, 350, self.w_chapter_slider, 30))
 
-        self.make_slider("slider_stdv", QtCore.Qt.Orientation.Horizontal, (3, 5), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 3,
-                         (self.x_chapter_usual, 390, self.w_chapter_slider, 100), self.slide3,
-                         "label_stdv", "Stdv value: 0.3", (self.x_chapter_usual + 10, 360, self.w_chapter_slider, 100))
+        self.make_slider("slider_srow", QtCore.Qt.Orientation.Horizontal, (20, 80), QtWidgets.QSlider.TickPosition.TicksBelow, 2, 50,
+                         (self.x_chapter_usual, 420, self.w_chapter_slider, 100), self.slide2,
+                         "label_srow", f"Number of neurons: {self.S_row}", (self.x_chapter_usual + 10, 420, self.w_chapter_slider, 30))
+
+        self.make_slider("slider_stdv", QtCore.Qt.Orientation.Horizontal, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 5,
+                         (self.x_chapter_usual, 490, self.w_chapter_slider, 100), self.slide3,
+                         "label_stdv", f"Noise standard deviation: {self.stdv}", (self.x_chapter_usual + 10, 490, self.w_chapter_slider, 30))
 
         self.animation_interval = 10
         self.full_batch = False
 
         self.run_button = QtWidgets.QPushButton("Train", self)
         self.run_button.setStyleSheet("font-size:13px")
-        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 490 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
+        self.run_button.setGeometry(self.x_chapter_button * self.w_ratio, 580 * self.h_ratio, self.w_chapter_button * self.w_ratio, self.h_chapter_button * self.h_ratio)
         self.run_button.clicked.connect(self.on_run)
 
-        self.make_button("pause_button", "Pause", (self.x_chapter_button, 520, self.w_chapter_button, self.h_chapter_button), self.on_stop)
+        self.make_button("pause_button", "Pause", (self.x_chapter_button, 610, self.w_chapter_button, self.h_chapter_button), self.on_stop)
         self.pause = True
 
     def ani_stop(self):
@@ -127,8 +137,8 @@ class Dropout(NNDLayout):
 
     def slide2(self):
         self.S_row = self.slider_srow.value() * 10
-        self.slide_base(self.label_srow, f"S value: {self.S_row}")
+        self.slide_base(self.label_srow, f"Number of neurons: {self.S_row}")
 
     def slide3(self):
         self.stdv = self.slider_stdv.value() / 10
-        self.slide_base(self.label_stdv, f"Stdv value: {self.stdv}")
+        self.slide_base(self.label_stdv, f"Noise standard deviation: {self.stdv}")
