@@ -115,6 +115,8 @@ from nndesigndemos.book2.chapter5.Cheatsheet5 import Cheatsheet5
 from nndesigndemos.book2.chapter6.Cheatsheet6 import Cheatsheet6
 # ------ Chapter 8 --------
 from nndesigndemos.book2.chapter8.Convolution_networks import Convol
+# ------ Chapter 9 --------
+from nndesigndemos.book2.chapter9.LinearizedNetworkResponse import LinearizedNetworkResponse
 # ------ Chapter 10 --------
 from nndesigndemos.book2.chapter10.Cheatsheet10 import Cheatsheet10
 
@@ -163,6 +165,9 @@ BOOK2_CHAPTERS_DEMOS = {
     8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
     10: ["Chapter 10", "Chapter 10 demos", "Cheatsheet"],
+    # 11 Linear Sequence
+    # 12 LSTM
+    # Chapter 13
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -755,7 +760,7 @@ class MainWindowDL(NNDLayout):
     def chapter9(self, idx):
         self.comboBox4.setCurrentIndex(0)
         if idx == 1:
-            self.book2_chapter9_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter9_window1 = LinearizedNetworkResponse(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter9_window1.show()
 
     def chapter10(self, idx):

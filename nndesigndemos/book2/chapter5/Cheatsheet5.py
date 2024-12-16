@@ -1,4 +1,3 @@
-import os
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -16,26 +15,26 @@ class Cheatsheet5(NNDLayout):
 
         root_path = PACKAGE_PATH + 'book2/chapter5/cheatsheets/'
         all_files = [
-            'Scipy-Linalgebra.pdf',
+            'Jupyter Notebook.pdf',
+            'Base Python.pdf',
+            'If While.pdf',
+            'List.pdf',
+            'Dictionaries.pdf',
+            'Open-WriteFiles .pdf',
             'Functions.pdf',
             'Classes.pdf',
-            'Pands2.pdf',
-            'Bokeh.pdf',
-            'Pands1.pdf',
-            'Matplotlib.pdf',
-            'List.pdf',
             'Code Debug.pdf',
-            'Django.pdf',
-            'Jupyter Notebook.pdf',
+            'Scipy-Linalgebra.pdf',
             'Numpy.pdf',
-            'If While.pdf',
-            'Data Structure 3.pdf',
-            'Data Structure 2.pdf',
+            'Pands1.pdf',
+            'Pands2.pdf',
+            'Matplotlib.pdf',
             'Matplotlib2.pdf',
+            'Bokeh.pdf',
+            'Django.pdf',
             'Data Structure 1.pdf',
-            'Base Python.pdf',
-            'Open-WriteFiles .pdf',
-            'Dictionaries.pdf'
+            'Data Structure 2.pdf',
+            'Data Structure 3.pdf',
         ]
 
         for i, file_name in enumerate(all_files):
