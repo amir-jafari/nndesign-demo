@@ -1,5 +1,5 @@
+import os
 from pathlib import Path
-from urllib.parse import urljoin
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -24,7 +24,11 @@ class Cheatsheet10(NNDLayout):
 
         for i, file_name in enumerate(all_files):
             absolute_path = Path(relative_dir + file_name).resolve()
-            file_uri = urljoin("file:///", str(absolute_path).replace("\\", "/"))
+            if os.name == "nt":
+                absolute_path = str(absolute_path).replace("\\", "/")
+                file_uri = f"file:///{absolute_path}"
+            else:
+                file_uri = f"file://{absolute_path}"
 
             label_str = f'<a href="{file_uri}">{i}. {file_name}</a>'
             label_attr_name = f"book{i}_link"

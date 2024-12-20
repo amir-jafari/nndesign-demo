@@ -1,5 +1,5 @@
+import os
 from pathlib import Path
-from urllib.parse import urljoin
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -17,7 +17,12 @@ class Cheatsheet6(NNDLayout):
 
         relative_path = "./nndesigndemos/book2/chapter6/TensorFlow2Cheatsheet.pdf"
         absolute_path = Path(relative_path).resolve()
-        file_uri = urljoin("file:///", str(absolute_path).replace("\\", "/"))
+
+        if os.name == "nt":
+            absolute_path = str(absolute_path).replace("\\", "/")
+            file_uri = f"file:///{absolute_path}"
+        else:
+            file_uri = f"file://{absolute_path}"
 
         label_str = f'<a href="{file_uri}">Open TensorFlow Cheatsheet</a>'
 
