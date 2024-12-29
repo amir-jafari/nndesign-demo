@@ -10,10 +10,6 @@ from nndesigndemos.get_package_path import PACKAGE_PATH
 from nndesigndemos.book2.chapter4.DropoutDir.trainscg0 import trainscg0
 from nndesigndemos.book2.chapter4.DropoutDir.testTrainSCG import plot_contour
 
-'''
-Button Option: No dropout
-'''
-
 
 class Dropout(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
@@ -47,21 +43,22 @@ class Dropout(NNDLayout):
         self.S_row = 500
         self.stdv = 0.5
 
-        '''
-        Button Option: No dropout
-        '''
+        self.no_dropout_checked = False
+        self.do_low_old = None
+        self.make_checkbox('checkbox_dropout', 'No Dropout', (self.x_chapter_usual + 10, 340, self.w_chapter_slider - 20, 50),
+                           self.select_no_dropout, False)
 
         self.make_slider("slider_do_low", QtCore.Qt.Orientation.Horizontal, (90, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 98,
-                         (self.x_chapter_usual, 350, self.w_chapter_slider, 100), self.slide1,
-                         "label_do_low", f"Dropout value: {self.do_low}", (self.x_chapter_usual + 10, 350, self.w_chapter_slider, 30))
+                         (self.x_chapter_usual, 400-30, self.w_chapter_slider, 100), self.slide1,
+                         "label_do_low", f"Dropout value: {self.do_low}", (self.x_chapter_usual + 10, 400-30, self.w_chapter_slider, 30))
 
         self.make_slider("slider_srow", QtCore.Qt.Orientation.Horizontal, (20, 80), QtWidgets.QSlider.TickPosition.TicksBelow, 2, 50,
-                         (self.x_chapter_usual, 420, self.w_chapter_slider, 100), self.slide2,
-                         "label_srow", f"Number of neurons: {self.S_row}", (self.x_chapter_usual + 10, 420, self.w_chapter_slider, 30))
+                         (self.x_chapter_usual, 470-30, self.w_chapter_slider, 100), self.slide2,
+                         "label_srow", f"Number of neurons: {self.S_row}", (self.x_chapter_usual + 10, 470-30, self.w_chapter_slider, 30))
 
         self.make_slider("slider_stdv", QtCore.Qt.Orientation.Horizontal, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 5,
-                         (self.x_chapter_usual, 490, self.w_chapter_slider, 100), self.slide3,
-                         "label_stdv", f"Noise standard deviation: {self.stdv}", (self.x_chapter_usual + 10, 490, self.w_chapter_slider, 30))
+                         (self.x_chapter_usual, 540-30, self.w_chapter_slider, 100), self.slide3,
+                         "label_stdv", f"Noise standard deviation: {self.stdv}", (self.x_chapter_usual + 10, 540-30, self.w_chapter_slider, 30))
 
         self.animation_interval = 10
         self.full_batch = False
@@ -73,6 +70,20 @@ class Dropout(NNDLayout):
 
         self.make_button("pause_button", "Pause", (self.x_chapter_button, 610, self.w_chapter_button, self.h_chapter_button), self.on_stop)
         self.pause = True
+
+    def select_no_dropout(self):
+        if self.checkbox_dropout.checkState().value == 2 and not self.no_dropout_checked:
+            self.no_dropout_checked = True
+            self.do_low_old = self.do_low
+            self.do_low = 1
+            self.slider_do_low.setValue(100)
+            self.slider_do_low.setDisabled(True)
+
+        if self.checkbox_dropout.checkState().value == 0 and self.no_dropout_checked:
+            self.no_dropout_checked = False
+            self.do_low = self.do_low_old
+            self.slider_do_low.setDisabled(False)
+            self.slider_do_low.setValue(int(self.do_low * 100))
 
     def ani_stop(self):
         if self.ani_1 and self.ani_1.event_source:
@@ -119,6 +130,7 @@ class Dropout(NNDLayout):
         self.train_error = []
         self.train_e.set_data([], [])
         self.canvas.draw()
+        print('on_run self.do_low, self.S_row, self.stdv', self.do_low, self.S_row, self.stdv)
 
         self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.fig_clean(), frames=trainscg0(self.do_low, self.S_row, self.stdv),
                                    interval=self.animation_interval, repeat=False, blit=True)
