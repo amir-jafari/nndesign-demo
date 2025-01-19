@@ -70,13 +70,13 @@ class InitEffect(NNDLayout):
 
     def graph(self):
         r = 6  # Input dimension
-        print(
-            'deephist(r, q, initial, input_distrib, act_func_key, layer_size), self.batch_norm',
-            r, self.n_examples, self.weight_init, self.input_distrib, self.act, self.max_layers, self.batch_norm
-        )
+        # print(
+        #     'deephist(r, q, initial, input_distrib, act_func_key, layer_size), self.batch_norm',
+        #     r, self.n_examples, self.weight_init, self.input_distrib, self.act, self.max_layers, self.batch_norm
+        # )
         self.a = deephist(r, self.n_examples, self.weight_init, self.input_distrib, self.act, self.max_layers, self.batch_norm)
 
-        print('len(self.a)', len(self.a))
+        # print('len(self.a)', len(self.a))
 
         self.draw_graph()
 

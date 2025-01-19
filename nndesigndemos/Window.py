@@ -159,18 +159,15 @@ BOOK2_CHAPTERS_DEMOS = {
     2: ["Multilayer Networks", "Chapter 2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
     3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Gradient Descent Stochastic"],
     4: ["Supplemental Training", "Chapter 4 demos", 'Normalization & Initialization Scaling', 'Normalization & Initialization Effect', 'Dropout'],
-    5: ["Python", "Chapter 5 demos", "Cheatsheet"],
-    6: ["TensorFlowIntro", "Chapter 6 demos", "Cheatsheet"],
-    7: ["Chapter 7", "Chapter 7 demos", "Convolution Networks demo"],
+    5: ["Python Intro", "Chapter 5 demos", "Cheatsheet"],
+    6: ["TensorFlow Intro", "Chapter 6 demos", "Cheatsheet"],
+    7: ["Chapter 7", "Chapter 7 demos", ],
     8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
-    10: ["Chapter 10", "Chapter 10 demos", "Cheatsheet"],
-    11: ["Chapter 11", "Chapter 11 demos", ],
-    12: ["Chapter 12", "Chapter 12 demos", ],
+    10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
+    11: ["Linear Sequence", "Chapter 11 demos", ],
+    12: ["LSTM", "Chapter 12 demos", ],
     13: ["Chapter 13", "Chapter 13 demos", ],
-    # 11 Linear Sequence
-    # 12 LSTM
-    # Chapter 13
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -753,9 +750,6 @@ class MainWindowDL(NNDLayout):
 
     def chapter7(self, idx):
         self.comboBox2.setCurrentIndex(0)
-        if idx == 1:
-            self.book2_chapter7_window1 = Convol(self.w_ratio, self.h_ratio, self.dpi)
-            self.book2_chapter7_window1.show()
 
     def chapter8(self, idx):
         self.comboBox3.setCurrentIndex(0)

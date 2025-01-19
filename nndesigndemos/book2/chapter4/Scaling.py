@@ -82,10 +82,10 @@ class Scaling(NNDLayout):
     def graph(self):
         r = 6  # Input dimension
         layer_size = 4
-        print(
-            'deephist(r, q, initial, input_distrib, act_func_key, layer_size, self.batch_norm)',
-            r, self.n_examples, self.weight_init, self.input_distrib, self.act, layer_size, self.batch_norm
-        )
+        # print(
+        #     'deephist(r, q, initial, input_distrib, act_func_key, layer_size, self.batch_norm)',
+        #     r, self.n_examples, self.weight_init, self.input_distrib, self.act, layer_size, self.batch_norm
+        # )
         a = deephist(r, self.n_examples, self.weight_init, self.input_distrib, self.act, layer_size, self.batch_norm)
 
         self.draw_hist(self.figureInput, a, 0, self.canvasInput, True)

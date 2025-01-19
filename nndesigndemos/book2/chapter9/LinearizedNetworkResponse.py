@@ -14,9 +14,9 @@ class LinearizedNetworkResponse(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(LinearizedNetworkResponse, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
-        self.fill_chapter("Hopfield Network", 21, "Click in the left graph\nto simulate the\nHopfield Network.\n\n"
-                                                  "Change the weights, biases\nand gain. Then click\n[Update] to change\n"
-                                                  "the network.",
+        self.fill_chapter("Linearized Network Response", 21, "Click in the left graph to\n"
+                                                             "simulate the Linearized\n"
+                                                             "Network Response.\n",
                           PACKAGE_PATH + "Logo/Logo_Ch_21.svg", None, description_coords=(535, 95, 450, 250))
 
         # Create the weights for the radial function
