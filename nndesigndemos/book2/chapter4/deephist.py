@@ -36,8 +36,9 @@ def plothist(a):
 
     plt.show()
 
+
 # Deep network simulation and histogram plotting
-def deephist(r, q, initial, input_distrib, act_func_key, layer_size):
+def deephist(r, q, initial, input_distrib, act_func_key, layer_size, batch_norm):
 
     # Mean and variance of the input
     pmean = np.zeros((r, 1))
@@ -107,9 +108,10 @@ if __name__ == '__main__':
     input_distrib = ["Normal", "Uniform"][0]
 
     layer_size = 4
+    batch_norm = True
 
     # Run the simulation
-    a = deephist(r, q, initial, input_distrib, act_func_key, layer_size)
+    a = deephist(r, q, initial, input_distrib, act_func_key, layer_size, batch_norm)
     print(len(a))
     # Plot histograms
     plothist(a)

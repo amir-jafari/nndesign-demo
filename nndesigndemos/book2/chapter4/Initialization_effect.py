@@ -1,5 +1,4 @@
 from PyQt6 import QtWidgets, QtCore
-import numpy as np
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -21,6 +20,10 @@ class InitEffect(NNDLayout):
         self.make_plot(1, (10, 180, 500, 500))
         self.figure.set_tight_layout(True)
 
+        self.batch_norm = True
+        self.make_checkbox('checkbox_batch_norm', 'Use Batch Norm', (310, 150, self.w_chapter_slider - 20, 50),
+                           self.select_bn, True)
+
         self.make_slider("slider_n_examples", QtCore.Qt.Orientation.Horizontal, (1, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 20,
                          (self.x_chapter_usual, 310, self.w_chapter_slider, 50), self.change_n_examples, "label_n_examples",
                          "Number of examples: 2000", (self.x_chapter_usual + 20, 310 - 25, self.w_chapter_slider, 50))
@@ -41,7 +44,7 @@ class InitEffect(NNDLayout):
                            (self.x_chapter_usual + 30, 480-20, self.w_chapter_slider, 50))
 
         self.max_layers = 100
-        self.n_layers = 4
+        self.n_layers = 1
         self.make_slider("slider_n_layers", QtCore.Qt.Orientation.Horizontal, (1, self.max_layers), QtWidgets.QSlider.TickPosition.TicksBelow, 1, self.n_layers,
                          (self.x_chapter_usual, 540, self.w_chapter_slider, 50), self.change_n_layers, "label_n_layers",
                          f"Number of layers: {self.n_layers}", (self.x_chapter_usual + 20, 540 - 25, self.w_chapter_slider, 50))
@@ -57,13 +60,21 @@ class InitEffect(NNDLayout):
 
         self.graph()
 
+    def select_bn(self):
+        if self.checkbox_batch_norm.checkState().value == 2 and not self.batch_norm:
+            self.batch_norm = True
+            self.graph()
+        if self.checkbox_batch_norm.checkState().value == 0 and self.batch_norm:
+            self.batch_norm = False
+            self.graph()
+
     def graph(self):
         r = 6  # Input dimension
         print(
-            'deephist(r, q, initial, input_distrib, act_func_key, layer_size)',
-            r, self.n_examples, self.weight_init, self.input_distrib, self.act, self.max_layers
+            'deephist(r, q, initial, input_distrib, act_func_key, layer_size), self.batch_norm',
+            r, self.n_examples, self.weight_init, self.input_distrib, self.act, self.max_layers, self.batch_norm
         )
-        self.a = deephist(r, self.n_examples, self.weight_init, self.input_distrib, self.act, self.max_layers)
+        self.a = deephist(r, self.n_examples, self.weight_init, self.input_distrib, self.act, self.max_layers, self.batch_norm)
 
         print('len(self.a)', len(self.a))
 

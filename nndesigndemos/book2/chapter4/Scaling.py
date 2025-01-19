@@ -1,5 +1,4 @@
 from PyQt6 import QtWidgets, QtCore
-import numpy as np
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -59,6 +58,10 @@ class Scaling(NNDLayout):
                            self.change_act_function, "label_act_function", "Activation function",
                            (self.x_chapter_usual + 30, 480-20, self.w_chapter_slider, 50))
 
+        self.batch_norm = True
+        self.make_checkbox('checkbox_batch_norm', 'Use Batch Norm', (self.x_chapter_usual + 15, 520, self.w_chapter_slider - 20, 50),
+                           self.select_bn, True)
+
         self.make_button('button_random_seed', "Random", (self.x_chapter_usual + 40, 580, 100, 55), self.change_random_seed)
 
         self.n_examples = int(self.slider_n_examples.value() * 100)
@@ -68,14 +71,22 @@ class Scaling(NNDLayout):
 
         self.graph()
 
+    def select_bn(self):
+        if self.checkbox_batch_norm.checkState().value == 2 and not self.batch_norm:
+            self.batch_norm = True
+            self.graph()
+        if self.checkbox_batch_norm.checkState().value == 0 and self.batch_norm:
+            self.batch_norm = False
+            self.graph()
+
     def graph(self):
         r = 6  # Input dimension
         layer_size = 4
         print(
-            'deephist(r, q, initial, input_distrib, act_func_key, layer_size)',
-            r, self.n_examples, self.weight_init, self.input_distrib, self.act, layer_size
+            'deephist(r, q, initial, input_distrib, act_func_key, layer_size, self.batch_norm)',
+            r, self.n_examples, self.weight_init, self.input_distrib, self.act, layer_size, self.batch_norm
         )
-        a = deephist(r, self.n_examples, self.weight_init, self.input_distrib, self.act, layer_size)
+        a = deephist(r, self.n_examples, self.weight_init, self.input_distrib, self.act, layer_size, self.batch_norm)
 
         self.draw_hist(self.figureInput, a, 0, self.canvasInput, True)
         self.draw_hist(self.figureOutput1, a, 1, self.canvasOutput1)

@@ -165,6 +165,9 @@ BOOK2_CHAPTERS_DEMOS = {
     8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
     10: ["Chapter 10", "Chapter 10 demos", "Cheatsheet"],
+    11: ["Chapter 11", "Chapter 11 demos", ],
+    12: ["Chapter 12", "Chapter 12 demos", ],
+    13: ["Chapter 13", "Chapter 13 demos", ],
     # 11 Linear Sequence
     # 12 LSTM
     # Chapter 13
@@ -641,9 +644,9 @@ class MainWindowDL(NNDLayout):
         self.button2.clicked.connect(partial(self.show_chapters, "6-9"))
 
         self.button3 = QtWidgets.QPushButton(self)
-        self.button3.setText("10")
+        self.button3.setText("10-13")
         self.button3.setGeometry((xbtn1 + 2 * add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
-        self.button3.clicked.connect(partial(self.show_chapters, "10"))
+        self.button3.clicked.connect(partial(self.show_chapters, "10-13"))
 
         self.center()
 
@@ -652,24 +655,27 @@ class MainWindowDL(NNDLayout):
     def show_chapters(self, chapters="2-5"):
         """ Updates the icons and dropdown menus based on a block of chapters (chapters) """
 
-        print('chapters', chapters)
-        if chapters in ["2-5", "6-9"]:
+        if chapters in ["2-5", "6-9", "10-13"]:
             icon_lst = [self.icon1, self.icon2, self.icon3, self.icon4]
             label_lst = [self.label_box1, self.label_box2, self.label_box3, self.label_box4]
             combo_lst = [self.comboBox1, self.comboBox2, self.comboBox3, self.comboBox4]
             chapters = chapters.split("-")
             chapter_numbers = list(range(int(chapters[0]), int(chapters[1]) + 1))
-        elif chapters == '10':
-            icon_lst = [self.icon1]
-            label_lst = [self.label_box1]
-            combo_lst = [self.comboBox1]
-            chapter_numbers = [10]
+        # elif chapters == '10':
+        #     icon_lst = [self.icon1]
+        #     label_lst = [self.label_box1]
+        #     combo_lst = [self.comboBox1]
+        #     chapter_numbers = [10]
 
-        chapter_functions = [self.chapter2, self.chapter3, self.chapter4, self.chapter5, self.chapter6, self.chapter7, self.chapter8, self.chapter9, self.chapter10]
+        chapter_functions = [
+            self.chapter2, self.chapter3, self.chapter4, self.chapter5,
+            self.chapter6, self.chapter7, self.chapter8, self.chapter9,
+            self.chapter10, self.chapter11, self.chapter12, self.chapter13,
+        ]
 
         idx = 0
         for icon in icon_lst:  # TODO: Change logo path when we have them
-            icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/Logo_Ch_{}.svg".format(chapter_numbers[idx] + 1)).pixmap(
+            icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/book_logos/{}.svg".format(chapter_numbers[idx] + 1)).pixmap(
                 w_Logo1, h_Logo1, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, w_Logo1, h_Logo1)
             icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio)
@@ -769,3 +775,11 @@ class MainWindowDL(NNDLayout):
             self.book2_chapter10_window1 = Cheatsheet10(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter10_window1.show()
 
+    def chapter11(self, idx):
+        self.comboBox2.setCurrentIndex(0)
+
+    def chapter12(self, idx):
+        self.comboBox3.setCurrentIndex(0)
+
+    def chapter13(self, idx):
+        self.comboBox4.setCurrentIndex(0)
