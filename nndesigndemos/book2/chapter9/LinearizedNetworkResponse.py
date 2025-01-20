@@ -15,8 +15,9 @@ class LinearizedNetworkResponse(NNDLayout):
         super(LinearizedNetworkResponse, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Linearized Network Response", 21, "Click in the left graph to\n"
-                                                             "simulate the Linearized\n"
-                                                             "Network Response.\n",
+                                                             "simulate the linearized\n"
+                                                             "network response.\n\n"
+                          "Click and hold the mouse\non the right 3D graph to\nrotate it.",
                           PACKAGE_PATH + "Logo/Logo_Ch_21.svg", None, description_coords=(535, 95, 450, 250))
 
         # Create the weights for the radial function
@@ -156,10 +157,9 @@ class LinearizedNetworkResponse(NNDLayout):
 
 
     def on_mouseclick(self, event):
-        if event.xdata != None and event.xdata != None:
+        if event.xdata != None and event.ydata != None:
             if self.contour_plot:
-                for c in self.contour_plot.collections:
-                    c.remove()
+                self.contour_plot.remove()
                 self.surf1_plot.remove()
                 self.scat_plot.remove()
                 self.canvas3_scat_plot.remove()

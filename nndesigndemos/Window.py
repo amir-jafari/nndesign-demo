@@ -574,7 +574,7 @@ class MainWindowDL(NNDLayout):
         super(MainWindowDL, self).__init__(w_ratio, h_ratio, dpi, chapter_window=False, main_menu=2, draw_vertical=False)
 
         self.make_label("label_3", "Table of Contents", (380, ylabel + add, wlabel, hlabel), font_size=18)
-        self.make_label("label4", "By Hagan, Jafari, Uría, Qi", (xautor-30, yautor, wlabel, hlabel))
+        self.make_label("label4", "By Hagan, Jafari, Qi", (xautor, yautor, wlabel, hlabel))
 
         font_size = 14
         if self.running_on_windows:

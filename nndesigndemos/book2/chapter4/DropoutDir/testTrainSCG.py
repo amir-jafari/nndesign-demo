@@ -33,13 +33,13 @@ def plot_contour(net1, Pd, Tl, fig, ax):
     # fig.colorbar(contour, ax=ax)
 
     # Plot all points from Pd
-    ax.plot(Pd[0, :], Pd[1, :], 'x') # , label='All P points'
+    ax.plot(Pd[0, :], Pd[1, :], 'x', markersize=5) # , label='All P points'
 
     # Identify indices where T(1,:) is non-zero
     ind = np.nonzero(Tl[0, :])[0]
 
     # Plot points with condition T(1, :)
-    ax.plot(Pd[0, ind], Pd[1, ind], 'or') # , label='T(1,:) non-zero points'
+    ax.plot(Pd[0, ind], Pd[1, ind], 'or', markersize=5) # , label='T(1,:) non-zero points'
 
     # Add reference lines
     ax.plot([-1, 1], [0, 0], 'k')  # Horizontal line

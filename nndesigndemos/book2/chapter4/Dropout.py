@@ -30,7 +30,7 @@ class Dropout(NNDLayout):
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Performance Indexes", fontdict={'fontsize': 10})
         self.train_e, = self.axes_1.plot([], [], linestyle='-', color="b", label="train error")
-        self.axes_1.legend()
+        self.axes_1.legend(loc='upper right', bbox_to_anchor=(1.0, 0.8))
         self.axes_1.plot(1, 100, marker="*", markersize=7)
         self.axes_1.plot(300, 100, marker="*", markersize=7)
         self.axes_1.plot(1, 1, marker="*", markersize=7)
@@ -130,7 +130,7 @@ class Dropout(NNDLayout):
         self.train_error = []
         self.train_e.set_data([], [])
         self.canvas.draw()
-        print('on_run self.do_low, self.S_row, self.stdv', self.do_low, self.S_row, self.stdv)
+        # print('on_run self.do_low, self.S_row, self.stdv', self.do_low, self.S_row, self.stdv)
 
         self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.fig_clean(), frames=trainscg0(self.do_low, self.S_row, self.stdv),
                                    interval=self.animation_interval, repeat=False, blit=True)

@@ -144,22 +144,22 @@ def trainscg0(do_firstlayer=0.98, S_row=500, stdv=0.5):
 
         if math.isfinite(show) and (epoch % show == 0 or stop != ''):
             # Print general information
-            print(this, end='')
-            if math.isfinite(epochs):
-                print(f', Epoch {epoch}/{epochs}', end='')
-            if math.isfinite(max_time):
-                print(f', Time {currentTime / max_time * 100:.2f}%', end='')
-            if math.isfinite(goal):
-                func_name = net['perf'].__name__
-                print(f', {func_name} {perf}/{goal}', end='')
-            if math.isfinite(min_grad):
-                print(f', Gradient {normgX}/{min_grad}', end='')
-            print()  # Print a newline
+            # print(this, end='')
+            # if math.isfinite(epochs):
+            #     print(f', Epoch {epoch}/{epochs}', end='')
+            # if math.isfinite(max_time):
+            #     print(f', Time {currentTime / max_time * 100:.2f}%', end='')
+            # if math.isfinite(goal):
+            #     func_name = net['perf'].__name__
+            #     print(f', {func_name} {perf}/{goal}', end='')
+            # if math.isfinite(min_grad):
+            #     print(f', Gradient {normgX}/{min_grad}', end='')
+            # print()  # Print a newline
             flag_stop = False
             # print(tr['epoch'])
             # print("tr['perf']:", tr['perf'])
-            if stop:
-                print(f'{this}, {stop}\n\n')
+            # if stop:
+            #     print(f'{this}, {stop}\n\n')
         # flag_stop = plotperf0(tr, goal, this, epoch)  # Assuming plotperf0 is defined
 
         if stop:
