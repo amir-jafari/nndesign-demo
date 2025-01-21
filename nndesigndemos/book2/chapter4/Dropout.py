@@ -15,7 +15,7 @@ class Dropout(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(Dropout, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Early Stopping", 4, "Use sliders to change the\ndropout value, the number\nof neurons in the hidden\nlayer, the Noise Standard\nDeviation of the training\npoints.\n\n"
+        self.fill_chapter("Dropout", 4, "Use sliders to change the\ndropout value, the number\nof neurons in the hidden\nlayer, the Noise Standard\nDeviation of the training\npoints.\n\n"
                                                 "Use the checkbox to turn\noff and turn on the dropout.\n\n"
                                                "Click [Train] to train on\nthe training points.\n\n",
                           PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 40, 450, 440))

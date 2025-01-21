@@ -11,7 +11,7 @@ class Cheatsheet10(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(Cheatsheet10, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Early Stopping", 10, "Click on each cheatsheet to\nopen it.",
+        self.fill_chapter("PyTorch Intro Cheatsheets", 10, "Click on each cheatsheet to\nopen it.",
                           PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 40, 450, 300))
 
         relative_dir = "./nndesigndemos/book2/chapter10/cheatsheets/"

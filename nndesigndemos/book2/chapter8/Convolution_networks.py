@@ -212,7 +212,7 @@ class Convol(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(Convol, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
-        self.fill_chapter("Convolution", 4,
+        self.fill_chapter("Convolution Network", 8,
                           "Change the input shape, \ninput size, kernel size,\nand stride below.\n\nUse checkboxs to change\npadding and value status.\n\nClick input or kernel images\nto change the input pattern\nor kernel pattern.",
                           PACKAGE_PATH + "Logo/Logo_Ch_7.svg", None)
 

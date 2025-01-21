@@ -14,7 +14,7 @@ class LinearizedNetworkResponse(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(LinearizedNetworkResponse, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
-        self.fill_chapter("Linearized Network Response", 21, "Click in the left graph to\n"
+        self.fill_chapter("Linearized Network Response", 9, "Click in the left graph to\n"
                                                              "simulate the linearized\n"
                                                              "network response.\n\n"
                           "Click and hold the mouse\non the right 3D graph to\nrotate it.",
