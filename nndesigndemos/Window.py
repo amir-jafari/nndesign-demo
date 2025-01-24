@@ -672,7 +672,7 @@ class MainWindowDL(NNDLayout):
 
         idx = 0
         for icon in icon_lst:  # TODO: Change logo path when we have them
-            icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/book_logos/{}.svg".format(chapter_numbers[idx] + 1)).pixmap(
+            icon.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Logo/book2_logos/{}.svg".format(chapter_numbers[idx])).pixmap(
                 w_Logo1, h_Logo1, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             # icon.setGeometry(xL_g1, yL_g1 + idx * add_l, w_Logo1, h_Logo1)
             icon.setGeometry(xL_g1 * self.w_ratio, (yL_g1 + idx * add_l) * self.h_ratio, w_Logo1 * self.w_ratio, h_Logo1 * self.h_ratio)

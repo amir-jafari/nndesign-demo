@@ -14,10 +14,8 @@ class LinearizedNetworkResponse(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(LinearizedNetworkResponse, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
-        self.fill_chapter("Linearized Network Response", 9, "Click in the left graph to\n"
-                                                             "simulate the linearized\n"
-                                                             "network response.\n\n"
-                          "Click and hold the mouse\non the right 3D graph to\nrotate it.",
+        self.fill_chapter("Linearized Network Response", 9,
+                          "Click a location in the left\ngraph where you want to\nlinearize the network\nresponse.",
                           PACKAGE_PATH + "Logo/Logo_Ch_21.svg", None, description_coords=(535, 95, 450, 250))
 
         # Create the weights for the radial function
