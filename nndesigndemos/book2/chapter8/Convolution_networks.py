@@ -214,7 +214,7 @@ class Convol(NNDLayout):
 
         self.fill_chapter("Convolution Network", 8,
                           "Change the input shape, \ninput size, kernel size,\nand stride below.\n\nUse checkboxs to change\npadding and value status.\n\nClick input or kernel images\nto change the input pattern\nor kernel pattern.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_7.svg", None)
+                          PACKAGE_PATH + "Logo/Logo_Ch_7.svg", None, 2,)
 
         self.stride = 1
         self.pad_on = False

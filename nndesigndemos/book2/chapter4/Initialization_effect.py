@@ -14,7 +14,7 @@ class InitEffect(NNDLayout):
         self.fill_chapter("Normalization & Initialization Effects", 4,
                           "\nChoose a initialization\nscheme and whether to\nuse BatchNorm or not."
                           "\n\nThe distribution of input,\nnet input and output\nis shown on the left.\n\n",
-                          PACKAGE_PATH + "Chapters/4_D/Logo_Ch_4.svg", None,
+                          PACKAGE_PATH + "Chapters/4_D/Logo_Ch_4.svg", None, 2,
                           icon_move_left=120, description_coords=(535, 105, 450, 250))
 
         self.make_plot(1, (10, 180, 500, 500))

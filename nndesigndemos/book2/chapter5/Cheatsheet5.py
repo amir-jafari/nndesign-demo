@@ -12,7 +12,7 @@ class Cheatsheet5(NNDLayout):
         super(Cheatsheet5, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
         self.fill_chapter("Python Intro Cheatsheets", 5, "Click on each cheatsheet to\nopen it.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 40, 450, 300))
+                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, 2, description_coords=(535, 40, 450, 300))
 
         relative_dir = "./nndesigndemos/book2/chapter5/cheatsheets/"
 

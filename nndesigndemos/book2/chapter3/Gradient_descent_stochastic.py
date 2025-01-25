@@ -16,7 +16,7 @@ class GradientDescentStochastic(NNDLayout):
                                                             "\nThen the steepest descent\ntrajectory will be shown.\n\n"
                                                             "Modify the learning rate\nby moving the slide bar.\n\n"
                                                             "Experiment with different\ninitial guesses and\nlearning rates.",
-                          PACKAGE_PATH + "Chapters/3_D/Logo_Ch_3.svg", None,
+                          PACKAGE_PATH + "Chapters/3_D/Logo_Ch_3.svg", None, 2,
                           icon_move_left=120, description_coords=(535, 105, 450, 250))
 
         self.data = []

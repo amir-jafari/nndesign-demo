@@ -12,7 +12,7 @@ class Cheatsheet6(NNDLayout):
         super(Cheatsheet6, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
         self.fill_chapter("TensorFlow Intro Cheatsheet", 6, "Click on each cheatsheet to\nopen it.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 40, 450, 300))
+                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, 2, description_coords=(535, 40, 450, 300))
 
         relative_path = "./nndesigndemos/book2/chapter6/TensorFlow2Cheatsheet.pdf"
         absolute_path = Path(relative_path).resolve()

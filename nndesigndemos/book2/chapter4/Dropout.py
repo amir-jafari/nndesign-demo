@@ -18,7 +18,7 @@ class Dropout(NNDLayout):
         self.fill_chapter("Dropout", 4, "Use sliders to change the\ndropout value, the number\nof neurons in the hidden\nlayer, the Noise Standard\nDeviation of the training\npoints.\n\n"
                                                 "Use the checkbox to turn\noff and turn on the dropout.\n\n"
                                                "Click [Train] to train on\nthe training points.\n\n",
-                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, description_coords=(535, 40, 450, 440))
+                          PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, 2, description_coords=(535, 40, 450, 440))
 
         self.make_plot(1, (100, 90, 300, 300))
         self.make_plot(2, (100, 380, 300, 300))

@@ -115,12 +115,15 @@ class NNDLayout(QMainWindow):
             # qp.drawLine(self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio + 35, self.wm - xl1 * self.w_ratio, 750 * self.h_ratio)
             qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, yl4 * self.h_ratio)
 
-    def fill_chapter(self, title, number, description, logo_path, icon_path=None, show_info=True, icon_move_left=0,
+    def fill_chapter(self, title, number, description, logo_path, icon_path=None, book_index=1, show_info=True, icon_move_left=0,
                      description_coords=(x_info, y_info, w_info, h_info), icon_coords=(x_pic2_2, y_pic2_2, w_pic2_2, h_pic2_2),
                      icon_rescale=False):
 
         # Overrides logo_path in order to use the new logos and don't change the code in 70 different files...
-        logo_path = PACKAGE_PATH + "Logo/book_logos/{}.svg".format(number)
+        if book_index == 1:
+            logo_path = PACKAGE_PATH + "Logo/book_logos/{}.svg".format(number)
+        else:
+            logo_path = PACKAGE_PATH + "Logo/book2_logos/{}.svg".format(number)
 
         len_ref = len("One-Input Neuron")
         len_current = len(title)

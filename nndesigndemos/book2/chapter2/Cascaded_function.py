@@ -18,7 +18,7 @@ class CascadedFunction(NNDLayout):
                                                   "using\nthe dropdown menus below.\n\nSet the input value\n"
                                                   "to 0 in order to start\nthe animation, or control it\nmanually by moving"
                                                   "\nthe slider.",
-                          PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/2f_1_1.svg", icon_move_left=120)
+                          PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", PACKAGE_PATH + "Chapters/2_D/2f_1_1.svg", 2, icon_move_left=120)
 
         self.make_plot(1, (90, 300, 370, 370))
 

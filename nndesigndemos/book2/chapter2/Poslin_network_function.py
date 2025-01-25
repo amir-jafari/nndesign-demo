@@ -16,7 +16,7 @@ class PoslinNetworkFunction(NNDLayout):
                                                         "Choose the output transfer\nfunction f below.\n\n"
                                                         "Click on [Random] to\nset each parameter\nto a random value.",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg",
-                          PACKAGE_PATH + "Figures/PoslinNetSimple.svg", icon_move_left=120, icon_coords=(130, 160, 500, 200))
+                          PACKAGE_PATH + "Figures/PoslinNetSimple.svg", 2, icon_move_left=120, icon_coords=(130, 160, 500, 200))
 
         self.make_plot(1, (10, 415, 500, 270))
 

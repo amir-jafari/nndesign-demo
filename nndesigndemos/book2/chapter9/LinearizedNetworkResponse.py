@@ -16,7 +16,7 @@ class LinearizedNetworkResponse(NNDLayout):
 
         self.fill_chapter("Linearized Network Response", 9,
                           "Click a location in the left\ngraph where you want to\nlinearize the network\nresponse.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_21.svg", None, description_coords=(535, 95, 450, 250))
+                          PACKAGE_PATH + "Logo/Logo_Ch_21.svg", None, 2, description_coords=(535, 95, 450, 250))
 
         # Create the weights for the radial function
         w1 = np.array([[-0.2], [-0.2]])
