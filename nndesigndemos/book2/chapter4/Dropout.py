@@ -104,13 +104,19 @@ class Dropout(NNDLayout):
             self.pause = True
 
     def on_animate_1(self, allYieldData):
-        if len(allYieldData) == 1:
+        if len(allYieldData) <= 3:
             self.error_train = allYieldData[0]
             self.train_error.append(self.error_train)
             epoch = len(self.train_error)
             self.train_e.set_data(list(range(epoch)), self.train_error)
+
+            if len(allYieldData) == 3:
+                Pd, Tl = allYieldData[1], allYieldData[2]
+                self.axes_2 = self.figure2.add_subplot(1, 1, 1)
+                plot_contour(None, Pd, Tl, self.figure2, self.axes_2)
+                self.canvas2.draw()
         else:
-            self.axes_2 = self.figure2.add_subplot(1, 1, 1)
+            # self.axes_2 = self.figure2.add_subplot(1, 1, 1)
             # self.axes_2.set_title("Function", fontdict={'fontsize': 10})
 
             net1, Pd, Tl = allYieldData[0], allYieldData[1], allYieldData[2]
@@ -141,7 +147,7 @@ class Dropout(NNDLayout):
         self.train_error = []
         self.canvas.draw()
         self.canvas2.draw()
-        print('self.do_low, self.S_row, self.stdv', self.do_low, self.S_row, self.stdv)
+        # print('self.do_low, self.S_row, self.stdv', self.do_low, self.S_row, self.stdv)
 
     def slide1(self):
         self.do_low = self.slider_do_low.value() / 100

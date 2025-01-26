@@ -17,23 +17,26 @@ def plot_contour(net1, Pd, Tl, fig, ax):
     dy = (mx[1] - mn[1]) / 101
     xpts = np.arange(xlim[0], xlim[1], dx)
     ypts = np.arange(ylim[0], ylim[1], dy)
-    X, Y = np.meshgrid(xpts, ypts)
 
-    testInput = np.vstack([X.ravel(), Y.ravel()])
-    net1['doflag'] = 0
-    testOutputs = simnet(net1, testInput)
-    testOutputs = testOutputs[1][0, :] - testOutputs[1][1, :]
+    if net1:
+        X, Y = np.meshgrid(xpts, ypts)
 
-    F = testOutputs.reshape(X.shape)
+        testInput = np.vstack([X.ravel(), Y.ravel()])
+        net1['doflag'] = 0
+        testOutputs = simnet(net1, testInput)
+        testOutputs = testOutputs[1][0, :] - testOutputs[1][1, :]
 
-    # Create a contour plot
-    contour = ax.contourf(xpts, ypts, F, levels=[-1, 0, 1], colors=['white', 'lightgreen'])
+        F = testOutputs.reshape(X.shape)
+    else:
+        F = np.zeros((101, 101))
+
+    ax.contourf(xpts, ypts, F, levels=[-1, 0, 1], colors=['white', 'lightgreen'])
 
     # # Add a colorbar
     # fig.colorbar(contour, ax=ax)
 
     # Plot all points from Pd
-    ax.plot(Pd[0, :], Pd[1, :], 'x', markersize=5) # , label='All P points'
+    ax.plot(Pd[0, :], Pd[1, :], 'x', markersize=5, color='#1f77b4') # , label='All P points'
 
     # Identify indices where T(1,:) is non-zero
     ind = np.nonzero(Tl[0, :])[0]
@@ -47,8 +50,8 @@ def plot_contour(net1, Pd, Tl, fig, ax):
 
     # Customize axis properties
     ax.set_aspect('equal', adjustable='box')  # Equivalent to plt.axis('square')
-    ax.set_xlabel("xpts")
-    ax.set_ylabel("ypts")
+    ax.set_xlabel("p1")
+    ax.set_ylabel("p2")
 
     ax.legend()
 

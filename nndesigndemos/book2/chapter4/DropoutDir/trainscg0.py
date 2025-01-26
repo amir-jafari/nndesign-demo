@@ -238,9 +238,12 @@ def trainscg0(do_firstlayer=0.98, S_row=500, stdv=0.5):
 
         # It's not good practice, but it works...
         # Comment on the following line to make it a regular function
-        yield tr['perf'][epoch],
+        if epoch == 0:
+            yield tr['perf'][epoch], Pd, Tl
+        else:
+            yield tr['perf'][epoch],
 
-    yield net, Pd, Tl
+    yield net, Pd, Tl, "End of the loop and ready to draw the boundary"
 
     tr = cliptr(tr, epoch)
     return net, tr, Pd, Tl
