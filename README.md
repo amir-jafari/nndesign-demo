@@ -64,11 +64,11 @@ If you are using multiple monitors and switching between them, you may need to r
 These are the packages needed to run all the demos. These specific versions are known to work, but this does not mean 
 older or newer versions will cause any issues.
 
-- Python 3.8+
-- PyQt6 6.5.2
-- NumPy 1.25.2
-- SciPy 1.11.1
-- Matplotlib 3.7.2
+- Python 3.9+
+- PyQt6 6.7.1
+- NumPy 2.0.1
+- SciPy 1.13.1
+- Matplotlib 3.9.2
 
 ## License
 

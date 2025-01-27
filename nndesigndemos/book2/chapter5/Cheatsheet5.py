@@ -14,8 +14,6 @@ class Cheatsheet5(NNDLayout):
         self.fill_chapter("Python Intro Cheatsheets", 5, "Click on each cheatsheet to\nopen it.",
                           PACKAGE_PATH + "Logo/Logo_Ch_13.svg", None, 2, description_coords=(535, 40, 450, 300))
 
-        relative_dir = "./nndesigndemos/book2/chapter5/cheatsheets/"
-
         all_files = [
             'Jupyter Notebook.pdf',
             'Base Python.pdf',
@@ -40,10 +38,10 @@ class Cheatsheet5(NNDLayout):
         ]
 
         for i, file_name in enumerate(all_files):
-            absolute_path = Path(relative_dir + file_name).resolve()
+            absolute_path = PACKAGE_PATH + "book2/chapter5/cheatsheets/" + file_name
 
             if os.name == "nt":
-                absolute_path = str(absolute_path).replace("\\", "/")
+                absolute_path = absolute_path.replace("\\", "/")
                 file_uri = f"file:///{absolute_path}"
             else:
                 file_uri = f"file://{absolute_path}"
