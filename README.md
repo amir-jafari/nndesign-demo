@@ -25,6 +25,11 @@ nndesigndemos is supported on macOS, Linux and Windows. It uses PyQt6, so your O
    sudo apt-get install -y libxcb-cursor-dev
    ```
 
+* Sometime for **macOS** or **Linux** platform, we may need this package as well:
+   ```
+   sudo apt-get install pulseaudio
+   ```
+
 ### Installing via pip
 
 The quick way is simply to install via `pip install nndesigndemos`, which works in most cases.
