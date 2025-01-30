@@ -167,7 +167,6 @@ BOOK2_CHAPTERS_DEMOS = {
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
     11: ["Linear Sequence", "Chapter 11 demos", ],
     12: ["LSTM", "Chapter 12 demos", ],
-    13: ["Chapter 13", "Chapter 13 demos", ],
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -641,33 +640,40 @@ class MainWindowDL(NNDLayout):
         self.button2.clicked.connect(partial(self.show_chapters, "6-9"))
 
         self.button3 = QtWidgets.QPushButton(self)
-        self.button3.setText("10-13")
+        self.button3.setText("10-12")
         self.button3.setGeometry((xbtn1 + 2 * add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
-        self.button3.clicked.connect(partial(self.show_chapters, "10-13"))
+        self.button3.clicked.connect(partial(self.show_chapters, "10-12"))
 
         self.center()
 
         self.show_chapters()
 
+    def change_visibility(self, visible):
+        self.icon4.setVisible(visible)
+        self.label_box4.setVisible(visible)
+        self.comboBox4.setVisible(visible)
+
     def show_chapters(self, chapters="2-5"):
         """ Updates the icons and dropdown menus based on a block of chapters (chapters) """
 
-        if chapters in ["2-5", "6-9", "10-13"]:
+        if chapters in ["2-5", "6-9"]:
             icon_lst = [self.icon1, self.icon2, self.icon3, self.icon4]
             label_lst = [self.label_box1, self.label_box2, self.label_box3, self.label_box4]
             combo_lst = [self.comboBox1, self.comboBox2, self.comboBox3, self.comboBox4]
-            chapters = chapters.split("-")
-            chapter_numbers = list(range(int(chapters[0]), int(chapters[1]) + 1))
-        # elif chapters == '10':
-        #     icon_lst = [self.icon1]
-        #     label_lst = [self.label_box1]
-        #     combo_lst = [self.comboBox1]
-        #     chapter_numbers = [10]
+            self.change_visibility(True)
+        elif chapters == "10-12":
+            icon_lst = [self.icon1, self.icon2, self.icon3]
+            label_lst = [self.label_box1, self.label_box2, self.label_box3]
+            combo_lst = [self.comboBox1, self.comboBox2, self.comboBox3]
+            self.change_visibility(False)
+
+        chapters = chapters.split("-")
+        chapter_numbers = list(range(int(chapters[0]), int(chapters[1]) + 1))
 
         chapter_functions = [
             self.chapter2, self.chapter3, self.chapter4, self.chapter5,
             self.chapter6, self.chapter7, self.chapter8, self.chapter9,
-            self.chapter10, self.chapter11, self.chapter12, self.chapter13,
+            self.chapter10, self.chapter11, self.chapter12,
         ]
 
         idx = 0
@@ -774,6 +780,3 @@ class MainWindowDL(NNDLayout):
 
     def chapter12(self, idx):
         self.comboBox3.setCurrentIndex(0)
-
-    def chapter13(self, idx):
-        self.comboBox4.setCurrentIndex(0)
