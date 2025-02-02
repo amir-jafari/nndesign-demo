@@ -2,7 +2,6 @@ from PyQt6 import QtWidgets, QtGui, QtCore
 import math
 import numpy as np
 import warnings
-import matplotlib.cbook
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 from matplotlib.animation import FuncAnimation
 
@@ -75,8 +74,8 @@ class CascadedFunction(NNDLayout):
         p1 = np.arange(0, 1, 0.01)
         a2 = self.net1(p1)
 
-        a.plot(p1, p1, 'g')
-        a.plot(p1, a2, 'b')
+        a.plot(p1, p1, 'g', linewidth=2)
+        a.plot(p1, a2, 'b', linewidth=2)
 
         if self.func1() == 2:
             self.aaa = np.linspace(0.01, 0.99, 100)
@@ -85,7 +84,8 @@ class CascadedFunction(NNDLayout):
         else:
             self.aaa = np.linspace(0.01, 0.99, 300)
 
-        self.plot_1, = a.plot([], 'ko-')
+        markersize = 4
+        self.plot_1, = a.plot([], 'ko-', markersize=markersize)
 
         a.axhline(y=0, color='k')
         a.axvline(x=0, color='k')
@@ -96,10 +96,10 @@ class CascadedFunction(NNDLayout):
 
             for i in range(len(self.aaa)):
                 xx, yy = self.getxx(self.aaa[i], self.func1())
-                a.plot(xx[-1], yy[-1], 'ro')
+                a.plot(xx[-1], yy[-1], 'ro', markersize=markersize)
 
             xx, yy = self.getxx((self.last_idx / 100), self.func1())
-            a.plot(xx, yy, 'ko-')
+            a.plot(xx, yy, 'ko-', markersize=markersize)
 
             if self.do_graph:
                 self.canvas.draw()
