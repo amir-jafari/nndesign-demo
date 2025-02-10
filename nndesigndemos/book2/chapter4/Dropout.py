@@ -7,7 +7,7 @@ from matplotlib.animation import FuncAnimation
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
 
-from nndesigndemos.book2.chapter4.DropoutDir.trainscg0 import trainscg0
+from nndesigndemos.book2.chapter4.DropoutDir.trainscg0 import trainscg0, preProcessing
 from nndesigndemos.book2.chapter4.DropoutDir.testTrainSCG import plot_contour
 
 
@@ -71,6 +71,16 @@ class Dropout(NNDLayout):
         self.make_button("pause_button", "Pause", (self.x_chapter_button, 610, self.w_chapter_button, self.h_chapter_button), self.on_stop)
         self.pause = True
 
+        self.first_time_draw_plot2 = True
+        self.draw_init_plot2()
+
+    def draw_init_plot2(self):
+        self.figure2.clf()
+        self.net, self.Pd, self.Tl = preProcessing(self.do_low, self.S_row, self.stdv)
+        self.axes_2 = self.figure2.add_subplot(1, 1, 1)
+        plot_contour(None, self.Pd, self.Tl, self.figure2, self.axes_2)
+        self.canvas2.draw()
+
     def select_no_dropout(self):
         if self.checkbox_dropout.checkState().value == 2 and not self.no_dropout_checked:
             self.no_dropout_checked = True
@@ -104,30 +114,17 @@ class Dropout(NNDLayout):
             self.pause = True
 
     def on_animate_1(self, allYieldData):
-        if len(allYieldData) <= 3:
+        if len(allYieldData) == 1:
             self.error_train = allYieldData[0]
             self.train_error.append(self.error_train)
             epoch = len(self.train_error)
             self.train_e.set_data(list(range(epoch)), self.train_error)
-
-            if len(allYieldData) == 3:
-                Pd, Tl = allYieldData[1], allYieldData[2]
-                self.axes_2 = self.figure2.add_subplot(1, 1, 1)
-                plot_contour(None, Pd, Tl, self.figure2, self.axes_2)
-                self.canvas2.draw()
         else:
-            # self.axes_2 = self.figure2.add_subplot(1, 1, 1)
-            # self.axes_2.set_title("Function", fontdict={'fontsize': 10})
-
             net1, Pd, Tl = allYieldData[0], allYieldData[1], allYieldData[2]
             plot_contour(net1, Pd, Tl, self.figure2, self.axes_2)
             self.canvas2.draw()
 
         return self.train_e,
-
-    def fig_clean(self):
-        self.figure2.clf()
-        self.canvas2.draw()
 
     def on_run(self):
         self.pause_button.setText("Pause")
@@ -136,9 +133,14 @@ class Dropout(NNDLayout):
         self.train_error = []
         self.train_e.set_data([], [])
         self.canvas.draw()
+
+        if self.first_time_draw_plot2:
+            self.first_time_draw_plot2 = False
+        else:
+            self.draw_init_plot2()
         # print('on_run self.do_low, self.S_row, self.stdv', self.do_low, self.S_row, self.stdv)
 
-        self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, init_func=self.fig_clean(), frames=trainscg0(self.do_low, self.S_row, self.stdv),
+        self.ani_1 = FuncAnimation(self.figure, self.on_animate_1, frames=trainscg0(self.net, self.Pd, self.Tl),
                                    interval=self.animation_interval, repeat=False, blit=True)
 
     def slide_base(self, label, content):
@@ -160,3 +162,6 @@ class Dropout(NNDLayout):
     def slide3(self):
         self.stdv = self.slider_stdv.value() / 10
         self.slide_base(self.label_stdv, f"Noise standard deviation: {self.stdv}")
+
+        self.first_time_draw_plot2 = True
+        self.draw_init_plot2()

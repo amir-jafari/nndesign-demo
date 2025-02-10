@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from nndesigndemos.book2.chapter4.DropoutDir.trainscg0 import trainscg0
+from nndesigndemos.book2.chapter4.DropoutDir.trainscg0 import trainscg0, preProcessing
 from nndesigndemos.book2.chapter4.DropoutDir.simnet import simnet
 
 
@@ -64,7 +64,9 @@ def testTrainSCG():
     # function. The generator function with yield line is for the demo. And the
     # regular function without yield is for the code running here. So just
     # comment on the yield line to make the code work here.
-    net1, tr, Pd, Tl = trainscg0()
+    net0, Pd, Tl = preProcessing()
+
+    net1, tr = trainscg0(net0, Pd, Tl)
 
     plt.plot(tr['perf'])  # Automatically uses index as x-axis if only y-data is provided
     plt.xlabel("Epoch")  # Label for the x-axis

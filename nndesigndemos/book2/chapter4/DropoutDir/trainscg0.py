@@ -14,8 +14,7 @@ from nndesigndemos.book2.chapter4.DropoutDir.softmax0 import softmax0
 from nndesigndemos.book2.chapter4.DropoutDir.crossentr import crossentr
 from nndesigndemos.book2.chapter4.DropoutDir.tansig0 import tansig0
 
-
-def preProcessing(do_firstlayer, S_row, stdv):
+def preProcessing(do_firstlayer=0.98, S_row=500, stdv=0.5):
     # stdv: standard deviation for noise
 
     # Create the network
@@ -60,7 +59,7 @@ def preProcessing(do_firstlayer, S_row, stdv):
     return net, Pd, Tl
 
 
-def trainscg0(do_firstlayer=0.98, S_row=500, stdv=0.5):
+def trainscg0(net, Pd, Tl):
     """
     Scaled conjugate gradient backpropagation algorithm for neural network training.
 
@@ -82,8 +81,6 @@ def trainscg0(do_firstlayer=0.98, S_row=500, stdv=0.5):
     tr : dict
         Training record over epochs (perf, vperf, tperf, alphak, deltak).
     """
-    net, Pd, Tl = preProcessing(do_firstlayer, S_row, stdv)
-
     this = 'TRAINSCG'
     epochs = net['trainParam']['epochs']
     show = net['trainParam']['show']
@@ -238,12 +235,9 @@ def trainscg0(do_firstlayer=0.98, S_row=500, stdv=0.5):
 
         # It's not good practice, but it works...
         # Comment on the following line to make it a regular function
-        if epoch == 0:
-            yield tr['perf'][epoch], Pd, Tl
-        else:
-            yield tr['perf'][epoch],
+        yield tr['perf'][epoch],
 
     yield net, Pd, Tl, "End of the loop and ready to draw the boundary"
 
     tr = cliptr(tr, epoch)
-    return net, tr, Pd, Tl
+    return net, tr
