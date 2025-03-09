@@ -18,10 +18,10 @@ class ComparisonOfMethods(NNDLayout):
                                                       " - Conjugate Gradient using\n   line search.",
                           PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None, description_coords=(535, 140, 300, 250))
 
-        x, y = np.linspace(-2, 0+(4/31*17), 100, endpoint=False), np.linspace(-2, 0 + (4 / 31 * 17), 200, endpoint=False)
+        x, y = np.linspace(-2, 2, 21), np.linspace(-2, 2, 21)
         X, Y = np.meshgrid(x, y)
         self.a, self.b, c = np.array([[2, 1], [1, 2]]), np.array([0, 0]), 0
-        F = (self.a[0, 0] * X ** 2 + self.a[0, 1] + self.a[1, 0] * X * Y + self.a[1, 1] * Y ** 2) / 2 \
+        F = (self.a[0, 0] * X ** 2 + (self.a[0, 1] + self.a[1, 0]) * X * Y + self.a[1, 1] * Y ** 2) / 2 \
             + self.b[0] * X + self.b[1] * Y + c
 
         self.make_plot(1, (115, 100, 290, 290))

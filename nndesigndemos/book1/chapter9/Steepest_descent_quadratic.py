@@ -19,14 +19,14 @@ class SteepestDescentQuadratic(NNDLayout):
                                                                "Experiment with different\ninitial guesses and\nlearning rates.",
                           PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None, description_coords=(535, 120, 300, 250))
 
-        x, y = np.linspace(-4, 0 + (0.2 * 22), 200, endpoint=False), np.linspace(-2, 0 + (4 / 31 * 17), 200, endpoint=False)
+        x, y = np.linspace(-4, 4, 41), np.linspace(-2, 2, 32)
         X, Y = np.meshgrid(x, y)
         self.a, self.b, c = np.array([[2, 0], [0, 50]]), np.array([0, 0]), 0
         self.max_epoch = 50
-        F = (self.a[0, 0] * X ** 2 + self.a[0, 1] + self.a[1, 0] * X * Y + self.a[1, 1] * Y ** 2) / 2\
+        F = (self.a[0, 0] * X ** 2 + (self.a[0, 1] + self.a[1, 0]) * X * Y + self.a[1, 1] * Y ** 2) / 2\
             + self.b[0] * X + self.b[1] * Y + c
 
-        self.make_plot(1, (25, 100, 470, 470))
+        self.make_plot(1, (0, 230, 520, 260))
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.axes.contour(X, Y, F, levels=[0.1, 0.5, 3, 7, 13, 20, 35, 50, 80])
         self.axes.set_xlim(-4, 4)
