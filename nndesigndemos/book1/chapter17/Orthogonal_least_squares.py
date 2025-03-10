@@ -258,6 +258,8 @@ class OrthogonalLeastSquares(NNDLayout):
             of = np.hstack((of, o1))
             u = np.delete(u, ind1, 1)
             hf.append(h[ind1].item())
+            # should ind1 > 0, aka, r.shape[0] > 0.
+            # However, not sure it it's easy to fix the bug.
             for j in range(k - 1):
                 rr[j, k - 1] = r[ind1, j, k - 1]
             if indexT[ind1] == nc + 1:
@@ -281,7 +283,7 @@ class OrthogonalLeastSquares(NNDLayout):
         else:
             w1, b1 = [], []
         if bindex:
-            if xx[:bindex - 1]:
+            if xx[:bindex - 1].size > 0:
                 w2 = np.hstack((xx[:bindex - 1], xx[bindex: nn])).T
             else:
                 w2 = xx[bindex: nn].T

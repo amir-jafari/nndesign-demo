@@ -471,7 +471,7 @@ class NonlinearOptimization(NNDLayout):
         else:
             w1, b1 = [], []
         if bindex:
-            if xx[:bindex - 1]:
+            if xx[:bindex - 1].size > 0:
                 w2 = np.hstack((xx[:bindex - 1], xx[bindex: nn])).T
             else:
                 w2 = xx[bindex: nn].T
