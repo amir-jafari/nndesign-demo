@@ -123,8 +123,8 @@ class DynamicalSystem(NNDLayout):
         self.angle, self.velocity = event.xdata, event.ydata
         self.draw_pendulum()
         self.energy_plot.set_data([], [])
-        if self.angle < -np.pi:
-            self.angle += 2 * np.pi
+        # if self.angle < -np.pi:
+        #     self.angle += 2 * np.pi
         self.energy_initial.set_data([self.angle], [self.velocity])
         self.energy_path.set_data([], [])
         self.canvas8.draw()
