@@ -115,7 +115,7 @@ class NNDLayout(QMainWindow):
             # qp.drawLine(self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio + 35, self.wm - xl1 * self.w_ratio, 750 * self.h_ratio)
             qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, yl4 * self.h_ratio)
 
-    def fill_chapter(self, title, number, description, logo_path, icon_path=None, book_index=1, show_info=True, icon_move_left=0,
+    def fill_chapter(self, title, number, description, logo_path, icon_path=None, book_index=1, show_info=True, icon_move_left=0, icon_move_up=0,
                      description_coords=(x_info, y_info, w_info, h_info), icon_coords=(x_pic2_2, y_pic2_2, w_pic2_2, h_pic2_2),
                      icon_rescale=False):
 
@@ -146,6 +146,7 @@ class NNDLayout(QMainWindow):
         if icon_path:
             icon_coords = list(icon_coords)
             icon_coords[0] -= icon_move_left
+            icon_coords[1] -= icon_move_up
             self.icon2 = QtWidgets.QLabel(self)
             if icon_rescale:
                 pixmap = QtGui.QIcon(icon_path).pixmap(icon_coords[2] * self.w_ratio, icon_coords[3] * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
