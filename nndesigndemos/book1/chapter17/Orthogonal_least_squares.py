@@ -1,7 +1,6 @@
 from PyQt6 import QtWidgets, QtCore
 import numpy as np
 import warnings
-import matplotlib.cbook
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
@@ -35,16 +34,16 @@ class OrthogonalLeastSquares(NNDLayout):
         self.S1 = 0
 
         self.make_slider("slider_b1_2", QtCore.Qt.Orientation.Horizontal, (2, 20), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 10,
-                         (170, 560, 150, 50), self.graph, "label_b1_2", "Number of Points: 10", (180, 530, 150, 50))
+                         (170, 560, 150, 50), self.on_reset, "label_b1_2", "Number of Points: 10", (180, 530, 150, 50))
         self.make_slider("slider_b", QtCore.Qt.Orientation.Horizontal, (10, 1000), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 100,
-                         (320, 560, 150, 50), self.graph, "label_b", "b: 1.00", (380, 530, 150, 50))
+                         (320, 560, 150, 50), self.on_reset, "label_b", "b: 1.00", (380, 530, 150, 50))
 
         self.make_slider("slider_w2_2", QtCore.Qt.Orientation.Horizontal, (0, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 0,
-                         (20, 630, 150, 50), self.graph, "label_w2_2", "Stdev Noise: 0.0", (50, 600, 150, 50))
+                         (20, 630, 150, 50), self.on_reset, "label_w2_2", "Stdev Noise: 0.0", (50, 600, 150, 50))
         self.make_slider("slider_b2", QtCore.Qt.Orientation.Horizontal, (25, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 50,
-                         (170, 630, 150, 50), self.graph, "label_b2", "Function Frequency: 0.50", (175, 600, 150, 50))
+                         (170, 630, 150, 50), self.on_reset, "label_b2", "Function Frequency: 0.50", (175, 600, 150, 50))
         self.make_slider("slider_fp", QtCore.Qt.Orientation.Horizontal, (0, 360), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 90,
-                         (320, 630, 150, 50), self.graph, "label_fp", "Function Phase: 90", (340, 600, 150, 50))
+                         (320, 630, 150, 50), self.on_reset, "label_fp", "Function Phase: 90", (340, 600, 150, 50))
 
         self.make_button("run_button", "Add Neuron", (self.x_chapter_button, 350, self.w_chapter_button, self.h_chapter_button), self.on_run)
 
@@ -59,22 +58,18 @@ class OrthogonalLeastSquares(NNDLayout):
         self.graph()
 
     def on_run(self):
+        """Add a neuron and update the graph"""
         self.S1 += 1
         self.label_w1_2.setText("- Requested: " + str(self.S1))
-        self.label_w1_3.setText("- Calculated: " + str(self.S1 - 1))
+        # Note: The actual calculated neurons will be determined in graph()
+        # and updated there, not here
         self.graph()
 
     def graph(self, plot_red=True):
-
         axis = self.figure.add_subplot(1, 1, 1)
-        axis.clear()  # Clear the plot
+        axis.clear()
         axis.set_xlim(-2, 2)
         axis.set_ylim(-2, 4)
-        # a.set_xticks([0], minor=True)
-        # a.set_yticks([0], minor=True)
-        # a.set_xticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.set_yticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.grid(which="minor")
         axis.set_xticks([-2, -1, 0, 1])
         axis.set_yticks([-2, -1, 0, 1, 2, 3])
         axis.plot(np.linspace(-2, 2, 10), [0]*10, color="black", linestyle="--", linewidth=0.2)
@@ -85,14 +80,9 @@ class OrthogonalLeastSquares(NNDLayout):
         axis.yaxis.set_label_coords(-0.025, 1)
 
         axis2 = self.figure2.add_subplot(1, 1, 1)
-        axis2.clear()  # Clear the plot
+        axis2.clear()
         axis2.set_xlim(-2, 2)
         axis2.set_ylim(0, 1)
-        # a.set_xticks([0], minor=True)
-        # a.set_yticks([0], minor=True)
-        # a.set_xticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.set_yticks([-2, -1.5, -1, -0.5, 0.5, 1, 1.5])
-        # a.grid(which="minor")
         axis2.set_xticks([-2, -1, 0, 1])
         axis2.set_yticks([0, 0.5])
         axis2.set_xlabel("$p$")
@@ -100,25 +90,13 @@ class OrthogonalLeastSquares(NNDLayout):
         axis2.set_ylabel("$a^1$")
         axis2.yaxis.set_label_coords(-0.025, 1)
 
-        # ax.set_xticks(major_ticks)
-        # ax.set_xticks(minor_ticks, minor=True)
-        # ax.set_yticks(major_ticks)
-        # ax.set_yticks(minor_ticks, minor=True)
-        #
-        # # And a corresponding grid
-        # ax.grid(which='both')
-        #
-        # # Or if you want different settings for the grids:
-        # ax.grid(which='minor', alpha=0.2)
-        # ax.grid(which='major', alpha=0.5)
-
         if self.auto_bias:
             bias = 1
             self.slider_b.setValue(bias * 100)
             self.label_b.setText("b: 1.00")
-        bias = self.get_slider_value_and_update(self.slider_b, self.label_b, 1 / 100, 2)
+        else:
+            bias = self.get_slider_value_and_update(self.slider_b, self.label_b, 1 / 100, 2)
         n_points = self.get_slider_value_and_update(self.slider_b1_2, self.label_b1_2)
-        # n_points = self.slider_b1_2.value()
         sigma = self.get_slider_value_and_update(self.slider_w2_2, self.label_w2_2, 1 / 10, 2)
         freq = self.get_slider_value_and_update(self.slider_b2, self.label_b2, 1 / 100, 2)
         phase = self.get_slider_value_and_update(self.slider_fp, self.label_fp)
@@ -127,47 +105,58 @@ class OrthogonalLeastSquares(NNDLayout):
         p = np.arange(-2, 2 + 0.0001, d1)
         t = np.sin(2 * np.pi * (freq * p + phase / 360)) + 1 + sigma * np.array(self.randseq[:len(p)])
         c = np.copy(p)
-        # delta = (2 - -2) / (S1 - 1)
         if self.auto_bias:
-            bias = np.ones(p.shape)
-            # self.slider_b.setValue(bias * 100)
-            # self.label_b.setText("b: " + str(bias))
+            b = np.ones(p.shape)
         else:
-            bias = np.ones(p.shape) * bias
-        n = self.S1
-        W1, b1, W2, b2, mf, of, indf = self.rb_ols(p, t, c, bias, n)
+            b = np.ones(p.shape) * bias
+        
+        # The requested neuron count shouldn't exceed data points + 1 (include bias term)
+        effective_n = min(self.S1, len(p) + 1)
+        W1, b1, W2, b2 = self.rb_ols(p, t, c, b, effective_n)
 
-        if type(W1) == np.float64:
-            S1 = 1
+        # Update the calculated neuron count in the display
+        if isinstance(W1, np.float64) or len(W1) == 0:
+            S1 = 0
         else:
             S1 = len(W1)
+        
+        self.label_w1_3.setText("- Calculated: " + str(S1))
+        
         total = 2 - -2
-        Q = len(p)
-        pp = np.repeat(p.reshape(1, -1), S1, 0)
-        if S1 == 0:
-            n1, a1 = 0, 0
-            n2 = np.dot(b2, np.ones((1, Q)))
-        else:
-            n1 = np.abs(pp - np.dot(W1, np.ones((1, Q)))) * np.dot(b1, np.ones((1, Q)))
-            a1 = np.exp(-n1 ** 2)
-            a2 = np.dot(W2, a1) + b2
 
         p2 = np.arange(-2, 2 + total / 1000, total / 1000)
         Q2 = len(p2)
+        
+        # Calculate network response for fine grid
         if S1 == 0:
-            a12 = 0
-            a22 = np.dot(b2, np.ones((1, Q2)))
+            a12 = np.zeros((1, Q2))
+            a22 = b2 * np.ones((1, Q2))
         else:
-            pp2 = np.repeat(p2.reshape(1, -1), S1, 0)
-            n12 = np.abs(pp2 - np.dot(W1, np.ones((1, Q2)))) * np.dot(b1, np.ones((1, Q2)))
-            a12 = np.exp(-n12 ** 2)
-            a22 = np.dot(W2, a12) + b2
+            try:
+                pp2 = np.repeat(p2.reshape(1, -1), S1, 0)
+                n12 = np.abs(pp2 - np.dot(W1.reshape(-1, 1), np.ones((1, Q2)))) * np.dot(b1.reshape(-1, 1), np.ones((1, Q2)))
+                a12 = np.exp(-n12 ** 2)
+                a22 = np.dot(W2.reshape(1, -1), a12) + b2 * np.ones((1, Q2))
+            except:
+                # Fallback if there's an issue with calculations
+                a12 = np.zeros((1, Q2))
+                a22 = b2 * np.ones((1, Q2))
+        
         t_exact = np.sin(2 * np.pi * (freq * p2 + phase / 360)) + 1
+        
+        # Calculate individual neuron contributions
         if S1 == 0:
             temp = b2 * np.ones((1, Q2))
         else:
-            temp = np.vstack((np.dot(W2.T, np.ones((1, Q2))) * a12, b2 * np.ones((1, Q2))))
-
+            try:
+                # Direct calculation of individual contributions
+                indiv_contribs = []
+                for i in range(S1):
+                    indiv_contribs.append(W2[i] * a12[i, :])
+                temp = np.vstack((indiv_contribs, b2 * np.ones((1, Q2))))
+            except:
+                temp = b2 * np.ones((1, Q2))
+        
         axis.scatter(p, t, color="white", edgecolor="black")
         for i in range(len(temp)):
             axis.plot(p2, temp[i], linestyle="--", color="black", linewidth=0.5)
@@ -175,7 +164,7 @@ class OrthogonalLeastSquares(NNDLayout):
         if plot_red:
             axis.plot(p2, a22.reshape(-1), color="red", linewidth=1)
         if S1 == 0:
-            axis2.plot(p2, [a12] * len(p2), color="black")
+            axis2.plot(p2, [0] * len(p2), color="black")
         else:
             for i in range(len(a12)):
                 axis2.plot(p2, a12[i], color="black")
@@ -189,7 +178,7 @@ class OrthogonalLeastSquares(NNDLayout):
 
     @staticmethod
     def rb_ols(p, t, c, b, n):
-
+        """Orthogonal Least Squares algorithm for RBF networks"""
         p = p.reshape(-1, 1)
         c = c.reshape(-1, 1)
         b = b.reshape(-1, 1)
@@ -205,96 +194,139 @@ class OrthogonalLeastSquares(NNDLayout):
         bindex = []
         sst = np.dot(t.T, t).item()
 
-        temp = np.dot(p.reshape(-1, 1), np.ones((1, nc))) - np.dot(np.ones((q, 1)), c.T.reshape(1, -1))
-        btot = np.dot(np.ones((q, 1)), b.T.reshape(1, -1))
+        # Generate all possible basis functions
+        temp = np.dot(p, np.ones((1, nc))) - np.dot(np.ones((q, 1)), c.T)
+        btot = np.dot(np.ones((q, 1)), b.T)
         uo = np.exp(-(temp * btot) ** 2)
         uo = np.hstack((uo, np.ones((q, 1))))
-        u = uo
-        m = u
+        u = uo.copy()
+        m = u.copy()
 
+        # Initial selection
         for i in range(nc + 1):
             ssm = np.dot(m[:, i].T, m[:, i])
-            h[i] = np.dot(m[:, i].T, t) / ssm
-            o[i] = h[i] ** 2 * ssm / sst
-        o1, ind1 = np.max(o), np.argmax(o)
+            if ssm < 1e-10:
+                h[i] = 0
+                o[i] = 0
+            else:
+                h[i] = np.dot(m[:, i].T, t) / ssm
+                o[i] = h[i] ** 2 * ssm / sst
+
+        if np.max(o) <= 0:
+            return np.array([]), np.array([]), np.array([0]), 0, np.array([]), np.array([]), np.array([])
+            
+        if np.max(o) == 0:
+            ind1 = 0
+            o1 = 1e-20
+        else:
+            o1, ind1 = np.max(o), np.argmax(o)
         of = o1
-        hf = [h[ind1]]
+        hf = [h[ind1].item()]
 
         mf = m[:, ind1].reshape(-1, 1)
-        ssmf = np.dot(mf.T, mf)
-        u = np.delete(u, ind1, 1)
+        
+        if ind1 < u.shape[1]:
+            u = np.delete(u, ind1, 1)
+        
         if indexT[ind1] == nc:
             bindex = 1
             indf = []
         else:
-            indf = indexT[ind1]
-        indexT.pop(ind1)
-        m = np.copy(u)
+            indf = np.array([indexT[ind1]])
+            
+        if ind1 < len(indexT):
+            indexT.pop(ind1)
+            
+        m = u.copy()
 
+        # Key change: Modify early stopping criteria to match MATLAB version
+        # Instead of using a fixed threshold, continue until the maximum requested neurons
+        # or until we run out of basis functions
         for k in range(2, n + 1):
-            o = np.zeros((nc + 2 - k, 1))
-            h = np.zeros((nc + 2 - k, 1))
-            r = np.zeros((q - k + 1, k, k))
-            for i in range(q - k + 1):
+            if m.shape[1] == 0:
+                break
+                
+            o = np.zeros((m.shape[1], 1))
+            h = np.zeros((m.shape[1], 1))
+            r = np.zeros((m.shape[1], k - 1))
+            
+            for i in range(m.shape[1]):
                 for j in range(k - 1):
-                    if type(ssmf) == np.float64:
-                        r[i, j, k - 1] = np.dot(mf, u[:, i]) / ssmf
-                        m[:, i] = m[:, i] - r[i, j, k - 1] * mf[j]
+                    mf_dot = np.dot(mf[:, j].T, mf[:, j])
+                    if mf_dot < 1e-15:  # Use a smaller threshold to allow more neurons
+                        r[i, j] = 0
                     else:
-                        r[i, j, k - 1] = np.dot(mf[:, j].reshape(1, -1), u[:, i][..., None]) / ssmf[0, j]
-                        m[:, i] = m[:, i] - r[i, j, k - 1] * mf[:, j]
-                ssm = m[:, i].T.dot(m[:, i])
-                h[i] = m[:, i].T.dot(t) / ssm
-                o[i] = h[i] ** 2 * ssm / sst
-            o1, ind1 = np.max(o), np.argmax(o)
-            mf = np.hstack((mf, m[:, ind1].reshape(-1, 1)))
-            if type(ssmf) == np.float64:
-                ssmf = m[:, ind1].T.dot(m[:, ind1])
+                        r[i, j] = np.dot(mf[:, j].T, m[:, i]) / mf_dot
+                    m[:, i] = m[:, i] - r[i, j] * mf[:, j]
+                
+                ssm = np.dot(m[:, i].T, m[:, i])
+                if ssm < 1e-15:  # Use a smaller threshold to allow more neurons
+                    h[i] = 0
+                    o[i] = 0
+                else:
+                    h[i] = np.dot(m[:, i].T, t) / ssm
+                    o[i] = h[i] ** 2 * ssm / sst
+            
+            # Only stop if actually zero contribution, not just very small
+            if np.max(o) == 0:
+                ind1 = 0
+                o1 = 1e-20
             else:
-                try:
-                    ssmf = np.vstack((ssmf.T, m[:, ind1].T.dot(m[:, ind1]))).T
-                except:
-                    print("!")
-            of = np.hstack((of, o1))
-            u = np.delete(u, ind1, 1)
+                o1, ind1 = np.max(o), np.argmax(o)
+            mf = np.hstack((mf, m[:, ind1].reshape(-1, 1)))
+            of = np.append(of, o1)
             hf.append(h[ind1].item())
-            # should ind1 > 0, aka, r.shape[0] > 0.
-            # However, not sure it it's easy to fix the bug.
+            
             for j in range(k - 1):
-                rr[j, k - 1] = r[ind1, j, k - 1]
-            if indexT[ind1] == nc + 1:
+                rr[j, k - 1] = r[ind1, j]
+            
+            if ind1 < len(indexT) and indexT[ind1] == nc:
                 bindex = k - 1
             else:
-                indf = np.hstack((indf, indexT[ind1]))
-            indexT.pop(ind1)
-            m = np.copy(u)
+                if ind1 < len(indexT):
+                    indf = np.append(indf, indexT[ind1])
+            
+            if ind1 < len(indexT):
+                indexT.pop(ind1)
+            if ind1 < u.shape[1]:
+                u = np.delete(u, ind1, 1)
+                
+            m = u.copy()
+            
+            if m.shape[1] == 0:
+                break
 
+        # If no neurons selected, return empty result
         nn = len(hf)
-        xx = np.zeros((nn, 1))
+        if nn == 0:
+            return np.array([]), np.array([]), np.array([0]), 0, np.array([]), np.array([]), np.array([])
+            
+        # Convert selections to network parameters
+        xx = np.zeros(nn)
         xx[nn - 1] = hf[nn - 1]
-        for i in list(range(nn - 1))[::-1]:
+        
+        # Back-substitution to get weights
+        for i in range(nn - 2, -1, -1):
             xx[i] = hf[i]
-            for j in list(range(i + 1, nn))[::-1]:
+            for j in range(i + 1, nn):
                 xx[i] = xx[i] - rr[i, j] * xx[j]
 
-        if isinstance(indf, list) and len(indf) != 0:
+        # Extract network parameters
+        if len(indf) > 0:
             w1 = c[indf.astype(int)]
             b1 = b[indf.astype(int)]
         else:
-            w1, b1 = [], []
+            w1, b1 = np.array([]), np.array([])
+            
         if bindex:
-            if xx[:bindex - 1].size > 0:
-                w2 = np.hstack((xx[:bindex - 1], xx[bindex: nn])).T
+            if bindex > 1 and bindex <= nn:
+                w2 = np.concatenate([xx[:bindex - 1], xx[bindex:]])
+                b2 = xx[bindex - 1]
             else:
-                w2 = xx[bindex: nn].T
-            b2 = xx[0, bindex - 1]
-            # indf = int(np.hstack((np.hstack((indf[:bindex - 1], nc + 1)), indf[bindex:])).item()) - 1
-            # if indf:
-            #     uu = uo[:, np.int(np.array(indf)) - 1]
-            # else:
-            #     uu = uo[:, []]
+                w2 = xx[bindex:]
+                b2 = xx[bindex - 1] if bindex - 1 >= 0 else 0
         else:
             b2 = 0
-            w2 = xx.T
-            # uu = uo[:, np.int(indf)]
-        return w1, b1, w2, b2, mf, of, indf
+            w2 = xx
+            
+        return w1, b1, w2, b2
