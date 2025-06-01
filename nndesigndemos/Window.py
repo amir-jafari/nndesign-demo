@@ -114,7 +114,8 @@ from nndesigndemos.book2.chapter5.Cheatsheet5 import Cheatsheet5
 # ------ Chapter 6 --------
 from nndesigndemos.book2.chapter6.Cheatsheet6 import Cheatsheet6
 # ------ Chapter 8 --------
-from nndesigndemos.book2.chapter8.Convolution_networks import Convol
+from nndesigndemos.book2.chapter8.Convolution_networks_ani import ConvolAnimation as Convol
+# from nndesigndemos.book2.chapter8.Convolution_networks import Convol
 # ------ Chapter 9 --------
 from nndesigndemos.book2.chapter9.LinearizedNetworkResponse import LinearizedNetworkResponse
 # ------ Chapter 10 --------
