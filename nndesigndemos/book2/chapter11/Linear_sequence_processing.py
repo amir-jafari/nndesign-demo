@@ -116,10 +116,12 @@ class LinearSequenceProcessing(NNDLayout):
                 "Please enter valid integer values for all parameters.")
 
     def graph(self):
-        self.plot_sequence(self.p, self.figure, self.canvas, r'Input Sequence $p(t)$')
-        self.plot_sequence(self.a, self.figure2, self.canvas2, r'Output Sequence $a(t)$')
+        min_value = min(min(self.p), min(self.a))
+        max_value = max(max(self.p), max(self.a))
+        self.plot_sequence(self.p, self.figure, self.canvas, r'Input Sequence $p(t)$', min_value, max_value)
+        self.plot_sequence(self.a, self.figure2, self.canvas2, r'Output Sequence $a(t)$', min_value, max_value)
 
-    def plot_sequence(self, array, figure, canvas, title):
+    def plot_sequence(self, array, figure, canvas, title, min_value, max_value):
         figure.clf()
         ax = figure.add_subplot(1, 1, 1)
         
@@ -134,8 +136,8 @@ class LinearSequenceProcessing(NNDLayout):
         
         # Set axis limits
         ax.set_xlim(-0.5, len(array) - 0.5)
-        y_max = max(array) * 1.1 if max(array) > 0 else 1  # Add 10% margin on top
-        y_min = min(array) * 1.1 if min(array) < 0 else -0.1
+        y_max = max_value * 1.1 if max_value > 0 else 1  # Add 10% margin on top
+        y_min = min_value * 1.1 if min_value < 0 else -0.1
         ax.set_ylim(y_min, y_max)
         
         # Set integer ticks for x-axis
