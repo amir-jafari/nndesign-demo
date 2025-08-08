@@ -23,7 +23,7 @@ class averaging_network:
             self.p_tdl = np.roll(self.p_tdl, 1)
             self.p_tdl[0] = p
         
-        return a
+        return round(a, 2)
     
     def process(self, input_sequence):
         output = np.zeros(len(input_sequence))

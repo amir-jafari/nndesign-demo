@@ -121,7 +121,7 @@ from nndesigndemos.book2.chapter9.LinearizedNetworkResponse import LinearizedNet
 # ------ Chapter 10 --------
 from nndesigndemos.book2.chapter10.Cheatsheet10 import Cheatsheet10
 # ------ Chapter 11 --------
-from nndesigndemos.book2.chapter11.Linear_sequence_processing import LinearSequenceProcessing
+from nndesigndemos.book2.chapter11.Sequence_averaging_network import SequenceAveragingNetwork
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ BOOK2_CHAPTERS_DEMOS = {
     8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
-    11: ["Linear Sequence", "Chapter 11 demos", "Linear Sequence Processing"],
+    11: ["Linear Sequence", "Chapter 11 demos", "Sequence Averaging Network"],
     12: ["LSTM", "Chapter 12 demos", ],
 }
 # -------------------------------------------------------------------------------------------------------------
@@ -781,7 +781,7 @@ class MainWindowDL(NNDLayout):
     def chapter11(self, idx):
         self.comboBox2.setCurrentIndex(0)
         if idx == 1:
-            self.book2_chapter11_window1 = LinearSequenceProcessing(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter11_window1 = SequenceAveragingNetwork(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter11_window1.show()
 
     def chapter12(self, idx):
