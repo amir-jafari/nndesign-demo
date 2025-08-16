@@ -7,54 +7,66 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
-from nndesigndemos.book2.chapter11.utils import averaging_network
+from nndesigndemos.book2.chapter11.smoothing_response.SequenceUtilities import input_output
 
 
-class SequenceAveragingNetwork(NNDLayout):
+class SequenceSmoothingResponse(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
-        super(SequenceAveragingNetwork, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
+        super(SequenceSmoothingResponse, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
         print(PACKAGE_PATH + "Figures/linear_sequence_processing.svg")
 
-        self.fill_chapter(f"Sequence Averaging Network", 11, "\nAlter the network's\n"
+        self.fill_chapter(f"Sequence Smoothing Response", 11, "\nAlter the network's\n"
                                                         "parameters by entering\nvalues in the input fields.\n\n"
                                                         "Click [Update] to apply\nyour changes.\n\n"
                                                         "Click [Set Default] to\nrestore original values.",
-                          PACKAGE_PATH + "Logo/Logo_Ch_11.svg", PACKAGE_PATH + "Figures/nndeep11_FIR_2_NoEq.svg", 2,
+                          PACKAGE_PATH + "Logo/Logo_Ch_11.svg", PACKAGE_PATH + "Figures/nndeep11_IIR_1_NoEq.svg", 2,
                           icon_move_left=90, icon_move_up=0, description_coords=(535, 130, 450, 220))
 
-        self.make_plot(1, (10, 430, 250, 250))
-        self.make_plot(2, (260, 430, 250, 250))
+        self.make_plot(1, (10, 460, 250, 220))
+        self.make_plot(2, (260, 460, 250, 220))
 
         self.p_str = ['0', '1', '2', '3', '2', '1', '0', '0', '0']
-        self.iw_str = ['0', '0.5', '0.5']
+        self.iw_str = ['0.5', '0.5']
+        self.lw_str = ['0.5', '0.5']
+        self.b_str = '0'
 
         self.p = np.array(self.p_str, dtype=int)
         self.iw = np.array(self.iw_str, dtype=float)
+        self.lw = np.array(self.lw_str, dtype=float)
+        self.b = float(self.b_str)
 
         self.n = len(self.p_str)
 
         self.initialize_table()
         
         # Weight sliders
-        slider_y_start = 360
-        slider_spacing = 60
-        self.make_slider("w0_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
+        slider_y_start = 340
+        slider_spacing = 50
+        self.make_slider("iw0_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
                         int(self.iw[0] * 100), (self.x_chapter_usual, slider_y_start, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_w0", "w0: 0.00", (self.x_chapter_usual+20, slider_y_start-25, self.w_chapter_slider, 50))
-        self.make_slider("w1_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
+                        self.slider_update, "label_iw0", "iw0: 0.50", (self.x_chapter_usual+20, slider_y_start-25, self.w_chapter_slider, 50))
+        self.make_slider("iw1_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
                         int(self.iw[1] * 100), (self.x_chapter_usual, slider_y_start + slider_spacing, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_w1", "w1: 0.50", (self.x_chapter_usual+20, slider_y_start + slider_spacing-25, self.w_chapter_slider, 50))
-        self.make_slider("w2_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
-                        int(self.iw[2] * 100), (self.x_chapter_usual, slider_y_start + 2*slider_spacing, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_w2", "w2: 0.50", (self.x_chapter_usual+20, slider_y_start + 2*slider_spacing-25, self.w_chapter_slider, 50))
+                        self.slider_update, "label_iw1", "iw1: 0.50", (self.x_chapter_usual+20, slider_y_start + slider_spacing-25, self.w_chapter_slider, 50))
+        
+        # Layer weight and bias sliders
+        self.make_slider("lw0_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
+                        int(self.lw[0] * 100), (self.x_chapter_usual, slider_y_start + 2*slider_spacing, self.w_chapter_slider, 50), 
+                        self.slider_update, "label_lw0", "lw0: 0.50", (self.x_chapter_usual+20, slider_y_start + 2*slider_spacing-25, self.w_chapter_slider, 50))
+        self.make_slider("lw1_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
+                        int(self.lw[1] * 100), (self.x_chapter_usual, slider_y_start + 3*slider_spacing, self.w_chapter_slider, 50), 
+                        self.slider_update, "label_lw1", "lw1: 0.50", (self.x_chapter_usual+20, slider_y_start + 3*slider_spacing-25, self.w_chapter_slider, 50))
+        self.make_slider("b_slider", QtCore.Qt.Orientation.Horizontal, (-100, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
+                        int(self.b * 100), (self.x_chapter_usual, slider_y_start + 4*slider_spacing, self.w_chapter_slider, 50), 
+                        self.slider_update, "label_b", "b: 0.00", (self.x_chapter_usual+20, slider_y_start + 4*slider_spacing-25, self.w_chapter_slider, 50))
         
         # Update button
-        self.make_button("update_button", "Update", (self.x_chapter_button, 540, self.w_chapter_button, self.h_chapter_button), self.update_values)
+        self.make_button("update_button", "Update", (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.update_values)
         
         # Set Default button
         self.make_button("default_button", "Set Default", 
-                        (self.x_chapter_button, 590, self.w_chapter_button, self.h_chapter_button), 
+                        (self.x_chapter_button, 620, self.w_chapter_button, self.h_chapter_button), 
                         self.set_default_values)
 
         # Animation controls after SVG figure
@@ -87,19 +99,23 @@ class SequenceAveragingNetwork(NNDLayout):
     
     def slider_update(self):
         """Update weights from slider values and refresh display"""
-        w0_val = self.get_slider_value_and_update(self.w0_slider, self.label_w0, 1/100, 2)
-        w1_val = self.get_slider_value_and_update(self.w1_slider, self.label_w1, 1/100, 2) 
-        w2_val = self.get_slider_value_and_update(self.w2_slider, self.label_w2, 1/100, 2)
+        iw0_val = self.get_slider_value_and_update(self.iw0_slider, self.label_iw0, 1/100, 2)
+        iw1_val = self.get_slider_value_and_update(self.iw1_slider, self.label_iw1, 1/100, 2) 
+        lw0_val = self.get_slider_value_and_update(self.lw0_slider, self.label_lw0, 1/100, 2)
+        lw1_val = self.get_slider_value_and_update(self.lw1_slider, self.label_lw1, 1/100, 2)
+        b_val = self.get_slider_value_and_update(self.b_slider, self.label_b, 1/100, 2)
         
-        self.iw = np.array([w0_val, w1_val, w2_val], dtype=float)
+        self.iw = np.array([iw0_val, iw1_val], dtype=float)
+        self.lw = np.array([lw0_val, lw1_val], dtype=float)
+        self.b = b_val
         self.update_values()
 
     def initialize_table(self):
         """Create and setup the sequence table"""
-        self.table = QTableWidget(3, self.n, self)
-        self.table.setGeometry(20, 290, 480, 143)
+        self.table = QTableWidget(4, self.n, self)
+        self.table.setGeometry(20, 290, 480, 180)
         
-        self.table.setVerticalHeaderLabels(['p(t)', 'a(t)', 'TDL'])
+        self.table.setVerticalHeaderLabels(['p(t)', 'a(t)', 'p_TDL', 'a_TDL'])
         
         self.table.setCornerButtonEnabled(False)
         
@@ -122,18 +138,25 @@ class SequenceAveragingNetwork(NNDLayout):
             item_p.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)  # Center text horizontally
             self.table.setItem(0, i, item_p)
             
-            item_a = QTableWidgetItem(str(self.a[i]))
+            item_a = QTableWidgetItem(f"{self.a[i]:.2f}")
             item_a.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)  # Center text horizontally
             item_a.setFlags(item_a.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)  # Make read-only
             item_a.setBackground(QtGui.QColor(240, 240, 240))  # Light gray background
             self.table.setItem(1, i, item_a)
         
-            tdl_text = "\n\n".join([str(int(val)) for val in self.tdl_history[i]])
-            item_tdl = QTableWidgetItem(tdl_text)
-            item_tdl.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)  # Center text horizontally
-            item_tdl.setFlags(item_tdl.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)  # Make read-only
-            item_tdl.setBackground(QtGui.QColor(240, 240, 240))  # Light gray background
-            self.table.setItem(2, i, item_tdl)
+            p_tdl_text = "\n".join([f"{val:.2f}" for val in self.p_tdl_history[i]])
+            item_p_tdl = QTableWidgetItem(p_tdl_text)
+            item_p_tdl.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)  # Center text horizontally
+            item_p_tdl.setFlags(item_p_tdl.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)  # Make read-only
+            item_p_tdl.setBackground(QtGui.QColor(240, 240, 240))  # Light gray background
+            self.table.setItem(2, i, item_p_tdl)
+            
+            a_tdl_text = f"{self.a_tdl_history[i][0]:.2f}" if len(self.a_tdl_history[i]) > 0 else "0.00"
+            item_a_tdl = QTableWidgetItem(a_tdl_text)
+            item_a_tdl.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)  # Center text horizontally
+            item_a_tdl.setFlags(item_a_tdl.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)  # Make read-only
+            item_a_tdl.setBackground(QtGui.QColor(240, 240, 240))  # Light gray background
+            self.table.setItem(3, i, item_a_tdl)
 
     def set_default_values(self):
         # Reset P values
@@ -143,16 +166,22 @@ class SequenceAveragingNetwork(NNDLayout):
             self.table.setItem(0, i, item_p)
         
         self.iw = np.array(self.iw_str, dtype=float)
+        self.lw = np.array(self.lw_str, dtype=float)
+        self.b = float(self.b_str)
 
-        self.w0_slider.setValue(int(self.iw[0] * 100))
-        self.w1_slider.setValue(int(self.iw[1] * 100))
-        self.w2_slider.setValue(int(self.iw[2] * 100))
+        self.iw0_slider.setValue(int(self.iw[0] * 100))
+        self.iw1_slider.setValue(int(self.iw[1] * 100))
+        self.lw0_slider.setValue(int(self.lw[0] * 100))
+        self.lw1_slider.setValue(int(self.lw[1] * 100))
+        self.b_slider.setValue(int(self.b * 100))
         
         # Update labels to show values
-        self.label_w0.setText(f"w0: {float(self.iw[0]):.2f}")
-        self.label_w1.setText(f"w1: {float(self.iw[1]):.2f}")
-        self.label_w2.setText(f"w2: {float(self.iw[2]):.2f}")
-                
+        self.label_iw0.setText(f"iw0: {float(self.iw[0]):.2f}")
+        self.label_iw1.setText(f"iw1: {float(self.iw[1]):.2f}")
+        self.label_lw0.setText(f"lw0: {float(self.lw[0]):.2f}")
+        self.label_lw1.setText(f"lw1: {float(self.lw[1]):.2f}")
+        self.label_b.setText(f"b: {float(self.b):.2f}")
+
         self.update_values()
 
     def update_values(self):
@@ -160,8 +189,18 @@ class SequenceAveragingNetwork(NNDLayout):
             for i in range(self.n):
                 self.p[i] = int(self.table.item(0, i).text())
                         
-            net = averaging_network(self.iw)
-            self.a, self.tdl_history = net.process(self.p)
+            net = input_output(self.iw, self.lw, self.b)
+            self.a = net.process(self.p)
+            
+            # Create history for TDL visualization
+            net_history = input_output(self.iw, self.lw, self.b)
+            self.p_tdl_history = []
+            self.a_tdl_history = []
+            
+            for i in range(self.n):
+                self.p_tdl_history.append(net_history.p_tdl.copy())
+                self.a_tdl_history.append(net_history.a_tdl.copy())
+                net_history.step(self.p[i])
 
             # print("Input:", self.p)
             # print("Output:", self.a)
@@ -246,7 +285,7 @@ class SequenceAveragingNetwork(NNDLayout):
             self.stop_animation()
             
         # Reset a(t) and TDL to initial state (zeros)
-        net = averaging_network(self.iw)
+        net = input_output(self.iw, self.lw, self.b)
         
         # Generate animation frames by processing each input step by step
         self.animation_frames = []
@@ -255,7 +294,8 @@ class SequenceAveragingNetwork(NNDLayout):
             frame = {
                 'step': i,
                 'input_value': self.p[i],
-                'tdl_state': net.p_tdl.copy(),
+                'p_tdl_state': net.p_tdl.copy(),
+                'a_tdl_state': net.a_tdl.copy(),
                 'output_value': net.step(self.p[i]),
                 'weights': self.iw.copy()
             }
@@ -279,12 +319,19 @@ class SequenceAveragingNetwork(NNDLayout):
             item_a.setBackground(QtGui.QColor(240, 240, 240))
             self.table.setItem(1, i, item_a)
             
-            # Clear TDL row
-            item_tdl = QTableWidgetItem("")
-            item_tdl.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-            item_tdl.setFlags(item_tdl.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
-            item_tdl.setBackground(QtGui.QColor(240, 240, 240))
-            self.table.setItem(2, i, item_tdl)
+            # Clear p_TDL row
+            item_p_tdl = QTableWidgetItem("")
+            item_p_tdl.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            item_p_tdl.setFlags(item_p_tdl.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+            item_p_tdl.setBackground(QtGui.QColor(240, 240, 240))
+            self.table.setItem(2, i, item_p_tdl)
+            
+            # Clear a_TDL row
+            item_a_tdl = QTableWidgetItem("")
+            item_a_tdl.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            item_a_tdl.setFlags(item_a_tdl.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+            item_a_tdl.setBackground(QtGui.QColor(240, 240, 240))
+            self.table.setItem(3, i, item_a_tdl)
         
     def start_animation(self):
         """Start the animation sequence"""
@@ -308,19 +355,27 @@ class SequenceAveragingNetwork(NNDLayout):
         frame = self.animation_frames[self.current_step]
         
         # Update a(t) value for current step
-        item_a = QTableWidgetItem(f"{frame['output_value']}")
+        item_a = QTableWidgetItem(f"{frame['output_value']:.2f}")
         item_a.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         item_a.setFlags(item_a.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
         item_a.setBackground(QtGui.QColor(240, 240, 240))
         self.table.setItem(1, self.current_step, item_a)
         
-        # Update TDL values for current step
-        tdl_text = "\n\n".join([str(int(val)) for val in frame['tdl_state']])
-        item_tdl = QTableWidgetItem(tdl_text)
-        item_tdl.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        item_tdl.setFlags(item_tdl.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
-        item_tdl.setBackground(QtGui.QColor(240, 240, 240))
-        self.table.setItem(2, self.current_step, item_tdl)
+        # Update p_TDL values for current step
+        p_tdl_text = "\n".join([f"{val:.2f}" for val in frame['p_tdl_state']])
+        item_p_tdl = QTableWidgetItem(p_tdl_text)
+        item_p_tdl.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        item_p_tdl.setFlags(item_p_tdl.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+        item_p_tdl.setBackground(QtGui.QColor(240, 240, 240))
+        self.table.setItem(2, self.current_step, item_p_tdl)
+        
+        # Update a_TDL values for current step
+        a_tdl_text = f"{frame['a_tdl_state'][0]:.2f}" if len(frame['a_tdl_state']) > 0 else "0.00"
+        item_a_tdl = QTableWidgetItem(a_tdl_text)
+        item_a_tdl.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        item_a_tdl.setFlags(item_a_tdl.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+        item_a_tdl.setBackground(QtGui.QColor(240, 240, 240))
+        self.table.setItem(3, self.current_step, item_a_tdl)
         
         # Update plots with current state
         current_a = [self.animation_frames[j]['output_value'] if j <= self.current_step else 0 
