@@ -16,8 +16,7 @@ class SequenceSmoothingResponse(NNDLayout):
 
         print(PACKAGE_PATH + "Figures/linear_sequence_processing.svg")
 
-        self.fill_chapter(f"Sequence Smoothing Response", 11, "\nAlter the network's\n"
-                                                        "parameters by entering\nvalues in the input fields.\n\n"
+        self.fill_chapter(f"Sequence Smoothing Response", 11, "Change input sequence by\nentering values in input\nfields.\n\n"
                                                         "Click [Update] to apply\nyour changes.\n\n"
                                                         "Click [Set Default] to\nrestore original values.",
                           PACKAGE_PATH + "Logo/Logo_Ch_11.svg", PACKAGE_PATH + "Figures/nndeep11_IIR_1_NoEq.svg", 2,
@@ -27,8 +26,8 @@ class SequenceSmoothingResponse(NNDLayout):
         self.make_plot(2, (260, 460, 250, 220))
 
         self.p_str = ['0', '1', '2', '3', '2', '1', '0', '0', '0']
-        self.iw_str = ['0.5', '0.5']
-        self.lw_str = ['0.5', '0.5']
+        self.iw_str = ['0', '0.5']
+        self.lw_str = ['0.5']
         self.b_str = '0'
 
         self.p = np.array(self.p_str, dtype=int)
@@ -40,51 +39,40 @@ class SequenceSmoothingResponse(NNDLayout):
 
         self.initialize_table()
         
-        # Weight sliders
-        slider_y_start = 340
-        slider_spacing = 50
-        self.make_slider("iw0_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
-                        int(self.iw[0] * 100), (self.x_chapter_usual, slider_y_start, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_iw0", "iw0: 0.50", (self.x_chapter_usual+20, slider_y_start-25, self.w_chapter_slider, 50))
-        self.make_slider("iw1_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
-                        int(self.iw[1] * 100), (self.x_chapter_usual, slider_y_start + slider_spacing, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_iw1", "iw1: 0.50", (self.x_chapter_usual+20, slider_y_start + slider_spacing-25, self.w_chapter_slider, 50))
+        # Weight sliders (only iw1 and lw visible, others kept for calculations)
+        slider_y_start = 360
+        slider_spacing = 60
+        self.make_slider("iw1_slider", QtCore.Qt.Orientation.Horizontal, (-100, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
+                        int(self.iw[1] * 100), (self.x_chapter_usual, slider_y_start, self.w_chapter_slider, 50), 
+                        self.slider_update, "label_iw1", "iw1: 0.50", (self.x_chapter_usual+20, slider_y_start-25, self.w_chapter_slider, 50))
         
-        # Layer weight and bias sliders
-        self.make_slider("lw0_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
-                        int(self.lw[0] * 100), (self.x_chapter_usual, slider_y_start + 2*slider_spacing, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_lw0", "lw0: 0.50", (self.x_chapter_usual+20, slider_y_start + 2*slider_spacing-25, self.w_chapter_slider, 50))
-        self.make_slider("lw1_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
-                        int(self.lw[1] * 100), (self.x_chapter_usual, slider_y_start + 3*slider_spacing, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_lw1", "lw1: 0.50", (self.x_chapter_usual+20, slider_y_start + 3*slider_spacing-25, self.w_chapter_slider, 50))
-        self.make_slider("b_slider", QtCore.Qt.Orientation.Horizontal, (-100, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
-                        int(self.b * 100), (self.x_chapter_usual, slider_y_start + 4*slider_spacing, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_b", "b: 0.00", (self.x_chapter_usual+20, slider_y_start + 4*slider_spacing-25, self.w_chapter_slider, 50))
+        # Layer weight slider
+        self.make_slider("lw_slider", QtCore.Qt.Orientation.Horizontal, (-100, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
+                        int(self.lw[0] * 100), (self.x_chapter_usual, slider_y_start + slider_spacing, self.w_chapter_slider, 50), 
+                        self.slider_update, "label_lw", "lw: 0.50", (self.x_chapter_usual+20, slider_y_start + slider_spacing-25, self.w_chapter_slider, 50))
         
         # Update button
-        self.make_button("update_button", "Update", (self.x_chapter_button, 580, self.w_chapter_button, self.h_chapter_button), self.update_values)
+        self.make_button("update_button", "Update", (self.x_chapter_button, 500, self.w_chapter_button, self.h_chapter_button), self.update_values)
         
         # Set Default button
         self.make_button("default_button", "Set Default", 
-                        (self.x_chapter_button, 620, self.w_chapter_button, self.h_chapter_button), 
+                        (self.x_chapter_button, 550, self.w_chapter_button, self.h_chapter_button), 
                         self.set_default_values)
 
         # Animation controls after SVG figure
         ani_x = 330
-        self.make_label("ani_txt", "Animation Part:", 
-                       (ani_x, 100, 150, 30))
         
         self.animation_enabled = False
-        self.make_checkbox('checkbox_animation', 'Enable Animation', (ani_x, 130, 150, 30),
+        self.make_checkbox('checkbox_animation', 'Enable Animation', (ani_x-5, 120, 150, 30),
                           self.toggle_animation, self.animation_enabled)
 
-        self.make_label("label_animation", "Animation Speed:", (ani_x, 170, 150, 30))
+        self.make_label("label_animation", "Animation Speed:", (ani_x, 160, 150, 30))
         self.make_slider("slider_animation", QtCore.Qt.Orientation.Horizontal, (100, 1000), 
                         QtWidgets.QSlider.TickPosition.TicksBelow, 100, 500,
-                        (ani_x, 210, 150, 30), self.change_animation_speed)
+                        (ani_x, 200, 150, 30), self.change_animation_speed)
 
         self.make_button("btn_play_pause", "Pause", 
-                        (ani_x, 245, 80, 30), self.toggle_play_pause)
+                        (ani_x, 235, 80, 30), self.toggle_play_pause)
         
         # Animation variables
         self.animation_speed = 500
@@ -99,15 +87,13 @@ class SequenceSmoothingResponse(NNDLayout):
     
     def slider_update(self):
         """Update weights from slider values and refresh display"""
-        iw0_val = self.get_slider_value_and_update(self.iw0_slider, self.label_iw0, 1/100, 2)
         iw1_val = self.get_slider_value_and_update(self.iw1_slider, self.label_iw1, 1/100, 2) 
-        lw0_val = self.get_slider_value_and_update(self.lw0_slider, self.label_lw0, 1/100, 2)
-        lw1_val = self.get_slider_value_and_update(self.lw1_slider, self.label_lw1, 1/100, 2)
-        b_val = self.get_slider_value_and_update(self.b_slider, self.label_b, 1/100, 2)
+        lw_val = self.get_slider_value_and_update(self.lw_slider, self.label_lw, 1/100, 2)
         
-        self.iw = np.array([iw0_val, iw1_val], dtype=float)
-        self.lw = np.array([lw0_val, lw1_val], dtype=float)
-        self.b = b_val
+        # Keep original values for iw0 and b; update only iw1 and lw
+        self.iw = np.array([self.iw[0], iw1_val], dtype=float)
+        self.lw = np.array([lw_val], dtype=float)
+        # self.b remains unchanged
         self.update_values()
 
     def initialize_table(self):
@@ -169,18 +155,12 @@ class SequenceSmoothingResponse(NNDLayout):
         self.lw = np.array(self.lw_str, dtype=float)
         self.b = float(self.b_str)
 
-        self.iw0_slider.setValue(int(self.iw[0] * 100))
         self.iw1_slider.setValue(int(self.iw[1] * 100))
-        self.lw0_slider.setValue(int(self.lw[0] * 100))
-        self.lw1_slider.setValue(int(self.lw[1] * 100))
-        self.b_slider.setValue(int(self.b * 100))
+        self.lw_slider.setValue(int(self.lw[0] * 100))
         
-        # Update labels to show values
-        self.label_iw0.setText(f"iw0: {float(self.iw[0]):.2f}")
+        # Update labels to show values (only visible sliders)
         self.label_iw1.setText(f"iw1: {float(self.iw[1]):.2f}")
-        self.label_lw0.setText(f"lw0: {float(self.lw[0]):.2f}")
-        self.label_lw1.setText(f"lw1: {float(self.lw[1]):.2f}")
-        self.label_b.setText(f"b: {float(self.b):.2f}")
+        self.label_lw.setText(f"lw: {float(self.lw[0]):.2f}")
 
         self.update_values()
 

@@ -16,8 +16,7 @@ class SequenceAveragingNetwork(NNDLayout):
 
         print(PACKAGE_PATH + "Figures/linear_sequence_processing.svg")
 
-        self.fill_chapter(f"Sequence Averaging Network", 11, "\nAlter the network's\n"
-                                                        "parameters by entering\nvalues in the input fields.\n\n"
+        self.fill_chapter(f"Sequence Averaging Network", 11, "Change input sequence by\nentering values in input\nfields.\n\n"
                                                         "Click [Update] to apply\nyour changes.\n\n"
                                                         "Click [Set Default] to\nrestore original values.",
                           PACKAGE_PATH + "Logo/Logo_Ch_11.svg", PACKAGE_PATH + "Figures/nndeep11_FIR_2_NoEq.svg", 2,
@@ -36,43 +35,38 @@ class SequenceAveragingNetwork(NNDLayout):
 
         self.initialize_table()
         
-        # Weight sliders
+        # Weight sliders (w1 and w2 only, w0 kept in calculations)
         slider_y_start = 360
         slider_spacing = 60
-        self.make_slider("w0_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
-                        int(self.iw[0] * 100), (self.x_chapter_usual, slider_y_start, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_w0", "w0: 0.00", (self.x_chapter_usual+20, slider_y_start-25, self.w_chapter_slider, 50))
-        self.make_slider("w1_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
-                        int(self.iw[1] * 100), (self.x_chapter_usual, slider_y_start + slider_spacing, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_w1", "w1: 0.50", (self.x_chapter_usual+20, slider_y_start + slider_spacing-25, self.w_chapter_slider, 50))
-        self.make_slider("w2_slider", QtCore.Qt.Orientation.Horizontal, (0, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
-                        int(self.iw[2] * 100), (self.x_chapter_usual, slider_y_start + 2*slider_spacing, self.w_chapter_slider, 50), 
-                        self.slider_update, "label_w2", "w2: 0.50", (self.x_chapter_usual+20, slider_y_start + 2*slider_spacing-25, self.w_chapter_slider, 50))
+        self.make_slider("w1_slider", QtCore.Qt.Orientation.Horizontal, (-100, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
+                        int(self.iw[1] * 100), (self.x_chapter_usual, slider_y_start, self.w_chapter_slider, 50), 
+                        self.slider_update, "label_w1", "w1: 0.50", (self.x_chapter_usual+20, slider_y_start-25, self.w_chapter_slider, 50))
+        self.make_slider("w2_slider", QtCore.Qt.Orientation.Horizontal, (-100, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10, 
+                        int(self.iw[2] * 100), (self.x_chapter_usual, slider_y_start + slider_spacing, self.w_chapter_slider, 50), 
+                        self.slider_update, "label_w2", "w2: 0.50", (self.x_chapter_usual+20, slider_y_start + slider_spacing-25, self.w_chapter_slider, 50))
         
         # Update button
-        self.make_button("update_button", "Update", (self.x_chapter_button, 540, self.w_chapter_button, self.h_chapter_button), self.update_values)
+        self.make_button("update_button", "Update", (self.x_chapter_button, 500, self.w_chapter_button, self.h_chapter_button), self.update_values)
         
         # Set Default button
         self.make_button("default_button", "Set Default", 
-                        (self.x_chapter_button, 590, self.w_chapter_button, self.h_chapter_button), 
+                        (self.x_chapter_button, 550, self.w_chapter_button, self.h_chapter_button), 
                         self.set_default_values)
 
         # Animation controls after SVG figure
         ani_x = 330
-        self.make_label("ani_txt", "Animation Part:", 
-                       (ani_x, 100, 150, 30))
         
         self.animation_enabled = False
-        self.make_checkbox('checkbox_animation', 'Enable Animation', (ani_x, 130, 150, 30),
+        self.make_checkbox('checkbox_animation', 'Enable Animation', (ani_x-5, 120, 150, 30),
                           self.toggle_animation, self.animation_enabled)
 
-        self.make_label("label_animation", "Animation Speed:", (ani_x, 170, 150, 30))
+        self.make_label("label_animation", "Animation Speed:", (ani_x, 160, 150, 30))
         self.make_slider("slider_animation", QtCore.Qt.Orientation.Horizontal, (100, 1000), 
                         QtWidgets.QSlider.TickPosition.TicksBelow, 100, 500,
-                        (ani_x, 210, 150, 30), self.change_animation_speed)
+                        (ani_x, 200, 150, 30), self.change_animation_speed)
 
         self.make_button("btn_play_pause", "Pause", 
-                        (ani_x, 245, 80, 30), self.toggle_play_pause)
+                        (ani_x, 235, 80, 30), self.toggle_play_pause)
         
         # Animation variables
         self.animation_speed = 500
@@ -87,11 +81,11 @@ class SequenceAveragingNetwork(NNDLayout):
     
     def slider_update(self):
         """Update weights from slider values and refresh display"""
-        w0_val = self.get_slider_value_and_update(self.w0_slider, self.label_w0, 1/100, 2)
         w1_val = self.get_slider_value_and_update(self.w1_slider, self.label_w1, 1/100, 2) 
         w2_val = self.get_slider_value_and_update(self.w2_slider, self.label_w2, 1/100, 2)
         
-        self.iw = np.array([w0_val, w1_val, w2_val], dtype=float)
+        # Keep w0 from original value, update w1 and w2
+        self.iw = np.array([self.iw[0], w1_val, w2_val], dtype=float)
         self.update_values()
 
     def initialize_table(self):
@@ -144,12 +138,10 @@ class SequenceAveragingNetwork(NNDLayout):
         
         self.iw = np.array(self.iw_str, dtype=float)
 
-        self.w0_slider.setValue(int(self.iw[0] * 100))
         self.w1_slider.setValue(int(self.iw[1] * 100))
         self.w2_slider.setValue(int(self.iw[2] * 100))
         
-        # Update labels to show values
-        self.label_w0.setText(f"w0: {float(self.iw[0]):.2f}")
+        # Update labels to show values (only w1 and w2)
         self.label_w1.setText(f"w1: {float(self.iw[1]):.2f}")
         self.label_w2.setText(f"w2: {float(self.iw[2]):.2f}")
                 
