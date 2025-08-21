@@ -136,13 +136,21 @@ class SequenceAveragingNetwork(NNDLayout):
         
         self.iw = np.array(self.iw_str, dtype=float)
 
+        # Temporarily disconnect sliders to prevent premature slider_update() calls
+        self.w1_slider.valueChanged.disconnect()
+        self.w2_slider.valueChanged.disconnect()
+        
         self.w1_slider.setValue(int(self.iw[1] * 100))
         self.w2_slider.setValue(int(self.iw[2] * 100))
         
         # Update labels to show values (only w1 and w2)
         self.label_w1.setText(f"w1: {float(self.iw[1]):.2f}")
         self.label_w2.setText(f"w2: {float(self.iw[2]):.2f}")
-                
+        
+        # Reconnect sliders
+        self.w1_slider.valueChanged.connect(self.slider_update)
+        self.w2_slider.valueChanged.connect(self.slider_update)
+        
         self.update_values()
 
     def update_values(self):

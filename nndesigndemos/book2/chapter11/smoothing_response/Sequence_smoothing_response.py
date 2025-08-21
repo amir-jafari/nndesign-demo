@@ -153,12 +153,20 @@ class SequenceSmoothingResponse(NNDLayout):
         self.lw = np.array(self.lw_str, dtype=float)
         self.b = float(self.b_str)
 
+        # Temporarily disconnect sliders to prevent premature slider_update() calls
+        self.iw1_slider.valueChanged.disconnect()
+        self.lw_slider.valueChanged.disconnect()
+        
         self.iw1_slider.setValue(int(self.iw[1] * 100))
         self.lw_slider.setValue(int(self.lw[0] * 100))
         
         # Update labels to show values (only visible sliders)
         self.label_iw1.setText(f"iw1: {float(self.iw[1]):.2f}")
         self.label_lw.setText(f"lw: {float(self.lw[0]):.2f}")
+
+        # Reconnect sliders
+        self.iw1_slider.valueChanged.connect(self.slider_update)
+        self.lw_slider.valueChanged.connect(self.slider_update)
 
         self.update_values()
 
