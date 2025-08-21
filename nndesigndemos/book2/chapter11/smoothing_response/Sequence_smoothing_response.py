@@ -14,13 +14,11 @@ class SequenceSmoothingResponse(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(SequenceSmoothingResponse, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        print(PACKAGE_PATH + "Figures/linear_sequence_processing.svg")
-
         self.fill_chapter(f"Sequence Smoothing Response", 11, "Change input sequence by\nentering values in input\nfields.\n\n"
                                                         "Click [Update] to apply\nyour changes.\n\n"
                                                         "Click [Set Default] to\nrestore original values.",
                           PACKAGE_PATH + "Logo/Logo_Ch_11.svg", PACKAGE_PATH + "Figures/nndeep11_IIR_1_NoEq.svg", 2,
-                          icon_move_left=90, icon_move_up=0, description_coords=(535, 130, 450, 220))
+                          icon_move_left=80, icon_move_up=0, description_coords=(535, 130, 450, 220))
 
         self.make_plot(1, (10, 460, 250, 220))
         self.make_plot(2, (260, 460, 250, 220))
@@ -63,13 +61,13 @@ class SequenceSmoothingResponse(NNDLayout):
         ani_x = 330
         
         self.animation_enabled = False
-        self.make_checkbox('checkbox_animation', 'Enable Animation', (ani_x-5, 120, 150, 30),
+        self.make_checkbox('checkbox_animation', 'Enable Animation', (ani_x-12, 120, 150, 30),
                           self.toggle_animation, self.animation_enabled)
 
         self.make_label("label_animation", "Animation Speed:", (ani_x, 160, 150, 30))
         self.make_slider("slider_animation", QtCore.Qt.Orientation.Horizontal, (100, 1000), 
                         QtWidgets.QSlider.TickPosition.TicksBelow, 100, 500,
-                        (ani_x, 200, 150, 30), self.change_animation_speed)
+                        (ani_x-12, 200, 150, 30), self.change_animation_speed)
 
         self.make_button("btn_play_pause", "Pause", 
                         (ani_x, 235, 80, 30), self.toggle_play_pause)

@@ -84,7 +84,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-777.0213,-379.1093)">
+     transform="scale(0.8) translate(-777.0213,-379.1093)">
     <g
        id="g8022"
        transform="translate(0,282.8562)">
@@ -362,27 +362,23 @@
        id="text26932"><tspan
          sodipodi:role="line"
          id="tspan26930"
-         style="font-size:10px;stroke-width:0.9375"
+         style="font-size:10px;stroke-width:0.9375;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Times;-inkscape-font-specification:'Times Italic'"
          x="825.74994"
-         y="429.11221"><tspan
-           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Times;-inkscape-font-specification:'Times Italic'"
-           id="tspan26926">w</tspan><tspan
-           style="font-size:65%;baseline-shift:sub"
-           id="tspan26928">1</tspan></tspan></text>
+         y="429.11221">w</tspan><tspan
+         style="font-size:6.5px;baseline-shift:sub"
+         x="835.74994"
+         y="429.11221">1</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;line-height:1.25;font-family:Times;-inkscape-font-specification:Times;stroke-width:0.9375"
        x="825.74994"
        y="456.11221"
        id="text26940"><tspan
-         sodipodi:role="line"
-         id="tspan26938"
-         style="font-size:10px;stroke-width:0.9375"
+         style="font-size:10px;stroke-width:0.9375;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Times;-inkscape-font-specification:'Times Italic'"
          x="825.74994"
-         y="456.11221"><tspan
-           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Times;-inkscape-font-specification:'Times Italic'"
-           id="tspan26934">w</tspan><tspan
-           style="font-size:65%;baseline-shift:sub"
-           id="tspan26936">2</tspan></tspan></text>
+         y="456.11221">w</tspan><tspan
+         style="font-size:6.5px;baseline-shift:sub"
+         x="835.74994"
+         y="456.11221">2</tspan></text>
   </g>
 </svg>
