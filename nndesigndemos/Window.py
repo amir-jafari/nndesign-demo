@@ -123,6 +123,7 @@ from nndesigndemos.book2.chapter10.Cheatsheet10 import Cheatsheet10
 # ------ Chapter 11 --------
 from nndesigndemos.book2.chapter11.Sequence_averaging_network import SequenceAveragingNetwork
 from nndesigndemos.book2.chapter11.smoothing_response.Sequence_smoothing_response import SequenceSmoothingResponse
+from nndesigndemos.book2.chapter11.impulse_response.Impulse_response import ImpulseResponse
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -169,7 +170,7 @@ BOOK2_CHAPTERS_DEMOS = {
     8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
-    11: ["Linear Sequence", "Chapter 11 demos", "Sequence Averaging Network", "Sequence Smoothing Response"],
+    11: ["Linear Sequence", "Chapter 11 demos", "Sequence Averaging Network", "Sequence Smoothing Response", "Impulse Response"],
     12: ["LSTM", "Chapter 12 demos", ],
 }
 # -------------------------------------------------------------------------------------------------------------
@@ -787,6 +788,9 @@ class MainWindowDL(NNDLayout):
         elif idx == 2:
             self.book2_chapter11_window2 = SequenceSmoothingResponse(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter11_window2.show()
+        elif idx == 3:
+            self.book2_chapter11_window3 = ImpulseResponse(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter11_window3.show()
 
     def chapter12(self, idx):
         self.comboBox3.setCurrentIndex(0)
