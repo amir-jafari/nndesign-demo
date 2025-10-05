@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="400" height="120" viewBox="0 0 400 120" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <!-- a(t) = -->
+    <text x="5" y="65" font-family="Times" font-size="32" font-style="italic">a</text>
+    <text x="25" y="65" font-family="Times" font-size="32">(</text>
+    <text x="40" y="65" font-family="Times" font-size="32" font-style="italic">t</text>
+    <text x="55" y="65" font-family="Times" font-size="32">) =</text>
+
+    <!-- Numerator: β₁D -->
+    <text x="175" y="40" font-family="Times" font-size="32">β</text>
+    <text x="191" y="48" font-family="Times" font-size="20">1</text>
+    <text x="201" y="40" font-family="Times" font-size="32" font-style="italic">D</text>
+
+    <!-- Division line -->
+    <line x1="105" y1="60" x2="305" y2="60" stroke="black" stroke-width="2"/>
+
+    <!-- Denominator: 1 + α₁D + α₂D² -->
+    <text x="105" y="95" font-family="Times" font-size="32">1 + α</text>
+    <text x="172" y="103" font-family="Times" font-size="20">1</text>
+    <text x="180" y="95" font-family="Times" font-size="32" font-style="italic">D + α</text>
+    <text x="260" y="103" font-family="Times" font-size="20">2</text>
+    <text x="270" y="95" font-family="Times" font-size="32" font-style="italic">D</text>
+    <text x="295" y="82" font-family="Times" font-size="20">2</text>
+
+    <!-- p(t) -->
+    <text x="315" y="65" font-family="Times" font-size="32" font-style="italic">p</text>
+    <text x="335" y="65" font-family="Times" font-size="32">(</text>
+    <text x="350" y="65" font-family="Times" font-size="32" font-style="italic">t</text>
+    <text x="365" y="65" font-family="Times" font-size="32">)</text>
+  </g>
+</svg>
