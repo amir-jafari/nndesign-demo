@@ -29,8 +29,8 @@ class ImpulseResponse(NNDLayout):
 
         # Instructions below the pole plot
         self.make_label("label_instructions",
-                       "Click on a complex region of the pole plot to choose a complex conjugate pair.\nClick on the real axis for real poles (requires two clicks).\n\n"
-                       "Note: β₁ is always 1 when clicking the pole plot because poles uniquely\ndetermine a monic polynomial.",
+                       "Click on a complex region of the pole plot to choose a complex conjugate pair.\nClick on the real axis for real poles (requires two clicks on the real axis).\n\n"
+                       "Note: Clicking the pole plot updates only α₁ and α₂ (denominator coefficients).\nβ₁ (numerator gain) remains unchanged and can only be adjusted via its slider.",
                        (30, 555, 440, 120), font_size=14)
 
         # Interactive pole selection variables
@@ -40,13 +40,21 @@ class ImpulseResponse(NNDLayout):
 
         # Default values
         self.p_str = ['1', '0', '0', '0', '0', '0', '0', '0']
-        self.lw11_str = ['1', '-0.24', '1']  # Three coefficients for lw11
-        
+
+        # Numerator coefficient (beta_1) and denominator coefficients (alpha_1, alpha_2)
+        self.beta1_default = '1'        # β₁: numerator gain coefficient
+        self.alpha1_default = '-0.24'   # α₁: first denominator coefficient
+        self.alpha2_default = '1'       # α₂: second denominator coefficient
+
         self.p = np.array(self.p_str, dtype=int)
-        self.lw11_coeff = np.array(self.lw11_str, dtype=float)
+
+        # Store coefficients as [beta_1, alpha_1, alpha_2] for convenience
+        self.beta1 = float(self.beta1_default)
+        self.alpha1 = float(self.alpha1_default)
+        self.alpha2 = float(self.alpha2_default)
         
-        # Fixed parameters
-        self.iw11 = np.array([1, 0])
+        # iw11 will be set based on beta_1 (lw11_coeff[0])
+        # Will be updated in update_values()
         self.lw21 = np.array([1, 0])
         self.b1 = np.zeros(2)
         self.b2 = 0
@@ -66,16 +74,16 @@ class ImpulseResponse(NNDLayout):
         self.x_chapter_usual = 520
 
         self.make_slider("coeff1_slider", QtCore.Qt.Orientation.Horizontal, (-100, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10,
-                        int(self.lw11_coeff[0] * 100), (self.x_chapter_usual, slider_y_start, self.w_chapter_slider, 50),
-                        self.slider_update, "label_coeff1", "β₁: 1.00", (self.x_chapter_usual+20, slider_y_start-25, self.w_chapter_slider, 50))
+                        int(self.beta1 * 100), (self.x_chapter_usual, slider_y_start, self.w_chapter_slider, 50),
+                        self.slider_update, "label_coeff1", f"β₁: {self.beta1:.2f}", (self.x_chapter_usual+20, slider_y_start-25, self.w_chapter_slider, 50))
 
         self.make_slider("coeff2_slider", QtCore.Qt.Orientation.Horizontal, (-100, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10,
-                        int(self.lw11_coeff[1] * 100), (self.x_chapter_usual, slider_y_start + slider_spacing, self.w_chapter_slider, 50),
-                        self.slider_update, "label_coeff2", "α₁: -0.24", (self.x_chapter_usual+20, slider_y_start + slider_spacing-25, self.w_chapter_slider, 50))
+                        int(self.alpha1 * 100), (self.x_chapter_usual, slider_y_start + slider_spacing, self.w_chapter_slider, 50),
+                        self.slider_update, "label_coeff2", f"α₁: {self.alpha1:.2f}", (self.x_chapter_usual+20, slider_y_start + slider_spacing-25, self.w_chapter_slider, 50))
 
         self.make_slider("coeff3_slider", QtCore.Qt.Orientation.Horizontal, (-100, 100), QtWidgets.QSlider.TickPosition.TicksBelow, 10,
-                        int(self.lw11_coeff[2] * 100), (self.x_chapter_usual, slider_y_start + 2*slider_spacing, self.w_chapter_slider, 50),
-                        self.slider_update, "label_coeff3", "α₂: 1.00", (self.x_chapter_usual+20, slider_y_start + 2*slider_spacing-25, self.w_chapter_slider, 50))
+                        int(self.alpha2 * 100), (self.x_chapter_usual, slider_y_start + 2*slider_spacing, self.w_chapter_slider, 50),
+                        self.slider_update, "label_coeff3", f"α₂: {self.alpha2:.2f}", (self.x_chapter_usual+20, slider_y_start + 2*slider_spacing-25, self.w_chapter_slider, 50))
         
         # Set Default button
         self.make_button("default_button", "Set Default",
@@ -89,11 +97,10 @@ class ImpulseResponse(NNDLayout):
     
     def slider_update(self):
         """Update coefficients from slider values and refresh display"""
-        beta1_val = self.get_slider_value_and_update(self.coeff1_slider, self.label_coeff1, 1/100, 2)
-        alpha1_val = self.get_slider_value_and_update(self.coeff2_slider, self.label_coeff2, 1/100, 2)
-        alpha2_val = self.get_slider_value_and_update(self.coeff3_slider, self.label_coeff3, 1/100, 2)
+        self.beta1 = self.get_slider_value_and_update(self.coeff1_slider, self.label_coeff1, 1/100, 2)
+        self.alpha1 = self.get_slider_value_and_update(self.coeff2_slider, self.label_coeff2, 1/100, 2)
+        self.alpha2 = self.get_slider_value_and_update(self.coeff3_slider, self.label_coeff3, 1/100, 2)
 
-        self.lw11_coeff = np.array([beta1_val, alpha1_val, alpha2_val], dtype=float)
         self.update_values()
 
     def initialize_table(self):
@@ -134,21 +141,25 @@ class ImpulseResponse(NNDLayout):
         """Reset all values to defaults"""
         # Reset P values
         self.p = np.array(self.p_str, dtype=int)
-        self.lw11_coeff = np.array(self.lw11_str, dtype=float)
+
+        # Reset coefficients to defaults
+        self.beta1 = float(self.beta1_default)
+        self.alpha1 = float(self.alpha1_default)
+        self.alpha2 = float(self.alpha2_default)
 
         # Temporarily disconnect sliders to prevent premature updates
         self.coeff1_slider.valueChanged.disconnect()
-        self.coeff2_slider.valueChanged.disconnect() 
+        self.coeff2_slider.valueChanged.disconnect()
         self.coeff3_slider.valueChanged.disconnect()
-        
-        self.coeff1_slider.setValue(int(self.lw11_coeff[0] * 100))
-        self.coeff2_slider.setValue(int(self.lw11_coeff[1] * 100))
-        self.coeff3_slider.setValue(int(self.lw11_coeff[2] * 100))
-        
+
+        self.coeff1_slider.setValue(int(self.beta1 * 100))
+        self.coeff2_slider.setValue(int(self.alpha1 * 100))
+        self.coeff3_slider.setValue(int(self.alpha2 * 100))
+
         # Update labels
-        self.label_coeff1.setText(f"β₁: {float(self.lw11_coeff[0]):.2f}")
-        self.label_coeff2.setText(f"α₁: {float(self.lw11_coeff[1]):.2f}")
-        self.label_coeff3.setText(f"α₂: {float(self.lw11_coeff[2]):.2f}")
+        self.label_coeff1.setText(f"β₁: {self.beta1:.2f}")
+        self.label_coeff2.setText(f"α₁: {self.alpha1:.2f}")
+        self.label_coeff3.setText(f"α₂: {self.alpha2:.2f}")
 
         # Reconnect sliders
         self.coeff1_slider.valueChanged.connect(self.slider_update)
@@ -160,9 +171,13 @@ class ImpulseResponse(NNDLayout):
     def update_values(self):
         """Update network calculations and plots"""
         try:
-            # Build lw11 matrix from coefficients
-            lw11 = np.array([[self.lw11_coeff[0], self.lw11_coeff[1]],
-                            [self.lw11_coeff[2], 0]]).transpose()
+            # Build iw11 with beta_1 (numerator coefficient)
+            self.iw11 = np.array([self.beta1, 0])
+
+            # Build lw11 matrix from alpha coefficients (Eq. 11.40)
+            # First column contains alpha terms, second column is [1, 0]
+            lw11 = np.array([[self.alpha1, self.alpha2],
+                            [1, 0]]).transpose()
 
             # print(self.iw11, lw11, self.b1, self.lw21, self.b2, self.a_0, self.p)
             # Create network and process sequence
@@ -202,9 +217,9 @@ class ImpulseResponse(NNDLayout):
             self.label_pole2.setText("Pole 2: Click to select")
         else:
             # Calculate poles from denominator coefficients
-            # Denominator polynomial: coeff0*z^2 + coeff1*z + coeff2 = 0
-            # Using the three coefficients from sliders
-            denominator = [self.lw11_coeff[0], self.lw11_coeff[1], self.lw11_coeff[2]]
+            # Denominator polynomial: 1*z^2 + alpha1*z + alpha2 = 0
+            # Beta_1 is in the numerator, not denominator
+            denominator = [1, self.alpha1, self.alpha2]
             poles = np.roots(denominator)
 
             # Update pole location labels
@@ -317,37 +332,38 @@ class ImpulseResponse(NNDLayout):
                 self.selected_poles = []
         else:
             # Complex pole - automatically create conjugate pair
+            # Clear any previously selected real pole
+            self.selected_poles = []
             pole = complex(event.xdata, event.ydata)
             poles = np.array([pole, np.conj(pole)])
             self.update_coefficients_from_poles(poles)
-            self.selected_poles = []
 
     def update_coefficients_from_poles(self, poles):
         """Update the coefficient sliders based on selected poles"""
         # Get denominator coefficients from poles using np.poly
+        # This gives a monic polynomial [1, alpha1, alpha2]
         denominator = np.poly(poles).real  # Take real part to handle numerical errors
 
-        # Update lw11_coeff
+        # Update only alpha1 and alpha2, keep beta_1 unchanged
         if len(denominator) == 3:
-            self.lw11_coeff = denominator
-            
+            # Keep beta_1 unchanged
+            # Update alpha_1 and alpha_2 from the monic polynomial
+            self.alpha1 = denominator[1]
+            self.alpha2 = denominator[2]
+
             # Temporarily disconnect sliders to prevent recursive updates
-            self.coeff1_slider.valueChanged.disconnect()
             self.coeff2_slider.valueChanged.disconnect()
             self.coeff3_slider.valueChanged.disconnect()
 
-            # Update slider values (clamp to slider range -1 to 1)
-            self.coeff1_slider.setValue(int(np.clip(self.lw11_coeff[0], -1, 1) * 100))
-            self.coeff2_slider.setValue(int(np.clip(self.lw11_coeff[1], -1, 1) * 100))
-            self.coeff3_slider.setValue(int(np.clip(self.lw11_coeff[2], -1, 1) * 100))
+            # Update slider values for alpha1 and alpha2 (clamp to slider range -1 to 1)
+            self.coeff2_slider.setValue(int(np.clip(self.alpha1, -1, 1) * 100))
+            self.coeff3_slider.setValue(int(np.clip(self.alpha2, -1, 1) * 100))
 
-            # Update labels
-            self.label_coeff1.setText(f"β₁: {float(self.lw11_coeff[0]):.2f}")
-            self.label_coeff2.setText(f"α₁: {float(self.lw11_coeff[1]):.2f}")
-            self.label_coeff3.setText(f"α₂: {float(self.lw11_coeff[2]):.2f}")
+            # Update labels (beta_1 unchanged)
+            self.label_coeff2.setText(f"α₁: {self.alpha1:.2f}")
+            self.label_coeff3.setText(f"α₂: {self.alpha2:.2f}")
 
             # Reconnect sliders
-            self.coeff1_slider.valueChanged.connect(self.slider_update)
             self.coeff2_slider.valueChanged.connect(self.slider_update)
             self.coeff3_slider.valueChanged.connect(self.slider_update)
 
