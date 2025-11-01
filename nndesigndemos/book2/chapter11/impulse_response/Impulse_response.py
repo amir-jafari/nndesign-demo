@@ -59,7 +59,6 @@ class ImpulseResponse(NNDLayout):
         self.b1 = np.zeros(2)
         self.b2 = 0
         self.a_0 = [0, 0]
-        # print(self.iw11, np.array([[1, -0.24],[1, 0]]).transpose(), self.b1, self.lw21, self.b2, self.a_0, self.p)
 
         self.n = len(self.p_str)
         self.n_outputs = self.n + 1  # Network outputs include initial condition
@@ -172,16 +171,16 @@ class ImpulseResponse(NNDLayout):
         """Update network calculations and plots"""
         try:
             # Build iw11 with beta_1 (numerator coefficient)
-            self.iw11 = np.array([self.beta1, 0])
+            iw11 = np.array([self.beta1, 0])
 
             # Build lw11 matrix from alpha coefficients (Eq. 11.40)
             # First column contains alpha terms, second column is [1, 0]
             lw11 = np.array([[self.alpha1, self.alpha2],
                             [1, 0]]).transpose()
 
-            # print(self.iw11, lw11, self.b1, self.lw21, self.b2, self.a_0, self.p)
+            # print(iw11, lw11, self.b1, self.lw21, self.b2, self.a_0, self.p)
             # Create network and process sequence
-            net = state_space(self.iw11, lw11, self.b1, self.lw21, self.b2, self.a_0)
+            net = state_space(iw11, lw11, self.b1, self.lw21, self.b2, self.a_0)
             self.a = net.process(self.p)
 
             self.graph()
@@ -217,9 +216,9 @@ class ImpulseResponse(NNDLayout):
             self.label_pole2.setText("Pole 2: Click to select")
         else:
             # Calculate poles from denominator coefficients
-            # Denominator polynomial: 1*z^2 + alpha1*z + alpha2 = 0
+            # State-space characteristic equation: z^2 - alpha1*z - alpha2 = 0
             # Beta_1 is in the numerator, not denominator
-            denominator = [1, self.alpha1, self.alpha2]
+            denominator = [1, -self.alpha1, -self.alpha2]
             poles = np.roots(denominator)
 
             # Update pole location labels
@@ -341,15 +340,18 @@ class ImpulseResponse(NNDLayout):
     def update_coefficients_from_poles(self, poles):
         """Update the coefficient sliders based on selected poles"""
         # Get denominator coefficients from poles using np.poly
-        # This gives a monic polynomial [1, alpha1, alpha2]
+        # np.poly gives (z-p1)(z-p2) = z^2 - (p1+p2)*z + p1*p2 = [1, -(p1+p2), p1*p2]
+        # For state-space form z^2 - alpha1*z - alpha2 = 0, we need:
+        # alpha1 = p1+p2 = -denominator[1]
+        # alpha2 = -p1*p2 = -denominator[2]
         denominator = np.poly(poles).real  # Take real part to handle numerical errors
 
         # Update only alpha1 and alpha2, keep beta_1 unchanged
         if len(denominator) == 3:
             # Keep beta_1 unchanged
-            # Update alpha_1 and alpha_2 from the monic polynomial
-            self.alpha1 = denominator[1]
-            self.alpha2 = denominator[2]
+            # Update alpha_1 and alpha_2 to match state-space characteristic equation
+            self.alpha1 = -denominator[1]
+            self.alpha2 = -denominator[2]
 
             # Temporarily disconnect sliders to prevent recursive updates
             self.coeff2_slider.valueChanged.disconnect()
