@@ -124,6 +124,8 @@ from nndesigndemos.book2.chapter10.Cheatsheet10 import Cheatsheet10
 from nndesigndemos.book2.chapter11.Sequence_averaging_network import SequenceAveragingNetwork
 from nndesigndemos.book2.chapter11.smoothing_response.Sequence_smoothing_response import SequenceSmoothingResponse
 from nndesigndemos.book2.chapter11.impulse_response.Impulse_response import ImpulseResponse
+# ------ Chapter 12 --------
+from nndesigndemos.book2.chapter12.parity_network.ParityNetworkDemo import ParityNetworkDemo
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -171,7 +173,7 @@ BOOK2_CHAPTERS_DEMOS = {
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
     11: ["Linear Sequence", "Chapter 11 demos", "Sequence Averaging Network", "Sequence Smoothing Response", "Impulse Response"],
-    12: ["LSTM", "Chapter 12 demos", ],
+    12: ["Non Linear Sequence", "Chapter 12 demos", "Specific Parity Network"],
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -794,3 +796,6 @@ class MainWindowDL(NNDLayout):
 
     def chapter12(self, idx):
         self.comboBox3.setCurrentIndex(0)
+        if idx == 1:
+            self.book2_chapter12_window1 = ParityNetworkDemo(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter12_window1.show()

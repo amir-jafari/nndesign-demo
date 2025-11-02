@@ -43,8 +43,8 @@ class ImpulseResponse(NNDLayout):
 
         # Numerator coefficient (beta_1) and denominator coefficients (alpha_1, alpha_2)
         self.beta1_default = '1'        # β₁: numerator gain coefficient
-        self.alpha1_default = '-0.24'   # α₁: first denominator coefficient
-        self.alpha2_default = '1'       # α₂: second denominator coefficient
+        self.alpha1_default = '1'       # α₁: first denominator coefficient
+        self.alpha2_default = '-0.24'   # α₂: second denominator coefficient
 
         self.p = np.array(self.p_str, dtype=int)
 
