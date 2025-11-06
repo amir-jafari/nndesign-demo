@@ -173,7 +173,7 @@ BOOK2_CHAPTERS_DEMOS = {
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
     11: ["Linear Sequence", "Chapter 11 demos", "Sequence Averaging Network", "Sequence Smoothing Response", "Impulse Response"],
-    12: ["Non Linear Sequence", "Chapter 12 demos", "Specific Parity Network"],
+    12: ["Non Linear Sequence", "Chapter 12 demos", "Parity Network"],
 }
 # -------------------------------------------------------------------------------------------------------------
 

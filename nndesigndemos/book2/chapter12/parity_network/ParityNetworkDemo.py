@@ -14,7 +14,7 @@ class ParityNetworkDemo(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(ParityNetworkDemo, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter(f"Specific Parity Network", 12, "Click input buttons to\ntoggle bits (0/1).\n\n"
+        self.fill_chapter(f"Parity Network", 12, "Click input buttons to\ntoggle bits (0/1).\n\n"
                                                    "The output updates\nautomatically.\n\n"
                                                    "Enable animation to see\nstep-by-step execution.\n\n"
                                                    "Click [Set Default] to\nrestore original values.",
