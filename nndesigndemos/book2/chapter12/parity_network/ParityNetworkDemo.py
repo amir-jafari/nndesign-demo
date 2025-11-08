@@ -22,7 +22,7 @@ class ParityNetworkDemo(NNDLayout):
                           icon_move_left=0, icon_move_up=0, description_coords=(535, 130, 450, 250))
 
         # Single plot for output sequence
-        self.make_plot(1, (10, 380, 500, 250))
+        self.make_plot(1, (10, 430, 500, 250))
 
         # Default input sequence (max 10 bits)
         self.p_str = ['0', '0', '1', '1', '0', '1', '1', '0', '0', '0']
@@ -30,7 +30,8 @@ class ParityNetworkDemo(NNDLayout):
         self.max_length = 10
 
         # Network outputs
-        self.a = np.zeros(self.max_length)
+        self.a1 = np.zeros((self.max_length, 2))  # Layer 1 output (2 neurons)
+        self.a2 = np.zeros(self.max_length)       # Layer 2 output (final)
 
         # Create toggle buttons for input
         self.create_input_buttons()
@@ -140,10 +141,10 @@ class ParityNetworkDemo(NNDLayout):
 
     def initialize_table(self):
         """Create and setup the sequence table"""
-        self.table = QTableWidget(2, self.max_length, self)
-        self.table.setGeometry(20, 250, 480, 100)
+        self.table = QTableWidget(4, self.max_length, self)
+        self.table.setGeometry(20, 235, 480, 183)
 
-        self.table.setVerticalHeaderLabels(['p(t)', 'a(t)'])
+        self.table.setVerticalHeaderLabels(['p(t)', 'a¹₁(t)', 'a¹₂(t)', 'a²(t)'])
 
         # Set column headers to show time indices
         headers = [str(i+1) for i in range(self.max_length)]
@@ -173,12 +174,26 @@ class ParityNetworkDemo(NNDLayout):
             item_p.setBackground(QtGui.QColor(240, 240, 240))
             self.table.setItem(0, i, item_p)
 
-            # Output row
-            item_a = QTableWidgetItem(str(int(self.a[i])))
-            item_a.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-            item_a.setFlags(item_a.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
-            item_a.setBackground(QtGui.QColor(240, 240, 240))
-            self.table.setItem(1, i, item_a)
+            # Layer 1, neuron 1 output
+            item_a1_1 = QTableWidgetItem(str(int(self.a1[i, 0])))
+            item_a1_1.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            item_a1_1.setFlags(item_a1_1.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+            item_a1_1.setBackground(QtGui.QColor(255, 250, 205))  # Light yellow
+            self.table.setItem(1, i, item_a1_1)
+
+            # Layer 1, neuron 2 output
+            item_a1_2 = QTableWidgetItem(str(int(self.a1[i, 1])))
+            item_a1_2.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            item_a1_2.setFlags(item_a1_2.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+            item_a1_2.setBackground(QtGui.QColor(255, 250, 205))  # Light yellow
+            self.table.setItem(2, i, item_a1_2)
+
+            # Layer 2 output (final)
+            item_a2 = QTableWidgetItem(str(int(self.a2[i])))
+            item_a2.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            item_a2.setFlags(item_a2.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+            item_a2.setBackground(QtGui.QColor(200, 255, 200))  # Light green
+            self.table.setItem(3, i, item_a2)
 
     def set_default_values(self):
         """Reset all values to defaults"""
@@ -196,7 +211,7 @@ class ParityNetworkDemo(NNDLayout):
         try:
             # Create network and process sequence
             network = SpecificParityNetwork()
-            self.a = network.forward(self.p)
+            self.a1, self.a2 = network.forward(self.p)
 
             self.graph()
             self.update_table()
@@ -210,7 +225,7 @@ class ParityNetworkDemo(NNDLayout):
 
     def graph(self):
         """Update output plot"""
-        self.plot_sequence(self.a, self.figure, self.canvas, r'Output Sequence $a(t)$ (Parity)', 0, 1)
+        self.plot_sequence(self.a2, self.figure, self.canvas, r'Output Sequence $a^2(t)$ (Parity)', 0, 1)
 
     def plot_sequence(self, array, figure, canvas, title, min_value, max_value, highlight_step=None):
         """Plot a sequence with optional step highlighting"""
@@ -272,11 +287,12 @@ class ParityNetworkDemo(NNDLayout):
         # Generate animation frames
         self.animation_frames = []
         for i in range(self.max_length):
-            output = network.step(self.p[i])
+            a1, a2 = network.step(self.p[i])
             frame = {
                 'step': i,
                 'input_value': self.p[i],
-                'output_value': output,
+                'a1_value': a1.copy(),
+                'a2_value': a2,
             }
             self.animation_frames.append(frame)
 
@@ -289,21 +305,35 @@ class ParityNetworkDemo(NNDLayout):
         self.start_animation()
 
     def clear_animation_table(self):
-        """Clear output row for animation"""
+        """Clear output rows for animation"""
         for i in range(self.max_length):
-            # Keep input row, clear output row
+            # Keep input row
             item_p = QTableWidgetItem(str(self.p[i]))
             item_p.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
             item_p.setFlags(item_p.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
             item_p.setBackground(QtGui.QColor(240, 240, 240))
             self.table.setItem(0, i, item_p)
 
-            # Clear output
-            item_a = QTableWidgetItem("")
-            item_a.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-            item_a.setFlags(item_a.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
-            item_a.setBackground(QtGui.QColor(240, 240, 240))
-            self.table.setItem(1, i, item_a)
+            # Clear a¹₁
+            item_a1_1 = QTableWidgetItem("")
+            item_a1_1.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            item_a1_1.setFlags(item_a1_1.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+            item_a1_1.setBackground(QtGui.QColor(255, 250, 205))
+            self.table.setItem(1, i, item_a1_1)
+
+            # Clear a¹₂
+            item_a1_2 = QTableWidgetItem("")
+            item_a1_2.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            item_a1_2.setFlags(item_a1_2.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+            item_a1_2.setBackground(QtGui.QColor(255, 250, 205))
+            self.table.setItem(2, i, item_a1_2)
+
+            # Clear a²
+            item_a2 = QTableWidgetItem("")
+            item_a2.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            item_a2.setFlags(item_a2.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+            item_a2.setBackground(QtGui.QColor(200, 255, 200))
+            self.table.setItem(3, i, item_a2)
 
     def start_animation(self):
         """Start the animation sequence"""
@@ -326,20 +356,34 @@ class ParityNetworkDemo(NNDLayout):
 
         frame = self.animation_frames[self.current_step]
 
-        # Update output value for current step
-        item_a = QTableWidgetItem(str(int(frame['output_value'])))
-        item_a.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        item_a.setFlags(item_a.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
-        item_a.setBackground(QtGui.QColor(240, 240, 240))
-        self.table.setItem(1, self.current_step, item_a)
+        # Update a¹₁ value for current step
+        item_a1_1 = QTableWidgetItem(str(int(frame['a1_value'][0])))
+        item_a1_1.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        item_a1_1.setFlags(item_a1_1.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+        item_a1_1.setBackground(QtGui.QColor(255, 250, 205))
+        self.table.setItem(1, self.current_step, item_a1_1)
+
+        # Update a¹₂ value for current step
+        item_a1_2 = QTableWidgetItem(str(int(frame['a1_value'][1])))
+        item_a1_2.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        item_a1_2.setFlags(item_a1_2.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+        item_a1_2.setBackground(QtGui.QColor(255, 250, 205))
+        self.table.setItem(2, self.current_step, item_a1_2)
+
+        # Update a² value for current step
+        item_a2 = QTableWidgetItem(str(int(frame['a2_value'])))
+        item_a2.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        item_a2.setFlags(item_a2.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+        item_a2.setBackground(QtGui.QColor(200, 255, 200))
+        self.table.setItem(3, self.current_step, item_a2)
 
         # Update plot with current state
-        current_a = [self.animation_frames[j]['output_value'] if j <= self.current_step else 0
-                    for j in range(self.max_length)]
+        current_a2 = [self.animation_frames[j]['a2_value'] if j <= self.current_step else 0
+                     for j in range(self.max_length)]
 
         # Highlight current step
-        self.plot_sequence(current_a, self.figure, self.canvas,
-                          r'Output Sequence $a(t)$ (Parity)', 0, 1, highlight_step=self.current_step)
+        self.plot_sequence(current_a2, self.figure, self.canvas,
+                          r'Output Sequence $a^2(t)$ (Parity)', 0, 1, highlight_step=self.current_step)
 
         self.current_step += 1
 

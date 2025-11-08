@@ -26,13 +26,16 @@ class SpecificParityNetwork:
         n2 = np.dot(self.LW21, a1) + self.b2
         output = self.hard_limit(n2)
         self.delay_state = a1.copy()
-        return output
+        return a1, output
     
     def forward(self, sequence):
         self.reset_state()
         if not isinstance(sequence, np.ndarray):
             sequence = np.array(sequence)
-        outputs = np.zeros(len(sequence))
+        a1_outputs = np.zeros((len(sequence), 2))
+        a2_outputs = np.zeros(len(sequence))
         for i, p in enumerate(sequence):
-            outputs[i] = self.step(p)
-        return outputs
+            a1, a2 = self.step(p)
+            a1_outputs[i] = a1
+            a2_outputs[i] = a2
+        return a1_outputs, a2_outputs
