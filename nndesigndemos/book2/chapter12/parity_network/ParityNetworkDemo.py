@@ -22,7 +22,7 @@ class ParityNetworkDemo(NNDLayout):
                           icon_move_left=0, icon_move_up=0, description_coords=(535, 130, 450, 250))
 
         # Single plot for output sequence
-        self.make_plot(1, (10, 430, 500, 250))
+        self.make_plot(1, (25, 430, 500, 250))
 
         # Default input sequence (max 10 bits)
         self.p_str = ['0', '0', '1', '1', '0', '1', '1', '0', '0', '0']
@@ -231,6 +231,8 @@ class ParityNetworkDemo(NNDLayout):
         """Plot a sequence with optional step highlighting"""
         figure.clf()
         ax = figure.add_subplot(1, 1, 1)
+
+        figure.subplots_adjust(left=0.15)
 
         x = np.arange(len(array))
 
