@@ -126,6 +126,7 @@ from nndesigndemos.book2.chapter11.smoothing_response.Sequence_smoothing_respons
 from nndesigndemos.book2.chapter11.impulse_response.Impulse_response import ImpulseResponse
 # ------ Chapter 12 --------
 from nndesigndemos.book2.chapter12.parity_network.ParityNetworkDemo import ParityNetworkDemo
+from nndesigndemos.book2.chapter12.constant_error_carousel.Constant_error_carousel import ConstantErrorCarousel
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -173,7 +174,7 @@ BOOK2_CHAPTERS_DEMOS = {
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
     11: ["Linear Sequence", "Chapter 11 demos", "Sequence Averaging Network", "Sequence Smoothing Response", "Impulse Response"],
-    12: ["Non Linear Sequence", "Chapter 12 demos", "Parity Network"],
+    12: ["Non Linear Sequence", "Chapter 12 demos", "Parity Network", "Constant Error Carousel"],
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -799,3 +800,6 @@ class MainWindowDL(NNDLayout):
         if idx == 1:
             self.book2_chapter12_window1 = ParityNetworkDemo(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter12_window1.show()
+        elif idx == 2:
+            self.book2_chapter12_window2 = ConstantErrorCarousel(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter12_window2.show()
