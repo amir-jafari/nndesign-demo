@@ -121,12 +121,13 @@ from nndesigndemos.book2.chapter9.LinearizedNetworkResponse import LinearizedNet
 # ------ Chapter 10 --------
 from nndesigndemos.book2.chapter10.Cheatsheet10 import Cheatsheet10
 # ------ Chapter 11 --------
-from nndesigndemos.book2.chapter11.Sequence_averaging_network import SequenceAveragingNetwork
+from nndesigndemos.book2.chapter11.sequence_averaging_network.Sequence_averaging_network import SequenceAveragingNetwork
 from nndesigndemos.book2.chapter11.smoothing_response.Sequence_smoothing_response import SequenceSmoothingResponse
 from nndesigndemos.book2.chapter11.impulse_response.Impulse_response import ImpulseResponse
 # ------ Chapter 12 --------
 from nndesigndemos.book2.chapter12.parity_network.ParityNetworkDemo import ParityNetworkDemo
 from nndesigndemos.book2.chapter12.constant_error_carousel.Constant_error_carousel import ConstantErrorCarousel
+from nndesigndemos.book2.chapter12.gated_cec.GatedCECDemo import GatedCECDemo
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -174,7 +175,7 @@ BOOK2_CHAPTERS_DEMOS = {
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
     11: ["Linear Sequence", "Chapter 11 demos", "Sequence Averaging Network", "Sequence Smoothing Response", "Impulse Response"],
-    12: ["Non Linear Sequence", "Chapter 12 demos", "Parity Network", "Constant Error Carousel"],
+    12: ["Non Linear Sequence", "Chapter 12 demos", "Parity Network", "Constant Error Carousel", "Gated CEC"],
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -803,3 +804,6 @@ class MainWindowDL(NNDLayout):
         elif idx == 2:
             self.book2_chapter12_window2 = ConstantErrorCarousel(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter12_window2.show()
+        elif idx == 3:
+            self.book2_chapter12_window3 = GatedCECDemo(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter12_window3.show()

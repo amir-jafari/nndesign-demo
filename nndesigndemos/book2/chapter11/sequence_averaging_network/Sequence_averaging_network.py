@@ -7,7 +7,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
-from nndesigndemos.book2.chapter11.utils import averaging_network
+from nndesigndemos.book2.chapter11.sequence_averaging_network.utils import averaging_network
 
 
 class SequenceAveragingNetwork(NNDLayout):
