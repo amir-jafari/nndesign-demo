@@ -18,12 +18,12 @@ class ConstantErrorCarousel(NNDLayout):
                          "Click [Update] to apply\nyour changes.\n\n"
                          "Click [Set Default] to\nrestore original values.\n\n"
                          "CEC uses LW1,1 = 1 and\nlinear transfer function\nto maintain long memory.",
-                         PACKAGE_PATH + "Logo/Logo_Ch_12.svg", None, 2,
-                         icon_move_left=90, icon_move_up=-10, description_coords=(535, 130, 450, 280))
+                         PACKAGE_PATH + "Logo/Logo_Ch_12.svg", PACKAGE_PATH + 'Figures/nndeep12_CEC_Net_a.svg', 2,
+                         icon_move_left=110, icon_move_up=-25, description_coords=(535, 130, 450, 280))
 
         # Two plots at the bottom
-        self.make_plot(1, (10, 430, 250, 250))  # Input + Output comparison
-        self.make_plot(2, (260, 430, 250, 250))  # Delay states
+        self.make_plot(1, (10, 430, 250, 250))  # Input sequence
+        self.make_plot(2, (260, 430, 250, 250))  # Output sequence
 
         # Default input sequence
         self.p_str = ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1']
@@ -160,86 +160,85 @@ class ConstantErrorCarousel(NNDLayout):
 
     def graph(self):
         """Update both plots"""
-        # Determine value ranges for consistent scaling
-        min_value = min(min(self.p), min(self.a), min(self.delay_states))
-        max_value = max(max(self.p), max(self.a), max(self.delay_states))
+        # Determine value ranges for each plot independently
+        min_input = min(self.p)
+        max_input = max(self.p)
+        min_output = min(self.a)
+        max_output = max(self.a)
 
-        # Plot 1: Input + Output comparison
-        self.plot_input_output(self.figure, self.canvas, min_value, max_value)
+        # Plot 1: Input sequence
+        self.plot_input(self.figure, self.canvas, min_input, max_input)
 
-        # Plot 2: Delay states
-        self.plot_delay_states(self.figure2, self.canvas2, min_value, max_value)
+        # Plot 2: Output sequence
+        self.plot_output(self.figure2, self.canvas2, min_output, max_output)
 
-    def plot_input_output(self, figure, canvas, min_value, max_value, highlight_step=None):
-        """Plot input and output sequences for comparison"""
+    def plot_input(self, figure, canvas, min_value, max_value, highlight_step=None):
+        """Plot input sequence"""
         figure.clf()
         ax = figure.add_subplot(1, 1, 1)
 
         x = np.arange(len(self.p))
 
         # Plot input sequence (blue)
-        ax.plot(x, self.p, 'bo-', linewidth=2, markersize=6, label='Input p', alpha=0.7)
-
-        # Plot output sequence (red)
-        ax.plot(x, self.a, 'ro-', linewidth=2, markersize=6, label='Output', alpha=0.7)
+        ax.plot(x, self.p, 'bo-', linewidth=2, markersize=6, label='Input p(t)', alpha=0.7)
 
         # Highlight the current step during animation
         if highlight_step is not None and highlight_step < len(self.p):
             ax.plot(highlight_step, self.p[highlight_step], 'bo', markersize=10, zorder=10)
-            ax.plot(highlight_step, self.a[highlight_step], 'ro', markersize=10, zorder=10)
 
         # Set axis limits
         ax.set_xlim(-0.5, len(self.p) - 0.5)
-        y_max = max_value * 1.1 if max_value > 0 else 1
-        y_min = min_value * 1.1 if min_value < 0 else -0.1
+
+        y_max = np.ceil(max_value) + 1 if max_value > 0 else 1
+        y_min = np.floor(min_value) - 1 if min_value < 0 else 0
         ax.set_ylim(y_min, y_max)
 
-        # Set ticks
+        # Set ticks - only integers for y-axis
+        y_ticks = np.arange(np.floor(y_min), np.ceil(y_max) + 1, 1)
+        ax.set_yticks(y_ticks)
+
         x_ticks = np.arange(0, len(self.p), max(1, len(self.p)//8))
         ax.set_xticks(x_ticks)
         ax.set_xticklabels([str(int(tick)) for tick in x_ticks])
 
         # Add title and legend
-        ax.set_title('Input vs Output', fontsize=12, pad=5)
-        ax.set_xlabel('Time Step')
-        ax.set_ylabel('Value')
+        ax.set_title('Input', fontsize=12, pad=5)
+        # ax.set_xlabel('Time Step')
+        # ax.set_ylabel('Value')
         ax.legend(loc='upper left')
         ax.grid(True, alpha=0.3)
 
         canvas.draw()
 
-    def plot_delay_states(self, figure, canvas, min_value, max_value, highlight_step=None):
-        """Plot delay states over time"""
+    def plot_output(self, figure, canvas, min_value, max_value, highlight_step=None):
+        """Plot output sequence"""
         figure.clf()
         ax = figure.add_subplot(1, 1, 1)
 
-        # Skip the initial delay state (index 0), plot only delay states after processing each input
-        delay_to_plot = self.delay_states[1:]  # Skip initial delay
-        x = np.arange(len(delay_to_plot))
+        x = np.arange(len(self.a))
 
-        # Plot delay states (green)
-        ax.plot(x, delay_to_plot, 'go-', linewidth=2, markersize=6, label='Delay/Memory', alpha=0.7)
+        # Plot output sequence (red)
+        ax.plot(x, self.a, 'ro-', linewidth=2, markersize=6, label='Output a(t)', alpha=0.7)
 
         # Highlight the current step during animation
-        if highlight_step is not None and highlight_step < len(delay_to_plot):
-            ax.plot(highlight_step, delay_to_plot[highlight_step], 'go',
-                   markersize=10, zorder=10)
+        if highlight_step is not None and highlight_step < len(self.a):
+            ax.plot(highlight_step, self.a[highlight_step], 'ro', markersize=10, zorder=10)
 
         # Set axis limits
-        ax.set_xlim(-0.5, len(delay_to_plot) - 0.5)
+        ax.set_xlim(-0.5, len(self.a) - 0.5)
         y_max = max_value * 1.1 if max_value > 0 else 1
         y_min = min_value * 1.1 if min_value < 0 else -0.1
         ax.set_ylim(y_min, y_max)
 
         # Set ticks
-        x_ticks = np.arange(0, len(delay_to_plot), max(1, len(delay_to_plot)//8))
+        x_ticks = np.arange(0, len(self.a), max(1, len(self.a)//8))
         ax.set_xticks(x_ticks)
         ax.set_xticklabels([str(int(tick)) for tick in x_ticks])
 
         # Add title and legend
-        ax.set_title('Delay/Memory', fontsize=12, pad=5)
-        ax.set_xlabel('Time Step')
-        ax.set_ylabel('Delay Value')
+        ax.set_title('Output', fontsize=12, pad=5)
+        # ax.set_xlabel('Time Step')
+        # ax.set_ylabel('Value')
         ax.legend(loc='upper left')
         ax.grid(True, alpha=0.3)
 
@@ -272,8 +271,10 @@ class ConstantErrorCarousel(NNDLayout):
             self.animation_frames.append(frame)
 
         # Calculate and store min/max from full arrays to keep y-axis fixed during animation
-        self.animation_min_value = min(min(self.p), min(self.a), min(self.delay_states))
-        self.animation_max_value = max(max(self.p), max(self.a), max(self.delay_states))
+        self.animation_min_input = min(self.p)
+        self.animation_max_input = max(self.p)
+        self.animation_min_output = min(self.a)
+        self.animation_max_output = max(self.a)
 
         self.current_step = 0
         self.total_steps = len(self.animation_frames)
@@ -338,30 +339,20 @@ class ConstantErrorCarousel(NNDLayout):
         # Build current state for plots
         current_a = [self.animation_frames[j]['output_value'] if j <= self.current_step else 0
                     for j in range(self.n)]
-        # Build delay_states with n+1 elements (initial delay of 0 + n processed states)
-        current_delay = [0.0]  # Initial delay
-        for j in range(self.n):
-            if j <= self.current_step:
-                current_delay.append(self.animation_frames[j]['delay_state'])
-            else:
-                current_delay.append(0)
 
         # Temporarily update for plotting
         old_a = self.a.copy()
-        old_delay = self.delay_states.copy()
         self.a = np.array(current_a)
-        self.delay_states = np.array(current_delay)
 
         # Use fixed min/max values calculated from full arrays to keep y-axis stable
         # Update plots with current state and highlight
-        self.plot_input_output(self.figure, self.canvas, self.animation_min_value, self.animation_max_value,
-                              highlight_step=self.current_step)
-        self.plot_delay_states(self.figure2, self.canvas2, self.animation_min_value, self.animation_max_value,
-                              highlight_step=self.current_step)
+        self.plot_input(self.figure, self.canvas, self.animation_min_input, self.animation_max_input,
+                       highlight_step=self.current_step)
+        self.plot_output(self.figure2, self.canvas2, self.animation_min_output, self.animation_max_output,
+                        highlight_step=self.current_step)
 
         # Restore full data
         self.a = old_a
-        self.delay_states = old_delay
 
         self.current_step += 1
 
