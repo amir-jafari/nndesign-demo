@@ -111,6 +111,7 @@ from nndesigndemos.book2.chapter4.Initialization_effect import InitEffect
 from nndesigndemos.book2.chapter4.Dropout import Dropout
 # ------ Chapter 5 --------
 from nndesigndemos.book2.chapter5.Cheatsheet5 import Cheatsheet5
+from nndesigndemos.book2.chapter5.linear_regression_steepest_descent.Learning_scheduler import LearningScheduler
 # ------ Chapter 6 --------
 from nndesigndemos.book2.chapter6.Cheatsheet6 import Cheatsheet6
 # ------ Chapter 8 --------
@@ -168,7 +169,7 @@ BOOK2_CHAPTERS_DEMOS = {
     2: ["Multilayer Networks", "Chapter 2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
     3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Gradient Descent Stochastic"],
     4: ["Supplemental Training", "Chapter 4 demos", 'Normalization & Initialization Scaling', 'Normalization & Initialization Effect', 'Dropout'],
-    5: ["Python Intro", "Chapter 5 demos", "Cheatsheet"],
+    5: ["Python Intro", "Chapter 5 demos", "Cheatsheet", "Learning Scheduler"],
     6: ["TensorFlow Intro", "Chapter 6 demos", "Cheatsheet"],
     7: ["Chapter 7", "Chapter 7 demos", ],
     8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
@@ -756,6 +757,9 @@ class MainWindowDL(NNDLayout):
         if idx == 1:
             self.book2_chapter5_window1 = Cheatsheet5(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter5_window1.show()
+        elif idx == 2:
+            self.book2_chapter5_window2 = LearningScheduler(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter5_window2.show()
 
     def chapter6(self, idx):
         self.comboBox1.setCurrentIndex(0)
