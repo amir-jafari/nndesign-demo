@@ -54,7 +54,7 @@ class BayesianRegularization(NNDLayout):
         self.train_e, = self.axes_2.plot([], [], linestyle='-', color="blue", label="train error")
         self.test_e, = self.axes_2.plot([], [], linestyle='-', color="black", label="test error")
         self.gamma, = self.axes_2.plot([], [], linestyle='-', color="red", label="gamma")
-        self.axes_2.legend()
+        self.axes_2.legend(loc='upper center')
         self.axes_2.plot(1, 1000, marker="*")
         self.axes_2.plot(100, 1000, marker="*")
         self.axes_2.plot(1, 0.1, marker="*")

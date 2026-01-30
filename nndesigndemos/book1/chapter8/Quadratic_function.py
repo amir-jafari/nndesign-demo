@@ -23,7 +23,7 @@ class QuadraticFunction(NNDLayout):
         self.y = np.copy(self.x)
 
         self.make_plot(1, (20, 120, 230, 230))
-        self.make_plot(2, (270, 120, 230, 230))
+        self.make_plot(2, (250, 100, 270, 270))
 
         self.axes_1 = self.figure.add_subplot(1, 1, 1)
         self.axes_1.set_title("Function F", fontdict={'fontsize': 10})
@@ -36,6 +36,7 @@ class QuadraticFunction(NNDLayout):
         # self.axes_2.set_xlim(-2, 2)
         # self.axes_2.set_ylim(-2, 2)
         self.axes_2.view_init(30, -30)
+        self.figure2.subplots_adjust(left=0.2, right=0.8, bottom=0.2, top=0.85)
         # self.canvas2.mpl_connect("motion_notify_event", self.print_view)
 
         # self.make_label("label_eq", "F(x) = 1/2 x.T A x + d x.T + c", (50, 310, 440, 200))

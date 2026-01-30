@@ -52,7 +52,7 @@ class EarlyStopping(NNDLayout):
         self.axes_2.set_title("Performance Indexes", fontdict={'fontsize': 10})
         self.train_e, = self.axes_2.plot([], [], linestyle='-', color="b", label="train error")
         self.test_e, = self.axes_2.plot([], [], linestyle='-', color="r", label="test error")
-        self.axes_2.legend()
+        self.axes_2.legend(loc='upper center')
         # self.axes_2.plot([1, 1])
         self.axes_2.plot(1, 1000, marker="*")
         self.axes_2.plot(100, 1000, marker="*")

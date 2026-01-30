@@ -36,8 +36,8 @@ class TaylorSeries2(NNDLayout):
 
         self.make_plot(1, (20, 135, 230, 230))
         self.make_plot(2, (270, 135, 230, 230))
-        self.make_plot(3, (20, 400, 230, 230))
-        self.make_plot(4, (270, 400, 230, 230))
+        self.make_plot(3, (0, 380, 270, 270))
+        self.make_plot(4, (250, 380, 270, 270))
 
         self.x_data, self.y_data = [], []
 
@@ -65,11 +65,13 @@ class TaylorSeries2(NNDLayout):
         self.axis1.plot_surface(self.XX, self.YY, FF)
         self.axis1.view_init(30, -30)
         self.axis1.autoscale()
+        self.figure3.subplots_adjust(left=0.2, right=0.8, bottom=0.2, top=0.85)
         self.canvas3.draw()
 
         self.axis2 = self.figure4.add_subplot(projection='3d')
         self.axis2.set_title("Approximation", fontdict={'fontsize': 10}, pad=3)
         self.axis2.view_init(30, -30)
+        self.figure4.subplots_adjust(left=0.2, right=0.8, bottom=0.2, top=0.85)
         self.canvas4.draw()
 
     def on_mouseclick(self, event):

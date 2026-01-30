@@ -55,19 +55,16 @@ class GramSchmidt(NNDLayout):
         self.make_button("button", "Start", (self.x_chapter_button, 345, self.w_chapter_button, self.h_chapter_button), self.clear_all)
 
     def on_mouseclick1(self, event):
-        if event.xdata != None and event.xdata != None:
+        if event.xdata != None and event.ydata != None:
             if len(self.axes1_points) == 0:
                 self.text_start.remove()
                 self.text_start = self.axes_1.text(-1.05, -0.12, "<ONCE MORE>")
             elif len(self.axes1_points) == 1:
                 self.text_start.remove()
                 self.text_start = None
-            if event.xdata > 0.8 or event.xdata < -0.8:
-                event.xdata /= 2
-                event.ydata /= 2
-            if event.ydata > 0.8 or event.ydata < -0.8:
-                event.ydata /= 2
-                event.xdata /= 2
+            # if abs(event.xdata) > 0.8 or abs(event.ydata) > 0.8:
+            #     event.xdata /= 2
+            #     event.ydata /= 2
             self.axes1_points.append((round(event.xdata, 2), round(event.ydata, 2)))
             self.draw_vector()
 
