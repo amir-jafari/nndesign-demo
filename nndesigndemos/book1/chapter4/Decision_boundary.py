@@ -28,7 +28,7 @@ class DecisionBoundaries(NNDLayout):
 
         self.point_1, self.point_2 = (-2, 2), (0, -2)
         self.prev_x_diff, self.prev_y_diff = None, None
-        self.current_x_diff, self.current_y_diff = 2 - -2, 2 - -2
+        self.current_x_diff, self.current_y_diff = self.point_1[0] - self.point_2[0], self.point_1[1] - self.point_2[1]
         self.data = [(1, 1, 1), (0, 0, 0), (1, 0, 0), (0, 1, 0)]
 
         self.make_plot(1, (5, 150, 510, 510))
@@ -104,7 +104,7 @@ class DecisionBoundaries(NNDLayout):
             self.point_2 = (event.xdata, event.ydata)
         self.prev_x_diff, self.prev_y_diff = self.current_x_diff, self.current_y_diff
         # print(self.point_1, self.point_2)
-        if not self.point_1[0] or not self.point_2[0]:
+        if self.point_1[0] is None or self.point_2[0] is None:
             return
         self.current_x_diff, self.current_y_diff = self.point_1[0] - self.point_2[0], self.point_1[1] - self.point_2[1]
         self.find_parameters()
@@ -150,14 +150,16 @@ class DecisionBoundaries(NNDLayout):
         x_coords, y_coords = zip(*[self.point_1, self.point_2])
         A = vstack([x_coords, ones(len(x_coords))]).T
         m, c = lstsq(A, y_coords, rcond=None)[0]
-        if str(self.prev_x_diff)[0] != str(self.current_x_diff)[0]:
-            if str(self.prev_y_diff)[0] != str(self.current_y_diff)[0]:
+        x_sign_changed = np.sign(self.prev_x_diff) != np.sign(self.current_x_diff)
+        y_sign_changed = np.sign(self.prev_y_diff) != np.sign(self.current_y_diff)
+        if x_sign_changed:
+            if y_sign_changed:
                 self.w[1] = -self.w[1]
                 self.w[0] = np.round(-m * self.w[1], 2)
             else:
                 self.w[1] = np.round(-self.w[0] / m, 2)
         else:
-            if str(self.prev_y_diff)[0] != str(self.current_y_diff)[0]:
+            if y_sign_changed:
                 self.w[0] = np.round(-m * self.w[1], 2)
             else:
                 self.w[1] = np.round(-self.w[0] / m, 2)
