@@ -24,30 +24,28 @@ class PerceptronClassification(NNDLayout):
 
         self.make_plot(1, (15, 100, 500, 390))
         self.axis = self.figure.add_subplot(projection='3d')
-        ys = np.linspace(-1, 1, 100)
-        zs = np.linspace(-1, 1, 100)
-        Y, Z = np.meshgrid(ys, zs)
-        X = 0
-        apple = np.array([-1, 1, -1])
-        orange = np.array([1, 1, -1])
+        X, Z = np.meshgrid(np.linspace(-1, 1, 100), np.linspace(-1, 1, 100))
         self.axis.set_title("Input Space")
-        self.axis.plot_surface(X, Y, Z, alpha=0.5)
-        self.axis.set_xlabel("texture")
+        self.axis.plot_surface(X, 0, Z, alpha=0.5)
+        self.axis.set_xlabel("shape")
+        self.axis.set_xlim(-1, 1)
         self.axis.set_xticks([-1, 1])
-        self.axis.set_ylabel("shape")
+        self.axis.set_ylabel("texture")
+        self.axis.set_ylim(-1, 1)
         self.axis.set_yticks([-1, 1])
         self.axis.set_zlabel("weight")
         self.axis.zaxis._axinfo['label']['space_factor'] = 0.1
+        self.axis.set_zlim(-1, 1)
         self.axis.set_zticks([-1, 1])
-        self.axis.scatter(orange[0], orange[1], orange[2], color='green')
-        self.axis.scatter(apple[0], apple[1], apple[2], color='orange')
+        self.axis.scatter(1, -1, -1, color='orange')
+        self.axis.scatter(1, 1, -1, color='green')
         self.line1, self.line2, self.line3 = None, None, None
-        self.axis.view_init(10, 110)
+        self.axis.view_init(10, 20)
         self.canvas.draw()
 
         self.p, self.a, self.label = None, None, None
 
-        self.make_label("label_w", "w = [1 0 0]", (550, 310, 150, 25))
+        self.make_label("label_w", "w = [0 1 0]", (550, 310, 150, 25))
         self.make_label("label_b", "b = 0", (550, 340, 150, 25))
         self.make_label("label_p", "", (550, 370, 150, 25))
         self.make_label("label_a_1", "", (550, 400, 150, 25))
@@ -108,7 +106,10 @@ class PerceptronClassification(NNDLayout):
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         self.label_p.setText(""); self.label_a_1.setText(""); self.label_a_2.setText(""); self.label_a_3.setText(""); self.label_fruit.setText("")
         self.p = np.round(np.random.uniform(-1, 1, (1, 3)), 2)
-        self.a = 1 * self.p[0, 0] + 0 * self.p[0, 1] + 0 * self.p[0, 2]
+        # print('self.p', self.p)
+        # Order of self.p: shape, texture, weight
+        # Texture = 1, Apple; Texture = -1, Orange
+        self.a = 0 * self.p[0, 0] + 1 * self.p[0, 1] + 0 * self.p[0, 2]
         self.label = 1 if self.a >= 0 else -1
         if self.line1:
             self.line1.pop().remove()

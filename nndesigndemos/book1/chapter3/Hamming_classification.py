@@ -24,38 +24,37 @@ class HammingClassification(NNDLayout):
 
         self.make_plot(1, (15, 100, 500, 390))
         self.axis = self.figure.add_subplot(projection='3d')
-        ys = np.linspace(-1, 1, 100)
-        zs = np.linspace(-1, 1, 100)
-        Y, Z = np.meshgrid(ys, zs)
-        X = 0
-        apple = np.array([-1, 1, -1])
-        orange = np.array([1, 1, -1])
+        X, Z = np.meshgrid(np.linspace(-1, 1, 100), np.linspace(-1, 1, 100))
         self.axis.set_title("Input Space")
-        self.axis.plot_surface(X, Y, Z, alpha=0.5)
-        self.axis.set_xlabel("texture")
+        self.axis.plot_surface(X, 0, Z, alpha=0.5)
+        self.axis.set_xlabel("shape")
+        self.axis.set_xlim(-1, 1)
         self.axis.set_xticks([-1, 1])
-        self.axis.set_ylabel("shape")
+        self.axis.set_ylabel("texture")
+        self.axis.set_ylim(-1, 1)
         self.axis.set_yticks([-1, 1])
         self.axis.set_zlabel("weight")
         self.axis.zaxis._axinfo['label']['space_factor'] = 0.1
+        self.axis.set_zlim(-1, 1)
         self.axis.set_zticks([-1, 1])
-        self.axis.scatter(orange[0], orange[1], orange[2], color='green')
-        self.axis.scatter(apple[0], apple[1], apple[2], color='orange')
+        self.axis.scatter(1, -1, -1, color='orange')
+        self.axis.scatter(1, 1, -1, color='green')
         self.line1, self.line2, self.line3 = None, None, None
-        self.axis.view_init(10, 110)
+        self.axis.view_init(10, 20)
         self.canvas.draw()
 
         self.p, self.a1, self.a2, self.fruit, self.label = None, None, None, None, None
 
-        self.make_label("label_w1", "W1 = [1 -1 -1; 1, 1, -1]", (550, 310, 150, 25))
-        self.make_label("label_b", "b = [3; 3]", (550, 340, 150, 25))
-        self.make_label("label_w2", "W2 = [1 -0.5; -0.5, 1]", (550, 370, 150, 25))
-        self.make_label("label_p", "", (550, 400, 150, 25))
-        self.make_label("label_a_11", "", (550, 430, 150, 25))
-        self.make_label("label_a_12", "", (550, 460, 150, 25))
-        self.make_label("label_a_21", "", (550, 490, 150, 25))
-        self.make_label("label_a_22", "", (550, 520, 150, 25))
-        self.make_label("label_fruit", "", (550, 550, 150, 25))
+        start_x = 535
+        self.make_label("label_w1", "W1 = [1 -1 -1; 1, 1, -1]", (start_x, 310, 150, 25))
+        self.make_label("label_b", "b = [3; 3]", (start_x, 340, 150, 25))
+        self.make_label("label_w2", "W2 = [1 -0.5; -0.5, 1]", (start_x, 370, 150, 25))
+        self.make_label("label_p", "", (start_x, 400, 150, 25))
+        self.make_label("label_a_11", "", (start_x, 430, 150, 25))
+        self.make_label("label_a_12", "", (start_x, 460, 150, 25))
+        self.make_label("label_a_21", "", (start_x, 490, 170, 25))
+        self.make_label("label_a_22", "", (start_x, 520, 150, 25))
+        self.make_label("label_fruit", "", (start_x, 550, 150, 25))
 
         if self.dpi > 113.5:
             self.figure_w, self.figure_h = round(575 / (self.dpi / 113.5)), round(190 / (self.dpi / 113.5))
@@ -80,6 +79,7 @@ class HammingClassification(NNDLayout):
 
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         self.make_button("run_button", "Go", (self.x_chapter_button, 577, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("btn_pause", "Pause", (self.x_chapter_button, 577 + self.h_chapter_button + 5, self.w_chapter_button, self.h_chapter_button), self.toggle_pause)
 
     def paintEvent(self, event):
         super(HammingClassification, self).paintEvent(event)
@@ -100,8 +100,12 @@ class HammingClassification(NNDLayout):
         self.icon3.setPixmap(pixmap)
 
     def on_run(self):
+        if hasattr(self, 'timer') and self.timer:
+            self.timer.stop()
         self.timer = QtCore.QTimer()
         self.idx = 0
+        self.converge_step = 0
+        self.btn_pause.setText("Pause")
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         self.label_p.setText("")
@@ -111,10 +115,24 @@ class HammingClassification(NNDLayout):
         self.label_a_22.setText("")
         self.label_fruit.setText("")
         self.p = np.round(np.random.uniform(-1, 1, (1, 3)), 2)
+        # self.p = np.array([[-.74, .00, -.14]])  # Boundary test: texture=0 causes no convergence
         w1, w2 = np.array([[1, -1, -1], [1, 1, -1]]), np.array([[1, -0.5], [-0.5, 1]])
-        self.a1 = np.round(np.dot(w1, self.p.T), 2)
-        self.a2 = np.round(np.dot(w2, self.a1), 2)
-        self.a2 = np.round(np.array([[self.poslin(self.a2[0, 0])], [self.poslin(self.a2[1, 0])]]), 2)
+        self.a1 = np.round(np.dot(w1, self.p.T) + np.array([[3], [3]]), 2)
+        # print('self.a1', self.a1)
+        # Iterate MAXNET until convergence: while all(a2 != 0)
+        self.a2_history = []
+        a2_curr = self.a1.copy()
+        for _ in range(50):
+            if not np.all(a2_curr != 0):
+                break
+            a2_next = np.dot(w2, a2_curr)
+            a2_next = np.round(np.array([[self.poslin(a2_next[0, 0])], [self.poslin(a2_next[1, 0])]]), 2)
+            self.a2_history.append(a2_next)
+            a2_curr = a2_next
+        self.a2 = self.a2_history[-1] if self.a2_history else self.a1
+        # print('self.a2_history', self.a2_history)
+        # print('Eventually self.a2', self.a2, '\n')
+        self.converged = not (self.a2[0, 0] == 0 and self.a2[1, 0] == 0)
         self.fruit = "Orange" if self.a2[0, 0] > 0 else "Apple"
         self.label = 1 if self.fruit == "Apple" else 0
         if self.line1:
@@ -124,6 +142,16 @@ class HammingClassification(NNDLayout):
             self.canvas.draw()
         self.timer.timeout.connect(self.update_label)
         self.timer.start(1100)
+
+    def toggle_pause(self):
+        if not hasattr(self, 'timer') or not self.timer:
+            return
+        if self.timer.isActive():
+            self.timer.stop()
+            self.btn_pause.setText("Play")
+        else:
+            self.timer.start()
+            self.btn_pause.setText("Pause")
 
     def update_label(self):
         if self.idx == 0:
@@ -176,15 +204,26 @@ class HammingClassification(NNDLayout):
                 sleep(0.5)
                 self.start_sound2.play()
         elif self.idx == 8:
-            self.label_a_12.setText("a1 = [{} {}]".format(self.a1[0, 0], self.a1[1, 0]))
+            self.label_a_12.setText("a2(0) = a1 = [{} {}]".format(self.a1[0, 0], self.a1[1, 0]))
             if self.play_sound:
                 self.start_sound1.play()
                 sleep(0.5)
                 self.start_sound2.play()
         elif self.idx == 9:
-            self.label_a_21.setText("a2 = poslin(W2 * a1)")
+            self.label_a_21.setText("a2(t+1) = poslin(W2*a2(t))")
         elif self.idx == 10:
-            self.label_a_22.setText("a2 = [{} {}]".format(self.a2[0, 0], self.a2[1, 0]))
+            if self.converge_step < len(self.a2_history):
+                a2 = self.a2_history[self.converge_step]
+                self.label_a_22.setText("a2({}) = [{} {}]".format(self.converge_step + 1, a2[0, 0], a2[1, 0]))
+                self.converge_step += 1
+                return
+            if not self.converged:
+                self.timer.stop()
+                QtWidgets.QMessageBox.warning(self, "No Convergence",
+                    "The network could not classify this input.\n"
+                    "The input may be too ambiguous (e.g. texture \u2248 0).\n\n"
+                    "Please click Go again to try a new input.")
+                return
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
@@ -201,6 +240,7 @@ class HammingClassification(NNDLayout):
                 self.knock_sound.play()
                 sleep(0.5)
                 self.knock_sound.play()
+            self.timer.stop()
         else:
             pass
         self.idx += 1

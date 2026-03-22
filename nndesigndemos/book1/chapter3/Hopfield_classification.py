@@ -24,35 +24,33 @@ class HopfieldClassification(NNDLayout):
 
         self.make_plot(1, (15, 100, 500, 390))
         self.axis = self.figure.add_subplot(projection='3d')
-        ys = np.linspace(-1, 1, 100)
-        zs = np.linspace(-1, 1, 100)
-        Y, Z = np.meshgrid(ys, zs)
-        X = 0
-        apple = np.array([-1, 1, -1])
-        orange = np.array([1, 1, -1])
+        X, Z = np.meshgrid(np.linspace(-1, 1, 100), np.linspace(-1, 1, 100))
         self.axis.set_title("Input Space")
-        self.axis.plot_surface(X, Y, Z, alpha=0.5)
-        self.axis.set_xlabel("texture")
+        self.axis.plot_surface(X, 0, Z, alpha=0.5)
+        self.axis.set_xlabel("shape")
+        self.axis.set_xlim(-1, 1)
         self.axis.set_xticks([-1, 1])
-        self.axis.set_ylabel("shape")
+        self.axis.set_ylabel("texture")
+        self.axis.set_ylim(-1, 1)
         self.axis.set_yticks([-1, 1])
         self.axis.set_zlabel("weight")
         self.axis.zaxis._axinfo['label']['space_factor'] = 0.1
+        self.axis.set_zlim(-1, 1)
         self.axis.set_zticks([-1, 1])
-        self.axis.scatter(orange[0], orange[1], orange[2], color='green')
-        self.axis.scatter(apple[0], apple[1], apple[2], color='orange')
+        self.axis.scatter(1, -1, -1, color='orange')
+        self.axis.scatter(1, 1, -1, color='green')
         self.line1, self.line2, self.line3 = None, None, None
-        self.axis.view_init(10, 110)
+        self.axis.view_init(10, 20)
         self.canvas.draw()
 
         self.p, self.a1, self.a2, self.fruit, self.label = None, None, None, None, None
 
         self.make_label("label_w", "W = [.2 0 0; 0 1.2 0; 0 0 .2]", (532, 320 - 5, 170, 25))
-        self.make_label("label_b", "b = [0.9; 0; -0.9]", (532, 350 - 5, 150, 25))
-        self.make_label("label_p", "", (532, 380 - 5, 150, 25))
-        self.make_label("label_a_11", "", (532, 410 - 5, 150, 25))
-        self.make_label("label_a_12", "", (532, 440 - 5, 150, 25))
-        self.make_label("label_fruit", "", (532, 470 - 5, 150, 25))
+        self.make_label("label_b", "b = [0.9; 0; -0.9]", (532, 350 - 5, 170, 25))
+        self.make_label("label_p", "", (532, 380 - 5, 170, 25))
+        self.make_label("label_a_11", "", (532, 410 - 5, 170, 25))
+        self.make_label("label_a_12", "", (532, 440 - 5, 170, 25))
+        self.make_label("label_fruit", "", (532, 470 - 5, 170, 25))
 
         if self.dpi > 113.5:
             self.figure_w, self.figure_h = round(575 / (self.dpi / 113.5)), round(190 / (self.dpi / 113.5))
@@ -77,6 +75,7 @@ class HopfieldClassification(NNDLayout):
 
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         self.make_button("run_button", "Go", (self.x_chapter_button, 500, self.w_chapter_button, self.h_chapter_button), self.on_run)
+        self.make_button("btn_pause", "Pause", (self.x_chapter_button, 500 + self.h_chapter_button + 5, self.w_chapter_button, self.h_chapter_button), self.toggle_pause)
 
     def paintEvent(self, event):
         super(HopfieldClassification, self).paintEvent(event)
@@ -97,8 +96,12 @@ class HopfieldClassification(NNDLayout):
         self.icon3.setPixmap(pixmap)
 
     def on_run(self):
+        if hasattr(self, 'timer') and self.timer:
+            self.timer.stop()
+        self.btn_pause.setText("Pause")
         self.timer = QtCore.QTimer()
         self.idx = 0
+        self.converge_step = 0
         self.text_shape, self.text_texture, self.text_weight = "?", "?", "?"
         self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_1.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
         self.label_p.setText("")
@@ -106,11 +109,27 @@ class HopfieldClassification(NNDLayout):
         self.label_a_12.setText("")
         self.label_fruit.setText("")
         self.p = np.round(np.random.uniform(-1, 1, (1, 3)), 2)
+        # self.p = np.array([[-.74, .01, -.14]]) # A boundary Test
+
         w = np.array([[0.2, 0, 0], [0, 1.2, 0], [0, 0, 0.2]])
         b = np.array([[0.9], [0], [-0.9]])
-        self.a1 = np.round(self.satlins(np.dot(w, self.p.T) + b), 2)
-        self.a2 = np.round(self.satlins(np.dot(w, self.a1) + b), 2)
-        self.fruit = "Orange" if self.a2[1, 0] > 0 else "Apple"
+        # Iterate until convergence: while any(a ~= orange) & any(a ~= apple)
+        self.a_history = []
+        a_curr = self.p.T.copy()
+        orange_proto = np.array([[1.0], [-1.0], [-1.0]])
+        apple_proto = np.array([[1.0], [1.0], [-1.0]])
+        for _ in range(50):
+            if np.all(a_curr == orange_proto) or np.all(a_curr == apple_proto):
+                break
+            a_next = np.round(self.satlins(np.dot(w, a_curr) + b), 2)
+            self.a_history.append(a_next)
+            if np.array_equal(a_next, a_curr):
+                break
+            a_curr = a_next
+        self.a1 = self.a_history[0] if self.a_history else self.p.T.copy()
+        self.a2 = self.a_history[-1] if self.a_history else self.p.T.copy()
+        self.converged = np.all(self.a2 == orange_proto) or np.all(self.a2 == apple_proto)
+        self.fruit = "Orange" if self.a2[1, 0] < 0 else "Apple"
         self.label = 1 if self.fruit == "Apple" else 0
         if self.line1:
             self.line1.pop().remove()
@@ -119,6 +138,16 @@ class HopfieldClassification(NNDLayout):
             self.canvas.draw()
         self.timer.timeout.connect(self.update_label)
         self.timer.start(900)
+
+    def toggle_pause(self):
+        if not hasattr(self, 'timer') or not self.timer:
+            return
+        if self.timer.isActive():
+            self.timer.stop()
+            self.btn_pause.setText("Play")
+        else:
+            self.timer.start()
+            self.btn_pause.setText("Pause")
 
     def update_label(self):
         if self.idx == 0:
@@ -159,9 +188,9 @@ class HopfieldClassification(NNDLayout):
             if self.play_sound:
                 self.classify_sound.play()
         elif self.idx == 6:
-            self.label_p.setText("p = [{} {} {}]".format(self.p[0, 0], self.p[0, 1], self.p[0, 2]))
+            self.label_p.setText("a(0) = p = [{} {} {}]".format(self.p[0, 0], self.p[0, 1], self.p[0, 2]))
         elif self.idx == 7:
-            self.label_a_11.setText("a1 = satlins(W * p + b)")
+            self.label_a_11.setText("a(t+1) = satlins(W*a(t)+b)")
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_4.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
@@ -171,7 +200,18 @@ class HopfieldClassification(NNDLayout):
                 sleep(0.5)
                 self.start_sound2.play()
         elif self.idx == 8:
-            self.label_a_12.setText("a1 = [{} {} {}]".format(self.a1[0, 0], self.a1[1, 0], self.a1[2, 0]))
+            if self.converge_step < len(self.a_history):
+                a = self.a_history[self.converge_step]
+                self.label_a_12.setText("a({}) = [{} {} {}]".format(self.converge_step + 1, a[0, 0], a[1, 0], a[2, 0]))
+                self.converge_step += 1
+                return
+            if not self.converged:
+                self.timer.stop()
+                QtWidgets.QMessageBox.warning(self, "No Convergence",
+                    "The network could not classify this input.\n"
+                    "The input may be too ambiguous (e.g. texture \u2248 0).\n\n"
+                    "Please click Go again to try a new input.")
+                return
             if self.label == 1:
                 self.icon3.setPixmap(QtGui.QIcon(PACKAGE_PATH + "Figures/nnd3d1_5.svg").pixmap(self.figure_w * self.w_ratio, self.figure_h * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
             else:
@@ -188,6 +228,7 @@ class HopfieldClassification(NNDLayout):
                 self.knock_sound.play()
                 sleep(0.5)
                 self.knock_sound.play()
+            self.timer.stop()
         else:
             pass
         self.idx += 1
@@ -195,4 +236,4 @@ class HopfieldClassification(NNDLayout):
     @staticmethod
     @np.vectorize
     def satlins(x):
-        return max([-1, min([x, 1])])
+        return max([-1.0, min([x, 1.0])])
