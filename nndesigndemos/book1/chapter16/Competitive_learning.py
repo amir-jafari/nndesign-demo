@@ -48,6 +48,7 @@ class CompetitiveLearning(NNDLayout):
         self.axes1_w2 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, color="g")
         self.axes1_w3 = self.axes_1.quiver([0], [0], [0], [0],  units="xy", scale=1, color="black")
         self.axes1_proj_line, = self.axes_1.plot([], "-")
+        self.axes1_new_w, = self.axes_1.plot([], "o", color="blue", markersize=8)
         self.update_plot()
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_mouseclick)
@@ -61,20 +62,39 @@ class CompetitiveLearning(NNDLayout):
         self.make_button("run_button", "Train", (self.x_chapter_button, 395, self.w_chapter_button, self.h_chapter_button), self.on_run)
         self.make_button("run_button", "Random", (self.x_chapter_button, 425, self.w_chapter_button, self.h_chapter_button), self.init_weights)
 
+        self.make_slider("slider_speed", QtCore.Qt.Orientation.Horizontal, (1, 10), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 5,
+                         (self.x_chapter_button, 475, self.w_chapter_button, 50), self.slide_speed,
+                         "label_speed", "Speed: 5", (self.x_chapter_button, 455, self.w_chapter_button, 20))
+        self.interval = 900
+
     def ani_stop(self):
         if self.ani and self.ani.event_source:
             self.ani.event_source.stop()
+
+    def init_parameters(self):
+        self.p_point_higlight.set_data([], [])
+        self.axes1_proj_line.set_data([], [])
+        self.axes1_new_w.set_data([], [])
+
+    def slide_speed(self):
+        self.ani_stop()
+        self.interval = 200 + (10 - self.slider_speed.value()) * 140
+        self.label_speed.setText("Speed: {}".format(self.slider_speed.value()))
+        self.init_parameters()
+        self.canvas.draw()
 
     def slide(self):
         self.ani_stop()
         self.alpha = float(self.slider_lr.value() / 10)
         self.label_lr.setText("Learning Rate: {}".format(self.alpha))
+        self.init_parameters()
         self.update_plot()
         self.canvas.draw()
         # self.on_run()
 
     def init_weights(self):
         self.ani_stop()
+        self.init_parameters()
         self.W_1 = [np.random.uniform(-1, 1), np.random.uniform(-1, 1)]
         self.W_1 /= np.linalg.norm(self.W_1)
         self.W_2 = [np.random.uniform(-1, 1), np.random.uniform(-1, 1)]
@@ -107,12 +127,13 @@ class CompetitiveLearning(NNDLayout):
         self.p_points_3.set_data(x_3_data[:], y_3_data[:])
 
     def animate_init_train(self):
-        return self.axes1_w1, self.axes1_w2, self.axes1_w3, self.p_points_1, self.p_points_2, self.p_points_3, self.p_point_higlight, self.axes1_proj_line
+        return self.axes1_w1, self.axes1_w2, self.axes1_w3, self.p_points_1, self.p_points_2, self.p_points_3, self.p_point_higlight, self.axes1_proj_line, self.axes1_new_w
 
     def on_animate_train(self, idx):
         if idx % 2 != 0:
             self.p_point_higlight.set_data([], [])
             self.axes1_proj_line.set_data([], [])
+            self.axes1_new_w.set_data([], [])
             self.update_plot()
         else:
             idx = int(idx / 2)
@@ -120,18 +141,21 @@ class CompetitiveLearning(NNDLayout):
             a = self.compet(np.dot(self.W, p[..., None]), axis=0)
             self.p_point_higlight.set_data([self.P[0, idx]], [self.P[1, idx]])
             if np.argmax(a) == 0:
-                W_1 = self.W_1[:]
+                W_old = self.W_1[:]
                 self.W_1 = list((1 - self.alpha) * np.array(self.W_1) + self.alpha * p)
-                self.axes1_proj_line.set_data([W_1[0], self.W_1[0]], [W_1[1], self.W_1[1]])
+                self.axes1_proj_line.set_data([W_old[0], p[0]], [W_old[1], p[1]])
+                self.axes1_new_w.set_data([self.W_1[0]], [self.W_1[1]])
             elif np.argmax(a) == 1:
-                W_2 = self.W_2[:]
+                W_old = self.W_2[:]
                 self.W_2 = list((1 - self.alpha) * np.array(self.W_2) + self.alpha * p)
-                self.axes1_proj_line.set_data([W_2[0], self.W_2[0]], [W_2[1], self.W_2[1]])
+                self.axes1_proj_line.set_data([W_old[0], p[0]], [W_old[1], p[1]])
+                self.axes1_new_w.set_data([self.W_2[0]], [self.W_2[1]])
             else:
-                W_3 = self.W_3[:]
+                W_old = self.W_3[:]
                 self.W_3 = list((1 - self.alpha) * np.array(self.W_3) + self.alpha * p)
-                self.axes1_proj_line.set_data([W_3[0], self.W_3[0]], [W_3[1], self.W_3[1]])
-        return self.axes1_w1, self.axes1_w2, self.axes1_w3, self.p_points_1, self.p_points_2, self.p_points_3, self.p_point_higlight, self.axes1_proj_line
+                self.axes1_proj_line.set_data([W_old[0], p[0]], [W_old[1], p[1]])
+                self.axes1_new_w.set_data([self.W_3[0]], [self.W_3[1]])
+        return self.axes1_w1, self.axes1_w2, self.axes1_w3, self.p_points_1, self.p_points_2, self.p_points_3, self.p_point_higlight, self.axes1_proj_line, self.axes1_new_w
 
     def on_run(self):
         seed = np.random.randint(1, 1000)
@@ -139,10 +163,11 @@ class CompetitiveLearning(NNDLayout):
         np.random.shuffle(self.p_x)
         np.random.seed(seed)
         np.random.shuffle(self.p_y)
+        self.init_parameters()
         self.update_plot()
         self.ani_stop()
         self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=2 * self.P.shape[1],
-                                 interval=500, repeat=False, blit=False)
+                                 interval=self.interval, repeat=False, blit=False)
         self.update_plot()
         self.canvas.draw()
 
@@ -152,9 +177,10 @@ class CompetitiveLearning(NNDLayout):
         np.random.shuffle(self.p_x)
         np.random.seed(seed)
         np.random.shuffle(self.p_y)
+        self.init_parameters()
         self.ani_stop()
         self.ani = FuncAnimation(self.figure, self.on_animate_train, init_func=self.animate_init_train, frames=2,
-                                 interval=500, repeat=False, blit=False)
+                                 interval=self.interval, repeat=False, blit=False)
         self.update_plot()
         self.canvas.draw()
 
