@@ -111,21 +111,21 @@
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        d="m 72,126 h 468 v 9 H 72 Z" /><text
        id="text22"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9px;font-family:'NewCenturySchlbk LT';-inkscape-font-specification:NewCenturySchlbkLT-BoldItalic;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9px;-inkscape-font-specification:NewCenturySchlbkLT-BoldItalic;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,303.48,129.0001)"><tspan
          id="tspan20"
          y="0"
          x="0">v</tspan></text>
 <text
        id="text26"
-       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,214.26,673.32)"><tspan
          id="tspan24"
          y="0"
          x="0 9.7627316 16.860144 23.957556 29.283407 37.274578 44.37199 57.677845 65.669014 74.553947 81.65136 88.748772 92.769096 105.19715 114.08208 119.40793 123.85599 137.23524 141.67532 148.77274 156.7639 162.08977 166.53781 174.52898">Performance Optimization</tspan></text>
 <text
        id="text52"
-       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;font-family:'Helvetica LT';-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,171,648.36)"><tspan
          id="tspan28"
          y="0"
@@ -165,14 +165,14 @@
          x="-0.0099600004 6.6602521 11.667144 17.231796 20.531544 25.538437 27.776447 32.78334 38.347992 43.354885 253.83458 259.39923 262.69897 268.26364">Exercises 9-39</tspan></text>
 <text
        id="text56"
-       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,226.26,462.36)"><tspan
          id="tspan54"
          y="0"
          x="0 15.982344 20.441568 29.337671 36.446255 44.448601 55.994064 61.331089 73.770309 81.772659 87.10968 92.446701 96.40638 107.07404 114.18262 122.18497 129.29355 138.18967 142.64888 151.54498">Widrow-Hoff Learning</tspan></text>
 <text
        id="text88"
-       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;font-family:'Helvetica LT';-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,171,437.34)"><tspan
          id="tspan58"
          y="0"
@@ -242,7 +242,7 @@
                style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                d="m 70.74,647.04 h 0.48 v 36.24 h -0.48 z" /><text
                id="text118"
-               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                transform="matrix(1,0,0,-1,82.2,658.02)"><tspan
                  id="tspan116"
                  y="0"
@@ -396,7 +396,7 @@
                style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                d="m 70.74,448.98 h 0.48 v 36.24 h -0.48 z" /><text
                id="text282"
-               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                transform="matrix(1,0,0,-1,76.26,459.96)"><tspan
                  id="tspan280"
                  y="0"

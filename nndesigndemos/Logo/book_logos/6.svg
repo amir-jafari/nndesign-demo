@@ -111,21 +111,21 @@
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        d="m 72,126 h 468 v 9 H 72 Z" /><text
        id="text22"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9px;font-family:'NewCenturySchlbk LT';-inkscape-font-specification:NewCenturySchlbkLT-BoldItalic;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9px;-inkscape-font-specification:NewCenturySchlbkLT-BoldItalic;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,300.78,129.0001)"><tspan
          id="tspan20"
          y="0"
          x="0 3.4802999 6.9605999">iii</tspan></text>
 <text
        id="text26"
-       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,192.72,673.32)"><tspan
          id="tspan24"
          y="0"
          x="0 8.886528 13.336176 21.328943 30.215471 38.208241 42.657887 46.678211 54.670979 63.557507 72.444038 76.464363 92.437126 99.536133 103.98579 111.97855 120.86508 126.19253 130.21284 141.74873 148.84775 155.94676 161.2742 169.26697 176.36598 180.38631 189.27283 198.15936 206.15213 213.25113 220.35014">Signal and Weight Vector Spaces</tspan></text>
 <text
        id="text60"
-       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;font-family:'Helvetica LT';-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,171,648.36)"><tspan
          id="tspan28"
          y="0"
@@ -177,14 +177,14 @@
          x="0.019920001 6.6901321 11.697024 17.261677 20.561424 25.568316 27.806328 32.813221 38.377872 43.384766 253.86447 259.42911 262.72885 268.29352">Exercises 5-28</tspan></text>
 <text
        id="text64"
-       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,150.54,414.36)"><tspan
          id="tspan62"
          y="0"
          x="0 10.662876 15.117312 24.008629 31.112425 39.109982 46.213776 50.2341 60.896976 68.000771 75.998329 84.889641 91.115639 96.447876 104.44543 111.54922 124.86147 132.85902 138.19125 142.64569 150.64325 159.48828 165.71907 169.67874 175.01576 183.01811 190.12669 194.08636 205.63184 212.74042 221.63652 228.7451 236.74745 241.20667 245.16635 256.71182 263.8204 269.15741 280.70288 288.70523 295.81381 304.70993">Linear Transformations for Neural Networks</tspan></text>
 <text
        id="text90"
-       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;font-family:'Helvetica LT';-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,171,389.34)"><tspan
          id="tspan66"
          y="0"
@@ -245,7 +245,7 @@
                style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                d="m 70.74,647.04 h 0.48 v 36.24 h -0.48 z" /><text
                id="text120"
-               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                transform="matrix(1,0,0,-1,82.2,658.02)"><tspan
                  id="tspan118"
                  y="0"
@@ -372,7 +372,7 @@
                style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                d="m 70.74,400.92 h 0.48 v 36.3 h -0.48 z" /><text
                id="text262"
-               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                transform="matrix(1,0,0,-1,82.2,411.96)"><tspan
                  id="tspan260"
                  y="0"

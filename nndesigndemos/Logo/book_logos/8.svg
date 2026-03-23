@@ -111,21 +111,21 @@
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        d="m 72,126 h 468 v 9 H 72 Z" /><text
        id="text22"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9px;font-family:'NewCenturySchlbk LT';-inkscape-font-specification:NewCenturySchlbkLT-BoldItalic;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9px;-inkscape-font-specification:NewCenturySchlbkLT-BoldItalic;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,301.74,129.0001)"><tspan
          id="tspan20"
          y="0"
          x="0 3.4802999">iv</tspan></text>
 <text
        id="text26"
-       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,203.34,673.32)"><tspan
          id="tspan24"
          y="0"
          x="0 8.8881245 17.776249 26.664371 33.764977 40.865582 48.859943 53.311188 59.533993 66.634598 75.52272 79.543045 91.974289 99.07489 107.96301 116.85114 121.30238 129.29675 138.18488 142.2052 152.86488 159.96548 167.95985 175.06046 183.94858 188.39983 197.28795">Supervised Hebbian Learning</tspan></text>
 <text
        id="text54"
-       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;font-family:'Helvetica LT';-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,171,648.36)"><tspan
          id="tspan28"
          y="0"
@@ -168,14 +168,14 @@
          x="0.0099600004 6.680172 11.687064 17.251717 20.551464 25.558355 27.796368 32.803261 38.367912 43.374805 253.85451 259.41916 262.7189 268.28357">Exercises 7-31</tspan></text>
 <text
        id="text58"
-       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,156.78,450.36)"><tspan
          id="tspan56"
          y="0"
          x="0 9.7723083 16.879295 23.986284 29.321712 37.32246 44.429447 57.744877 65.745621 74.640129 81.747124 88.854111 92.844109 101.73862 110.63313 117.74011 123.07554 131.07629 138.18327 145.29027 151.51945 155.50945 163.51019 172.40471 181.29921 185.28922 197.72684 206.62135 211.95679 216.41441 229.72984 238.62434 251.93977 255.92978 265.70209 273.70282 278.16046 287.05496 292.39038">Performance Surfaces and Optimum Points</tspan></text>
 <text
        id="text92"
-       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;font-family:'Helvetica LT';-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,171,425.34)"><tspan
          id="tspan60"
          y="0"
@@ -248,7 +248,7 @@
                style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                d="m 70.74,647.04 h 0.48 v 36.24 h -0.48 z" /><text
                id="text122"
-               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                transform="matrix(1,0,0,-1,82.2,658.02)"><tspan
                  id="tspan120"
                  y="0"
@@ -468,7 +468,7 @@
                style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                d="m 70.74,436.98 h 0.48 v 36.24 h -0.48 z" /><text
                id="text334"
-               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                transform="matrix(1,0,0,-1,82.2,447.96)"><tspan
                  id="tspan332"
                  y="0"

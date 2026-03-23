@@ -70,21 +70,21 @@
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        d="m 72,126 h 468 v 9 H 72 Z" /><text
        id="text22"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9px;font-family:'NewCenturySchlbk LT';-inkscape-font-specification:NewCenturySchlbkLT-BoldItalic;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9px;-inkscape-font-specification:NewCenturySchlbkLT-BoldItalic;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,304.26,129.0001)"><tspan
          id="tspan20"
          y="0"
          x="0">i</tspan></text>
 <text
        id="text26"
-       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:36px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:36px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,72,660)"><tspan
          id="tspan24"
          y="0"
          x="0 25.992001 43.992001 64.008003 75.996002 91.980003 111.996 123.984">Contents</tspan></text>
 <text
        id="text32"
-       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,280.26,592.32)"><tspan
          id="tspan28"
          y="0"
@@ -94,7 +94,7 @@
          x="-17.811359 -11.590152 -2.703624 2.6238239 9.7228317 17.715599 26.602127 35.488655 42.587666 47.915112 52.364761 60.357529">Introduction</tspan></text>
 <text
        id="text44"
-       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;font-family:'Helvetica LT';-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,171,510.36)"><tspan
          id="tspan34"
          y="0"
@@ -113,14 +113,14 @@
          x="0 6.1234078 11.64324 14.997768 17.757685 23.333292 28.853125 32.207653 34.967567 42.196537 47.772144 53.347752 58.867584 61.11655 66.692162 72.21199 253.83159 259.4072 262.70694 268.28256">Further Reading 1-10</tspan></text>
 <text
        id="text48"
-       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.96000004px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,161.22,408.36)"><tspan
          id="tspan46"
          y="0"
          x="0 11.537484 18.638088 27.526213 34.626816 42.621181 51.509304 55.489727 70.570335 78.564697 87.45282 94.553421 99.004669 102.98509 110.97945 119.86758 128.75571 132.73613 144.27361 151.44444 156.77188 168.30777 176.30054 183.39955 192.28609 196.3064 207.84229 214.9413 222.04031 230.92683 235.37648 240.70393 247.80293 254.90195 260.2294 269.11594 276.21494 283.31393">Neuron Model and Network Architectures</tspan></text>
 <text
        id="text80"
-       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;font-family:'Helvetica LT';-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.96000004px;-inkscape-font-specification:HelveticaLT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1,0,0,-1,171,383.34)"><tspan
          id="tspan50"
          y="0"
@@ -190,7 +190,7 @@
                style="fill:#0000ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                d="m 70.74,394.92 h 0.48 v 36.3 h -0.48 z" /><text
                id="text110"
-               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:'Times LT Std';-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+               style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;-inkscape-font-specification:TimesLTStd-Bold;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
                transform="matrix(1,0,0,-1,82.2,405.96)"><tspan
                  id="tspan108"
                  y="0"
