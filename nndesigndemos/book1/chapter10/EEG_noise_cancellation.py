@@ -174,7 +174,7 @@ class EEGNoiseCancellation(NNDLayout):
 
     def on_animate(self, idx):
         p = self.P[:, idx]
-        self.a[0, idx] = np.dot(self.w, p)
+        self.a[0, idx] = np.dot(self.w, p).item()
         self.e[0, idx] = self.T[0, idx] - self.a[0, idx]
         self.w += self.lr * self.e[0, idx] * p.T
         self.signal_approx.set_data(self.time[:idx + 1], self.e[0, :idx + 1])
@@ -190,7 +190,7 @@ class EEGNoiseCancellation(NNDLayout):
 
     def on_animate_diff(self, idx):
         p = self.P[:, idx]
-        self.a[0, idx] = np.dot(self.w, p)
+        self.a[0, idx] = np.dot(self.w, p).item()
         self.e[0, idx] = self.T[0, idx] - self.a[0, idx]
         self.w += self.lr * self.e[0, idx] * p.T
         self.signal_diff.set_data(self.time[:idx + 1], (self.signal_ - self.e)[0, :idx + 1])

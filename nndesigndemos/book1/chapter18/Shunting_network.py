@@ -89,7 +89,7 @@ class ShuntingNetwork(NNDLayout):
             self.label_bias_neg.setText("Bias b-: " + str(round(self.bn, 2)))
             self.label_tcte.setText("Time Constant: " + str(round(self.e, 2)))
             r = ode(self.shunt).set_integrator("zvode")
-            r.set_initial_value(0, 0)
+            r.set_initial_value([0.0], 0)
             t1 = 5
             dt = 0.01
             out = []

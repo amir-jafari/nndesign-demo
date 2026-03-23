@@ -191,7 +191,7 @@ class Marquardt(NNDLayout):
         #     return self.path,
 
         jj = np.dot(jac.T, jac)
-        dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+        dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je).flatten()
         W1, b1, W2, b2 = np.copy(self.W1), np.copy(self.b1), np.copy(self.W2), np.copy(self.b2)
         if self.pair_of_params == 1:
             self.x, self.y = self.W1[0, 0] + dw[0], self.W2[0, 0] + dw[1]
@@ -219,7 +219,7 @@ class Marquardt(NNDLayout):
                 if self.mu > 1e10:
                     break
 
-                dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je)
+                dw = -np.dot(np.linalg.inv(jj + self.mu * self.ii), je).flatten()
                 W1, b1, W2, b2 = np.copy(self.W1), np.copy(self.b1), np.copy(self.W2), np.copy(self.b2)
                 if self.pair_of_params == 1:
                     self.x, self.y = self.W1[0, 0] + dw[0], self.W2[0, 0] + dw[1]

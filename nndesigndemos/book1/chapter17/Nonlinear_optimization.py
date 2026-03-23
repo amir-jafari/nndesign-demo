@@ -431,7 +431,7 @@ class NonlinearOptimization(NNDLayout):
                         r[i, j, k - 1] = np.dot(mf, u[:, i]) / ssmf
                         m[:, i] = m[:, i] - r[i, j, k - 1] * mf[j]
                     else:
-                        r[i, j, k - 1] = np.dot(mf[:, j].reshape(1, -1), u[:, i][..., None]) / ssmf[0, j]
+                        r[i, j, k - 1] = (np.dot(mf[:, j].reshape(1, -1), u[:, i][..., None]) / ssmf[0, j]).item()
                         m[:, i] = m[:, i] - r[i, j, k - 1] * mf[:, j]
                 ssm = m[:, i].T.dot(m[:, i])
                 h[i] = m[:, i].T.dot(t) / ssm

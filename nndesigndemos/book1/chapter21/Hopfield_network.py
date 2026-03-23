@@ -123,7 +123,7 @@ class HopfieldNetwork(NNDLayout):
             self.r = ode(self.hop).set_integrator("zvode")
             n0 = np.array([[2 * np.tan(np.pi * self.x / 2) / self.finite_value_gain / np.pi],
                            [2 * np.tan(np.pi * self.y / 2) / self.finite_value_gain / np.pi]])
-            self.r.set_initial_value(n0, 0)
+            self.r.set_initial_value(n0.flatten(), 0)
             t1 = 10
             dt = 0.1
             n = np.zeros((101, 2))
@@ -136,7 +136,7 @@ class HopfieldNetwork(NNDLayout):
         else:
             self.r = ode(self.hopi).set_integrator("zvode")
             n0 = np.array([[self.x], [self.y]])
-            self.r.set_initial_value(n0, 0)
+            self.r.set_initial_value(n0.flatten(), 0)
             t1 = 10
             dt = 0.1
             n = np.zeros((101, 2))
@@ -182,7 +182,7 @@ class HopfieldNetwork(NNDLayout):
         for i in range(len(self.x_)):
             for j in range(len(self.y_)):
                 a = np.array([[self.X[i, j]], [self.Y[i, j]]])
-                F[i, j] = -0.5 * np.dot(a.T, np.dot(W, a)) - np.dot(b.T, a)
+                F[i, j] = (-0.5 * np.dot(a.T, np.dot(W, a)) - np.dot(b.T, a)).item()
                 for k in range(2):
                     temp1 = np.cos(np.pi / 2 * a[k, 0])
                     if temp1 == 0:

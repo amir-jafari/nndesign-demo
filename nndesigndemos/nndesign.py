@@ -92,6 +92,7 @@ def nndtoc(play_sound=True):
     import sys
     # QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     app = QApplication(sys.argv)
+    # app.setWindowIcon(QtGui.QIcon(PACKAGE_PATH + "Logo/CorelFrontCoverE.png"))
     dimensions = app.primaryScreen().geometry()
     w_screen, h_screen = dimensions.width(), dimensions.height()
     w_ratio, h_ratio = w_screen / 1000, h_screen / 800

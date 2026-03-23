@@ -112,7 +112,7 @@ class GrossbergLayer2(NNDLayout):
         y_out = np.zeros(y.shape)
         y_out[0, 0] = (-y[0, 0] + (self.bp - y[0, 0]) * (a[0, 0] + i1) - (y[0, 0] + self.bn) * a[1, 0]) / self.e
         y_out[1, 0] = (-y[1, 0] + (self.bp - y[1, 0]) * (a[1, 0] + i2) - (y[1, 0] + self.bn) * a[0, 0]) / self.e
-        return y_out
+        return y_out.flatten()
 
     def graph(self):
         if self.do_graph:
@@ -125,23 +125,23 @@ class GrossbergLayer2(NNDLayout):
             self.W2 = np.array([[w11, w12], [w21, w22]])
             self.p = np.array([[self.pp], [self.pn]])
             r1 = ode(self.layer2).set_integrator("zvode")
-            r1.set_initial_value(np.array([[0], [0]]), 0)
+            r1.set_initial_value(np.array([0., 0.]), 0)
             t1 = 0.26
             dt = 0.01
             out_11, out_21 = [], []
             while r1.successful() and r1.t < t1:
                 out = r1.integrate(r1.t + dt)
-                out_11.append(out[0, 0].item())
-                out_21.append(out[1, 0].item())
+                out_11.append(out[0].item())
+                out_21.append(out[1].item())
             self.p = np.array([[0], [0]])
             r2 = ode(self.layer2).set_integrator("zvode")
-            r2.set_initial_value(np.array([[out_11[-1]], [out_21[-1]]]), 0.26)
+            r2.set_initial_value(np.array([out_11[-1], out_21[-1]]), 0.26)
             t2 = 0.51
             out_12, out_22 = [], []
             while r2.successful() and r2.t < t2:
                 out = r2.integrate(r2.t + dt)
-                out_12.append(out[0, 0].item())
-                out_22.append(out[1, 0].item())
+                out_12.append(out[0].item())
+                out_22.append(out[1].item())
             out_1, out_2 = out_11 + out_12, out_21 + out_22
             out_1[0], out_2[0] = 0, 0
             while len(self.lines1) > 1:

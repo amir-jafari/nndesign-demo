@@ -126,13 +126,13 @@ class CascadedFunction(NNDLayout):
         # print('p, nr', p, nr)
         for i in range(int(nr)):
             out1 = self.net1(x)
-            out1 = float(out1)
+            out1 = float(out1.item())
             # print('xx, yy, x, out1', xx, yy, x, out1)
             xx = np.concatenate((xx, [x, x, x, out1]))
             yy = np.concatenate((yy, [x, out1, out1, out1]))
             # print('xx, yy', xx, yy)
             x = out1
-        yy[0] = np.array([0])
+        yy[0] = 0
         xx[-1] = x1
         return xx, yy
 
@@ -173,15 +173,15 @@ class CascadedFunction(NNDLayout):
 
     @staticmethod
     def two():
-        return np.array([2])
+        return 2
 
     @staticmethod
     def three():
-        return np.array([3])
+        return 3
 
     @staticmethod
     def four():
-        return np.array([4])
+        return 4
 
     def Poslin(self, x):
         if (x < 0):
