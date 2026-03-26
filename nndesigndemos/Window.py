@@ -129,6 +129,9 @@ from nndesigndemos.book2.chapter11.impulse_response.Impulse_response import Impu
 from nndesigndemos.book2.chapter12.parity_network.ParityNetworkDemo import ParityNetworkDemo
 from nndesigndemos.book2.chapter12.constant_error_carousel.Constant_error_carousel import ConstantErrorCarousel
 from nndesigndemos.book2.chapter12.gated_cec.GatedCECDemo import GatedCECDemo
+# ------ Chapter 13 --------
+from nndesigndemos.book2.chapter13.Self_attention_2d import SelfAttention2D
+from nndesigndemos.book2.chapter13.Self_attention_3d import SelfAttention3D
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -177,6 +180,7 @@ BOOK2_CHAPTERS_DEMOS = {
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
     11: ["Linear Sequence", "Chapter 11 demos", "Sequence Averaging Network", "Sequence Smoothing Response", "Impulse Response"],
     12: ["Non Linear Sequence", "Chapter 12 demos", "Parity Network", "Constant Error Carousel", "Gated CEC"],
+    13: ["Attention", "Chapter 13 demos", "Self-Attention 2D", "Self-Attention 3D"],
 }
 # -------------------------------------------------------------------------------------------------------------
 
@@ -650,9 +654,9 @@ class MainWindowDL(NNDLayout):
         self.button2.clicked.connect(partial(self.show_chapters, "6-9"))
 
         self.button3 = QtWidgets.QPushButton(self)
-        self.button3.setText("10-12")
+        self.button3.setText("10-13")
         self.button3.setGeometry((xbtn1 + 2 * add2) * self.w_ratio, ybtn1 * self.h_ratio, wbtn1 * self.w_ratio, hbtn1 * self.h_ratio)
-        self.button3.clicked.connect(partial(self.show_chapters, "10-12"))
+        self.button3.clicked.connect(partial(self.show_chapters, "10-13"))
 
         self.center()
 
@@ -666,16 +670,11 @@ class MainWindowDL(NNDLayout):
     def show_chapters(self, chapters="2-5"):
         """ Updates the icons and dropdown menus based on a block of chapters (chapters) """
 
-        if chapters in ["2-5", "6-9"]:
+        if chapters in ["2-5", "6-9", "10-13"]:
             icon_lst = [self.icon1, self.icon2, self.icon3, self.icon4]
             label_lst = [self.label_box1, self.label_box2, self.label_box3, self.label_box4]
             combo_lst = [self.comboBox1, self.comboBox2, self.comboBox3, self.comboBox4]
             self.change_visibility(True)
-        elif chapters == "10-12":
-            icon_lst = [self.icon1, self.icon2, self.icon3]
-            label_lst = [self.label_box1, self.label_box2, self.label_box3]
-            combo_lst = [self.comboBox1, self.comboBox2, self.comboBox3]
-            self.change_visibility(False)
 
         chapters = chapters.split("-")
         chapter_numbers = list(range(int(chapters[0]), int(chapters[1]) + 1))
@@ -683,7 +682,7 @@ class MainWindowDL(NNDLayout):
         chapter_functions = [
             self.chapter2, self.chapter3, self.chapter4, self.chapter5,
             self.chapter6, self.chapter7, self.chapter8, self.chapter9,
-            self.chapter10, self.chapter11, self.chapter12,
+            self.chapter10, self.chapter11, self.chapter12, self.chapter13,
         ]
 
         idx = 0
@@ -811,3 +810,12 @@ class MainWindowDL(NNDLayout):
         elif idx == 3:
             self.book2_chapter12_window3 = GatedCECDemo(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter12_window3.show()
+
+    def chapter13(self, idx):
+        self.comboBox4.setCurrentIndex(0)
+        if idx == 1:
+            self.book2_chapter13_window1 = SelfAttention2D(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter13_window1.show()
+        elif idx == 2:
+            self.book2_chapter13_window2 = SelfAttention3D(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter13_window2.show()
