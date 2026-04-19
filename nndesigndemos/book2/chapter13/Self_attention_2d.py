@@ -24,8 +24,8 @@ class SelfAttention2D(NNDLayout):
 
         self.fill_chapter("Self-Attention 2D", 13,
                           "\nClick and drag the tips of\np(1) or p(2) to move the\ninput vectors.\n\n"
-                          "Adjust the W^Q, W^K, W^V\nrotation angles with sliders.\n\n"
-                          "The dashed arrows show the\nattention output vectors.",
+                          "Adjust W^Q, W^K, W^V\nrotation angles with sliders.\n\n"
+                          "The dashed arrows show\nattention output vectors.",
                           PACKAGE_PATH + "Chapters/2_D/Logo_Ch_2.svg", None, 2,
                           icon_move_left=120, description_coords=(535, 105, 450, 250))
 

@@ -39,22 +39,22 @@ class SelfAttention3D(NNDLayout):
         self.GX, self.GY = np.meshgrid(gx, gy)
 
         # Two 3D plots for the surfaces
-        self.make_plot(1, (10, 130, 250, 220))
-        self.make_plot(2, (260, 130, 250, 220))
+        self.make_plot(1, (2, 115, 265, 265))
+        self.make_plot(2, (258, 115, 265, 265))
 
         # Small 2D plot for dragging p(2)
-        self.make_plot(3, (10, 360, 230, 200))
+        self.make_plot(3, (10, 380, 330, 270))
         self.figure3.set_tight_layout(True)
 
         # Radio buttons to select o(1) or o(2)
-        self.make_label("label_output", "Select output:", (270, 360, 150, 30))
+        self.make_label("label_output", "Select output:", (380, 410, 150, 30))
         self.radio_o1 = QtWidgets.QRadioButton("o(1)", self)
-        self.radio_o1.setGeometry(270 * self.w_ratio, 390 * self.h_ratio, 80 * self.w_ratio, 30 * self.h_ratio)
+        self.radio_o1.setGeometry(380 * self.w_ratio, 440 * self.h_ratio, 80 * self.w_ratio, 30 * self.h_ratio)
         self.radio_o1.setChecked(True)
         self.radio_o1.toggled.connect(self.on_radio)
 
         self.radio_o2 = QtWidgets.QRadioButton("o(2)", self)
-        self.radio_o2.setGeometry(270 * self.w_ratio, 420 * self.h_ratio, 80 * self.w_ratio, 30 * self.h_ratio)
+        self.radio_o2.setGeometry(380 * self.w_ratio, 470 * self.h_ratio, 80 * self.w_ratio, 30 * self.h_ratio)
         self.radio_o2.toggled.connect(self.on_radio)
 
         # Sliders for W matrices
@@ -147,6 +147,7 @@ class SelfAttention3D(NNDLayout):
         ax3d_0.set_ylabel('p(1)[1]', fontsize=8)
         ax3d_0.set_zlabel(f'{out_label}[0]', fontsize=8)
         ax3d_0.set_title(f'{out_label}[0]', fontsize=10, fontweight='bold')
+        self.figure.subplots_adjust(left=-0.1, right=0.9)
         self.canvas.draw()
 
         # Right 3D: output element [1]
@@ -157,6 +158,7 @@ class SelfAttention3D(NNDLayout):
         ax3d_1.set_ylabel('p(1)[1]', fontsize=8)
         ax3d_1.set_zlabel(f'{out_label}[1]', fontsize=8)
         ax3d_1.set_title(f'{out_label}[1]', fontsize=10, fontweight='bold')
+        self.figure2.subplots_adjust(left=-0.1, right=0.9)
         self.canvas2.draw()
 
         # Small 2D axis: draggable p(2)
