@@ -180,7 +180,7 @@ BOOK2_CHAPTERS_DEMOS = {
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
     11: ["Linear Sequence", "Chapter 11 demos", "Sequence Averaging Network", "Sequence Smoothing Response", "Impulse Response"],
     12: ["Non Linear Sequence", "Chapter 12 demos", "Parity Network", "Constant Error Carousel", "Gated CEC"],
-    13: ["Attention", "Chapter 13 demos", "Self-Attention 2D", "Self-Attention 3D"],
+    13: ["Seq2Seq Attention", "Chapter 13 demos", "Self-Attention 2D", "Self-Attention 3D"],
 }
 # -------------------------------------------------------------------------------------------------------------
 
