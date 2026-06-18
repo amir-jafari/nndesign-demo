@@ -106,28 +106,19 @@ class GradientDescentStochastic(NNDLayout):
 
             self.a1.plot(np.concatenate((Lx1, x1), 0), np.concatenate((Lx2, x2), 0), 'bo-', markersize=1)
             F1 = (a[0, 0] * np.power(x1, 2) + (a[0, 1] + a[1, 0]) * (x1 * x2) + a[1, 1] * np.power(x2, 2)) / 2 + b[0] * x1 + b[1] * x1 + c
-            # aa.plot(x1,x2,F1.flatten(),'ro', markersize=4)
-            aa.scatter3D(x1,x2,F1.flatten(),s=40, c='Red', marker='o')
+            aa.scatter3D(x1, x2, F1.flatten(), s=40, c='red', marker='o')
 
-        # aa.plot_surface(X1, X2, F,color='g')
-        #aa.plot_wireframe(X1, X2, F, rcount=30,ccount=30)
-
-        # aa.plot_surface(X1, X2, F)
-        aa.plot_wireframe(X1, X2, F, rcount=30, ccount=30)
-        # aa.plot_wireframe(self.P1, self.P2, z11,  rcount=10,ccount=10)
-        self.a1.contour(X1, X2, F)
+        aa.plot_surface(X1, X2, F, cmap='coolwarm', alpha=0.85, edgecolor='none')
+        aa.set_xlabel(r'$w_{1,1}$', fontsize=8)
+        aa.set_ylabel(r'$w_{1,2}$', fontsize=8)
+        aa.set_zlabel('F', fontsize=8)
+        aa.set_title('Error Surface', fontsize=10, fontweight='bold')
+        self.figure.subplots_adjust(left=-0.1, right=0.9)
 
         self.a1.contour(X1, X2, F)
         self.a1.set_xlabel(r'$\mathrm{w}_{1,1}$')
         self.a1.set_ylabel(r'$\mathrm{w}_{1,2}$')
         self.a1.yaxis.tick_right()
-
-        # Setting limits so that the point moves instead of the plot.
-        #a.set_xlim(-4, 4)
-        #a.set_ylim(-2, 2)
-
-        # add grid and axes
-        aa.grid(True, which='both')
 
         self.canvas.draw()
         self.canvas2.draw()
