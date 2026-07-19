@@ -114,6 +114,9 @@ from nndesigndemos.book2.chapter5.Cheatsheet5 import Cheatsheet5
 from nndesigndemos.book2.chapter5.linear_regression_steepest_descent.Learning_scheduler import LearningScheduler
 # ------ Chapter 6 --------
 from nndesigndemos.book2.chapter6.Cheatsheet6 import Cheatsheet6
+# ------ Chapter 7 --------
+from nndesigndemos.book2.chapter7.Forward_propagation_LFFN import LFFNForwardPropagation
+from nndesigndemos.book2.chapter7.Forward_propagation_GLDDN import GLDDNForwardPropagation
 # ------ Chapter 8 --------
 from nndesigndemos.book2.chapter8.Convolution_networks_ani import ConvolAnimation as Convol
 # from nndesigndemos.book2.chapter8.Convolution_networks import Convol
@@ -174,7 +177,7 @@ BOOK2_CHAPTERS_DEMOS = {
     4: ["Supplemental Training", "Chapter 4 demos", 'Normalization & Initialization Scaling', 'Normalization & Initialization Effect', 'Dropout'],
     5: ["Python Intro", "Chapter 5 demos", "Cheatsheet", "Learning Scheduler"],
     6: ["TensorFlow Intro", "Chapter 6 demos", "Cheatsheet"],
-    7: ["Chapter 7", "Chapter 7 demos", ],
+    7: ["Deep Learning Notation", "Chapter 7 demos", "LFFN", "GLDDN"],
     8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
@@ -768,6 +771,12 @@ class MainWindowDL(NNDLayout):
 
     def chapter7(self, idx):
         self.comboBox2.setCurrentIndex(0)
+        if idx == 1:
+            self.book2_chapter7_window1 = LFFNForwardPropagation(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter7_window1.show()
+        elif idx == 2:
+            self.book2_chapter7_window2 = GLDDNForwardPropagation(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter7_window2.show()
 
     def chapter8(self, idx):
         self.comboBox3.setCurrentIndex(0)
