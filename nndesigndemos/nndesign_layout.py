@@ -1,7 +1,6 @@
 import os
 from PyQt6 import QtWidgets, QtGui, QtCore, QtMultimedia
 from PyQt6.QtWidgets import QMainWindow, QApplication
-# import warnings
 import numpy as np
 import matplotlib
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -17,6 +16,43 @@ from nndesigndemos.nndesign_settings import OS_NAME
 
 WM_MAC_MAIN, HM_MAC_MAIN = 1280 - 750, 800 - 120  # For my Mac
 WM_MAC_CHAPTER, HM_MAC_CHAPTER = 1280 - 580, 800 - 120  # For my Mac - original size
+
+# Global window scale — enlarges every demo's window AND its contents. Width and
+# height scale independently so the window can be widened more than it is
+# heightened. 1.0 = original size (width 700, height 680).
+#   WINDOW_SCALE_W = 1.30 → width  700 -> 910  (matches chapter 7's footprint)
+#   WINDOW_SCALE_H = 1.20 → height 680 -> 816  (kept shorter than the width)
+# Equal factors preserve the original aspect ratio; a smaller height factor makes
+# the window shorter/wider (contents compress slightly in the vertical).
+# NOTE: the window must still fit on screen — height is the tight dimension. 816
+# px fits displays >= ~850 px tall; lower WINDOW_SCALE_H toward 1.08 (= chapter
+# 7's height, 734 px) if it clips, or raise it on large monitors.
+WINDOW_SCALE_W = 1.30
+WINDOW_SCALE_H = 1.20
+
+
+class _ScaledRatio(float):
+    """A screen ratio that already folds in the WINDOW_SCALE factor.
+
+    The whole library assumes ``coord * ratio`` is an int (historically the
+    ratio was always an integer). A fractional scale would make those products
+    floats, which PyQt6's setGeometry/pixmap calls reject. Rounding the product
+    back to an int here keeps every existing geometry call working without
+    touching the ~dozens of call sites.
+
+    The object also remembers its unscaled ``base`` so that, as the ratio
+    propagates from the main menu down through sub-menus to demo windows, any
+    window can (a) avoid scaling twice, or (b) recover the exact original size
+    when it opts out (scale_window=False) — no float round-trip.
+    """
+    def __new__(cls, base, scale):
+        obj = super().__new__(cls, base * scale)
+        obj.base = base
+        return obj
+
+    def __mul__(self, other):
+        return int(round(float(self) * other))
+    __rmul__ = __mul__
 
 xlabel, ylabel, wlabel, hlabel, add = 30, 5, 500, 100, 20
 
@@ -37,12 +73,123 @@ x_chapter = 560
 # -------------------------------------------------------------------------------------------------------------
 
 
+def center_on_screen(window):
+    qr = window.frameGeometry()
+    qr.moveCenter(QApplication.primaryScreen().availableGeometry().center())
+    window.move(qr.topLeft())
+
+
+class ScalableWindow(QtWidgets.QGraphicsView):
+    """Resizable, fixed-aspect-ratio wrapper around a demo window.
+
+    A demo is built once at its normal (fixed) size, then embedded here as a
+    QGraphicsScene item. On resize the whole demo — widgets, plots and the
+    hand-drawn side rails — is scaled by a single transform to fill the view,
+    and the window itself is constrained to the demo's aspect ratio so no empty
+    margins appear. This scales pixels (plots soften a little when enlarged well
+    past native) but needs zero changes inside any demo.
+    """
+
+    def __init__(self, demo):
+        super().__init__()
+        self._demo = demo
+        self._aspect = demo.width() / demo.height()   # width / height, locked
+        self._adjusting = False
+
+        scene = QtWidgets.QGraphicsScene(self)
+        demo.setWindowFlags(QtCore.Qt.WindowType.Widget)   # embed as a plain widget
+        self._proxy = scene.addWidget(demo)
+        # The proxy inherits the demo's full geometry — including any screen
+        # position the demo had as a top-level window. Reset it to the scene
+        # origin, where the fixed scene rect below expects it; otherwise the
+        # demo is drawn offset and clipped.
+        self._proxy.setPos(0, 0)
+        # Fix the scene rect to the demo's known size (deterministic — the proxy's
+        # boundingRect may not be laid out yet at this point).
+        scene.setSceneRect(0, 0, demo.width(), demo.height())
+        self.setScene(scene)
+
+        self.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)   # demo fills edge-to-edge
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setRenderHints(QtGui.QPainter.RenderHint.Antialiasing |
+                            QtGui.QPainter.RenderHint.SmoothPixmapTransform)
+        self.setWindowTitle(demo.windowTitle())
+        # Open at the demo's size, but never bigger than the screen (a scaled
+        # demo — especially a portrait one at 2x — can exceed the display; if the
+        # window doesn't fit, its aspect gets broken and margins appear).
+        self.resize(*self._clamp_to_screen(demo.width(), demo.height()))
+        center_on_screen(self)
+
+    def _clamp_to_screen(self, w, h):
+        """Shrink (w, h) to fit the screen while preserving the aspect ratio."""
+        scr = QApplication.primaryScreen().availableGeometry()
+        max_w, max_h = int(scr.width() * 0.95), int(scr.height() * 0.95)
+        if w > max_w:
+            w, h = max_w, round(max_w / self._aspect)
+        if h > max_h:
+            w, h = round(max_h * self._aspect), max_h
+        return int(w), int(h)
+
+    def _fit(self):
+        # Scale the demo to fill the view, keeping its aspect ratio fixed.
+        self.fitInView(self.sceneRect(), QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+        self._fit()
+
+        # Constrain the WINDOW to the same aspect ratio so no margins appear:
+        # snap the less-dragged dimension to match the other (guarded against
+        # the re-entrant resize this triggers).
+        if self._adjusting:
+            self._adjusting = False
+            return
+        old, new = e.oldSize(), e.size()
+        if old.width() < 0 or old.height() < 0:
+            return  # first show — no previous size to compare
+        w, h = new.width(), new.height()
+        if abs(w - old.width()) >= abs(h - old.height()):
+            h = round(w / self._aspect)
+        else:
+            w = round(h * self._aspect)
+        w, h = self._clamp_to_screen(w, h)   # keep the window on-screen, aspect intact
+        if (w, h) != (new.width(), new.height()):
+            self._adjusting = True
+            self.resize(w, h)
+
+    def closeEvent(self, event):
+        # Let the embedded demo clean up (stop its timers/animations) too.
+        self._demo.close()
+        super().closeEvent(event)
+
+
 class NNDLayout(QMainWindow):
     def __init__(self, w_ratio, h_ratio, dpi, chapter_window=True, main_menu=False, draw_vertical=True,
                  draw_horizontal=True, print_mouse_coords=False, fixed_size=False, do_not_scale=False,
-                 overwrite_size=None):
+                 overwrite_size=None, scale_window=True):
 
         super(NNDLayout, self).__init__()
+
+        # Apply the global proportional scale up front so it flows into BOTH the
+        # window size (self.wm/self.hm and overwrite_size below) and every widget
+        # geometry (via self.w_ratio/self.h_ratio). Recover the unscaled base
+        # first (the ratio may already be scaled after propagating from the main
+        # menu) so scaling stays idempotent and scale_window=False restores the
+        # exact original size.
+        base_w = w_ratio.base if isinstance(w_ratio, _ScaledRatio) else w_ratio
+        base_h = h_ratio.base if isinstance(h_ratio, _ScaledRatio) else h_ratio
+        if scale_window:
+            w_ratio = _ScaledRatio(base_w, WINDOW_SCALE_W)
+            h_ratio = _ScaledRatio(base_h, WINDOW_SCALE_H)
+        else:
+            w_ratio, h_ratio = base_w, base_h
+
+        # Wrap windows in a ScalableWindow on show() so they resize with a fixed
+        # aspect ratio — both demos and the menu / table-of-contents. Only
+        # windows that opt out (scale_window=False, e.g. chapter 7) are left as-is.
+        self._enable_scaling = scale_window
+        self._scaler = None
 
         self.running_on_windows = OS_NAME == "Windows"
         self.running_on_linux = OS_NAME == "Linux"
@@ -58,16 +205,20 @@ class NNDLayout(QMainWindow):
         else:
             self.w_ratio, self.h_ratio = w_ratio, h_ratio
         if chapter_window:
-            self.wm, self.hm = WM_MAC_CHAPTER * w_ratio, HM_MAC_CHAPTER * h_ratio
+            self.wm, self.hm = int(WM_MAC_CHAPTER * w_ratio), int(HM_MAC_CHAPTER * h_ratio)
         else:
-            self.wm, self.hm = WM_MAC_MAIN * w_ratio, HM_MAC_MAIN * h_ratio
+            self.wm, self.hm = int(WM_MAC_MAIN * w_ratio), int(HM_MAC_MAIN * h_ratio)
         if fixed_size:
             self.setFixedSize(WM_MAC_CHAPTER, HM_MAC_CHAPTER)
         else:
             self.setFixedSize(self.wm, self.hm)
         if overwrite_size is not None:
-            self.setFixedSize(overwrite_size[0] * w_ratio, overwrite_size[1] * h_ratio)
-        self.center()
+            self.setFixedSize(int(overwrite_size[0] * w_ratio), int(overwrite_size[1] * h_ratio))
+        if not self._enable_scaling:
+            # Wrapped windows are centered by their ScalableWindow instead;
+            # moving this widget would only pollute the geometry the wrapper
+            # inherits when it embeds the demo.
+            self.center()
 
         size_scaled = int(10 * (self.w_ratio + self.h_ratio) / 2)
         matplotlib.rcParams.update({'font.size': size_scaled, 'axes.titlesize': size_scaled, 'axes.labelsize': size_scaled,
@@ -83,6 +234,9 @@ class NNDLayout(QMainWindow):
 
         self.draw_vertical = draw_vertical
         self.draw_horizontal = draw_horizontal
+        # x of the vertical divider between plot area and control panel. Demos
+        # may move it (before fill_chapter) to change the split of the window.
+        self.xl2 = xl2
         if main_menu == 1:
             self.setWindowTitle("Neural Network Design Demos")
             self.make_label("label1", "Neural Network", (xlabel, ylabel, wlabel, hlabel), font_size=18, italics=True)
@@ -95,8 +249,6 @@ class NNDLayout(QMainWindow):
 
     def paintEvent(self, e):
         qp = QtGui.QPainter()
-        color = QtGui.QColor(0, 0, 0)
-        color.setNamedColor('#d4d4d4')
         qp.begin(self)
         self.draw_lines(qp)
         qp.end()
@@ -105,15 +257,13 @@ class NNDLayout(QMainWindow):
         if self.draw_horizontal:
             pen = QtGui.QPen(QtGui.QColor("darkblue"), 4, QtCore.Qt.PenStyle.SolidLine)
             qp.setPen(pen)
-            # qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio)
-            qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, xl2 * self.w_ratio, yl1 * self.h_ratio)
+            qp.drawLine(xl1 * self.w_ratio, yl1 * self.h_ratio, self.xl2 * self.w_ratio, yl1 * self.h_ratio)
             qp.drawLine(xl3 * self.w_ratio, yl4 * self.h_ratio, xl4 * self.w_ratio, yl4 * self.h_ratio)
 
         if self.draw_vertical:
             pen = QtGui.QPen(QtGui.QColor("darkblue"), 4, QtCore.Qt.PenStyle.SolidLine)
             qp.setPen(pen)
-            # qp.drawLine(self.wm - xl1 * self.w_ratio, yl1 * self.h_ratio + 35, self.wm - xl1 * self.w_ratio, 750 * self.h_ratio)
-            qp.drawLine(xl2 * self.w_ratio, yl1 * self.h_ratio + 35, xl2 * self.w_ratio, yl4 * self.h_ratio)
+            qp.drawLine(self.xl2 * self.w_ratio, yl1 * self.h_ratio + 35, self.xl2 * self.w_ratio, yl4 * self.h_ratio)
 
     def fill_chapter(self, title, number, description, logo_path, icon_path=None, book_index=1, show_info=True, icon_move_left=0, icon_move_up=0,
                      description_coords=(x_info, y_info, w_info, h_info), icon_coords=(x_pic2_2, y_pic2_2, w_pic2_2, h_pic2_2),
@@ -127,17 +277,11 @@ class NNDLayout(QMainWindow):
 
         len_ref = len("One-Input Neuron")
         len_current = len(title)
-        self.make_label("label3", title, (xl2 - 135 - (len_current - len_ref) * 5.5, ylabel + add, wlabel, hlabel), font_size=18)
+        self.make_label("label3", title, (self.xl2 - 135 - (len_current - len_ref) * 5.5, ylabel + add, wlabel, hlabel), font_size=18)
         self.make_label("label4", "Chapter {}".format(number), (x_chapter, 630, 150, 50), font_size=16)
 
         if show_info:
-            # paragraphs = description.split("<p>")
-            # y_pos = y_info
             self.make_label("label5", description, (description_coords[0], description_coords[1], description_coords[2], description_coords[3]))
-            # for idx, paragraph in enumerate(paragraphs):
-            #     self.make_label("label{}".format(idx + 5), paragraph, (x_info, y_pos, w_info, h_info))
-            #     n_lines = len(paragraph.split("\n")) + 1
-            #     y_pos += (n_lines * 10 + 20) * self.h_ratio
 
         self.icon1 = QtWidgets.QLabel(self)
         self.icon1.setPixmap(QtGui.QIcon(logo_path).pixmap(wp_pic2_1 * self.w_ratio, hp_pic2_1 * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On))
@@ -152,22 +296,11 @@ class NNDLayout(QMainWindow):
                 pixmap = QtGui.QIcon(icon_path).pixmap(icon_coords[2] * self.w_ratio, icon_coords[3] * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
             else:
                 pixmap = QtGui.QIcon(icon_path).pixmap(wp_pic2_2 * self.w_ratio, hp_pic2_2 * self.h_ratio, QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
-            # if icon_rescale:
-            #     pixmap = pixmap.scaled(icon_coords[2] * self.w_ratio, icon_coords[3] * self.h_ratio)
             self.icon2.setPixmap(pixmap)
             self.icon2.setGeometry(icon_coords[0] * self.w_ratio, icon_coords[1] * self.h_ratio, icon_coords[2] * self.w_ratio, icon_coords[3] * self.h_ratio)
-            # w_pic2_2 = 400
-            # h_pic2_2 = 200
-            # self.show_image("icon2", icon_path, (x_pic2_2 - icon_move_left, y_pic2_2, w_pic2_2, h_pic2_2))
 
     def center(self):
-        qr = self.frameGeometry()
-        app = QApplication.instance()
-
-        cp = app.primaryScreen().availableGeometry().center()
-        # cp = QtWidgets.QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
+        center_on_screen(self)
 
     def mouseMoveEvent(self, event):
         if self.print_mouse_coords:
@@ -266,55 +399,27 @@ class NNDLayout(QMainWindow):
         if plot_number == 1:  # This  is to avoid breaking all the code where
             plot_number = ""  # I call the first plot figure instead of figure1
         setattr(self, "figure" + str(plot_number), Figure())
-        # getattr(self, "figure" + str(plot_number)).set_tight_layout(True)
-        # setattr(self, "figure" + str(plot_number), Figure(figsize=(4, 6)))
         setattr(self, "canvas" + str(plot_number), FigureCanvas(getattr(self, "figure" + str(plot_number))))
-        # getattr(self, "canvas" + str(plot_number)).resize(plot_coords[2] * 0.8, plot_coords[3] * 0.8)
-        # getattr(self, "canvas" + str(plot_number)).setParent(self)
-        # setattr(self, "toolbar" + str(plot_number), NavigationToolbar(getattr(self, "canvas" + str(plot_number)), self))
         self.set_layout(plot_coords, getattr(self, "canvas" + str(plot_number)))
-        # self.set_layout(plot_coords, getattr(self, "toolbar" + str(plot_number)))
-
-    # def make_plot_v2(self, plot_number, plot_coords=(90, 300, 370, 370)):
-    #     if plot_number == 1:  # This  is to avoid breaking all the code where
-    #         plot_number = ""  # I call the first plot figure instead of figure1
-    #     setattr(self, "canvas" + str(plot_number), Canvas(self, plot_coords[2], plot_coords[3]))
-    #     setattr(self, "axes_1", getattr(self, "canvas" + str(plot_number)).axes)
-    #     # setattr(self, "figure" + str(plot_number), getattr(self, "canvas" + str(plot_number)).fig)
-    #     # self.set_layout(plot_coords, getattr(self, "canvas" + str(plot_number)))
 
     def make_combobox(self, combobox_number, combobox_items, combobox_coords, f_connect=None, label_attr_name=None, label_str="?",
                       label_coords=None, label_font_name="Times New Roman", label_font_size=14, label_italics=False):
         setattr(self, "comboBox" + str(combobox_number), QtWidgets.QComboBox(self))
         combobox = getattr(self, "comboBox" + str(combobox_number))
-        # combobox.setSizeAdjustPolicy(0)
         combobox.setGeometry(combobox_coords[0] * self.w_ratio, combobox_coords[1] * self.h_ratio,
                              combobox_coords[2] * self.w_ratio, combobox_coords[3] * self.h_ratio)
-        # combobox.setFixedSize((combobox_coords[2] - 10) * self.w_ratio, (combobox_coords[3] + 50) * self.h_ratio)
-        # I'm able to adjust the font of the combobox in the right way, but I'm not able to increase the height of the combobox,
-        # so I'm just going to increase the font when it's clicked instead
-        # font = QtGui.QFont()
-        # font.setPointSize(int(13 * (self.w_ratio + self.h_ratio) / 2))
-        # combobox.setFont(font)
-        # combobox.DropDownHeight = combobox_coords[3] * self.h_ratio
-        # combobox.setStyleSheet("QListView::item {height:" + str(int(combobox_coords[3] * self.h_ratio)) + "px;}")
         combobox.addItems(combobox_items)
-        # combobox.setStyleSheet("QLineEdit::item {font-size:" + str(int(18 * (self.w_ratio + self.h_ratio) / 2)) + "px;}")
-        # combobox.setView(QtWidgets.QListView())
         if label_attr_name:
             if not label_coords:
                 label_coords = (combobox_coords[0] + 80, combobox_coords[1] - 20, combobox_coords[2], combobox_coords[3])
             self.make_label(label_attr_name, label_str, label_coords, label_font_name, label_font_size, label_italics)
-        # if combobox_coords[-1] > 50 * self.h_ratio:
-        #     warnings.warn("Setting combobox with too high height ({}).".format(combobox_coords[-1] * self.h_ratio)
-        #                   + " This may result in interactive problems")
         self.set_layout(combobox_coords, combobox)
         if f_connect:
             combobox.currentIndexChanged.connect(f_connect)
 
     def make_slider(self, slider_attr_name, slider_type, slider_range, slider_tick_pos, slider_tick_interval,
                     slider_value, slider_coords, f_connect=None, label_attr_name=None, label_str="?", label_coords=None,
-                    label_font_name="Times New Roman", label_font_size=14, label_italics=False):  # , update_only_when_mouse_released=False):
+                    label_font_name="Times New Roman", label_font_size=14, label_italics=False):
         setattr(self, slider_attr_name, QtWidgets.QSlider(slider_type))
         slider = getattr(self, slider_attr_name)
         slider.setRange(slider_range[0], slider_range[1])
@@ -325,25 +430,9 @@ class NNDLayout(QMainWindow):
             if not label_coords:
                 label_coords = (slider_coords[0] + 80, slider_coords[1] - 30, slider_coords[2], slider_coords[3])
             self.make_label(label_attr_name, label_str, label_coords, label_font_name, label_font_size, label_italics)
-        # if slider_coords[-1] > 50 * self.h_ratio and slider_type == QtCore.Qt.Orientation.Horizontal:
-        #     warnings.warn("Setting horizontal slider {} with too much height ({}).".format(
-        #         slider_attr_name, slider_coords[-1] * self.h_ratio
-        #     ) + " This may result in interactive problems")
         self.set_layout(slider_coords, slider)
         if f_connect:
             slider.valueChanged.connect(f_connect)
-        # if update_only_when_mouse_released:
-        #     self.f_connect = f_connect
-        #     self.slider_temp = slider
-        #     self.slider_temp.sliderPressed.connect(self.slider_disconnect)
-        #     self.slider_temp.sliderReleased.connect(self.slider_reconnect)
-
-    # def slider_disconnect(self):
-    #     self.slider_temp.valueChanged.disconnect()
-
-    # def slider_reconnect(self):
-    #     self.slider_temp.valueChanged.connect(self.f_connect)
-    #     self.slider_temp.valueChanged.emit(self.slider_temp.value())
 
     def make_button(self, button_attr_name, button_str, button_coords, f_connect, style_sheet="font-size:13px"):
         setattr(self, button_attr_name, QtWidgets.QPushButton(button_str, self))
@@ -374,9 +463,6 @@ class NNDLayout(QMainWindow):
         input_box.setText(input_box_text)
         if func_text_changed is not None:
             input_box.textChanged[str].connect(func_text_changed)
-        # font = input_box.font()
-        # font.setPointSize(int(20 * (self.w_ratio + self.h_ratio) / 2))
-        # input_box.setFont(font)
         if self.running_on_windows:
             input_box.setStyleSheet("font: {}px".format(int(12 * 0.9)))
         elif self.running_on_linux:
@@ -385,13 +471,22 @@ class NNDLayout(QMainWindow):
             input_box.setStyleSheet("font: {}px".format(int(12 * (self.w_ratio + self.h_ratio) / 2)))
         input_box.setGeometry(input_box_coords[0] * self.w_ratio, input_box_coords[1] * self.h_ratio,
                               input_box_coords[2] * self.w_ratio, input_box_coords[3] * self.h_ratio)
-        # self.set_layout((input_box_coords[0] * 1.01, input_box_coords[1], input_box_coords[2] * 0.9, input_box_coords[3]), input_box)
         self.set_layout(input_box_coords, input_box)
 
     def get_slider_value_and_update(self, slider, slider_label, value_multiplier=1, round_pos=0):
         value = slider.value() * value_multiplier
         slider_label.setText(slider_label.text()[:slider_label.text().find(":") + 2] + str(round(value, round_pos)))
         return value
+
+    def show(self):
+        # Demo windows are shown inside a ScalableWindow so they can be resized
+        # with a fixed aspect ratio; everything else shows normally.
+        if self._enable_scaling:
+            if self._scaler is None:
+                self._scaler = ScalableWindow(self)
+            self._scaler.show()
+        else:
+            super().show()
 
     def closeEvent(self, event):
         super().closeEvent(event)
@@ -512,9 +607,6 @@ class NNDLayout(QMainWindow):
     @staticmethod
     def tansig(x):
         return 2 / (1 + math.e ** (-2 * x)) - 1
-
-    def nndtansig(self, x):
-        a = self.tansig(x)
 
     def initial_sound(self, sound_name, left_path):
         setattr(self, sound_name, QtMultimedia.QSoundEffect())

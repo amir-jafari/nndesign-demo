@@ -111,6 +111,23 @@ NIF_NAMES = list(NIF_FN.keys())
 LAYER_COLORS = ['#FFB347', '#87CEEB', '#90EE90', '#DDA0DD', '#F08080', '#B0E0E6', '#FAFAD2']
 SIG_COLORS   = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
 
+# ══════════════════════════════════════════════════════════════
+# Layout (base 700 × 680 window coordinates)
+#
+# These demos need a wider control panel than the standard split allows, so
+# the vertical divider is moved left of the default 520. The header band of
+# the right panel puts the description (left) and chapter logo (right) on one
+# row, leaving the rest of the panel height to the controls.
+# ══════════════════════════════════════════════════════════════
+DIVIDER_X  = 400                     # x of the blue vertical line
+PLOT_RECT  = (5, 135, 391, 535)      # figure, up to (not touching) the divider
+PANEL_RECT = (403, 135, 294, 505)    # control panel, below the header band
+
+# Control-panel fonts. Group boxes propagate their font to every child widget,
+# so setting the group font sizes all the labels/combos/sliders inside it.
+def _grp_font():
+    return QFont('Arial', 12, QFont.Weight.Bold)
+
 
 # ══════════════════════════════════════════════════════════════
 # LFFN  —  Layered Feed-Forward Network
@@ -209,12 +226,12 @@ def _slider_row(label, lo, hi, val, scale, parent_vl, label_width=120, tooltip=N
     """
     rw = QWidget()
     rh = QHBoxLayout(rw)
-    rh.setContentsMargins(0, 2, 0, 2)
+    rh.setContentsMargins(0, 1, 0, 1)
     lbl = QLabel(label)
     lbl.setFixedWidth(label_width)
     sl  = _make_slider(lo, hi, val, scale)
     vl  = QLabel(f'{val:.2f}')
-    vl.setFixedWidth(36)
+    vl.setFixedWidth(46)
     if tooltip:
         lbl.setToolTip(tooltip); sl.setToolTip(tooltip)
     rh.addWidget(lbl); rh.addWidget(sl); rh.addWidget(vl)
@@ -224,8 +241,9 @@ def _slider_row(label, lo, hi, val, scale, parent_vl, label_width=120, tooltip=N
 def _signal_panel(parent_vl):
     """Input signal group; returns dict of widgets."""
     grp = QGroupBox("Input Signal  p(t)")
-    grp.setFont(QFont('Arial', 9, QFont.Weight.Bold))
+    grp.setFont(_grp_font())
     vl  = QVBoxLayout(grp)
+    vl.setSpacing(2)
 
     def _row(lbl_txt, widget):
         rw = QWidget(); rh = QHBoxLayout(rw); rh.setContentsMargins(0, 0, 0, 0)
@@ -260,12 +278,19 @@ def _build_signal(widgets):
 
 
 def _place_header(demo, description):
-    """Lay out the control-panel header band, matching the other demos:
-    a standard-size description on the left and the chapter logo on the right,
-    parallel to each other."""
-    demo.make_label("label_desc", description, (530, 45, 355, 130))
-    demo.icon1.setGeometry(int(905 * demo.w_ratio), int(35 * demo.h_ratio),
+    """Lay out the control-panel header band: description text on the left and
+    the chapter logo on the right, sharing one row at the top of the panel."""
+    demo.make_label("label_desc", description, (425, 30, 148, 100))
+    demo.icon1.setGeometry(int(575 * demo.w_ratio), int(30 * demo.h_ratio),
                            int(120 * demo.w_ratio), int(100 * demo.h_ratio))
+
+
+def _anim_interval_ms(slider_value):
+    """Map the speed slider (100–1000) to a frame interval in ms.
+
+    The 0.7 factor speeds up the whole range: 700 ms (slowest) → 385 ms at the
+    centred default → 70 ms (fastest)."""
+    return int(0.7 * (1100 - slider_value))
 
 
 def _animation_group(mixin):
@@ -275,8 +300,9 @@ def _animation_group(mixin):
     on ``mixin`` and wires them to the mixin's handlers. Returns the QGroupBox.
     """
     grp = QGroupBox("Animation")
-    grp.setFont(QFont('Arial', 9, QFont.Weight.Bold))
+    grp.setFont(_grp_font())
     vl = QVBoxLayout(grp)
+    vl.setSpacing(2)
 
     mixin.checkbox_animation = QCheckBox("Enable step-by-step animation")
     mixin.checkbox_animation.setChecked(False)
@@ -287,7 +313,7 @@ def _animation_group(mixin):
     srh.addWidget(QLabel("Speed:"))
     mixin.slider_animation = QSlider(Qt.Orientation.Horizontal)
     mixin.slider_animation.setRange(100, 1000)
-    mixin.slider_animation.setValue(600)
+    mixin.slider_animation.setValue(550)   # centred; interval via _anim_interval_ms
     mixin.slider_animation.setToolTip("Slide right to speed up the animation")
     mixin.slider_animation.valueChanged.connect(mixin.change_animation_speed)
     srh.addWidget(mixin.slider_animation)
@@ -317,7 +343,7 @@ def _animation_group(mixin):
 # ══════════════════════════════════════════════════════════════
 class Ch7AnimationMixin:
     def init_animation_state(self):
-        self.animation_speed = 500          # ms between frames
+        self.animation_speed = _anim_interval_ms(550)   # matches the slider default
         self.is_animating    = False
         self.animation_paused = False
         self.animation       = None         # QTimer (auto-stopped by NNDLayout.closeEvent)
@@ -382,7 +408,7 @@ class Ch7AnimationMixin:
                 self._draw_static(self._anim_result)
 
     def change_animation_speed(self):
-        self.animation_speed = 1100 - self.slider_animation.value()
+        self.animation_speed = _anim_interval_ms(self.slider_animation.value())
         if self.animation is not None:
             self.animation.setInterval(self.animation_speed)
 

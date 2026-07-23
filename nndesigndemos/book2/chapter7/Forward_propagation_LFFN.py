@@ -30,14 +30,15 @@ from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
 from nndesigndemos.book2.chapter7.ch7_utils import (
     ACT_NAMES, WF_NAMES, NIF_NAMES, LAYER_COLORS, LFFN,
-    Ch7AnimationMixin, _animation_group, _place_header,
+    Ch7AnimationMixin, _animation_group, _place_header, _grp_font,
+    DIVIDER_X, PLOT_RECT, PANEL_RECT,
 )
 
 
 class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
-        super(LFFNForwardPropagation, self).__init__(
-            w_ratio, h_ratio, dpi, main_menu=2, overwrite_size=(1090, 740))
+        super(LFFNForwardPropagation, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
+        self.xl2 = DIVIDER_X   # widen the control panel (before fill_chapter)
 
         self.fill_chapter(
             "LFFN", 7,
@@ -45,7 +46,7 @@ class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
             PACKAGE_PATH + "Logo/book2_logos/7.svg", None, 2, show_info=False)
 
         # Header band: description (left) + chapter logo (right)
-        _place_header(self, "Forward propagation through\na static layered\nfeed-forward network.")
+        _place_header(self, "Forward propagation\nthrough a static\nlayered feed-forward\nnetwork.")
 
         self._layer_rows  = []   # [(neurons_spin, act_cb, wf_cb, nif_cb), …]
         self._input_spins = []
@@ -53,7 +54,7 @@ class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
         self.init_animation_state()
 
         # ── Figure (left region) ─────────────────────────────
-        self.make_plot(1, (15, 150, 500, 555))
+        self.make_plot(1, PLOT_RECT)
 
         # ── Control panel (right region) ─────────────────────
         self._build_panel()
@@ -66,13 +67,16 @@ class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
     # ─────────────────────────────────────────────────────────
     def _build_panel(self):
         panel = QWidget()
-        lv = QVBoxLayout(panel); lv.setSpacing(8)
+        lv = QVBoxLayout(panel); lv.setSpacing(4)
         lv.setContentsMargins(4, 4, 4, 4)
+
+        grp_font = _grp_font()
 
         # Network shape
         shape_grp = QGroupBox("Network Shape")
-        shape_grp.setFont(QFont('Arial', 9, QFont.Weight.Bold))
+        shape_grp.setFont(grp_font)
         shape_vl  = QVBoxLayout(shape_grp)
+        shape_vl.setSpacing(2)
 
         def _spin_row(label, lo, hi, val, vl):
             rw = QWidget(); rh = QHBoxLayout(rw); rh.setContentsMargins(0, 0, 0, 0)
@@ -86,22 +90,27 @@ class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
 
         # Per-layer settings (no scrollbars; M ≤ 6 rows fit directly)
         layer_grp = QGroupBox("Per-layer: S^m | f^m | wf^m | nif^m")
-        layer_grp.setFont(QFont('Arial', 9, QFont.Weight.Bold))
+        layer_grp.setFont(grp_font)
         self.layer_grp_vl = QVBoxLayout(layer_grp)
+        self.layer_grp_vl.setSpacing(2)
+        self.layer_grp_vl.setContentsMargins(2, 4, 2, 4)
         self._layer_container = None
         self._rebuild_layers(self.m_spin.value())
         lv.addWidget(layer_grp)
 
         # Input vector — 2-column grid (max 4 rows for R ≤ 8), no scrollbar
         inp_grp = QGroupBox("Input vector  p")
-        inp_grp.setFont(QFont('Arial', 9, QFont.Weight.Bold))
+        inp_grp.setFont(grp_font)
         self.inp_grp_vl = QVBoxLayout(inp_grp)
+        self.inp_grp_vl.setSpacing(2)
+        self.inp_grp_vl.setContentsMargins(6, 4, 6, 4)
         self._inp_container = None
         self._rebuild_inputs(self.r_spin.value())
         lv.addWidget(inp_grp)
 
         # Seed
         seed_grp = QGroupBox("Weight Init")
+        seed_grp.setFont(grp_font)
         seed_vl  = QHBoxLayout(seed_grp)
         seed_vl.addWidget(QLabel("Random seed:"))
         self.seed_spin = QSpinBox(); self.seed_spin.setRange(0, 9999); self.seed_spin.setValue(42)
@@ -124,7 +133,7 @@ class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
         scroll = QScrollArea(); scroll.setWidgetResizable(True); scroll.setWidget(panel)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self.set_layout((525, 160, 520, 555), scroll)
+        self.set_layout(PANEL_RECT, scroll)
 
     def _rebuild_layers(self, M):
         # Replace the previous rows (if any)
@@ -133,24 +142,27 @@ class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
             self._layer_container.setParent(None)   # detach immediately (no ghost)
             self._layer_container.deleteLater()
         container = QWidget()
-        vl = QVBoxLayout(container); vl.setSpacing(3)
+        # Dense 5-widget rows: slightly smaller, non-bold font than the rest of
+        # the panel so a full row (L#, S, f, wf, nif) fits the panel width.
+        container.setFont(QFont('Arial', 11))
+        vl = QVBoxLayout(container); vl.setSpacing(2); vl.setContentsMargins(0, 0, 0, 0)
         self._layer_rows = []
         def_n   = [4, 3, 4, 2, 3, 2]
         def_act = ['Sigmoid', 'Tanh', 'ReLU', 'Linear', 'Sigmoid', 'Sigmoid']
         def_wf  = ['dotprod'] * 6
         def_nif = ['netsum'] * 6
         for m in range(M):
-            rw = QWidget(); rh = QHBoxLayout(rw); rh.setContentsMargins(2, 1, 2, 1)
-            lbl = QLabel(f"L{m+1}:"); lbl.setFixedWidth(30)
+            rw = QWidget(); rh = QHBoxLayout(rw); rh.setContentsMargins(0, 1, 0, 1); rh.setSpacing(2)
+            lbl = QLabel(f"L{m+1}:"); lbl.setFixedWidth(24)
             rh.addWidget(lbl)
-            n_sp = QSpinBox(); n_sp.setRange(1, 16); n_sp.setValue(def_n[m]); n_sp.setFixedWidth(46)
+            n_sp = QSpinBox(); n_sp.setRange(1, 16); n_sp.setValue(def_n[m]); n_sp.setFixedWidth(44)
             n_sp.setToolTip(f"S^{m+1} — neurons in layer {m+1}")
             act_cb = QComboBox(); act_cb.addItems(ACT_NAMES); act_cb.setCurrentText(def_act[m])
-            act_cb.setToolTip("Activation  f^m"); act_cb.setFixedWidth(84)
+            act_cb.setToolTip("Activation  f^m"); act_cb.setFixedWidth(90)
             wf_cb  = QComboBox(); wf_cb.addItems(WF_NAMES);  wf_cb.setCurrentText(def_wf[m])
-            wf_cb.setToolTip("Weight function  wf^m"); wf_cb.setFixedWidth(76)
+            wf_cb.setToolTip("Weight function  wf^m"); wf_cb.setFixedWidth(82)
             nif_cb = QComboBox(); nif_cb.addItems(NIF_NAMES); nif_cb.setCurrentText(def_nif[m])
-            nif_cb.setToolTip("Net-input function  nif^m"); nif_cb.setFixedWidth(68)
+            nif_cb.setToolTip("Net-input function  nif^m"); nif_cb.setFixedWidth(75)
             for w in (n_sp, act_cb, wf_cb, nif_cb): rh.addWidget(w)
             vl.addWidget(rw)
             self._layer_rows.append((n_sp, act_cb, wf_cb, nif_cb))
@@ -169,11 +181,12 @@ class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
             self._inp_container.setParent(None)   # detach immediately (no ghost)
             self._inp_container.deleteLater()
         container = QWidget()
-        grid = QGridLayout(container); grid.setSpacing(3); grid.setContentsMargins(2, 1, 2, 1)
+        grid = QGridLayout(container); grid.setContentsMargins(0, 1, 0, 1)
+        grid.setHorizontalSpacing(14); grid.setVerticalSpacing(2)   # clear gap between the 2 columns
         self._input_spins = []
         defaults = [0.5, 0.8, -0.3, 1.0, 0.2, -0.6, 0.9, -0.1]
         for r in range(R):
-            cell = QWidget(); ch = QHBoxLayout(cell); ch.setContentsMargins(2, 1, 2, 1)
+            cell = QWidget(); ch = QHBoxLayout(cell); ch.setContentsMargins(0, 1, 0, 1); ch.setSpacing(2)
             lbl = QLabel(f"p[{r+1}] ="); lbl.setFixedWidth(46)
             sp = QDoubleSpinBox(); sp.setRange(-5.0, 5.0); sp.setSingleStep(0.1)
             sp.setValue(defaults[r]); sp.setDecimals(2)
@@ -220,8 +233,11 @@ class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
         n_cols = M + 1
         axs    = self.figure.subplots(1, n_cols, gridspec_kw={'wspace': 0.5})
         if n_cols == 1: axs = [axs]
-        # Reserve room at the top so the suptitle is fully visible.
-        self.figure.subplots_adjust(top=0.80, bottom=0.08, left=0.08, right=0.97)
+        # With many columns each one is too narrow for "wf | nif" on one line —
+        # switch to compact 4-line column titles and a 2-line suptitle.
+        compact = n_cols > 5
+        # Reserve room at the top so the suptitle and column titles are fully visible.
+        self.figure.subplots_adjust(top=0.76 if compact else 0.80, bottom=0.08, left=0.08, right=0.97)
 
         for m, ax in enumerate(axs):
             a   = net.a[m]
@@ -247,13 +263,18 @@ class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
 
             title_color = '#003366' if revealed else '#bbbbbb'
             if m == 0:
-                ax.set_title(f'$a^0 = p$\nR={len(a)}', fontsize=7.5, color=title_color)
+                ax.set_title(f'$a^0 = p$\nR={len(a)}', fontsize=7.5 if compact else 8.5,
+                             color=title_color)
             else:
                 wf_lbl  = net.wf_names[m-1]
                 nif_lbl = net.nif_names[m-1]
                 fn_lbl  = net.act_names[m-1]
-                ax.set_title(f'$a^{m}$  S={len(a)}\n{wf_lbl} | {nif_lbl}\n{fn_lbl}',
-                             fontsize=6.5, color=title_color)
+                if compact:
+                    ax.set_title(f'$a^{m}$ S={len(a)}\n{wf_lbl}\n{nif_lbl}\n{fn_lbl}',
+                                 fontsize=6.5, color=title_color)
+                else:
+                    ax.set_title(f'$a^{m}$  S={len(a)}\n{wf_lbl} | {nif_lbl}\n{fn_lbl}',
+                                 fontsize=7.5, color=title_color)
 
             if m == highlight:
                 for spine in ax.spines.values():
@@ -261,8 +282,10 @@ class LFFNForwardPropagation(Ch7AnimationMixin, NNDLayout):
 
         wf_set  = set(net.wf_names);  wf_str  = ','.join(sorted(wf_set))
         nif_set = set(net.nif_names); nif_str = ','.join(sorted(nif_set))
-        title = ('LFFN Forward Pass   '
-                 + '→'.join(f'S{m+1}={s}' for m, s in enumerate(net.layer_sizes))
-                 + f'   wf: {wf_str}   nif: {nif_str}')
-        self.figure.suptitle(title, fontsize=8.5, color='darkred', y=0.97)
+        shapes  = '→'.join(f'S{m+1}={s}' for m, s in enumerate(net.layer_sizes))
+        if compact:
+            title = f'LFFN Forward Pass   wf: {wf_str}   nif: {nif_str}\n{shapes}'
+        else:
+            title = f'LFFN Forward Pass   {shapes}   wf: {wf_str}   nif: {nif_str}'
+        self.figure.suptitle(title, fontsize=10, color='darkred', y=0.99, va='top')
         self.canvas.draw()

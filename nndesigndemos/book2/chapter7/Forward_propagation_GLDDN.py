@@ -23,21 +23,21 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QComboBox, QGroupBox, QScrollArea,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
 
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
 from nndesigndemos.book2.chapter7.ch7_utils import (
     ACT_NAMES, WF_NAMES, NIF_NAMES, ACT_FUNCS, SIG_COLORS,
     _scalar_wf, _scalar_nif, _separator, _slider_row, _signal_panel, _build_signal,
-    Ch7AnimationMixin, _animation_group, _place_header,
+    Ch7AnimationMixin, _animation_group, _place_header, _grp_font,
+    DIVIDER_X, PLOT_RECT, PANEL_RECT,
 )
 
 
 class GLDDNForwardPropagation(Ch7AnimationMixin, NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
-        super(GLDDNForwardPropagation, self).__init__(
-            w_ratio, h_ratio, dpi, main_menu=2, overwrite_size=(1090, 740))
+        super(GLDDNForwardPropagation, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
+        self.xl2 = DIVIDER_X   # widen the control panel (before fill_chapter)
 
         self.fill_chapter(
             "GLDDN", 7,
@@ -45,13 +45,13 @@ class GLDDNForwardPropagation(Ch7AnimationMixin, NNDLayout):
             PACKAGE_PATH + "Logo/book2_logos/7.svg", None, 2, show_info=False)
 
         # Header band: description (left) + chapter logo (right)
-        _place_header(self, "Forward propagation through\na dynamic network with\ndelays and feedback.")
+        _place_header(self, "Forward propagation\nthrough a dynamic\nnetwork with delays\nand feedback.")
 
         self.init_animation_state()
         self._stride = 1
 
         # ── Figure (left region) ─────────────────────────────
-        self.make_plot(1, (15, 150, 500, 555))
+        self.make_plot(1, PLOT_RECT)
 
         # ── Control panel (right region) ─────────────────────
         self._build_panel()
@@ -64,53 +64,49 @@ class GLDDNForwardPropagation(Ch7AnimationMixin, NNDLayout):
     # ─────────────────────────────────────────────────────────
     def _build_panel(self):
         panel = QWidget()
-        lv = QVBoxLayout(panel); lv.setSpacing(6)
+        lv = QVBoxLayout(panel); lv.setSpacing(4)
         lv.setContentsMargins(4, 4, 4, 4)
 
-        grp_font = QFont('Arial', 9, QFont.Weight.Bold)
+        grp_font = _grp_font()
 
         # Input signal
         self.sig_w = _signal_panel(lv)
         for w in self.sig_w.values():
             (w.valueChanged if hasattr(w, 'valueChanged') else w.currentIndexChanged).connect(self._on_change)
 
-        # Layer 1 & Layer 2 weights — side by side, each half width
-        weights_row = QWidget()
-        wr = QHBoxLayout(weights_row); wr.setContentsMargins(0, 0, 0, 0); wr.setSpacing(6)
-
+        # Layer 1 & Layer 2 weights — stacked, each full panel width
         # (short label, full tooltip, lo, hi, default)
         l1_grp = QGroupBox("Layer 1 Weights"); l1_grp.setFont(grp_font)
-        l1_vl  = QVBoxLayout(l1_grp)
+        l1_vl  = QVBoxLayout(l1_grp); l1_vl.setSpacing(2)
         w_defs1 = [('IW¹(0)',  'IW¹(0)  p(t)',      -3.0, 3.0, 1.2),
                    ('IW¹(1)',  'IW¹(1)  p(t−1)',    -3.0, 3.0, 0.4),
                    ('LW¹¹(1)', 'LW¹¹(1)  a¹(t−1)',  -1.5, 1.5, 0.55),
                    ('b¹',      'b¹  (bias)',        -3.0, 3.0, 0.0)]
         self.sl1 = []
         for label, tip, lo, hi, val in w_defs1:
-            sl, vlab = _slider_row(label, lo, hi, val, 100, l1_vl, label_width=62, tooltip=tip)
+            sl, vlab = _slider_row(label, lo, hi, val, 100, l1_vl, label_width=78, tooltip=tip)
             self._wire_weight_slider(sl, vlab)
             self.sl1.append(sl)
-        wr.addWidget(l1_grp)
+        lv.addWidget(l1_grp)
 
         l2_grp = QGroupBox("Layer 2 Weights"); l2_grp.setFont(grp_font)
-        l2_vl  = QVBoxLayout(l2_grp)
+        l2_vl  = QVBoxLayout(l2_grp); l2_vl.setSpacing(2)
         w_defs2 = [('LW²¹(0)', 'LW²¹(0)  a¹(t)',    -3.0, 3.0, 1.0),
                    ('LW²¹(1)', 'LW²¹(1)  a¹(t−1)',  -3.0, 3.0, 0.2),
                    ('LW²²(1)', 'LW²²(1)  a²(t−1)',  -1.5, 1.5, 0.3),
                    ('b²',      'b²  (bias)',        -3.0, 3.0, 0.0)]
         self.sl2 = []
         for label, tip, lo, hi, val in w_defs2:
-            sl, vlab = _slider_row(label, lo, hi, val, 100, l2_vl, label_width=62, tooltip=tip)
+            sl, vlab = _slider_row(label, lo, hi, val, 100, l2_vl, label_width=78, tooltip=tip)
             self._wire_weight_slider(sl, vlab)
             self.sl2.append(sl)
-        wr.addWidget(l2_grp)
-
-        lv.addWidget(weights_row)
+        lv.addWidget(l2_grp)
 
         # Functions per layer
         fn_grp = QGroupBox("Functions  (per layer)")
         fn_grp.setFont(grp_font)
         fn_vl  = QVBoxLayout(fn_grp)
+        fn_vl.setSpacing(2)
 
         def _cb_row(lbl, items, default, vl):
             rw = QWidget(); rh = QHBoxLayout(rw); rh.setContentsMargins(0, 0, 0, 0)
@@ -137,7 +133,7 @@ class GLDDNForwardPropagation(Ch7AnimationMixin, NNDLayout):
         scroll = QScrollArea(); scroll.setWidgetResizable(True); scroll.setWidget(panel)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self.set_layout((525, 160, 520, 555), scroll)
+        self.set_layout(PANEL_RECT, scroll)
 
     def _wire_weight_slider(self, sl, vlab):
         """Weight slider: always update its value label; instant redraw while

@@ -92,6 +92,10 @@ def nndtoc(play_sound=True):
     import sys
     # QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     app = QApplication(sys.argv)
+    # The native macOS style renders/behaves badly inside the QGraphicsProxyWidget
+    # every window is embedded in (sliders lose their groove and can't be dragged);
+    # Fusion draws everything with QPainter and works reliably there.
+    app.setStyle("Fusion")
     # app.setWindowIcon(QtGui.QIcon(PACKAGE_PATH + "Logo/CorelFrontCoverE.png"))
     dimensions = app.primaryScreen().geometry()
     w_screen, h_screen = dimensions.width(), dimensions.height()
