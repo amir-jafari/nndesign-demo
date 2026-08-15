@@ -11,7 +11,7 @@ class Scaling(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(Scaling, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Normalization & Initialization Scaling", 4,
+        self.fill_chapter("Scaling", 4,
                           "\nChoose a initialization\nscheme and whether to\nuse BatchNorm or not."
                           "\n\nThe distribution of input,\nnet input and output\nis shown on the left.\n\n",
                           PACKAGE_PATH + "Chapters/4_D/Logo_Ch_4.svg", None, 2,
@@ -107,7 +107,7 @@ class Scaling(NNDLayout):
 
         # sub_plot.set_xlim(xlim)
         sub_plot.set_title(
-            'Input layer' if is_input else f'Output layer{layer}'
+            'Input layer' if is_input else f'Layer {layer} Output'
         )
         canvas.draw()
 

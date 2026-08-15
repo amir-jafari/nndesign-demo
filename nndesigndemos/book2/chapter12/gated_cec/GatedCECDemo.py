@@ -67,7 +67,7 @@ class GatedCECDemo(NNDLayout):
                         (ani_x-12, ani_y+80, 150, 30), self.change_animation_speed)
 
         self.make_button("btn_play_pause", "Pause",
-                        (ani_x, ani_y+115, 80, 30), self.toggle_play_pause)
+                        (ani_x - 12 + (150 - 80) // 2, ani_y+115, 80, 30), self.toggle_play_pause)  # centered under the speed slider
 
         # Animation variables
         self.animation_speed = 500
@@ -99,16 +99,21 @@ class GatedCECDemo(NNDLayout):
         self.gi_buttons = []
         self.gf_buttons = []
 
+        # All geometry below is in design coords, scaled like the rest of the window
+        w, h = self.w_ratio, self.h_ratio
+        label_px = int(11 * (w + h) / 2)
+
         # Label for g^i(t) row
         label_gi = QtWidgets.QLabel("Input Gate g^i(t):", self)
-        label_gi.setGeometry(button_start_x, button_start_y - 25, 150, 20)
-        label_gi.setStyleSheet("font-size: 11px; font-weight: bold;")
+        label_gi.setGeometry(button_start_x * w, (button_start_y - 25) * h, 150 * w, 20 * h)
+        label_gi.setStyleSheet(f"font-size: {label_px}px; font-weight: bold;")
         label_gi.show()
 
         # Create g^i(t) buttons
         for i in range(self.max_length):
             button = QtWidgets.QPushButton(str(int(self.gi[i])), self)
-            button.setGeometry(button_start_x + i * button_spacing, button_start_y, button_width, button_height)
+            button.setGeometry((button_start_x + i * button_spacing) * w, button_start_y * h,
+                               button_width * w, button_height * h)
             button.setStyleSheet(self.get_button_style(int(self.gi[i])))
             button.clicked.connect(lambda checked, idx=i: self.toggle_gi(idx))
             button.show()
@@ -116,54 +121,58 @@ class GatedCECDemo(NNDLayout):
 
         # Label for g^f(t) row
         label_gf = QtWidgets.QLabel("Feedback Gate g^f(t):", self)
-        label_gf.setGeometry(button_start_x, button_start_y + row_spacing - 25, 150, 20)
-        label_gf.setStyleSheet("font-size: 11px; font-weight: bold;")
+        label_gf.setGeometry(button_start_x * w, (button_start_y + row_spacing - 25) * h, 150 * w, 20 * h)
+        label_gf.setStyleSheet(f"font-size: {label_px}px; font-weight: bold;")
         label_gf.show()
 
         # Create g^f(t) buttons
         for i in range(self.max_length):
             button = QtWidgets.QPushButton(str(int(self.gf[i])), self)
-            button.setGeometry(button_start_x + i * button_spacing, button_start_y + row_spacing, button_width, button_height)
+            button.setGeometry((button_start_x + i * button_spacing) * w, (button_start_y + row_spacing) * h,
+                               button_width * w, button_height * h)
             button.setStyleSheet(self.get_button_style(int(self.gf[i])))
             button.clicked.connect(lambda checked, idx=i: self.toggle_gf(idx))
             button.show()
             self.gf_buttons.append(button)
 
-        # Add time step labels below second row
+        # Add time step labels below second row, centered under each button
         for i in range(self.max_length):
             label = QtWidgets.QLabel(str(i), self)
-            label.setGeometry(button_start_x + i * button_spacing + 14, button_start_y + row_spacing + 35, 20, 20)
-            label.setStyleSheet("font-size: 9px; color: gray;")
+            label.setGeometry((button_start_x + i * button_spacing) * w, (button_start_y + row_spacing + 35) * h,
+                              button_width * w, 20 * h)
+            label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            label.setStyleSheet(f"font-size: {int(9 * (w + h) / 2)}px; color: gray;")
             label.show()
 
     def get_button_style(self, value):
         """Get button style based on value (0 or 1)"""
+        font_px = int(12 * (self.w_ratio + self.h_ratio) / 2)
         if value == 0:
-            return """
-                QPushButton {
+            return f"""
+                QPushButton {{
                     background-color: #f0f0f0;
                     border: 2px solid #999;
                     border-radius: 5px;
-                    font-size: 12px;
+                    font-size: {font_px}px;
                     font-weight: bold;
-                }
-                QPushButton:hover {
+                }}
+                QPushButton:hover {{
                     background-color: #e0e0e0;
-                }
+                }}
             """
         else:
-            return """
-                QPushButton {
+            return f"""
+                QPushButton {{
                     background-color: #4CAF50;
                     color: white;
                     border: 2px solid #45a049;
                     border-radius: 5px;
-                    font-size: 12px;
+                    font-size: {font_px}px;
                     font-weight: bold;
-                }
-                QPushButton:hover {
+                }}
+                QPushButton:hover {{
                     background-color: #45a049;
-                }
+                }}
             """
 
     def toggle_gi(self, idx):
@@ -232,7 +241,7 @@ class GatedCECDemo(NNDLayout):
         figure.clf()
         ax = figure.add_subplot(1, 1, 1)
 
-        figure.subplots_adjust(left=0.175, right=0.95, top=0.88, bottom=0.15)
+        figure.subplots_adjust(left=0.175, right=0.95, top=0.86, bottom=0.26)  # room for tick + 'Time Step' labels
 
         x = np.arange(len(array))
 

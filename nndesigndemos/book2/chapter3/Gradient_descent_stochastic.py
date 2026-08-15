@@ -12,7 +12,7 @@ class GradientDescentStochastic(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(GradientDescentStochastic, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Gradient Descent Stochastic", 3, "\nClick anywhere on the\ngraph to start an initial guess."
+        self.fill_chapter("Stochastic Gradient Descent", 3, "\nClick anywhere on the\ngraph to start an initial guess."
                                                             "\nThen the steepest descent\ntrajectory will be shown.\n\n"
                                                             "Modify the learning rate\nby moving the slide bar.\n\n"
                                                             "Experiment with different\ninitial guesses and\nlearning rates.",
@@ -26,7 +26,7 @@ class GradientDescentStochastic(NNDLayout):
         self.figure.set_tight_layout(True)
         self.figure2.set_tight_layout(True)
 
-        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 30), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 1,
+        self.make_slider("slider_lr", QtCore.Qt.Orientation.Horizontal, (0, 15), QtWidgets.QSlider.TickPosition.TicksBelow, 1, 1,
                          (self.x_chapter_usual, 360, self.w_chapter_slider, 50), self.slider, "label_lr",
                          "Learning rate: 0.01", (self.x_chapter_usual + 40, 360 - 25, self.w_chapter_slider, 50))
         self.lr = float(self.slider_lr.value() / 100)

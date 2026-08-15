@@ -12,7 +12,7 @@ from nndesigndemos.book2.chapter9.RadialProblemSimple import Multilayer
 
 class LinearizedNetworkResponse(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
-        super(LinearizedNetworkResponse, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
+        super(LinearizedNetworkResponse, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
         self.fill_chapter("Linearized Network Response", 9,
                           "Click a location in the left\ngraph where you want to\nlinearize the network\nresponse.",
@@ -96,9 +96,9 @@ class LinearizedNetworkResponse(NNDLayout):
         self.axes_3.set_yticks([-2, 0, 2])
         self.axes_3.set_aspect('equal', 'box')
 
-        self.axes_3.set_xlabel("$a1$")
+        self.axes_3.set_xlabel("$p_1$")
         # self.axes_3.xaxis.set_label_coords(0.5, 0)
-        self.axes_3.set_ylabel("$a2$")
+        self.axes_3.set_ylabel("$p_2$")
         self.axes_3.yaxis.set_label_coords(-0.1, 0.5)
 
         for i in range(len(gd)):
@@ -145,9 +145,9 @@ class LinearizedNetworkResponse(NNDLayout):
         # self.axes_4.tick_params(axis='y', labelsize=14)
         # self.axes_4.zaxis.set_tick_params(labelsize=fsize)
 
-        self.axes_4.set_xlabel("$a1$")
-        self.axes_4.set_ylabel("$a2$")
-        self.axes_4.set_zlabel("$V(a)$")
+        self.axes_4.set_xlabel("$p_1$")
+        self.axes_4.set_ylabel("$p_2$")
+        self.axes_4.set_zlabel("$a$")
 
         self.canvas4.draw()
 

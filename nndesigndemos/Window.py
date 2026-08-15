@@ -173,11 +173,11 @@ BOOK1_CHAPTERS_DEMOS = {
 
 BOOK2_CHAPTERS_DEMOS = {
     2: ["Multilayer Networks", "Chapter 2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
-    3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Gradient Descent Stochastic"],
-    4: ["Supplemental Training", "Chapter 4 demos", 'Normalization & Initialization Scaling', 'Normalization & Initialization Effect', 'Dropout'],
+    3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Stochastic Gradient Descent"],
+    4: ["Supplemental Training", "Chapter 4 demos", 'Scaling', 'Initialization Effect', 'Dropout'],
     5: ["Python Intro", "Chapter 5 demos", "Cheatsheet", "Learning Scheduler"],
     6: ["TensorFlow Intro", "Chapter 6 demos", "Cheatsheet"],
-    7: ["Deep Learning Notation", "Chapter 7 demos", "LFFN", "GLDDN"],
+    7: ["General Network Notation", "Chapter 7 demos", "LFFN", "GLDDN"],
     8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
     10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],

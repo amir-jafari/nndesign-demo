@@ -105,7 +105,7 @@ class ImpulseResponse(NNDLayout):
     def initialize_table(self):
         """Create and setup the sequence table"""
         self.table = QTableWidget(1, self.n_outputs, self)
-        self.table.setGeometry(20, 190, 480, 63)
+        row_h = int(40 * self.h_ratio)
 
         self.table.setVerticalHeaderLabels(['a(t)'])
 
@@ -114,16 +114,26 @@ class ImpulseResponse(NNDLayout):
         self.table.setHorizontalHeaderLabels(headers)
 
         self.table.setCornerButtonEnabled(False)
+        # Draw the (empty) top-left corner as its own bordered cell so the row-label
+        # column doesn't look like it sits under the first time-step header
+        self.table.setStyleSheet("QTableCornerButton::section { background-color: #d6d6d6; "
+                                 "border: 1px solid #a8a8a8; }")
 
         # Make table look nice
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
-        self.table.verticalHeader().setDefaultSectionSize(40)
+        self.table.verticalHeader().setDefaultSectionSize(row_h)
+        self.table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         # Set font size
         font = self.table.font()
-        font.setPointSize(10)
+        font.setPointSize(int(10 * (self.w_ratio + self.h_ratio) / 2))
         self.table.setFont(font)
+
+        # Fit the table height exactly to its header + rows (no blank strip, no scrollbar)
+        table_h = (self.table.horizontalHeader().sizeHint().height() + 1 * row_h
+                   + 2 * self.table.frameWidth())
+        self.table.setGeometry(20 * self.w_ratio, 197 * self.h_ratio, 480 * self.w_ratio, table_h)
 
         self.table.show()
 

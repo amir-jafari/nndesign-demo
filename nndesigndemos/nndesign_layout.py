@@ -164,6 +164,39 @@ class ScalableWindow(QtWidgets.QGraphicsView):
         super().closeEvent(event)
 
 
+class JumpSlider(QtWidgets.QSlider):
+    """QSlider that jumps straight to the clicked position.
+
+    The app uses the Fusion style, whose sliders *page* (by pageStep) toward a
+    click on the groove instead of moving to it — so a click lands the handle
+    somewhere other than under the cursor. The native macOS style jumped to the
+    click; this restores that behaviour for every demo. Dragging still works:
+    after the jump the handle is under the cursor, so the normal press handler
+    picks it up.
+    """
+
+    def mousePressEvent(self, ev):
+        if ev.button() == QtCore.Qt.MouseButton.LeftButton:
+            opt = QtWidgets.QStyleOptionSlider()
+            self.initStyleOption(opt)
+            style = self.style()
+            cc, sc = QtWidgets.QStyle.ComplexControl.CC_Slider, QtWidgets.QStyle.SubControl
+            handle = style.subControlRect(cc, opt, sc.SC_SliderHandle, self)
+            pos = ev.position().toPoint()
+            if not handle.contains(pos):
+                groove = style.subControlRect(cc, opt, sc.SC_SliderGroove, self)
+                if self.orientation() == QtCore.Qt.Orientation.Horizontal:
+                    length, span_min = handle.width(), groove.x()
+                    span_max, click = groove.right() - length + 1, pos.x() - length // 2
+                else:
+                    length, span_min = handle.height(), groove.y()
+                    span_max, click = groove.bottom() - length + 1, pos.y() - length // 2
+                value = QtWidgets.QStyle.sliderValueFromPosition(
+                    self.minimum(), self.maximum(), click - span_min, span_max - span_min, opt.upsideDown)
+                self.setValue(value)
+        super().mousePressEvent(ev)
+
+
 class NNDLayout(QMainWindow):
     def __init__(self, w_ratio, h_ratio, dpi, chapter_window=True, main_menu=False, draw_vertical=True,
                  draw_horizontal=True, print_mouse_coords=False, fixed_size=False, do_not_scale=False,
@@ -386,6 +419,13 @@ class NNDLayout(QMainWindow):
         setattr(self, label_attr_name, QtWidgets.QLabel(self))
         label = getattr(self, label_attr_name)
         label.setText(label_str)
+        if "<a href" in label_str:
+            # Windows are embedded in a QGraphicsProxyWidget (ScalableWindow).
+            # A link-only label ignores the mouse press, so the proxy never
+            # grabs the mouse and the release (which fires linkActivated) is
+            # lost. Making the text selectable makes the press accepted.
+            label.setTextInteractionFlags(QtCore.Qt.TextInteractionFlag.LinksAccessibleByMouse |
+                                          QtCore.Qt.TextInteractionFlag.TextSelectableByMouse)
         if self.running_on_windows:
             label.setFont(QtGui.QFont(font_name, int(font_size * 0.78 * (self.w_ratio + self.h_ratio) / 2), italic=italics))
         elif self.running_on_linux:
@@ -420,7 +460,7 @@ class NNDLayout(QMainWindow):
     def make_slider(self, slider_attr_name, slider_type, slider_range, slider_tick_pos, slider_tick_interval,
                     slider_value, slider_coords, f_connect=None, label_attr_name=None, label_str="?", label_coords=None,
                     label_font_name="Times New Roman", label_font_size=14, label_italics=False):
-        setattr(self, slider_attr_name, QtWidgets.QSlider(slider_type))
+        setattr(self, slider_attr_name, JumpSlider(slider_type))
         slider = getattr(self, slider_attr_name)
         slider.setRange(slider_range[0], slider_range[1])
         slider.setTickPosition(slider_tick_pos)

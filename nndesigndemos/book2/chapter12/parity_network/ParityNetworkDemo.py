@@ -52,7 +52,7 @@ class ParityNetworkDemo(NNDLayout):
                         (ani_x-12, ani_y+80, 150, 30), self.change_animation_speed)
 
         self.make_button("btn_play_pause", "Pause",
-                        (ani_x, ani_y+115, 80, 30), self.toggle_play_pause)
+                        (ani_x - 12 + (150 - 80) // 2, ani_y+115, 80, 30), self.toggle_play_pause)  # centered under the speed slider
 
         # Animation variables
         self.animation_speed = 500
@@ -83,52 +83,56 @@ class ParityNetworkDemo(NNDLayout):
         self.input_buttons = []
 
         # Label for input row
-        self.make_label("label_input", "Input p(t):", (button_start_x, button_start_y - 25, 100, 20))
+        self.make_label("label_input", "Input p(t):", (button_start_x, button_start_y - 27, 100, 25))
 
-        # Create 10 buttons
+        # Create 10 buttons (geometry in design coords, scaled like everything else)
         for i in range(self.max_length):
             button = QtWidgets.QPushButton(self.p_str[i], self)
-            button.setGeometry(button_start_x + i * button_spacing, button_start_y, button_width, button_height)
+            button.setGeometry((button_start_x + i * button_spacing) * self.w_ratio, button_start_y * self.h_ratio,
+                               button_width * self.w_ratio, button_height * self.h_ratio)
             button.setStyleSheet(self.get_button_style(int(self.p_str[i])))
             button.clicked.connect(lambda checked, idx=i: self.toggle_input(idx))
             button.show()
             self.input_buttons.append(button)
 
-        # Add time step labels below buttons
+        # Add time step labels below buttons, centered under each button
         for i in range(self.max_length):
             label = QtWidgets.QLabel(str(i+1), self)
-            label.setGeometry(button_start_x + i * button_spacing + 20, button_start_y + 35, 20, 20)
-            label.setStyleSheet("font-size: 10px; color: gray;")
+            label.setGeometry((button_start_x + i * button_spacing) * self.w_ratio, (button_start_y + 35) * self.h_ratio,
+                              button_width * self.w_ratio, 20 * self.h_ratio)
+            label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            label.setStyleSheet(f"font-size: {int(10 * (self.w_ratio + self.h_ratio) / 2)}px; color: gray;")
             label.show()
 
     def get_button_style(self, value):
         """Get button style based on value (0 or 1)"""
+        font_px = int(14 * (self.w_ratio + self.h_ratio) / 2)
         if value == 0:
-            return """
-                QPushButton {
+            return f"""
+                QPushButton {{
                     background-color: #f0f0f0;
                     border: 2px solid #999;
                     border-radius: 5px;
-                    font-size: 14px;
+                    font-size: {font_px}px;
                     font-weight: bold;
-                }
-                QPushButton:hover {
+                }}
+                QPushButton:hover {{
                     background-color: #e0e0e0;
-                }
+                }}
             """
         else:
-            return """
-                QPushButton {
+            return f"""
+                QPushButton {{
                     background-color: #4CAF50;
                     color: white;
                     border: 2px solid #45a049;
                     border-radius: 5px;
-                    font-size: 14px;
+                    font-size: {font_px}px;
                     font-weight: bold;
-                }
-                QPushButton:hover {
+                }}
+                QPushButton:hover {{
                     background-color: #45a049;
-                }
+                }}
             """
 
     def toggle_input(self, idx):
@@ -142,7 +146,7 @@ class ParityNetworkDemo(NNDLayout):
     def initialize_table(self):
         """Create and setup the sequence table"""
         self.table = QTableWidget(4, self.max_length, self)
-        self.table.setGeometry(20, 235, 480, 183)
+        row_h = int(40 * self.h_ratio)
 
         self.table.setVerticalHeaderLabels(['p(t)', 'a¹₁(t)', 'a¹₂(t)', 'a²(t)'])
 
@@ -151,16 +155,26 @@ class ParityNetworkDemo(NNDLayout):
         self.table.setHorizontalHeaderLabels(headers)
 
         self.table.setCornerButtonEnabled(False)
+        # Draw the (empty) top-left corner as its own bordered cell so the row-label
+        # column doesn't look like it sits under the first time-step header
+        self.table.setStyleSheet("QTableCornerButton::section { background-color: #d6d6d6; "
+                                 "border: 1px solid #a8a8a8; }")
 
         # Make table look nice
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
-        self.table.verticalHeader().setDefaultSectionSize(40)
+        self.table.verticalHeader().setDefaultSectionSize(row_h)
+        self.table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         # Set font size
         font = self.table.font()
-        font.setPointSize(10)
+        font.setPointSize(int(10 * (self.w_ratio + self.h_ratio) / 2))
         self.table.setFont(font)
+
+        # Fit the table height exactly to its header + rows (no blank strip, no scrollbar)
+        table_h = (self.table.horizontalHeader().sizeHint().height() + 4 * row_h
+                   + 2 * self.table.frameWidth())
+        self.table.setGeometry(20 * self.w_ratio, 235 * self.h_ratio, 480 * self.w_ratio, table_h)
 
         self.table.show()
 
@@ -232,7 +246,7 @@ class ParityNetworkDemo(NNDLayout):
         figure.clf()
         ax = figure.add_subplot(1, 1, 1)
 
-        figure.subplots_adjust(left=0.15)
+        figure.subplots_adjust(left=0.15, bottom=0.18)  # room for the 'Time Step' label
 
         x = np.arange(len(array))
 

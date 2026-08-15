@@ -11,7 +11,7 @@ class InitEffect(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(InitEffect, self).__init__(w_ratio, h_ratio, dpi, main_menu=2)
 
-        self.fill_chapter("Normalization & Initialization Effects", 4,
+        self.fill_chapter("Initialization Effect", 4,
                           "\nChoose a initialization\nscheme and whether to\nuse BatchNorm or not."
                           "\n\nThe distribution of input,\nnet input and output\nis shown on the left.\n\n",
                           PACKAGE_PATH + "Chapters/4_D/Logo_Ch_4.svg", None, 2,
@@ -88,7 +88,7 @@ class InitEffect(NNDLayout):
         xlim = [-1, 1]
         self.sub_plot.set_xlim(xlim)
         self.sub_plot.set_ylim([0, self.n_examples//2])
-        self.sub_plot.set_title(f'Output layer {self.n_layers}')
+        self.sub_plot.set_title(f'Layer {self.n_layers} Output')
         self.canvas.draw()
 
     def change_n_examples(self):

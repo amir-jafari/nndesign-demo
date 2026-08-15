@@ -70,7 +70,7 @@ class SequenceSmoothingResponse(NNDLayout):
                         (ani_x-12, 200, 150, 30), self.change_animation_speed)
 
         self.make_button("btn_play_pause", "Pause", 
-                        (ani_x, 235, 80, 30), self.toggle_play_pause)
+                        (ani_x - 12 + (150 - 80) // 2, 235, 80, 30), self.toggle_play_pause)  # centered under the speed slider
         
         # Animation variables
         self.animation_speed = 500
@@ -97,21 +97,31 @@ class SequenceSmoothingResponse(NNDLayout):
     def initialize_table(self):
         """Create and setup the sequence table"""
         self.table = QTableWidget(4, self.n, self)
-        self.table.setGeometry(20, 290, 480, 180)
+        row_h = int(36 * self.h_ratio)
         
         self.table.setVerticalHeaderLabels(['p(t)', 'a(t)', 'p_TDL', 'a_TDL'])
         
         self.table.setCornerButtonEnabled(False)
+        # Draw the (empty) top-left corner as its own bordered cell so the row-label
+        # column doesn't look like it sits under the first time-step header
+        self.table.setStyleSheet("QTableCornerButton::section { background-color: #d6d6d6; "
+                                 "border: 1px solid #a8a8a8; }")
         
         # Make table look nice
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
-        self.table.verticalHeader().setDefaultSectionSize(40)
+        self.table.verticalHeader().setDefaultSectionSize(row_h)
+        self.table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         
         # Set font size
         font = self.table.font()
-        font.setPointSize(10)
+        font.setPointSize(int(10 * (self.w_ratio + self.h_ratio) / 2))
         self.table.setFont(font)
+
+        # Fit the table height exactly to its header + rows (no blank strip, no scrollbar)
+        table_h = (self.table.horizontalHeader().sizeHint().height() + 4 * row_h
+                   + 2 * self.table.frameWidth())
+        self.table.setGeometry(20 * self.w_ratio, 290 * self.h_ratio, 480 * self.w_ratio, table_h)
 
         self.table.show()
 
