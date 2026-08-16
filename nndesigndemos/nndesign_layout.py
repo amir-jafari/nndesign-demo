@@ -407,9 +407,13 @@ class NNDLayout(QMainWindow):
         img.setGeometry(image_coords[0] * self.w_ratio, image_coords[1] * self.h_ratio,
                         image_coords[2] * self.w_ratio, image_coords[3] * self.h_ratio)
 
-    def set_layout(self, layout_coords, widget):
+    def set_layout(self, layout_coords, widget, margins=None):
         wid = QtWidgets.QWidget(self)
         layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
+        if margins is not None:
+            # Opt-in: (left, top, right, bottom) in logical px, scaled like the geometry.
+            layout.setContentsMargins(int(margins[0] * self.w_ratio), int(margins[1] * self.h_ratio),
+                                      int(margins[2] * self.w_ratio), int(margins[3] * self.h_ratio))
         wid.setGeometry(layout_coords[0] * self.w_ratio, layout_coords[1] * self.h_ratio,
                         layout_coords[2] * self.w_ratio, layout_coords[3] * self.h_ratio)
         layout.addWidget(widget)
@@ -459,7 +463,7 @@ class NNDLayout(QMainWindow):
 
     def make_slider(self, slider_attr_name, slider_type, slider_range, slider_tick_pos, slider_tick_interval,
                     slider_value, slider_coords, f_connect=None, label_attr_name=None, label_str="?", label_coords=None,
-                    label_font_name="Times New Roman", label_font_size=14, label_italics=False):
+                    label_font_name="Times New Roman", label_font_size=14, label_italics=False, margins=None):
         setattr(self, slider_attr_name, JumpSlider(slider_type))
         slider = getattr(self, slider_attr_name)
         slider.setRange(slider_range[0], slider_range[1])
@@ -470,7 +474,7 @@ class NNDLayout(QMainWindow):
             if not label_coords:
                 label_coords = (slider_coords[0] + 80, slider_coords[1] - 30, slider_coords[2], slider_coords[3])
             self.make_label(label_attr_name, label_str, label_coords, label_font_name, label_font_size, label_italics)
-        self.set_layout(slider_coords, slider)
+        self.set_layout(slider_coords, slider, margins)
         if f_connect:
             slider.valueChanged.connect(f_connect)
 

@@ -9,7 +9,7 @@ class PoslinDecisionRegions2D(PoslinDecisionRegionsBase):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(PoslinDecisionRegions2D, self).__init__(w_ratio, h_ratio, dpi, post_title=' 2D')
 
-        self.make_plot(1, (135, 240, 250, 250))
+        self.make_plot(1, (118, 210, 275, 275))
         self.update_values()
 
     def graph(self):

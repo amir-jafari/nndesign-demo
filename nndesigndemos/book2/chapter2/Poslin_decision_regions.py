@@ -9,14 +9,18 @@ class PoslinDecisionRegions(PoslinDecisionRegionsBase):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(PoslinDecisionRegions, self).__init__(w_ratio, h_ratio, dpi, "")
 
-        self.make_plot(1, (10, 240, 250, 250))
-        self.make_plot(2, (260, 240, 250, 250))
+        self.make_plot(1, (5, 210, 250, 275))
+        self.make_plot(2, (258, 210, 250, 275))
 
         self.update_values()
 
     def graph(self):
+        # Keep the user's rotation of the 3D view across redraws (sliders redraw on every drag step).
+        view = [(ax.elev, ax.azim) for ax in self.figure.axes if hasattr(ax, 'azim')]
         self.figure.clf()
         ax = self.figure.add_subplot(projection='3d')
+        if view:
+            ax.view_init(*view[0])
 
         self.figure2.clf()
         ax1 = self.figure2.add_subplot(111)
