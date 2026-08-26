@@ -105,6 +105,7 @@ from nndesigndemos.book2.chapter2.Cascaded_function import CascadedFunction
 # ------ Chapter 3 --------
 from nndesigndemos.book2.chapter3.Gradient_descent import GradientDescent
 from nndesigndemos.book2.chapter3.Gradient_descent_stochastic import GradientDescentStochastic
+from nndesigndemos.book2.chapter3.Gradient_descent_vs_adam import GradientDescentVsAdam
 # ------ Chapter 4 --------
 from nndesigndemos.book2.chapter4.Scaling import Scaling
 from nndesigndemos.book2.chapter4.Initialization_effect import InitEffect
@@ -114,6 +115,10 @@ from nndesigndemos.book2.chapter5.Cheatsheet5 import Cheatsheet5
 from nndesigndemos.book2.chapter5.linear_regression_steepest_descent.Learning_scheduler import LearningScheduler
 # ------ Chapter 6 --------
 from nndesigndemos.book2.chapter6.Cheatsheet6 import Cheatsheet6
+from nndesigndemos.book2.chapter6.Tensor_shapes import TensorShapes
+from nndesigndemos.book2.chapter6.Model_builder import ModelBuilder
+from nndesigndemos.book2.chapter6.XOR_training import XORTraining
+from nndesigndemos.book2.chapter6.Dataset_pipeline import DatasetPipeline
 # ------ Chapter 7 --------
 from nndesigndemos.book2.chapter7.Forward_propagation_LFFN import LFFNForwardPropagation
 from nndesigndemos.book2.chapter7.Forward_propagation_GLDDN import GLDDNForwardPropagation
@@ -124,6 +129,8 @@ from nndesigndemos.book2.chapter8.Convolution_networks_ani import ConvolAnimatio
 from nndesigndemos.book2.chapter9.LinearizedNetworkResponse import LinearizedNetworkResponse
 # ------ Chapter 10 --------
 from nndesigndemos.book2.chapter10.Cheatsheet10 import Cheatsheet10
+from nndesigndemos.book2.chapter10.Training_loop import TrainingLoop
+from nndesigndemos.book2.chapter10.Dataset_dataloader import DatasetDataLoader
 # ------ Chapter 11 --------
 from nndesigndemos.book2.chapter11.sequence_averaging_network.Sequence_averaging_network import SequenceAveragingNetwork
 from nndesigndemos.book2.chapter11.smoothing_response.Sequence_smoothing_response import SequenceSmoothingResponse
@@ -173,14 +180,14 @@ BOOK1_CHAPTERS_DEMOS = {
 
 BOOK2_CHAPTERS_DEMOS = {
     2: ["Multilayer Networks", "Chapter 2 demos", "Poslin Network Function", "Poslin Decision Regions", "Poslin Decision Regions 2D", "Poslin Decision Regions 3D", "Cascaded Function"],
-    3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Stochastic Gradient Descent"],
+    3: ["Multilayer Network Train", "Chapter 3 demos", "Gradient Descent", "Stochastic Gradient Descent", "Gradient Descent vs Adam"],
     4: ["Supplemental Training", "Chapter 4 demos", 'Scaling', 'Initialization Effect', 'Dropout'],
     5: ["Python Intro", "Chapter 5 demos", "Cheatsheet", "Learning Scheduler"],
-    6: ["TensorFlow Intro", "Chapter 6 demos", "Cheatsheet"],
+    6: ["TensorFlow Intro", "Chapter 6 demos", "Cheatsheet", "Tensor Shapes", "Model Builder", "XOR Training", "Dataset Pipeline"],
     7: ["General Network Notation", "Chapter 7 demos", "LFFN", "GLDDN"],
     8: ["Convolution Networks", "Chapter 8 demos", "Convolution Networks demo"],
     9: ["PostTrain", "Chapter 9 demos", "Linearized Network Response"],
-    10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet"],
+    10: ["PyTorch Intro", "Chapter 10 demos", "Cheatsheet", "Training Loop", "Dataset & DataLoader"],
     11: ["Linear Sequence", "Chapter 11 demos", "Sequence Averaging Network", "Sequence Smoothing Response", "Impulse Response"],
     12: ["Non Linear Sequence", "Chapter 12 demos", "Parity Network", "Constant Error Carousel", "Gated CEC"],
     13: ["Seq2Seq Attention", "Chapter 13 demos", "Self-Attention 2D", "Self-Attention 3D"],
@@ -741,6 +748,9 @@ class MainWindowDL(NNDLayout):
         elif idx == 2:
             self.book2_chapter3_window2 = GradientDescentStochastic(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter3_window2.show()
+        elif idx == 3:
+            self.book2_chapter3_window3 = GradientDescentVsAdam(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter3_window3.show()
 
     def chapter4(self, idx):
         self.comboBox3.setCurrentIndex(0)
@@ -768,6 +778,18 @@ class MainWindowDL(NNDLayout):
         if idx == 1:
             self.book2_chapter6_window1 = Cheatsheet6(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter6_window1.show()
+        elif idx == 2:
+            self.book2_chapter6_window2 = TensorShapes(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter6_window2.show()
+        elif idx == 3:
+            self.book2_chapter6_window3 = ModelBuilder(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter6_window3.show()
+        elif idx == 4:
+            self.book2_chapter6_window4 = XORTraining(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter6_window4.show()
+        elif idx == 5:
+            self.book2_chapter6_window5 = DatasetPipeline(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter6_window5.show()
 
     def chapter7(self, idx):
         self.comboBox2.setCurrentIndex(0)
@@ -795,6 +817,12 @@ class MainWindowDL(NNDLayout):
         if idx == 1:
             self.book2_chapter10_window1 = Cheatsheet10(self.w_ratio, self.h_ratio, self.dpi)
             self.book2_chapter10_window1.show()
+        elif idx == 2:
+            self.book2_chapter10_window2 = TrainingLoop(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter10_window2.show()
+        elif idx == 3:
+            self.book2_chapter10_window3 = DatasetDataLoader(self.w_ratio, self.h_ratio, self.dpi)
+            self.book2_chapter10_window3.show()
 
     def chapter11(self, idx):
         self.comboBox2.setCurrentIndex(0)
