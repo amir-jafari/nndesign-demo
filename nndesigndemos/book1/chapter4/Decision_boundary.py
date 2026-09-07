@@ -7,7 +7,6 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 from nndesigndemos.nndesign_layout import NNDLayout
 from nndesigndemos.get_package_path import PACKAGE_PATH
 
-
 class DecisionBoundaries(NNDLayout):
     def __init__(self, w_ratio, h_ratio, dpi):
         super(DecisionBoundaries, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
@@ -74,6 +73,11 @@ class DecisionBoundaries(NNDLayout):
 
         self.make_button("undo_click_button", "Undo Last Mouse Click", (self.x_chapter_button, 450, self.w_chapter_button, self.h_chapter_button), self.on_undo_mouseclick)
         self.make_button("clear_button", "Clear Data", (self.x_chapter_button, 480, self.w_chapter_button, self.h_chapter_button), self.on_clear)
+
+    @staticmethod
+    def nonzero(unsafe_number):
+        """Replace an unsafe number with a finite epsilon if needed."""
+        return unsafe_number if abs(unsafe_number) > 1e-6 else 1e-6
 
     def on_mouseclick(self, event):
         """Add an item to the plot"""
@@ -145,28 +149,30 @@ class DecisionBoundaries(NNDLayout):
         self.canvas.draw()
 
     def find_parameters(self):
-        from numpy import ones, vstack
-        from numpy.linalg import lstsq
-        x_coords, y_coords = zip(*[self.point_1, self.point_2])
-        A = vstack([x_coords, ones(len(x_coords))]).T
-        m, c = lstsq(A, y_coords, rcond=None)[0]
-        x_sign_changed = np.sign(self.prev_x_diff) != np.sign(self.current_x_diff)
-        y_sign_changed = np.sign(self.prev_y_diff) != np.sign(self.current_y_diff)
-        if x_sign_changed:
-            if y_sign_changed:
-                self.w[1] = -self.w[1]
-                self.w[0] = np.round(-m * self.w[1], 2)
-            else:
-                self.w[1] = np.round(-self.w[0] / m, 2)
-        else:
-            if y_sign_changed:
-                self.w[0] = np.round(-m * self.w[1], 2)
-            else:
-                self.w[1] = np.round(-self.w[0] / m, 2)
-        scale = np.sqrt(self.w[0] ** 2 + self.w[1] ** 2)
-        self.w[0] = np.round(self.w[0] / scale, 2)
-        self.w[1] = np.round(self.w[1] / scale, 2)
-        self.b = np.round(np.array([-c * self.w[1]]), 2)
+        # The decision boundary is the line through point_1 and point_2, and
+        # the weight vector must be normal (perpendicular) to that line. For a
+        # line direction (dx, dy), a normal is simply (dy, -dx) -- this is
+        # well-defined for every orientation, including exactly horizontal
+        # (dy == 0) or exactly vertical (dx == 0), with no division involved.
+        # (The previous approach fit a slope with lstsq and divided by it,
+        # which is singular/unstable at precisely those two orientations.)
+        dx = self.point_1[0] - self.point_2[0]
+        dy = self.point_1[1] - self.point_2[1]
+        new_w = np.array([dy, -dx])
+        scale = self.nonzero(np.sqrt(new_w[0] ** 2 + new_w[1] ** 2))
+        new_w = new_w / scale
+        # The normal direction is ambiguous up to a sign flip (w vs -w
+        # describe the same line). Keep whichever sign is closer to the
+        # previous weight vector so the boundary doesn't suddenly invert.
+        if new_w[0] * self.w[0] + new_w[1] * self.w[1] < 0:
+            new_w = -new_w
+        self.w[0] = np.round(new_w[0], 2)
+        self.w[1] = np.round(new_w[1], 2)
+        # Solve for b so the boundary passes through the midpoint of the two
+        # points: w[0]*mx + w[1]*my + b = 0
+        mx = (self.point_1[0] + self.point_2[0]) / 2.0
+        my = (self.point_1[1] + self.point_2[1]) / 2.0
+        self.b = np.round(np.array([-(self.w[0] * mx + self.w[1] * my)]), 2)
         # self.latex_w.setPixmap(self.mathTex_to_QPixmap("$W = [{} \quad {}]$".format(self.w[0], self.w[1]), 10))
         self.label_W.setText("W = [{}  {}]".format(round(self.w[0], 1), round(self.w[1], 1)))
         # self.latex_b.setPixmap(self.mathTex_to_QPixmap("$b = [{}]$".format(self.b[0]), 10))
@@ -176,7 +182,7 @@ class DecisionBoundaries(NNDLayout):
     def find_decision_boundary(self, x):
         """Returns the corresponding y value for the input x on the decision
         boundary"""
-        return -(x * self.w[0] + self.b) / (self.w[1] if self.w[1] != 0 else .000001)
+        return -(x * self.w[0] + self.b) / self.nonzero(self.w[1])
 
     def run_forward(self, p):
         """Given an input of dimension R, run the network"""
