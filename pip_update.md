@@ -37,6 +37,6 @@ password: your_pypi_password
 
 5. Install twine and upload the package to PyPI.
     * `python3 -m pip install --upgrade twine`
-    * `python3 -m twine upload dist/*`
+    * `python3 -m twine upload dist/* --verbose`
 
 6. After uploading, use pip install to test it by installing it in a new virtual environment
