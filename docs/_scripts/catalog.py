@@ -40,7 +40,7 @@ BOOKS = {
         "dict_name": "BOOK1_CHAPTERS_DEMOS",
         "logo_dir": "Logo/book_logos",
         "cover": "Logo/Figure.jpg",
-        "url": "https://hagan.okstate.edu/nnd.html",
+        "url": "https://github.com/NNDesignDeepLearning/NNDesignDeepLearning",
         "blocks": ["2-5", "6-9", "10-13", "14-17", "18-21"],
     },
     2: {

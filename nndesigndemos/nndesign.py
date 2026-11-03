@@ -48,7 +48,7 @@ class MainWindow(NNDLayout):
         self.make_label("book1_info", "Click on the button above to access the\ndemonstrations for the Neural Network\n"
                                       "Design book.\n\nEach demo is linked to a chapter section\nof the book. You can "
                                       "find more info at", (x_left, y_text, w, h_text))
-        self.make_label("book1_link", '<a href="https://hagan.okstate.edu/nnd.html">https://hagan.okstate.edu/nnd.html/</a>', (x_left, y_text + 145, w, 30))
+        self.make_label("book1_link", '<a href="https://github.com/NNDesignDeepLearning/NNDesignDeepLearning">https://github.com/NNDesignDeepLearning/NNDesignDeepLearning</a>', (x_left, y_text + 145, w, 30))
         self.book1_link.linkActivated.connect(open_link)
 
         self.make_label("book2_info", "Click on the button above to access the\ndemonstrations for the Neural Network\n"

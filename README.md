@@ -7,7 +7,7 @@
 
 **PyPI:** https://pypi.org/project/nndesigndemos/ · **Documentation:** https://amir-jafari.github.io/nndesign-demo/
 
-This is a set of demonstrations paired with the [Neural Network Design](https://hagan.okstate.edu/nnd.html) 
+This is a set of demonstrations paired with the [Neural Network Design](https://github.com/NNDesignDeepLearning/NNDesignDeepLearning) 
 & Neural Network Design: Deep Learning books written in Python.
 
 ## Installation

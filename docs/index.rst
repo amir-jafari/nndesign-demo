@@ -4,7 +4,7 @@ nndesigndemos
 =============
 
 **nndesigndemos** is a set of interactive Python demonstrations paired with the
-`Neural Network Design <https://hagan.okstate.edu/nnd.html>`_ and
+`Neural Network Design <https://github.com/NNDesignDeepLearning/NNDesignDeepLearning>`_ and
 *Neural Network Design: Deep Learning* books. Every demo is linked to a chapter
 section of the books, so you can experiment with the ideas as you read them.
 The original demos were written in MATLAB; this package reimplements them in

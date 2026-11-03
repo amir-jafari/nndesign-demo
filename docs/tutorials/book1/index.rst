@@ -12,7 +12,7 @@ Neural Network Design
 
 69 demos across 20 chapters. In the main menu press **Neural Network Design**, then use the buttons along the bottom (**2-5**, **6-9**, **10-13**, **14-17**, **18-21**) to page through the chapters.
 
-Book website: https://hagan.okstate.edu/nnd.html
+Book website: https://github.com/NNDesignDeepLearning/NNDesignDeepLearning
 
 .. list-table::
    :header-rows: 1

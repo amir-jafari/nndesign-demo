@@ -10,7 +10,7 @@ nndesigndemos is written and maintained by:
 
 The demos accompany the books *Neural Network Design* (Hagan, Demuth, Beale and
 De Jesús) and *Neural Network Design: Deep Learning*. More information about the
-books is available at https://hagan.okstate.edu/nnd.html.
+books is available at https://github.com/NNDesignDeepLearning/NNDesignDeepLearning.
 
 Contact: nndesign.demo@gmail.com
 

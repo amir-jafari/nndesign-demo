@@ -9,14 +9,14 @@ setuptools.setup(
     name='nndesigndemos',
     license="MIT",
     description='Demos for the Neural Network Design & Deep Learning books',
-    version='v1.3.0',
+    version='v1.3.2',
     long_description_content_type="text/markdown",
     # long_description="This is a set of demonstrations paired with the Neural Network Design & Deep Learning books.\n"
     #                  "Each demo is linked to a chapter section of the books. You can find more info at "
-    #                  "https://hagan.okstate.edu/nnd.html.\n\nAfter installing (creating a virtual environment is "
+    #                  "https://github.com/NNDesignDeepLearning/NNDesignDeepLearning.\n\nAfter installing (creating a virtual environment is "
     #                  "recommended), just open the Python Shell and type: from nndesigndemos import nndtoc; nndtoc()",
     long_description=description,
-    url='https://hagan.okstate.edu/nnd.html',
+    url='https://github.com/NNDesignDeepLearning/NNDesignDeepLearning',
     project_urls={
         "Documentation": "https://amir-jafari.github.io/nndesign-demo/",
         "Source Code": "https://github.com/amir-jafari/nndesign-demo",

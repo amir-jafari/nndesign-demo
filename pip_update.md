@@ -19,10 +19,10 @@ Since the project is already in PyPI, we only need to update it to a new version
 
 2. Make sure you install the latest versions of `setuptools` and `wheel`:
 
-    * ```python3 -m pip install --user --upgrade setuptools wheel```
+    * ```python -m pip install --user --upgrade setuptools wheel```
 
 3. Build the distribution files:
-   * `python3 setup.py sdist bdist_wheel`
+   * `python setup.py sdist bdist_wheel`
 
 4. Create a text file named `.pypirc` with the following content. Don't forget to change your own username and password. And I didn't set testpypi.
 
@@ -36,7 +36,7 @@ password: your_pypi_password
 ```
 
 5. Install twine and upload the package to PyPI.
-    * `python3 -m pip install --upgrade twine`
-    * `python3 -m twine upload dist/* --verbose`
+    * `python -m pip install --upgrade twine`
+    * `python -m twine upload dist/* --verbose`
 
 6. After uploading, use pip install to test it by installing it in a new virtual environment
