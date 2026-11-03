@@ -13,8 +13,8 @@ class NewtonsMethod(NNDLayout):
         super(NewtonsMethod, self).__init__(w_ratio, h_ratio, dpi, main_menu=1)
 
         self.fill_chapter("Newton's Method", 9, "\n\nClick anywhere on the\ngraph to start an\ninitial guess.\n\nThen the "
-                                                "steepest descent\ntrajectory will be shown.\n\nThe bottom graph shows\nthe"
-                                                "approximation of\nfunction self.F at the\ninitial point.",
+                                                "Newton's method\ntrajectory will be shown.\n\nThe bottom graph shows\nthe "
+                                                "quadratic approximation\nof the function at the\ninitial point.",
                           PACKAGE_PATH + "Logo/Logo_Ch_9.svg", None)
 
         x = np.array([-2, -1.8, -1.6, -1.4, -1.2, -1, -0.8, -0.6, -0.4, -0.2, 0,
