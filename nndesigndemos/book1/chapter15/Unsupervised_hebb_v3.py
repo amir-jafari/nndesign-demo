@@ -171,7 +171,7 @@ class UnsupervisedHebb(NNDLayout):
             painter.setFont(QtGui.QFont("times", 12 * (self.h_ratio + self.h_ratio) / 2))
             painter.drawText(QtCore.QPoint(100 * self.h_ratio, 28 * self.h_ratio), "Active" if self.first_scanner_on else "Inactive")
         else:
-            painter.setFont(QtGui.QFont("times", 12 * (self.w_ratio + self.h_ratio) / 2))
+            painter.setFont(QtGui.QFont("times", int(12 * (self.w_ratio + self.h_ratio) / 2)))
             painter.drawText(QtCore.QPoint(100 * self.w_ratio, 28 * self.h_ratio), "Active" if self.first_scanner_on else "Inactive")"""
 
         self.banana_shape_text.remove()
