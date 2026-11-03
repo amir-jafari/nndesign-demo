@@ -32,6 +32,9 @@ jobs:
 
       # PyQt6 and matplotlib's Qt backends are mocked in docs/conf.py
       # (autodoc_mock_imports), so no display or Qt system libraries are needed.
+      - name: Check tutorials cover every demo in the menu
+        run: python docs/_scripts/gen_tutorials.py --check
+
       - name: Build HTML docs
         run: sphinx-build -W --keep-going -b html docs docs/_build/html
 

@@ -57,7 +57,7 @@ source_suffix = {
 
 master_doc = "index"
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "_scripts", "README.md", "Thumbs.db", ".DS_Store"]
 
 # -- Autodoc -----------------------------------------------------------------
 # PyQt6 needs a display and a compiled Qt install; mock it so the docs build on CI.

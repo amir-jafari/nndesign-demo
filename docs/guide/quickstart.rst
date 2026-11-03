@@ -13,16 +13,12 @@ All demos start from the same main menu. Open a Python shell and run:
 
 A window will pop up where you choose a book, then a chapter, then a demo.
 
-.. Placeholder for the main-menu screenshot. Save the image to
-   docs/_static/screenshots/main_menu.png and then uncomment the directive
-   below (the build runs with -W, so a missing image would fail it).
+.. figure:: /_static/screenshots/main_menu.webp
+   :alt: The nndesigndemos main menu
+   :align: center
+   :width: 60%
 
-   .. figure:: /_static/screenshots/main_menu.png
-      :alt: The nndesigndemos main menu
-      :align: center
-      :width: 80%
-
-      The main menu, with one button per book.
+   The main menu, with one button per book.
 
 Running without sound
 ---------------------
@@ -47,6 +43,13 @@ The menu follows the structure of the books:
 3. **Demo.** Every chapter has a drop-down list of its demos. Selecting an
    entry opens that demo in its own window. You can keep several demos open
    at the same time.
+
+.. figure:: /_static/screenshots/toc_book1.webp
+   :alt: The Neural Network Design table of contents window
+   :align: center
+   :width: 60%
+
+   The table of contents for *Neural Network Design*, showing chapters 2 to 5.
 
 For every section of the *Neural Network Design* book where you see the MATLAB
 logo, there is a corresponding Python demo in this package. The demos for the
