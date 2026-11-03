@@ -1,6 +1,7 @@
 """Sphinx configuration for the nndesigndemos documentation."""
 
 import datetime
+import importlib.metadata
 import importlib.util
 import os
 import re
@@ -13,15 +14,22 @@ sys.path.insert(0, ROOT)
 
 
 def _read_version():
-    """Read the version from setup.py so the docs stay in sync with the package.
+    """Return the package version so the docs never drift from the package.
 
-    Parsing the file (instead of importing the package) keeps the build free of
-    the PyQt6 import that nndesigndemos needs at import time.
+    setup.py in this checkout is the source of truth, so it is read first
+    (without importing the package, which would pull in PyQt6). If setup.py
+    is ever removed, fall back to the metadata of the installed distribution.
     """
     setup_py = os.path.join(ROOT, "setup.py")
-    with open(setup_py, encoding="utf-8") as f:
-        match = re.search(r"version\s*=\s*['\"]v?([^'\"]+)['\"]", f.read())
-    return match.group(1) if match else "0.0.0"
+    if os.path.exists(setup_py):
+        with open(setup_py, encoding="utf-8") as f:
+            match = re.search(r"version\s*=\s*['\"]v?([^'\"]+)['\"]", f.read())
+        if match:
+            return match.group(1)
+    try:
+        return importlib.metadata.version("nndesigndemos").lstrip("v")
+    except importlib.metadata.PackageNotFoundError:
+        return "0.0.0"
 
 
 # -- Project information -----------------------------------------------------

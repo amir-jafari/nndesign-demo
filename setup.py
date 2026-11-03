@@ -17,10 +17,11 @@ setuptools.setup(
     #                  "recommended), just open the Python Shell and type: from nndesigndemos import nndtoc; nndtoc()",
     long_description=description,
     url='https://hagan.okstate.edu/nnd.html',
-    # project_urls={
-    #     "Documentation": "https://docs.example.com/HelloWorld/",
-    #     "Source Code": "https://github.com/amir-jafari/nndesign-demo",
-    # },
+    project_urls={
+        "Documentation": "https://amir-jafari.github.io/nndesign-demo/",
+        "Source Code": "https://github.com/amir-jafari/nndesign-demo",
+        "Issue Tracker": "https://github.com/amir-jafari/nndesign-demo/issues",
+    },
     packages=["nndesigndemos"],
     include_package_data=True,
     python_requires=">=3.9",

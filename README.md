@@ -1,5 +1,12 @@
 # nndesigndemos
 
+[![PyPI version](https://img.shields.io/pypi/v/nndesigndemos.svg)](https://pypi.org/project/nndesigndemos/)
+[![Python versions](https://img.shields.io/pypi/pyversions/nndesigndemos.svg)](https://pypi.org/project/nndesigndemos/)
+[![Documentation](https://github.com/amir-jafari/nndesign-demo/actions/workflows/docs.yml/badge.svg)](https://amir-jafari.github.io/nndesign-demo/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+**PyPI:** https://pypi.org/project/nndesigndemos/ · **Documentation:** https://amir-jafari.github.io/nndesign-demo/
+
 This is a set of demonstrations paired with the [Neural Network Design](https://hagan.okstate.edu/nnd.html) 
 & Neural Network Design: Deep Learning books written in Python.
 
